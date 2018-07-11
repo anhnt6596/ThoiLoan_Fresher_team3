@@ -92,8 +92,6 @@ var rootMapPos = {
 var MapLayer = cc.Layer.extend({
     _targetedBuilding: null,
     _isMovingBuilding: false,
-    mapWidth: 0,
-    mapHeight: 0,
     ctor: function() {
         this._super();
         this.anchorX = 0;
@@ -107,7 +105,7 @@ var MapLayer = cc.Layer.extend({
         this.initContructions(contructionList);
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
-        this.scale = 0.5;
+        this.scale = 0.8;
     },
     initContructions: function(contructions) {
         var builderHut1 = new BuilderHut(contructionList.a111);
@@ -188,8 +186,8 @@ var MapLayer = cc.Layer.extend({
             scale: 1,
         });
         this.addChild(mapBackground, 0);
-        this.mapWidth = bg_bl.width + bg_br.width - 170;
-        this.mapHeight = bg_bl.height + bg_tl.height + 300;
+        this.mapWidth = bg_bl.width + bg_br.width + 500;
+        this.mapHeight = bg_bl.height + bg_tl.height + 500;
     },
     addTouchListener: function() {
         var self = this;
@@ -202,6 +200,10 @@ var MapLayer = cc.Layer.extend({
         }, this);
     },
     onTouchBegan: function(touch, event) {
+        var tp = touch.getLocation();
+        var coorInMap = this.calculateCoor(tp);
+        var mapPos = this.calculatePos(coorInMap);
+        cc.log('x/y: ', mapPos.x + '/' + mapPos.y);
         return true;
     },
     onTouchMoved: function(touch, event) {
@@ -225,5 +227,19 @@ var MapLayer = cc.Layer.extend({
             this.y = curPos.y;
             curPos = null;
         }
+    },
+    calculatePos: function(coorInMap) {
+        var coor = { x: 0, y: 0 };
+        var x = coorInMap.x - rootMapPos.x;
+        var y = coorInMap.y - rootMapPos.y;
+        coor.x = parseInt((- (x / (TILE_WIDTH/2) + y / (TILE_HEIGHT/2)) / 2).toFixed(0));
+        coor.y = parseInt(((x / (TILE_WIDTH/2) - y / (TILE_HEIGHT/2)) / 2).toFixed(0));
+        return coor;
+    },
+    calculateCoor: function(tp) {
+        var result = { x: 0, y: 0 };
+        result.x = (tp.x - this.x) / this.scale;
+        result.y = (tp.y - this.y) / this.scale;
+        return result;
     }
 });
