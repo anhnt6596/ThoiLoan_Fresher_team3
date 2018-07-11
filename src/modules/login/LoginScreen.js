@@ -23,7 +23,7 @@ var LoginScreen = cc.Layer.extend({
     },
 
     loginTrucTiep: function(){
-        cc.director.runScene(createGameScene());
+        cc.director.runScene(createMapScene());
 
     }
 

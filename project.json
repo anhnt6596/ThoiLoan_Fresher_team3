@@ -35,8 +35,6 @@
         "src/libs/md5.js",
         "src/libs/signals.js",
         "src/libs/underscore.js",
-        "src/modules/animation/ScreenDragonbones.js",
-        "src/modules/localization/ScreenLocalization.js",
         "src/modules/mainmenu/ScreenMenu.js",
         "src/modules/testnetwork/network/Network.js",
         "src/modules/testnetwork/network/Packet.js",
@@ -44,9 +42,9 @@
         "src/modules/test/ScreenTest.js",
         "src/modules/loading/LoadingScreen.js",
         "src/modules/login/LoginScreen.js",
-        "src/modules/gameScreen/GameScreen.js",
-        "src/modules/gameScreen/MapLayer/MapLayer.js",
-        "src/modules/gameScreen/LobbyLayer/LobbyLayer.js",
+        "src/modules/mapScreen/MapScreen.js",
+        "src/modules/mapScreen/MapLayer/MapLayer.js",
+        "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
         "src/modules/shop/ShopScreen.js"
     ]
 }
