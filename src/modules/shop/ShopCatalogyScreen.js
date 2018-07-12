@@ -193,6 +193,7 @@ var ShopCatalogyScreen = cc.Layer.extend({
         name.y = this._item.y + ITEM_HEIGHT-10;
         this._item.addChild(name, 4, 4);
 
+        var self = this;
         var listener = cc.EventListener.create({
             event: cc.EventListener.MOUSE,
             onMouseDown: function (event) {
