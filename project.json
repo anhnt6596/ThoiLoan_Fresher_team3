@@ -45,6 +45,7 @@
         "src/modules/mapScreen/MapScreen.js",
         "src/modules/mapScreen/MapLayer/MapLayer.js",
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
-        "src/modules/shop/ShopScreen.js"
+        "src/modules/shop/ShopScreen.js",
+        "src/modules/shop/ShopCatalogyScreen.js"
     ]
 }
