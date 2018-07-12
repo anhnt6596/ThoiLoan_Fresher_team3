@@ -5,8 +5,8 @@ var Contruction = cc.Sprite.extend({
         this.init();
     },
     init: function() {
-        var newX = rootMapPos.x + (this.info.posY - this.info.posX) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width/2);
-        var newY = rootMapPos.y - (this.info.posX + this.info.posY) * TILE_HEIGHT / 2 - TILE_HEIGHT*(this.info.height - 0.5);
+        var newX = rootMapPos.x + (this.info.posY - this.info.posX) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
+        var newY = rootMapPos.y + (this.info.posX + this.info.posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
         this.x = newX;
         this.y = newY;
         this.anchorX = 0;
@@ -56,39 +56,77 @@ var Contruction = cc.Sprite.extend({
         this.addChild(this.arrowMove, 2);
     },
     moving: function(mapPos) {
+        var newX = rootMapPos.x + (mapPos.y - mapPos.x) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
+        var newY = rootMapPos.y + (mapPos.x + mapPos.y) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
+        this.x = newX;
+        this.y = newY;
+        this.tempX = mapPos.x;
+        this.tempY = mapPos.y;
+        if (this.checkNewPosition(mapPos)) {
+            this.greenBG.opacity = 230;
+            this.redBG.opacity = 0;
+        } else {
+            this.greenBG.opacity = 0;
+            this.redBG.opacity = 230;
+        }
     },
     updatePosition: function(mapPos) {
+        this.info.posX = mapPos.x;
+        this.info.posY = mapPos.y;
+        this.tempX = mapPos.x;
+        this.tempY = mapPos.y;
     },
     checkNewPosition: function(mapPos) {
+        if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
+        for (var i = 0; i < this.info.width; i++) {
+            for (var j = 0; j < this.info.height; j++) {
+                if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== 0 && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
+                    return false;
+                }
+            }
+        }
         return true;
     },
     onTarget: function() {
+        var act = new cc.FadeIn(0.2);
+        this.arrowMove.runAction(act);
+        if (this.grass) this.grass.opacity = 0;
+        this.greenBG.opacity = 230;
     },
     removeTarget: function() {
+        var act = new cc.FadeOut(0.2);
+        this.arrowMove.runAction(act);
+        var newZ = 900 - (this.info.posX + this.info.posY) * 10;
+        this.parent.reorderChild(this, newZ);
+        if (this.grass) this.grass.opacity = 255;
+        this.greenBG.opacity = 0;
+        this.redBG.opacity = 0;
+
+        var newX = rootMapPos.x + (this.info.posY - this.info.posX) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
+        var newY = rootMapPos.y + (this.info.posX + this.info.posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
+        this.x = newX;
+        this.y = newY;
+        this.tempX = this.info.posX;
+        this.tempY = this.info.posY;
     },
 
     // shadow
     addShadow: function() {
         switch (this.info.name) {
             case 'BDH':
-                this.squareShadow2();
+                this.squareShadow(2);
+                break;
+            case 'TOW':
+                this.squareShadow(4);
                 break;
             case 'GOL_1', 'GOL_2':
-                this.squareShadow3();
+                this.squareShadow(3);
             default:
                 break;
         }
     },
-    squareShadow2: function () {
-        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_2_Shadow.png';
-        var shadow = new cc.Sprite(resShadow);
-        shadow.anchorX = 0;
-        shadow.anchorY = 0;
-        shadow.scale = 2;
-        this.addChild(shadow, 2);
-    },
-    squareShadow3: function () {
-        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_3_Shadow.png';
+    squareShadow: function(size) {
+        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_'+ size +'_Shadow.png';
         var shadow = new cc.Sprite(resShadow);
         shadow.anchorX = 0;
         shadow.anchorY = 0;

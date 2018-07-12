@@ -47,6 +47,7 @@
         "src/modules/mapScreen/MapLayer/Contruction/Contruction.js",
         "src/modules/mapScreen/MapLayer/Contruction/Building.js",
         "src/modules/mapScreen/MapLayer/Contruction/BuilderHut.js",
+        "src/modules/mapScreen/MapLayer/Contruction/TownHall.js",
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
         "src/modules/shop/ShopScreen.js"
     ]
