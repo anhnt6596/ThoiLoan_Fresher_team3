@@ -33,6 +33,10 @@ var ResourceBar = cc.Sprite.extend({
         });
         this.addChild(valueBar);
 
+        var ratio = 0.5;
+        valueBar.setTextureRect(cc.rect(valueBar.width * (1 - ratio), 0, valueBar.width, valueBar.height));
+        valueBar.x += (1 - ratio) * valueBar.width;
+
         var maxText = new cc.LabelBMFont("Max: 4.000.000", 'res/Art/Fonts/soji_12.fnt');
         maxText.attr({
             anchorX: 0,

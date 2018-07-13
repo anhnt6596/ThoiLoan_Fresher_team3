@@ -1,0 +1,6 @@
+BDH: Builder Hut: (leu xay dung)
+DAR: Dark elixir mine
+TOW: Townhall
+BAR: Barrack
+ARM_x: Cac don vi quan doi
+AMC: Army Camp (trai linh)
