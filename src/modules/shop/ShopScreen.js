@@ -1,48 +1,16 @@
 CATALOGY_WIDTH = 241;
 CATALOGY_HEIGHT = 186;
 
-var ShopScreen = cc.Layer.extend({
-    _resInfo:null,
-    _close:null,
+var ShopScreen = Popup.extend({
+    //_resInfo:null,
+    //_close:null,
     _catalogyList:[],
     _catalogy:null,
-    
-    ctor:function() {
+
+    ctor:function(width, height, x, y, text, data, bool) {
         cc.log("-----------ctor ShopScreen-----------");
-        cc.log(cc.winSize.width + " " + cc.winSize.height);
-        this._super();
-        this.init();
-    },
-
-    init:function(){
-        var bakeLayer = cc.LayerColor.create(cc.color(100, 128, 128), cc.winSize.width, cc.winSize.height);
-        this.addChild(bakeLayer, 0, 0);
-
-        this._resInfo = new cc.Sprite('res/Art/GUIs/shop_gui/res_info.png');
-        this._resInfo.x = cc.winSize.width/2;
-        this._resInfo.y = cc.winSize.height - this._resInfo.height/2;
-        this._resInfo.scaleX = cc.winSize.width/this._resInfo.width;
-        this.addChild(this._resInfo, 1, 1);
-
-
-        var label = new cc.LabelTTF("SHOP", "Arial", 36);
-        label.x = cc.winSize.width/2;
-        label.y = this._resInfo.y;
-        this.addChild(label, 200, 200);
-
-
-        var closeItem = new cc.MenuItemImage('res/Art/GUIs/shop_gui/close.png', 'res/Art/GUIs/shop_gui/close.png', this.onCloseCallback, this);
-        var closeMenu = new cc.Menu(closeItem);
-        closeMenu.width = closeItem.width;
-        closeMenu.height = closeItem.height;
-        closeMenu.x = cc.winSize.width - closeMenu.width/2 - 10;
-        closeMenu.y = cc.winSize.height - closeMenu.height/1.3;
-
-        this.addChild(closeMenu, 2, 2);
-
+        this._super(width, height, x, y, text, data, bool);
         this.initCatalogy();
-
-        return true;
     },
 
     initCatalogy:function() {
@@ -88,13 +56,8 @@ var ShopScreen = cc.Layer.extend({
         }
     },
 
-    onCloseCallback:function () {
-        // cc.director.runScene(createMapScene());
-        cc.director.popScene();
-    },
-
     createCatalogy:function(catalogyName){
-        this._catalogy = new cc.Sprite('res/Art/GUIs/shop_gui/slot_catalogy.png');
+        this._catalogy = new ccui.Button('res/Art/GUIs/shop_gui/slot_catalogy.png');
         this._catalogy.anchorX = 0;
         this._catalogy.anchorY = 0;
 
@@ -126,17 +89,20 @@ var ShopScreen = cc.Layer.extend({
         var listener = cc.EventListener.create({
             event: cc.EventListener.MOUSE,
             onMouseDown: function (event) {
+
+            },
+            onMouseUp: function (event) {
                 var target = event.getCurrentTarget();
                 var locationInNode = target.convertToNodeSpace(event.getLocation());
                 var s = target.getContentSize();
                 var rect = cc.rect(0, 0, s.width, s.height);
 
                 if (cc.rectContainsPoint(rect, locationInNode)) {
-                    //cc.director.runScene(new cc.TransitionFade(0.5, ShopCatalogyScreen.scene(catalogyName)));
-                    cc.director.runScene(ShopCatalogyScreen.scene(self.switchToName(catalogyName)));
+                    var shopCatalogyScreen = new ShopCatalogyScreen(cc.winSize.width, cc.winSize.height, 0, 0, self.switchToName(catalogyName).toUpperCase(), null, true);
+                    var scene = new cc.Scene();
+                    scene.addChild(shopCatalogyScreen);
+                    cc.director.pushScene(scene);
                 }
-            },
-            onMouseUp: function (event) {
             }
         });
         cc.eventManager.addListener(listener, this._catalogy);
