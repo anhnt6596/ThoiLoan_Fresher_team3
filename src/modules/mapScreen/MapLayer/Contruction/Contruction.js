@@ -1,4 +1,4 @@
-var Contruction = cc.Sprite.extend({
+var Contruction = cc.Node.extend({
     ctor: function(info) {
         this._super();
         this.info = info;
@@ -71,10 +71,15 @@ var Contruction = cc.Sprite.extend({
         }
     },
     updatePosition: function(mapPos) {
+        var oldX = this.info.posX;
+        var oldX = this.info.posY;
+
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
+
+        // call_API_update_position(this.info._id, mapPos.x, mapPos.y); linhrafa
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
@@ -119,8 +124,15 @@ var Contruction = cc.Sprite.extend({
             case 'TOW':
                 this.squareShadow(4);
                 break;
-            case 'GOL_1', 'GOL_2':
+            case 'BAR':
+            case 'RES_1':
                 this.squareShadow(3);
+                break
+            case 'STO_1':
+            case 'STO_2':
+            case 'RES_2':
+                this.roundShadow();
+                break;
             default:
                 break;
         }
@@ -131,6 +143,18 @@ var Contruction = cc.Sprite.extend({
         shadow.anchorX = 0;
         shadow.anchorY = 0;
         shadow.scale = 2;
+        this.addChild(shadow, 2);
+    },
+    roundShadow: function() {
+        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_5_Shadow.png';
+        var shadow = new cc.Sprite(resShadow);
+        shadow.attr({
+            anchorX: 0,
+            anchorY: 0,
+            scale: 2,
+            x: 0,
+            y: 0,
+        });
         this.addChild(shadow, 2);
     },
 });
