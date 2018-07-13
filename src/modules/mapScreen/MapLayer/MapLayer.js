@@ -5,6 +5,7 @@ var contructionList = [
     {
         _id: '_01',
         name: 'BDH',
+        level: 1,
         posX: 10,
         posY: 10,
         width: 2,
