@@ -204,6 +204,8 @@ var ShopCatalogyScreen = cc.Layer.extend({
 
                 if (cc.rectContainsPoint(rect, locationInNode)) {
                     //cc.director.runScene(ShopCatalogyScreen.scene(itemName));
+                    var pp = lad.popup(cc.winSize.width, cc.winSize.height, cc.winSize.width/2, cc.winSize.height/2, itemName, 1, false);
+                    self.addChild(pp, 100);
                     cc.log("Show item to Map");
                 }
             },
