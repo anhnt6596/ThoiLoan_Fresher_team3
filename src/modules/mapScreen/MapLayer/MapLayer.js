@@ -5,7 +5,6 @@ var contructionList = [
     {
         _id: '_01',
         name: 'BDH',
-        level: 1,
         posX: 10,
         posY: 10,
         width: 2,
@@ -18,7 +17,98 @@ var contructionList = [
         posY: 19,
         width: 4,
         height: 4,
-    }
+        level: 5,
+    },
+    {
+        _id: '_03',
+        name: 'AMC',
+        posX: 0,
+        posY: 0,
+        width: 5,
+        height: 5,
+        level: 1,
+    },
+    {
+        _id: '_04',
+        name: 'BAR',
+        posX: 10,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_05',
+        name: 'BAR',
+        posX: 5,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_06',
+        name: 'STO_1',
+        posX: 5,
+        posY: 10,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_07',
+        name: 'STO_1',
+        posX: 5,
+        posY: 15,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_08',
+        name: 'STO_2',
+        posX: 5,
+        posY: 20,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_09',
+        name: 'STO_2',
+        posX: 5,
+        posY: 25,
+        width: 3,
+        height: 3,
+        level: 1,
+    },
+    {
+        _id: '_10',
+        name: 'RES_1',
+        posX: 5,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
+    {
+        _id: '_11',
+        name: 'RES_1',
+        posX: 10,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_12',
+        name: 'RES_2',
+        posX: 15,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
 ];
 
 var rootMapPos = {
@@ -38,15 +128,19 @@ var MapLayer = cc.Layer.extend({
         this.addTouchListener();
     },
     init: function() {
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
         this.initBackGround();
         this.initContructions(contructionList);
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
         this.scale = 0.8;
+        this.x = - (this.mapWidth + cc.winSize.width) / 2;
+        this.y = - (this.mapHeight + cc.winSize.height) / 2;
     },
     initContructions: function(contructions) {
         var self = this;
-        contructions.forEach(function(contruction) {
+        contructions.forEach(function(contruction, i) {
             var name = contruction.name;
             switch (name) {
                 case 'TOW':
@@ -58,6 +152,36 @@ var MapLayer = cc.Layer.extend({
                     var builderHut = new BuilderHut(contruction);
                     self.addChild(builderHut);
                     objectRefs.push(builderHut);
+                    break;
+                case 'AMC':
+                    var armyCamp = new ArmyCamp(contruction);
+                    self.addChild(armyCamp);
+                    objectRefs.push(armyCamp);
+                    break;
+                case 'BAR':
+                    var barrack = new Barrack(contruction);
+                    self.addChild(barrack);
+                    objectRefs.push(barrack);
+                    break;
+                case 'STO_1':
+                    var goldStorage = new GoldStorage(contruction);
+                    self.addChild(goldStorage);
+                    objectRefs.push(goldStorage);
+                    break;
+                case 'STO_2':
+                    var elixirStorage = new ElixirStorage(contruction);
+                    self.addChild(elixirStorage);
+                    objectRefs.push(elixirStorage);
+                    break;
+                case 'RES_1':
+                    var goldMine = new GoldMine(contruction);
+                    self.addChild(goldMine);
+                    objectRefs.push(goldMine);
+                    break;
+                case 'RES_2':
+                    var elixirCollector = new ElixirCollector(contruction);
+                    self.addChild(elixirCollector);
+                    objectRefs.push(elixirCollector);
                     break;
                 default:
                     break;
@@ -167,12 +291,11 @@ var MapLayer = cc.Layer.extend({
     },
     isTouchTargetedObject: function(mapPos) {
         if (this._targetedObject == null) return false;
-        var isOnMap = mapPos.x >= 0 && mapPos.y >= 0 && mapPos.x <40 && mapPos.y < 40;
         var tempX = this._targetedObject.tempX;
         var tempY = this._targetedObject.tempY;
         var size = this._targetedObject.info.width;
         var isOnObject = mapPos.x >= tempX && mapPos.x <= tempX + size && mapPos.y >= tempY && mapPos.y <= tempY + size;
-        return (isOnMap && isOnObject);
+        return isOnObject;
     },
     onTouchMoved: function(touch, event) {
         var tp = touch.getLocation();
