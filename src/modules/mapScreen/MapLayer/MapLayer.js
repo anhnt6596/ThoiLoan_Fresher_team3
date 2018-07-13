@@ -216,8 +216,6 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
-            cc.log('>>>>>', target_id);
-            cc.log(objectRefs);
             for(var i = 0; i < objectRefs.length; i+=1) {
                 if (objectRefs[i].info && objectRefs[i].info._id && objectRefs[i].info._id == target_id) {
                     var newTarget = objectRefs[i];

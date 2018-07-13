@@ -89,7 +89,8 @@ var ShopScreen = cc.Layer.extend({
     },
 
     onCloseCallback:function () {
-        cc.director.runScene(createMapScene());
+        // cc.director.runScene(createMapScene());
+        cc.director.popScene();
     },
 
     createCatalogy:function(catalogyName){
