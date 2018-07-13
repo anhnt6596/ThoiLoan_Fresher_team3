@@ -2,42 +2,29 @@
 var LobbyLayer = cc.Layer.extend({
     ctor:function() {
         this._super();
-
-
         var size = cc.winSize;
         var yBtn = size.height/3;
 
-        var btnShop = new cc.Sprite('res/Art/GUIs/Main_Gui/shop.png');
-        this.addChild(btnShop);
-        //btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
-        //btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
-
-
-        //var listener = cc.EventListener.create({
-        //    event: cc.EventListener.MOUSE,
-        //    onMouseDown: function (event) {
-        //        var target = event.getCurrentTarget();
-        //        var locationInNode = target.convertToNodeSpace(event.getLocation());
-        //        var s = target.getContentSize();
-        //        var rect = cc.rect(0, 0, s.width, s.height);
-        //
-        //        if (cc.rectContainsPoint(rect, locationInNode)) {
-        //            //cc.log('Mouse Down: Inside the ' + catalogyName);
-        //            //cc.director.runScene(ShopCatalogy.scene(catalogyName));
-        //            cc.log("-----------Load Scene-----------");
-        //            //cc.director.pushScene(ShopCatalogy.scene(catalogyName));
-        //        }
-        //    },
-        //    onMouseUp: function (event) {
-        //    }
-        //});
-        //cc.eventManager.addListener(listener, btnShop);
-        var btnShop = gv.commonButton(200, 64, cc.winSize.width, yBtn,"SHOP");
+        var btnShop = ui.iconButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'shop');
         this.addChild(btnShop);
         btnShop.addClickEventListener(this.onOpenShop.bind(this));
+
+        // var btnShop = new TextButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'shop');
+        // this.addChild(btnShop);
+
+        var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'Tấn công');
+        this.addChild(btnAttack);
+        btnAttack.addClickEventListener(this.onAttack.bind(this));
+
+        var goldBar = new ResourceBar(size.width - 118, size.height - 40, 'gold');
+        this.addChild(goldBar);
+        var elixirBar = new ResourceBar(size.width - 118, size.height - 100, 'elixir');
+        this.addChild(elixirBar);
+        var darkElixirBar = new ResourceBar(size.width - 118, size.height - 160, 'dark_elixir');
+        this.addChild(darkElixirBar);
     },
     onOpenShop: function(){
         fr.view(ShopScreen);
-
-    }
+    },
+    onAttack: function() {},
 });

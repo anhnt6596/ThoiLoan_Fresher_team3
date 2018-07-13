@@ -32,6 +32,7 @@
         "src/base/network/InPacketFactory.js",
         "src/base/Resource.js",
         "src/base/UIFactory.js",
+        "src/base/IconButton.js",
         "src/base/UtilityUI.js",
         "src/libs/md5.js",
         "src/libs/signals.js",
@@ -51,6 +52,8 @@
         "src/modules/mapScreen/MapLayer/Contruction/BuilderHut.js",
         "src/modules/mapScreen/MapLayer/Contruction/TownHall.js",
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
+        "src/modules/mapScreen/LobbyLayer/ResourceBar.js",
+        "src/modules/mapScreen/LobbyLayer/TextButton.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js"
     ]
