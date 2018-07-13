@@ -79,8 +79,11 @@ cc.game.onStart = function () {
         testnetwork.connector = new testnetwork.Connector(gv.gameClient);
 
          //fr.view(DuyTest);
-         fr.view(LoadingScreen);
+        //  fr.view(LoadingScreen);
         //fr.view(MapLayer);
+        //  fr.view(LoadingScreen);
+        //fr.view(MapLayer);
+        fr.view(LoginScreen);
     }, this);
 };
 cc.game.run();
