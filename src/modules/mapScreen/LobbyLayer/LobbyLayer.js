@@ -5,14 +5,14 @@ var LobbyLayer = cc.Layer.extend({
         var size = cc.winSize;
         var yBtn = size.height/3;
 
-        var btnShop = ui.iconButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'shop');
+        var btnShop = ui.iconButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'SHOP');
         this.addChild(btnShop);
         btnShop.addClickEventListener(this.onOpenShop.bind(this));
 
         // var btnShop = new TextButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'shop');
         // this.addChild(btnShop);
 
-        var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'Tấn công');
+        var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'TẤN CÔNG');
         this.addChild(btnAttack);
         btnAttack.addClickEventListener(this.onAttack.bind(this));
 

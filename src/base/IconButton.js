@@ -13,17 +13,22 @@ ui.iconButton = function(size, x, y, src_img, text = ''){
         y: y
     });
 
-    // btn.setTitleText(text);
-    // btn.setTitleFontSize(15);
-    // btn.setTitleColor(cc.color(255,255,255,255));
-    // btn.setZoomScale(0.1);
-    // btn.setPressedActionEnabled(true);
-
     btn.setScale9Enabled(true);
     btn.setUnifySizeEnabled(false);
     btn.ignoreContentAdaptWithSize(false);
     var capInsets = cc.rect(15,15, 15, 15);
     btn.setCapInsets(capInsets);
     btn.setContentSize(cc.size(size,size));
+
+    var valueText = new cc.LabelBMFont(text, 'res/Art/Fonts/soji_16.fnt');
+    valueText.attr({
+        anchorX: 0.5,
+        anchorY: 0,
+        x: btn.width / 2,
+        y: 8,
+        scale: 0.9
+    });
+    btn.addChild(valueText, 100);
+
     return btn;
 };

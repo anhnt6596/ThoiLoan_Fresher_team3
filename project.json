@@ -53,7 +53,6 @@
         "src/modules/mapScreen/MapLayer/Contruction/TownHall.js",
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
         "src/modules/mapScreen/LobbyLayer/ResourceBar.js",
-        "src/modules/mapScreen/LobbyLayer/TextButton.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js"
     ]
