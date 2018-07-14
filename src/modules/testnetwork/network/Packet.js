@@ -158,7 +158,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
-            //contructionList = [];
+           // contructionList = [];
         },
         readData:function(){
             this.n = this.getInt();

@@ -15,7 +15,7 @@ var ElixirCollector = CollectorBuilding.extend({
             x: coor.x + this.img_x,
             y: coor.y + this.img_y,
         });
-        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 1) / 2) * 10;
+        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 3) / 2) * 10;
         MAP.addChild(buildingImg, zOrder);
         var goldmineAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_0', 0, 9, 0.2);
         var animSprite = new cc.Sprite();

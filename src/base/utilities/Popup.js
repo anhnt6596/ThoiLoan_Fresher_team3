@@ -7,11 +7,14 @@ var Popup = cc.Layer.extend({
 
     _resInfo:null,
     _close:null,
+    _data:null,
 
     ctor:function(width, height, x, y, text, data, bool) {
         cc.log("-----------ctor Popup-----------");
         this._super();
         //this.init(width, height, x, y, text, data, bool);
+        this._data = data;
+
         var bakeLayer = cc.LayerColor.create(cc.color(100, 128, 128), width, height);
         bakeLayer.setAnchorPoint(0, 0);
         bakeLayer.setPosition(x, y);
@@ -28,7 +31,7 @@ var Popup = cc.Layer.extend({
 
         var label = new cc.LabelTTF(text, "Arial", this._resInfo.height * this._resInfo.scaleY / 1.5);
         label.setAnchorPoint(0, 0);
-        label.setPosition((cc.winSize.width - label.width)/2, this._resInfo.y);
+        label.setPosition((cc.winSize.width - label.width)/2, this._resInfo.y + 5);
         this.addChild(label, 200, 200);
 
 
