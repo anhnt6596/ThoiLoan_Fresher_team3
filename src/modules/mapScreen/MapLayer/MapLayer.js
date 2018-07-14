@@ -5,7 +5,7 @@ var MAP = MAP || null;
 var contructionList = [
     {
         _id: '_01',
-        name: 'BDH',
+        name: 'BDH_1',
         level: 1,
         posX: 10,
         posY: 10,
@@ -14,7 +14,7 @@ var contructionList = [
     },
     {
         _id: '_02',
-        name: 'TOW',
+        name: 'TOW_1',
         posX: 19,
         posY: 19,
         width: 4,
@@ -23,7 +23,7 @@ var contructionList = [
     },
     {
         _id: '_03',
-        name: 'AMC',
+        name: 'AMC_1',
         posX: 0,
         posY: 0,
         width: 5,
@@ -32,7 +32,7 @@ var contructionList = [
     },
     {
         _id: '_04',
-        name: 'BAR',
+        name: 'BAR_1',
         posX: 10,
         posY: 5,
         width: 3,
@@ -41,7 +41,7 @@ var contructionList = [
     },
     {
         _id: '_05',
-        name: 'BAR',
+        name: 'BAR_1',
         posX: 5,
         posY: 5,
         width: 3,
@@ -147,19 +147,19 @@ var MapLayer = cc.Layer.extend({
         contructions.forEach(function(contruction, i) {
             var name = contruction.name;
             switch (name) {
-                case 'TOW':
+                case 'TOW_1':
                     var townHall = new TownHall(contruction);
                     objectRefs.push(townHall);
                     break;
-                case 'BDH':
+                case 'BDH_1':
                     var builderHut = new BuilderHut(contruction);
                     objectRefs.push(builderHut);
                     break;
-                case 'AMC':
+                case 'AMC_1':
                     var armyCamp = new ArmyCamp(contruction);
                     objectRefs.push(armyCamp);
                     break;
-                case 'BAR':
+                case 'BAR_1':
                     var barrack = new Barrack(contruction);
                     objectRefs.push(barrack);
                     break;
@@ -366,12 +366,15 @@ var MapLayer = cc.Layer.extend({
         this._startTouch = null;
     },
     updateContructionList: function(info) {
-        var newContructionList = contructionList.map(function(info) {
-            if (contruction._id == info._id) {
-                contruction.posX = info.posX;
-                contruction.posY = info.posY;
+        var newContructionList = contructionList.map(function(contruction) {
+            var newContruction = contruction;
+            if (newContruction._id == info._id) {
+                newContruction.posX = info.posX;
+                newContruction.posY = info.posY;
             }
+            return newContruction;
         });
+        contructionList = newContructionList;
     },
     targetObject: function(mapPos) {
         var self = this;
