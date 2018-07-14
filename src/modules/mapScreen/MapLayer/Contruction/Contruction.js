@@ -77,7 +77,7 @@ var Contruction = cc.Class.extend({
                 x: coor.x,
                 y: coor.y,
             });
-        }
+        }  
     },
     setImgCoor: function(coor) {
         this.buildingImg.attr({
