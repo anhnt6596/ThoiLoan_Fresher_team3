@@ -1,74 +1,101 @@
-var Contruction = cc.Node.extend({
+var Contruction = cc.Class.extend({
     ctor: function(info) {
-        this._super();
+        // this._super();
         this.info = info;
         this.init();
     },
     init: function() {
-        var newX = rootMapPos.x + (this.info.posY - this.info.posX) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
-        var newY = rootMapPos.y + (this.info.posX + this.info.posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
-        this.x = newX;
-        this.y = newY;
-        this.anchorX = 0;
-        this.anchorY = 0;
-        this.scale = 1;
-
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
 
         this.addShadow();
-        this.addArrowMove();
-        this.addGreenBG();
-        this.addRedBG();
     },
-    addGreenBG: function() {
-        var resBG = 'res/Art/Map/map_obj_bg/BG/GREEN_' + this.info.width + '.png';
-        var greenBG = new cc.Sprite(resBG);
-        this.greenBG = greenBG;
-        greenBG.attr({
-            anchorX: 0,
-            anchorY: 0,
-            scale: 2,
+    onTarget: function() {
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var act = new cc.FadeIn(0.2);
+        MAP.arrows[this.info.width].attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        MAP.arrows[this.info.width].runAction(act);
+        if (this.grass) this.grass.opacity = 0;
+        MAP.greenBGs[this.info.width].attr({
+            x: coor.x,
+            y: coor.y,
+            opacity: 230,
+        });
+        MAP.redBGs[this.info.width].attr({
+            x: coor.x,
+            y: coor.y,
             opacity: 0,
         });
-        this.addChild(greenBG, 1);
     },
-    addRedBG: function() {
-        var resBG = 'res/Art/Map/map_obj_bg/BG/RED_' + this.info.width + '.png';
-        var redBG = new cc.Sprite(resBG);
-        this.redBG = redBG;
-        redBG.attr({
-            anchorX: 0,
-            anchorY: 0,
-            scale: 2,
+    removeTarget: function() {
+        var act = new cc.FadeOut(0.2);
+        MAP.arrows[this.info.width].runAction(act);
+        if (this.grass) this.grass.opacity = 255;
+        MAP.greenBGs[this.info.width].attr({
             opacity: 0,
         });
-        this.addChild(redBG, 1);
-    },
-    addArrowMove: function() {
-        var arrowMoveRes = 'res/Art/Map/map_obj_bg/BG/arrowmove' + this.info.width + '.png'
-        this.arrowMove = new cc.Sprite(arrowMoveRes)
-        this.arrowMove.attr({
-            anchorX: 0,
-            anchorY: 0,
+        MAP.redBGs[this.info.width].attr({
             opacity: 0,
         });
-        this.addChild(this.arrowMove, 2);
+
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        this.setImgCoor(coor);
+        this.tempX = this.info.posX;
+        this.tempY = this.info.posY;
     },
     moving: function(mapPos) {
-        var newX = rootMapPos.x + (mapPos.y - mapPos.x) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
-        var newY = rootMapPos.y + (mapPos.x + mapPos.y) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
-        this.x = newX;
-        this.y = newY;
+        var coor = this.xyOnMap(mapPos.x, mapPos.y);
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
+        this.setImgCoor(coor); // đặt lại vị trí
+        // setzOrder
+        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10;
+        MAP.reorderChild(this.buildingImg, newZ);
+        // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
-            this.greenBG.opacity = 230;
-            this.redBG.opacity = 0;
+            MAP.greenBGs[this.info.width].attr({
+                opacity: 230,
+                x: coor.x,
+                y: coor.y,
+            });
+            MAP.redBGs[this.info.width].attr({
+                opacity: 0,
+                x: coor.x,
+                y: coor.y,
+            });
         } else {
-            this.greenBG.opacity = 0;
-            this.redBG.opacity = 230;
+            MAP.greenBGs[this.info.width].attr({
+                opacity: 0,
+                x: coor.x,
+                y: coor.y,
+            });
+            MAP.redBGs[this.info.width].attr({
+                opacity: 230,
+                x: coor.x,
+                y: coor.y,
+            });
         }
+    },
+    setImgCoor: function(coor) {
+        this.buildingImg.attr({
+            x: coor.x + this.img_x,
+            y: coor.y + this.img_y,
+        });
+        this.grass && this.grass.attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        this.shadow && this.shadow.attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        MAP.arrows[this.info.width].attr({
+            x: coor.x,
+            y: coor.y,
+        });
     },
     updatePosition: function(mapPos) {
         var oldX = this.info.posX;
@@ -92,30 +119,6 @@ var Contruction = cc.Node.extend({
         }
         return true;
     },
-    onTarget: function() {
-        var act = new cc.FadeIn(0.2);
-        this.arrowMove.runAction(act);
-        if (this.grass) this.grass.opacity = 0;
-        this.greenBG.opacity = 230;
-    },
-    removeTarget: function() {
-        var act = new cc.FadeOut(0.2);
-        this.arrowMove.runAction(act);
-        var newZ = 900 - (this.info.posX + this.info.posY) * 10;
-        this.parent.reorderChild(this, newZ);
-        if (this.grass) this.grass.opacity = 255;
-        this.greenBG.opacity = 0;
-        this.redBG.opacity = 0;
-
-        var newX = rootMapPos.x + (this.info.posY - this.info.posX) * TILE_WIDTH / 2 - TILE_WIDTH*(this.info.width / 2);
-        var newY = rootMapPos.y + (this.info.posX + this.info.posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
-        this.x = newX;
-        this.y = newY;
-        this.tempX = this.info.posX;
-        this.tempY = this.info.posY;
-    },
-
-    // shadow
     addShadow: function() {
         switch (this.info.name) {
             case 'BDH':
@@ -140,21 +143,34 @@ var Contruction = cc.Node.extend({
     squareShadow: function(size) {
         var resShadow = 'res/Art/Map/map_obj_bg/GRASS_'+ size +'_Shadow.png';
         var shadow = new cc.Sprite(resShadow);
-        shadow.anchorX = 0;
-        shadow.anchorY = 0;
-        shadow.scale = 2;
-        this.addChild(shadow, 2);
-    },
-    roundShadow: function() {
-        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_5_Shadow.png';
-        var shadow = new cc.Sprite(resShadow);
+        this.shadow = shadow;
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
         shadow.attr({
             anchorX: 0,
             anchorY: 0,
             scale: 2,
-            x: 0,
-            y: 0,
+            x: coor.x,
+            y: coor.y,
         });
-        this.addChild(shadow, 2);
+        MAP.addChild(shadow, Z.BUILDING_SHADOW);
     },
+    roundShadow: function() {
+        var resShadow = 'res/Art/Map/map_obj_bg/GRASS_5_Shadow.png';
+        var shadow = new cc.Sprite(resShadow);
+        this.shadow = shadow;
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        shadow.attr({
+            anchorX: 0,
+            anchorY: 0,
+            scale: 2,
+            x: coor.x,
+            y: coor.y,
+        });
+        MAP.addChild(shadow, Z.BUILDING_SHADOW);
+    },
+    xyOnMap: function(posX, posY) {
+        var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2 - TILE_WIDTH * (this.info.width / 2);
+        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
+        return { x: newX, y: newY };
+    }
 });

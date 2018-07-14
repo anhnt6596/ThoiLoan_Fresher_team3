@@ -1,5 +1,6 @@
 var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
+var MAP = MAP || null;
 
 var contructionList = [
     {
@@ -122,6 +123,7 @@ var MapLayer = cc.Layer.extend({
     _isMovingBuilding: false,
     ctor: function() {
         this._super();
+        MAP = this;
         this.anchorX = 0;
         this.anchorY = 0;
 
@@ -132,6 +134,7 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
         this.initBackGround();
+        this.initMovingTool();
         this.initContructions(contructionList);
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
@@ -146,42 +149,34 @@ var MapLayer = cc.Layer.extend({
             switch (name) {
                 case 'TOW':
                     var townHall = new TownHall(contruction);
-                    self.addChild(townHall);
                     objectRefs.push(townHall);
                     break;
                 case 'BDH':
                     var builderHut = new BuilderHut(contruction);
-                    self.addChild(builderHut);
                     objectRefs.push(builderHut);
                     break;
                 case 'AMC':
                     var armyCamp = new ArmyCamp(contruction);
-                    self.addChild(armyCamp);
                     objectRefs.push(armyCamp);
                     break;
                 case 'BAR':
                     var barrack = new Barrack(contruction);
-                    self.addChild(barrack);
                     objectRefs.push(barrack);
                     break;
                 case 'STO_1':
                     var goldStorage = new GoldStorage(contruction);
-                    self.addChild(goldStorage);
                     objectRefs.push(goldStorage);
                     break;
                 case 'STO_2':
                     var elixirStorage = new ElixirStorage(contruction);
-                    self.addChild(elixirStorage);
                     objectRefs.push(elixirStorage);
                     break;
                 case 'RES_1':
                     var goldMine = new GoldMine(contruction);
-                    self.addChild(goldMine);
                     objectRefs.push(goldMine);
                     break;
                 case 'RES_2':
                     var elixirCollector = new ElixirCollector(contruction);
-                    self.addChild(elixirCollector);
                     objectRefs.push(elixirCollector);
                     break;
                 default:
@@ -191,6 +186,48 @@ var MapLayer = cc.Layer.extend({
     },
     initImpediments: function(impediments) {
 
+    },
+    initMovingTool: function() {
+        this.arrows = [];
+        this.greenBGs = [];
+        this.redBGs = [];
+
+        this.arrows[0] = null;
+        this.greenBGs[0] = null;
+        this.redBGs[0] = null;
+        for (var i = 1; i <= 5; i++) {
+            var arrowMoveRes = 'res/Art/Map/map_obj_bg/BG/arrowmove' + i + '.png';
+            var arrow = new cc.Sprite(arrowMoveRes)
+            arrow.attr({
+                anchorX: 0,
+                anchorY: 0,
+                opacity: 0,
+            });
+            this.addChild(arrow, Z.ARROW_MOVE);
+            this.arrows[i] = arrow;
+
+            var greenBGres = 'res/Art/Map/map_obj_bg/BG/GREEN_' + i + '.png';
+            var greenBG = new cc.Sprite(greenBGres)
+            greenBG.attr({
+                anchorX: 0,
+                anchorY: 0,
+                scale: 2,
+                opacity: 0,
+            });
+            this.addChild(greenBG, Z.GREEN_BG);
+            this.greenBGs[i] = greenBG;
+
+            var redBGres = 'res/Art/Map/map_obj_bg/BG/RED_' + i + '.png';
+            var redBG = new cc.Sprite(redBGres)
+            redBG.attr({
+                anchorX: 0,
+                anchorY: 0,
+                scale: 2,
+                opacity: 0,
+            });
+            this.addChild(redBG, Z.RED_BG);
+            this.redBGs[i] = redBG;
+        }
     },
     createLogicArray: function(contructions, impediments) {
         mapLogicArray = [];
@@ -223,7 +260,7 @@ var MapLayer = cc.Layer.extend({
             y: 0,
             scale: 2,
         });
-        this.addChild(bg_bl, 1);
+        this.addChild(bg_bl, Z.BACKGROUND);
         
         var bg_br = new cc.Sprite(res.map.map_br);
         bg_br.attr({
@@ -233,7 +270,7 @@ var MapLayer = cc.Layer.extend({
             y: 0,
             scale: 2,
         });
-        this.addChild(bg_br, 1);
+        this.addChild(bg_br, Z.BACKGROUND);
 
         var bg_tl = new cc.Sprite(res.map.map_tl);
         bg_tl.attr({
@@ -253,7 +290,7 @@ var MapLayer = cc.Layer.extend({
             y: bg_bl.height * 2 - 6,
             scale: 2,
         });
-        this.addChild(bg_tr, 1);
+        this.addChild(bg_tr, Z.BACKGROUND);
 
         var mapBackground = new cc.TMXTiledMap(res.map.map_tmx);
         mapBackground.attr({
@@ -263,7 +300,7 @@ var MapLayer = cc.Layer.extend({
             y: bg_bl.height * 2 - 4,
             scale: 1,
         });
-        this.addChild(mapBackground, 0);
+        this.addChild(mapBackground, Z.TILEMAP);
         this.mapWidth = bg_bl.width + bg_br.width + 500;
         this.mapHeight = bg_bl.height + bg_tl.height + 500;
     },
@@ -349,7 +386,7 @@ var MapLayer = cc.Layer.extend({
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
                         self._targetedObject.onTarget();
-                        self.reorderChild(self._targetedObject, 1000);
+                        //self.reorderChild(self._targetedObject, 1000);
                         break;
                     }
                 } else {
