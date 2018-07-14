@@ -5,15 +5,15 @@
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 
+
 testnetwork.Connector = cc.Class.extend({
     ctor:function(gameClient)
     {
         this.gameClient = gameClient;
         gameClient.packetFactory.addPacketMap(testnetwork.packetMap);
         gameClient.receivePacketSignal.add(this.onReceivedPacket, this);
-        this._userName = "linh";
         this.sessionKey = 10001010;
-        this._password;
+
     },
     onReceivedPacket:function(cmd, packet)
     {
@@ -25,19 +25,16 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.USER_LOGIN:
                 this.sendGetUserInfo();
-                fr.getCurrentScreen().onFinishLogin(packet.username, packet.password);
-                break;
+                //fr.getCurrentScreen().onFinishLogin(packet.username, packet.password);
+                //break;
             case gv.CMD.USER_INFO:
-                fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
+                //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
+                this.setUserInfomation(packet);
+                this.sendGetMapInfo();
                 break;
-            case gv.CMD.MOVE:
-                cc.log("MOVE:", packet.x, packet.y);
-                fr.getCurrentScreen().updateMove(packet.x, packet.y);
-                break;
-            case gv.CMD.TEST:
-
-                fr.getCurrentScreen().updateTest(packet.number+1);
+            case gv.CMD.GET_MAP_INFO:
+                LOGIN.onFinishGameInfo();
                 break;
         }
     },
@@ -48,25 +45,31 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack();
         this.gameClient.sendPacket(pk);
     },
+    sendGetMapInfo:function()
+    {
+        cc.log("sendGetMapInfo");
+        var pk = this.gameClient.getOutPacket(CmdSendMapInfo);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+    },
     sendLoginRequest: function () {
         cc.log("sendLoginRequest");
         var pk = this.gameClient.getOutPacket(CmdSendLogin);
-        pk.pack(this._userName, this.sessionKey);
+        pk.pack(this.sessionKey, gv.user.uuid);
         this.gameClient.sendPacket(pk);
     },
-    sendMove:function(direction){
-        cc.log("SendMove:" + direction);
-        var pk = this.gameClient.getOutPacket(CmdSendMove);
-        pk.pack(direction);
-        this.gameClient.sendPacket(pk);
-    },
-    sendTest:function(number){
-        cc.log("SendTest" + number);
-        var pk = this.gameClient.getOutPacket(CmdSendTest);
-        pk.pack(number);
-        this.gameClient.sendPacket(pk);
-        //this.gameClient.sendPacket(number);
+    setUserInfomation:function(packet){
+        gv.user.id = packet.id;
+        gv.user.name = packet.name;
+        gv.user.exp = packet.exp;
+        gv.user.coin = packet.coin;
+        gv.user.gold = packet.gold;
+        gv.user.elixir = packet.elixir;
+        gv.user.darkElixir = packet.darkElixir;
+        gv.user.builderNumber = packet.builderNumber;
+
     }
+
 });
 
 

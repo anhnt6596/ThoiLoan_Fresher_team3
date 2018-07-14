@@ -1,7 +1,9 @@
 
+var LOBBY = LOBBY || null;
 var LobbyLayer = cc.Layer.extend({
     ctor:function() {
         this._super();
+        LOBBY = this;
         var size = cc.winSize;
         var yBtn = size.height/3;
 
@@ -38,5 +40,8 @@ var LobbyLayer = cc.Layer.extend({
         shopScene.addChild(shopScreen);
         cc.director.pushScene(shopScene);
     },
-    onAttack: function() {},
+    onAttack: function() {}
+    ,
+
+
 });
