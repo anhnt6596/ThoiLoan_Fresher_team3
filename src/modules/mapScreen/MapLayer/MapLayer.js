@@ -354,7 +354,7 @@ var MapLayer = cc.Layer.extend({
             this.targetObject(mapPos);
         }
         if (this._isMovingObject) {
-            if (this._targetedObject.checkNewPosition(mapPos)) {
+            if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
                 this._targetedObject.updatePosition(mapPos);
                 this.updateContructionList(this._targetedObject.info);
                 this.createLogicArray(contructionList, {});
