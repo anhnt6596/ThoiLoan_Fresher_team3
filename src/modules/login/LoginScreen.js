@@ -23,9 +23,8 @@ var LoginScreen = cc.Layer.extend({
         //btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
 
-
-
-
+        this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
+        this.addChild(this.lblLog);
 
     },
 
@@ -37,6 +36,7 @@ var LoginScreen = cc.Layer.extend({
         //this.lblLog.setString("Start Connect!");
 
         gv.user.uuid = this.tfId.getString()
+        cc.log("uuid "+  gv.user.uuid  );
         gv.gameClient.connect();
     },
     onConnectSuccess:function()
@@ -48,7 +48,7 @@ var LoginScreen = cc.Layer.extend({
         this.lblLog.setString("Connect fail: " + text);
     },
     onFinishGameInfo:function(){
-        cc.director.runScene(createMapScene());
+            cc.director.runScene(createMapScene());
     }
 
 });

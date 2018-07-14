@@ -151,14 +151,14 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
     }
 );
 
-var contructionList = contructionList || [];
+//var contructionList = contructionList || [];
 
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
         ctor:function()
         {
             this._super();
-            contructionList = [];
+            //contructionList = [];
         },
         readData:function(){
             this.n = this.getInt();
@@ -180,9 +180,17 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this.status = this.getString();
                 cc.log(", status: "+ this.status);
                 console.log("/n");
-                this.width =3;
-                this.height =3;
-                contructionList.push(this);
+                this.width = 3;
+                this.height = 3;
+                //contructionList[i] = {
+                //    _id: this._id,
+                //    name: this.name,
+                //    level: this.level,
+                //    posX: this.posX,
+                //    posY: this.posY,
+                //    width: this.name === 'BDH_1' ? 2 : 3,
+                //    height: this.name === 'BDH_1' ? 2 : 3,
+                //};
 
             }
            //console.log(contructionList);

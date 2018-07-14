@@ -1,7 +1,7 @@
 /**
  * Created by KienVN on 10/2/2017.
  */
-
+//var count =0;
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 
@@ -21,20 +21,25 @@ testnetwork.Connector = cc.Class.extend({
         switch (cmd)
         {
             case gv.CMD.HAND_SHAKE:
+
                 this.sendLoginRequest();
                 break;
             case gv.CMD.USER_LOGIN:
-                this.sendGetUserInfo();
+            
+
                 //fr.getCurrentScreen().onFinishLogin(packet.username, packet.password);
                 //break;
             case gv.CMD.USER_INFO:
+                //count++;
+                //cc.log(">>>>>>count" + count);
+                //this.setUserInfomation();
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
                 this.sendGetMapInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
-                LOGIN.onFinishGameInfo();
+                fr.getCurrentScreen().onFinishGameInfo();
                 break;
         }
     },

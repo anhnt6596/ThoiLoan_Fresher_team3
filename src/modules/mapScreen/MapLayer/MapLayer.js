@@ -2,116 +2,116 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-//var contructionList = [
-//    {
-//        _id: '_01',
-//        name: 'BDH',
-//        level: 1,
-//        posX: 10,
-//        posY: 10,
-//        width: 2,
-//        height: 2,
-//    },
-//    {
-//        _id: '_02',
-//        name: 'TOW',
-//        posX: 19,
-//        posY: 19,
-//        width: 4,
-//        height: 4,
-//        level: 5,
-//    },
-//    {
-//        _id: '_03',
-//        name: 'AMC',
-//        posX: 0,
-//        posY: 0,
-//        width: 5,
-//        height: 5,
-//        level: 1,
-//    },
-//    {
-//        _id: '_04',
-//        name: 'BAR',
-//        posX: 10,
-//        posY: 5,
-//        width: 3,
-//        height: 3,
-//        level: 2,
-//    },
-//    {
-//        _id: '_05',
-//        name: 'BAR',
-//        posX: 5,
-//        posY: 5,
-//        width: 3,
-//        height: 3,
-//        level: 5,
-//    },
-//    {
-//        _id: '_06',
-//        name: 'STO_1',
-//        posX: 5,
-//        posY: 10,
-//        width: 3,
-//        height: 3,
-//        level: 2,
-//    },
-//    {
-//        _id: '_07',
-//        name: 'STO_1',
-//        posX: 5,
-//        posY: 15,
-//        width: 3,
-//        height: 3,
-//        level: 4,
-//    },
-//    {
-//        _id: '_08',
-//        name: 'STO_2',
-//        posX: 5,
-//        posY: 20,
-//        width: 3,
-//        height: 3,
-//        level: 5,
-//    },
-//    {
-//        _id: '_09',
-//        name: 'STO_2',
-//        posX: 5,
-//        posY: 25,
-//        width: 3,
-//        height: 3,
-//        level: 1,
-//    },
-//    {
-//        _id: '_10',
-//        name: 'RES_1',
-//        posX: 5,
-//        posY: 30,
-//        width: 3,
-//        height: 3,
-//        level: 11,
-//    },
-//    {
-//        _id: '_11',
-//        name: 'RES_1',
-//        posX: 10,
-//        posY: 30,
-//        width: 3,
-//        height: 3,
-//        level: 4,
-//    },
-//    {
-//        _id: '_12',
-//        name: 'RES_2',
-//        posX: 15,
-//        posY: 30,
-//        width: 3,
-//        height: 3,
-//        level: 11,
-//    },
-//];
+var contructionList = [
+    {
+        _id: '_01',
+        name: 'BDH',
+        level: 1,
+        posX: 10,
+        posY: 10,
+        width: 2,
+        height: 2,
+    },
+    {
+        _id: '_02',
+        name: 'TOW',
+        posX: 19,
+        posY: 19,
+        width: 4,
+        height: 4,
+        level: 5,
+    },
+    {
+        _id: '_03',
+        name: 'AMC',
+        posX: 0,
+        posY: 0,
+        width: 5,
+        height: 5,
+        level: 1,
+    },
+    {
+        _id: '_04',
+        name: 'BAR',
+        posX: 10,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_05',
+        name: 'BAR',
+        posX: 5,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_06',
+        name: 'STO_1',
+        posX: 5,
+        posY: 10,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_07',
+        name: 'STO_1',
+        posX: 5,
+        posY: 15,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_08',
+        name: 'STO_2',
+        posX: 5,
+        posY: 20,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_09',
+        name: 'STO_2',
+        posX: 5,
+        posY: 25,
+        width: 3,
+        height: 3,
+        level: 1,
+    },
+    {
+        _id: '_10',
+        name: 'RES_1',
+        posX: 5,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
+    {
+        _id: '_11',
+        name: 'RES_1',
+        posX: 10,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_12',
+        name: 'RES_2',
+        posX: 15,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
+];
 
 var rootMapPos = {
     x: 2100,
@@ -147,19 +147,19 @@ var MapLayer = cc.Layer.extend({
         contructions.forEach(function(contruction, i) {
             var name = contruction.name;
             switch (name) {
-                case 'TOW':
+                case 'TOW_1':
                     var townHall = new TownHall(contruction);
                     objectRefs.push(townHall);
                     break;
-                case 'BDH':
+                case 'BDH_1':
                     var builderHut = new BuilderHut(contruction);
                     objectRefs.push(builderHut);
                     break;
-                case 'AMC':
+                case 'AMC_1':
                     var armyCamp = new ArmyCamp(contruction);
                     objectRefs.push(armyCamp);
                     break;
-                case 'BAR':
+                case 'BAR_1':
                     var barrack = new Barrack(contruction);
                     objectRefs.push(barrack);
                     break;
