@@ -100,7 +100,6 @@ var Contruction = cc.Class.extend({
     updatePosition: function(mapPos) {
         var oldX = this.info.posX;
         var oldX = this.info.posY;
-
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
