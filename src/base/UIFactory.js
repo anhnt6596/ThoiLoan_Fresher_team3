@@ -88,6 +88,14 @@ gv.TextField = function(text,placeholder, x ,y){
     return _tf;
 }
 gv.user = {
-    username: "",
-    password: "",
+    uuid: "",
+    id :"",
+    name: "",
+    exp : "",
+    coin :"",
+    gold :"",
+    elixir :"",
+    darkElixir :"",
+    builderNumber :"",
+
 }
