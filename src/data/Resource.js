@@ -110,3 +110,15 @@ var g_resources = [
 
 var TILE_WIDTH = 76;
 var TILE_HEIGHT = 57;
+
+var Z = {
+    TILEMAP: 0,
+    BACKGROUND: 1,
+    BUILDING_GRASS: 5,
+    GREEN_BG: 6,
+    RED_BG: 6,
+    BUILDING_SHADOW: 8,
+    BUILDING_SCALE: 10,
+    ARROW_MOVE: 999,
+    TARGET: 1000, 
+}

@@ -6,11 +6,16 @@ var ArmyCamp = Building.extend({
         this.addBuildingImg();
     },
     addBuildingImg: function() {
-        var buildingImage = new cc.Sprite('res/Art/Buildings/army camp/AMC_1_'+ this.info.level +'/idle/image0000.png');
-        buildingImage.anchorX = 0;
-        buildingImage.anchorY = 0;
-        buildingImage.x = this.img_x;
-        buildingImage.y = this.img_y;
-        this.addChild(buildingImage, 10);
+        var buildingImg = new cc.Sprite('res/Art/Buildings/army camp/AMC_1_'+ this.info.level +'/idle/image0000.png');
+        this.buildingImg = buildingImg;
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        buildingImg.attr({
+            anchorX: 0,
+            anchorY: 0,
+            x: coor.x + this.img_x,
+            y: coor.y + this.img_y,
+        });
+        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 1) / 2) * 10;
+        MAP.addChild(buildingImg, zOrder);
     }
 });
