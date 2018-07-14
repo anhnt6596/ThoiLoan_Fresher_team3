@@ -7,21 +7,25 @@ var ShopCatalogyScreen = Popup.extend({
     _item:null,
     _itemList:[],
     _direction:null,
+    _obj:null,
 
     ctor:function (width, height, x, y, text, data, bool) {
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
         this._super(width, height, x, y, text, data, bool);
-        this.init();
+        this.init(text);
+
     },
 
-    init:function () {
+    init:function (text) {
+        this._obj = JSON.parse(shopInfo);
+
         this._resInfoBottom = new cc.Sprite('res/Art/GUIs/shop_gui/res_info.png');
         this._resInfoBottom.x = cc.winSize.width/2;
         this._resInfoBottom.y = this._resInfoBottom.height/2;
         this._resInfoBottom.scaleX = cc.winSize.width/this._resInfoBottom.width;
         this.addChild(this._resInfoBottom, 1, 1);
 
-        this.initItems();
+        this.initItems(text);
 
         var self = this;
         this.listener = cc.EventListener.create({
@@ -68,15 +72,11 @@ var ShopCatalogyScreen = Popup.extend({
         return true;
     },
 
-    initItems:function(){
-        this.createItem("BAR_1");
-        this.createItem("AMC_1");
-        this.createItem("DEF_1");
-        this.createItem("DEF_2");
-        this.createItem("DEF_3");
-        this.createItem("DEF_4");
-        this.createItem("DEF_5");
-        this.createItem("DEF_7");
+    initItems:function(text){
+        var catalogy = this._obj[text];
+        for (var item in catalogy) {
+            this.createItem(text, item);
+        }
 
         for(var i = 0; i < this._itemList.length; i++){
             this._itemList[i].x = (i+1)*gap_x + i*ITEM_WIDTH;
@@ -86,34 +86,78 @@ var ShopCatalogyScreen = Popup.extend({
         }
     },
 
-    createItem: function (itemName) {
+    createItem: function (catalogyName, itemName) {
         this._item = new cc.Sprite('res/Art/GUIs/shop_gui/slot.png');
-        this._item.anchorX = 0;
-        this._item.anchorY = 0;
+        this._item.setAnchorPoint(0, 0);
 
         var bg = new cc.Sprite('res/Art/GUIs/shop_gui/item_background.png');
-        bg.anchorX = 0;
-        bg.anchorY = 0;
+        bg.setAnchorPoint(0, 0);
         this._item.addChild(bg, 1, 1);
 
         var ha = new cc.Sprite('res/Art/GUIs/icons/shop_gui/icon/' + itemName + '.png');
-        ha.anchorX = 0;
-        ha.anchorY = 0;
+        ha.setAnchorPoint(0, 0);
         this._item.addChild(ha, 2, 2);
 
         this._info = new cc.Sprite('res/Art/GUIs/shop_gui/info.png');
-        this._info.anchorX = 0;
-        this._info.anchorY = 0;
+        this._info.setAnchorPoint(0, 0);
         this._info.x = this._item.x + this._item.width - this._info.width - 10;
         this._info.y = this._item.y + this._item.height - this._info.height - 10;
         this._item.addChild(this._info, 3, 3);
 
         var name = new cc.LabelTTF(itemName.toUpperCase(), "Arial", 20);
-        name.anchorX = 0;
-        name.anchorY = 0;
+        name.setAnchorPoint(0, 0);
         name.x = this._item.x + (ITEM_WIDTH-name.width)/2;
         name.y = this._item.y + ITEM_HEIGHT - name.height - 17;
         this._item.addChild(name, 4, 4);
+
+        var clock = new cc.Sprite('res/Art/GUIs/shop_gui/time.png');
+        clock.setAnchorPoint(0, 0);
+        clock.setPosition(this._item.x + 20, this._item.y + 70);
+        this._item.addChild(clock, 4, 4);
+
+        var catalogy = this._obj[catalogyName];
+
+        var day = Math.floor(catalogy[itemName].buildTime/86400);
+        var hour = Math.floor((catalogy[itemName].buildTime - 86400*day)/3600);
+        var minute = Math.floor((catalogy[itemName].buildTime - 86400*day - 3600*hour)/60);
+        var second = catalogy[itemName].buildTime - 86400*day - 3600*hour - minute*60;
+        var time = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
+        var time = time ? time : '0s';
+
+        var timeLabel = new cc.LabelTTF(time, "Arial", 20);
+        timeLabel.setAnchorPoint(0, 0);
+        timeLabel.setPosition(clock.x + clock.width + 10, clock.y + 5);
+        this._item.addChild(timeLabel, 4, 4);
+
+        var gold = catalogy[itemName].gold;
+        var elixir = catalogy[itemName].elixir;
+        var darkElixir = catalogy[itemName].darkElixir;
+        var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
+
+        var unit = null;
+        if(gold && gold !== undefined){
+            unit = new cc.Sprite('res/Art/GUIs/shop_gui/gold.png');
+        }else if(elixir){
+            unit = new cc.Sprite('res/Art/GUIs/shop_gui/elixir.png');
+        }else if(darkElixir){
+            unit = new cc.Sprite('res/Art/GUIs/shop_gui/icon_dElixir_bar.png');
+        }
+        else if(coin && coin !== undefined){
+            unit = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
+        }else{
+            unit = new cc.LabelTTF("Free", "Arial", 20);
+        }
+        unit.setAnchorPoint(0, 0);
+        unit.setPosition(this._item.x + this._item.width - unit.width - 20, this._item.y + 15);
+        this._item.addChild(unit, 4, 4);
+
+        var cost;
+        cost = (gold ? gold.toFixed(3) : '') + (elixir ? elixir.toFixed(3) : '') + (darkElixir ? darkElixir.toFixed(3) : '') + (coin ? coin.toFixed(3) : '');
+        var costLabel = new cc.LabelTTF(cost, "Arial", 20);
+        costLabel.setAnchorPoint(0, 0);
+        costLabel.setPosition(unit.x - costLabel.width - 10, unit.y + 5);
+        this._item.addChild(costLabel, 4, 4);
+
 
         var self = this;
         var listener = cc.EventListener.create({
