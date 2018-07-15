@@ -29,9 +29,11 @@ var Popup = cc.Layer.extend({
         this._resInfo.setPosition(x, y + bakeLayer.height * bakeLayer.scaleY - this._resInfo.height - 10);
         this.addChild(this._resInfo, 1, 1);
 
-        var label = new cc.LabelTTF(text, "Arial", this._resInfo.height * this._resInfo.scaleY / 1.5);
+        var label = new cc.LabelBMFont(text.toUpperCase(), 'res/Art/Fonts/soji_24.fnt');
+        label.scale = 1.5;
+        //var label = new cc.LabelTTF(text, "Arial", this._resInfo.height * this._resInfo.scaleY / 1.5);
         label.setAnchorPoint(0, 0);
-        label.setPosition((cc.winSize.width - label.width)/2, this._resInfo.y + 5);
+        label.setPosition((cc.winSize.width - label.width*label.scaleX)/2, this._resInfo.y + 5);
         this.addChild(label, 200, 200);
 
 
