@@ -2,116 +2,118 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-var contructionList = [
-    {
-        _id: '_01',
-        name: 'BDH_1',
-        level: 1,
-        posX: 10,
-        posY: 10,
-        width: 2,
-        height: 2,
-    },
-    {
-        _id: '_02',
-        name: 'TOW_1',
-        posX: 19,
-        posY: 19,
-        width: 4,
-        height: 4,
-        level: 5,
-    },
-    {
-        _id: '_03',
-        name: 'AMC_1',
-        posX: 0,
-        posY: 0,
-        width: 5,
-        height: 5,
-        level: 1,
-    },
-    {
-        _id: '_04',
-        name: 'BAR_1',
-        posX: 10,
-        posY: 5,
-        width: 3,
-        height: 3,
-        level: 2,
-    },
-    {
-        _id: '_05',
-        name: 'BAR_1',
-        posX: 5,
-        posY: 5,
-        width: 3,
-        height: 3,
-        level: 5,
-    },
-    {
-        _id: '_06',
-        name: 'STO_1',
-        posX: 5,
-        posY: 10,
-        width: 3,
-        height: 3,
-        level: 2,
-    },
-    {
-        _id: '_07',
-        name: 'STO_1',
-        posX: 5,
-        posY: 15,
-        width: 3,
-        height: 3,
-        level: 4,
-    },
-    {
-        _id: '_08',
-        name: 'STO_2',
-        posX: 5,
-        posY: 20,
-        width: 3,
-        height: 3,
-        level: 5,
-    },
-    {
-        _id: '_09',
-        name: 'STO_2',
-        posX: 5,
-        posY: 25,
-        width: 3,
-        height: 3,
-        level: 1,
-    },
-    {
-        _id: '_10',
-        name: 'RES_1',
-        posX: 5,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-    },
-    {
-        _id: '_11',
-        name: 'RES_1',
-        posX: 10,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 4,
-    },
-    {
-        _id: '_12',
-        name: 'RES_2',
-        posX: 15,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-    },
-];
+// var contructionList = [
+//     {
+//         _id: '_01',
+//         name: 'BDH_1',
+//         level: 1,
+//         posX: 10,
+//         posY: 10,
+//         width: 2,
+//         height: 2,
+//     },
+//     {
+//         _id: '_02',
+//         name: 'TOW_1',
+//         posX: 19,
+//         posY: 19,
+//         width: 4,
+//         height: 4,
+//         level: 5,
+//     },
+//     {
+//         _id: '_03',
+//         name: 'AMC_1',
+//         posX: 0,
+//         posY: 0,
+//         width: 5,
+//         height: 5,
+//         level: 1,
+//     },
+//     {
+//         _id: '_04',
+//         name: 'BAR_1',
+//         posX: 10,
+//         posY: 5,
+//         width: 3,
+//         height: 3,
+//         level: 2,
+//     },
+//     {
+//         _id: '_05',
+//         name: 'BAR_1',
+//         posX: 5,
+//         posY: 5,
+//         width: 3,
+//         height: 3,
+//         level: 5,
+//     },
+//     {
+//         _id: '_06',
+//         name: 'STO_1',
+//         posX: 5,
+//         posY: 10,
+//         width: 3,
+//         height: 3,
+//         level: 2,
+//     },
+//     {
+//         _id: '_07',
+//         name: 'STO_1',
+//         posX: 5,
+//         posY: 15,
+//         width: 3,
+//         height: 3,
+//         level: 4,
+//     },
+//     {
+//         _id: '_08',
+//         name: 'STO_2',
+//         posX: 5,
+//         posY: 20,
+//         width: 3,
+//         height: 3,
+//         level: 5,
+//     },
+//     {
+//         _id: '_09',
+//         name: 'STO_2',
+//         posX: 5,
+//         posY: 25,
+//         width: 3,
+//         height: 3,
+//         level: 1,
+//     },
+//     {
+//         _id: '_10',
+//         name: 'RES_1',
+//         posX: 5,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 11,
+//     },
+//     {
+//         _id: '_11',
+//         name: 'RES_1',
+//         posX: 10,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 4,
+//     },
+//     {
+//         _id: '_12',
+//         name: 'RES_2',
+//         posX: 15,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 11,
+//     },
+// ];
+
+var contructionList = contructionList || [];
 
 var rootMapPos = {
     x: 2100,
@@ -121,6 +123,7 @@ var rootMapPos = {
 var MapLayer = cc.Layer.extend({
     _targetedObject: null,
     _isMovingBuilding: false,
+    _isBuilding: false,
     ctor: function() {
         this._super();
         MAP = this;
@@ -228,6 +231,23 @@ var MapLayer = cc.Layer.extend({
             this.addChild(redBG, Z.RED_BG);
             this.redBGs[i] = redBG;
         }
+        var cancelBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/cancel.png');
+        cancelBtn.attr({
+            anchorX: 0,
+            anchorY: 0,
+            opacity: 0,
+        });
+        this.addChild(cancelBtn, 1000);
+        this.cancelBtn = cancelBtn;
+
+        var acceptBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/accept.png');
+        acceptBtn.attr({
+            anchorX: 0,
+            anchorY: 0,
+            opacity: 0,
+        });
+        this.addChild(acceptBtn, 1000);
+        this.acceptBtn = acceptBtn;
     },
     createLogicArray: function(contructions, impediments) {
         mapLogicArray = [];
@@ -302,7 +322,7 @@ var MapLayer = cc.Layer.extend({
         });
         this.addChild(mapBackground, Z.TILEMAP);
         this.mapWidth = bg_bl.width + bg_br.width + 500;
-        this.mapHeight = bg_bl.height + bg_tl.height + 500;
+        this.mapHeight = bg_bl.height + bg_tl.height + 800;
     },
     addTouchListener: function() {
         var self = this;
@@ -350,7 +370,11 @@ var MapLayer = cc.Layer.extend({
         var tp = touch.getLocation();
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
-        if (this._startTouch && this._startTouch.x == tp.x && this._startTouch.y == tp.y) { // nếu touch mà ko di chuyển
+        if (this._startTouch
+            && this._startTouch.x == tp.x
+            && this._startTouch.y == tp.y
+            && !this._isBuilding
+        ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
         }
         if (this._isMovingObject) {
@@ -380,6 +404,7 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
+            cc.log(target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
                 if (objectRefs[i].info && objectRefs[i].info._id && objectRefs[i].info._id == target_id) {
                     var newTarget = objectRefs[i];
@@ -398,6 +423,76 @@ var MapLayer = cc.Layer.extend({
                 }
             }
         })();
+    },
+    buildNewContruction: function(buildingInfo = {
+        _id: '_099',
+        name: 'BDH_1',
+        level: 1,
+        posX: 30,
+        posY: 30,
+        width: 2,
+        height: 2,
+    }) {
+        this._isBuilding = true;
+        var newBuilding = new BuilderHut(buildingInfo);
+        newBuilding.setStatus('setting');
+        this._targetedObject && this._targetedObject.removeTarget();
+        this._targetedObject = newBuilding;
+        newBuilding.onTarget();
+        // contructionList.push(buildingInfo);
+        // objectRefs.push(newBuilding);
+        // this.createLogicArray(contructionList, {});
+        this.cancelBtn.addClickEventListener(function() {
+            this._isBuilding = false;
+            newBuilding.remove();
+            this._targetedObject = null;
+            this.cancelBtn.attr({
+                x: -1000,
+                y: -1000,
+                opacity: 0,
+            });
+            this.acceptBtn.attr({
+                x: -1000,
+                y: -1000,
+                opacity: 0,
+            });
+        }.bind(this));
+
+        this.acceptBtn.addClickEventListener(function() {
+            if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
+                this._isBuilding = false;
+                newBuilding.removeTarget();
+                this._targetedObject = null;
+                contructionList.push(buildingInfo);
+                objectRefs.push(newBuilding);
+                this.createLogicArray(contructionList, {});
+                this.cancelBtn.attr({
+                    x: -1000,
+                    y: -1000,
+                    opacity: 0,
+                });
+                this.acceptBtn.attr({
+                    x: -1000,
+                    y: -1000,
+                    opacity: 0,
+                });
+            }
+        }.bind(this));
+
+        this.setVXbtn(this._targetedObject);
+    },
+    setVXbtn: function(targetedObject) {
+        var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
+        this.cancelBtn.attr({
+            x: coor.x + (targetedObject.info.width - 3) / 2 * TILE_WIDTH,
+            y: coor.y + 2 * TILE_HEIGHT,
+            opacity: 255,
+        });
+        this.acceptBtn.attr({
+            x: coor.x + (targetedObject.info.width + 1) / 2 * TILE_WIDTH,
+            y: coor.y + 2 * TILE_HEIGHT,
+            opacity: 255,
+        });
     },
     moveMap: function(touch) {
         if (this.prevTouchId !== touch.getID()) this.prevTouchId = touch.getID();
