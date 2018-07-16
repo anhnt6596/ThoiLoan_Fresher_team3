@@ -8,16 +8,22 @@ var ShopCatalogyScreen = Popup.extend({
     _itemList:[],
     _direction:null,
     _obj:null,
+    _moving:false,
+    _user:null,
 
     ctor:function (width, height, x, y, text, data, bool) {
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
         this._super(width, height, x, y, text, data, bool);
         this.init(text);
-
     },
 
     init:function (text) {
-        this._obj = JSON.parse(shopInfo);
+        var self = this;
+        cc.loader.loadJson("res/Config json/ShopInfo.json", function(error, data){
+            self._obj = data;
+        });
+        this._user = gv.user;
+
 
         this._resInfoBottom = new cc.Sprite('res/Art/GUIs/shop_gui/res_info.png');
         this._resInfoBottom.setAnchorPoint(0, 0);
@@ -27,51 +33,58 @@ var ShopCatalogyScreen = Popup.extend({
         this._resInfoBottom.scaleY = this._resInfo.height * this._resInfo.scaleY / this._resInfoBottom.height;
         this.addChild(this._resInfoBottom, 1, 1);
 
+        //info bottom
+        this.createInfoUserResource(this._user.gold, this._user.elixir, this._user.darkElixir, this._user.coin);
+
         this.initItems(text);
 
-        var self = this;
         this.listener = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            onTouchBegan: function(touch, event){return true;},
+            onTouchBegan: function(touch, event){
+                return true;
+            },
             onTouchMoved: function(touch, event){
-                var dx = touch.getDelta().x;
-                for(var i = 0; i < self._itemList.length; i++){
-                    self._itemList[i].stopAllActions();
-                    self._itemList[i].x += dx;
-                }
+                if(self._itemList.length > 0){
+                    var dx = touch.getDelta().x;
+                    for(var i = 0; i < self._itemList.length; i++){
+                        self._itemList[i].stopAllActions();
+                        self._itemList[i].x += dx;
+                    }
 
-                if(self._itemList[0].x > gap_x){
-                    self._direction = true;
-                }
-                if(self._itemList[self._itemList.length - 1].x < cc.winSize.width - gap_x - ITEM_WIDTH){
-                    self._direction = false;
+                    if(self._itemList[0].x > gap_x){
+                        self._direction = true;
+                    }
+                    if(self._itemList[self._itemList.length - 1].x < cc.winSize.width - gap_x - ITEM_WIDTH){
+                        self._direction = false;
+                    }
+                    self._moving = true;
                 }
             },
             onTouchEnded: function(touch, event){
-                if(self._direction){
-                    cc.log("-----------To Right-----------");
-                    if(self._itemList[0].x > gap_x){
-                        for(var i = 0; i < self._itemList.length; i++){
-                            self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
+                if(self._itemList.length > 0){
+                    if(self._direction){
+                        if(self._itemList[0].x > gap_x){
+                            for(var i = 0; i < self._itemList.length; i++){
+                                self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
+                            }
                         }
-                    }
-                }else{
-                    cc.log("-----------To Left-----------");
-                    var last = self._itemList.length - 1;
-                    var end = cc.winSize.width - gap_x - ITEM_WIDTH;
-                    if(self._itemList[last].x < end){
-                        var m = 0;
-                        for(var j = last; j >= 0; j--){
-                            m++;
-                            self._itemList[j].runAction(cc.moveTo(0.2, cc.p(cc.winSize.width - m*(gap_x + ITEM_WIDTH), self._itemList[j].y)));
+                    }else{
+                        var last = self._itemList.length - 1;
+                        var end = cc.winSize.width - gap_x - ITEM_WIDTH;
+                        if(self._itemList[last].x < end){
+                            var m = 0;
+                            for(var j = last; j >= 0; j--){
+                                m++;
+                                self._itemList[j].runAction(cc.moveTo(0.2, cc.p(cc.winSize.width - m*(gap_x + ITEM_WIDTH), self._itemList[j].y)));
+                            }
                         }
                     }
                 }
+                self._moving = false;
             }
         });
 
         cc.eventManager.addListener(this.listener, this);
-
         return true;
     },
 
@@ -125,9 +138,8 @@ var ShopCatalogyScreen = Popup.extend({
         var minute = Math.floor((catalogy[itemName].buildTime - 86400*day - 3600*hour)/60);
         var second = catalogy[itemName].buildTime - 86400*day - 3600*hour - minute*60;
         var time = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
-        var time = time ? time : '0s';
+        time = time ? time : '0s';
 
-        //var timeLabel = new cc.LabelTTF(time, "Arial", 20);
         var timeLabel = new cc.LabelBMFont(time, 'res/Art/Fonts/soji_20.fnt');
         timeLabel.setAnchorPoint(0, 0);
         timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
@@ -158,56 +170,62 @@ var ShopCatalogyScreen = Popup.extend({
         var cost;
         //cost = (gold ? gold.toFixed(3) : '') + (elixir ? elixir.toFixed(3) : '') + (darkElixir ? darkElixir.toFixed(3) : '') + (coin ? coin.toFixed(3) : '');
         cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
-        var costLabel = new cc.LabelBMFont(cost, 'res/Art/Fonts/soji_20.fnt');
+        var costLabel = new cc.LabelBMFont(cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
         costLabel.setPosition(unit.x - costLabel.width - 7, unit.y);
         this._item.addChild(costLabel, 4, 4);
 
+        var num = 0;
+        for(var i = 0; i < contructionList.length; i++){
+            if(itemName == contructionList[i].name){
+                num++;
+            }
+        }
+        var numLabel = new cc.LabelBMFont(num + "/" + catalogy[itemName].amount, 'res/Art/Fonts/soji_20.fnt');
+        numLabel.setAnchorPoint(0, 0);
+        numLabel.setPosition(this._item.x + this._item.width * this._item.scaleX - numLabel.width - 15, clock.y + 5);
+        this._item.addChild(numLabel, 4, 4);
 
-        //info bottom
-        var goldDemo = 2258025;
-        var elixirDemo = 809258;
-        var darkElixirDemo = 17934;
-        var coinDemo = 1996;
+        var currentLevelTownHall = 1;
+        for(var i = 0; i < contructionList.length; i++){
+            if(contructionList[i].name.substring(0, 5) == "TOW_1"){
+                currentLevelTownHall = contructionList[i].level;
+            }
+        }
 
-        //this.createInfoUserResource(goldDemo, elixirDemo, darkElixirDemo, coinDemo);
-
-
-        var itemBarCoin = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
-        itemBarCoin.setAnchorPoint(0, 0);
-        itemBarCoin.setPosition(this._resInfoBottom.x + itemBarCoin.width, this._resInfoBottom.y+itemBarCoin.height/2);
-        this.addChild(itemBarCoin, this._resInfoBottom.getLocalZOrder(), 1);
-
-        var amountGold = new cc.LabelBMFont(goldDemo, 'res/Art/Fonts/soji_20.fnt');
-        amountGold.setAnchorPoint(0, 0);
-        amountGold.setPosition(itemBarCoin.x + 10, itemBarCoin.y+5);
-        this.addChild(amountGold, 3, 3);
-
-        var itemGold = new cc.Sprite('res/Art/GUIs/shop_gui/icon_gold_bar.png');
-        itemGold.setAnchorPoint(0, 0);
-        itemGold.setPosition(itemBarCoin.x + itemBarCoin.width - itemGold.width + 10, itemBarCoin.y);
-        this.addChild(itemGold, 3, 3);
-
-
+        var condition = (num == catalogy[itemName].amount) || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired);
+        //Required TownHall Level and Amount
+        if(condition){
+            this._item.setColor(cc.color(128, 128, 128, 255));
+            this._item.removeChild(bg);
+            var requiredLabel = new cc.LabelBMFont("Require TownHall level " + catalogy[itemName].townHallLevelRequired, 'res/Art/Fonts/soji_12.fnt');
+            requiredLabel.setAnchorPoint(0, 0);
+            requiredLabel.setPosition(this._item.x + (this._item.width - requiredLabel.width)/2, clock.y + clock.height + 10);
+            requiredLabel.setColor(cc.color(255, 0, 0, 255));
+            this._item.addChild(requiredLabel, 4, 4);
+        }
 
         var self = this;
-        var listener = cc.EventListener.create({
-            event: cc.EventListener.MOUSE,
-            onMouseDown: function (event) {
-                var target = event.getCurrentTarget();
-                var locationInNode = target.convertToNodeSpace(event.getLocation());
-                var s = target.getContentSize();
-                var rect = cc.rect(0, 0, s.width, s.height);
+        if(!condition){
+            var listener = cc.EventListener.create({
+                event: cc.EventListener.TOUCH_ONE_BY_ONE,
+                onTouchBegan: function(touch, event){return true;},
+                onTouchMoved: function(touch, event){},
+                onTouchEnded: function(touch, event){
+                    var target = event.getCurrentTarget();
+                    var locationInNode = target.convertToNodeSpace(touch.getLocation());
+                    var s = target.getContentSize();
+                    var rect = cc.rect(0, 0, s.width, s.height);
 
-                if (cc.rectContainsPoint(rect, locationInNode)) {
-                    //cc.director.runScene(ShopCatalogyScreen.scene(itemName));
-                    cc.log("Show item to Map");
+                    if (cc.rectContainsPoint(rect, locationInNode)) {
+                        if(!self._moving){
+                            cc.log("Click Item " + itemName);
+                        }
+                    }
                 }
-            },
-            onMouseUp: function (event) {
-            }
-        });
-        cc.eventManager.addListener(listener, this._item);
+            });
+            cc.eventManager.addListener(listener, this._item);
+        }
 
 
         this._itemList.push(this._item);
@@ -215,44 +233,80 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
+        //Gold
         var itemBarGold = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
         itemBarGold.setAnchorPoint(0, 0);
-        var itemBarElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
-        itemBarElixir.setAnchorPoint(0, 0);
-        var itemBarDarkElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
-        itemBarDarkElixir.setAnchorPoint(0, 0);
-        var itemBarCoin = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
-        itemBarCoin.setAnchorPoint(0, 0);
-
+        itemBarGold.setPosition(this._resInfoBottom.x + itemBarGold.width - 10, this._resInfoBottom.y + itemBarGold.height/2 - 5);
+        itemBarGold.setScale(1.5);
+        this.addChild(itemBarGold, this._resInfoBottom.getLocalZOrder(), 1);
 
         var itemGold = new cc.Sprite('res/Art/GUIs/shop_gui/icon_gold_bar.png');
         itemGold.setAnchorPoint(0, 0);
+        itemGold.setPosition(itemBarGold.x + itemBarGold.width * itemBarGold.scaleX - itemGold.width + 5, itemBarGold.y + 3);
+        itemGold.setScale(1.2);
+        this.addChild(itemGold, 3, 3);
+
+        var amountGold = new cc.LabelBMFont(gold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_24.fnt');
+        amountGold.setAnchorPoint(0, 0);
+        amountGold.setPosition(itemGold.x - amountGold.width - 5, itemBarGold.y+5);
+        this.addChild(amountGold, 3, 3);
+
+
+        //Elixir
+        var itemBarElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarElixir.setAnchorPoint(0, 0);
+        itemBarElixir.setPosition(itemGold.x + itemGold.width * itemGold.scaleX + 10, itemBarGold.y);
+        itemBarElixir.setScale(1.5);
+        this.addChild(itemBarElixir, this._resInfoBottom.getLocalZOrder(), 1);
+
         var itemElixir = new cc.Sprite('res/Art/GUIs/shop_gui/icon_elixir_bar.png');
         itemElixir.setAnchorPoint(0, 0);
+        itemElixir.setPosition(itemBarElixir.x + itemBarElixir.width * itemBarElixir.scaleX - itemElixir.width + 5, itemBarElixir.y + 3);
+        itemElixir.setScale(1.2);
+        this.addChild(itemElixir, 3, 3);
+
+        var amountElixir = new cc.LabelBMFont(elixir.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_24.fnt');
+        amountElixir.setAnchorPoint(0, 0);
+        amountElixir.setPosition(itemElixir.x - amountElixir.width - 5, itemBarElixir.y+5);
+        this.addChild(amountElixir, 3, 3);
+
+
+        //Dark Elixir
+        var itemBarDarkElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarDarkElixir.setAnchorPoint(0, 0);
+        itemBarDarkElixir.setPosition(itemElixir.x + itemElixir.width * itemElixir.scaleX + 10, itemBarElixir.y);
+        itemBarDarkElixir.setScale(1.5);
+        this.addChild(itemBarDarkElixir, this._resInfoBottom.getLocalZOrder(), 1);
+
         var itemDarkElixir = new cc.Sprite('res/Art/GUIs/shop_gui/icon_dElixir_bar.png');
         itemDarkElixir.setAnchorPoint(0, 0);
+        itemDarkElixir.setPosition(itemBarDarkElixir.x + itemBarDarkElixir.width * itemBarDarkElixir.scaleX - itemDarkElixir.width + 5, itemBarDarkElixir.y + 3);
+        itemDarkElixir.setScale(1.2);
+        this.addChild(itemDarkElixir, 3, 3);
+
+        var amountDarkElixir = new cc.LabelBMFont(darkElixir.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_24.fnt');
+        amountDarkElixir.setAnchorPoint(0, 0);
+        amountDarkElixir.setPosition(itemDarkElixir.x - amountDarkElixir.width - 5, itemBarDarkElixir.y+5);
+        this.addChild(amountDarkElixir, 3, 3);
+
+
+        //Coin
+        var itemBarCoin = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarCoin.setAnchorPoint(0, 0);
+        itemBarCoin.setPosition(itemDarkElixir.x + itemDarkElixir.width * itemDarkElixir.scaleX + 10, itemBarDarkElixir.y);
+        itemBarCoin.setScale(1.5);
+        this.addChild(itemBarCoin, this._resInfoBottom.getLocalZOrder(), 1);
+
         var itemCoin = new cc.Sprite('res/Art/GUIs/shop_gui/icon_g_bar.png');
         itemCoin.setAnchorPoint(0, 0);
+        itemCoin.setPosition(itemBarCoin.x + itemBarCoin.width * itemBarCoin.scaleX - itemCoin.width + 5, itemBarCoin.y + 3);
+        itemCoin.setScale(1.3);
+        this.addChild(itemCoin, 3, 3);
 
-
-        var amountGold = new cc.LabelBMFont(gold.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
-        amountGold.setAnchorPoint(0, 0);
-        var amountElixir = new cc.LabelBMFont(elixir.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
-        amountElixir.setAnchorPoint(0, 0);
-        var amountDarkElixir = new cc.LabelBMFont(darkElixir.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
-        amountDarkElixir.setAnchorPoint(0, 0);
-        var amountCoin = new cc.LabelBMFont(coin.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
+        var amountCoin = new cc.LabelBMFont(coin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_24.fnt');
         amountCoin.setAnchorPoint(0, 0);
-
-
-
-
-
-        //itemBar.scaleX = (amountLabel.width + 10)/ itemBar.width;
-        //itemBar.scaleY = (amountLabel.height +10)/ itemBar.height;
-
-
-        this._resInfoBottom.addChild();
+        amountCoin.setPosition(itemCoin.x - amountCoin.width - 5, itemBarCoin.y+5);
+        this.addChild(amountCoin, 3, 3);
     },
 
     onExit:function(){
