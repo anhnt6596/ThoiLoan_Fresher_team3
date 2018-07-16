@@ -158,7 +158,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
-            contructionList = [];
+            contructionList1 = [];
         },
         readData:function(){
             this.n = this.getInt();
@@ -194,7 +194,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                        width: config.building[this.name][1].width,
                        height: config.building[this.name][1].height,
                     };
-                    contructionList.push(contruction);
+                    contructionList1.push(contruction);
                 }
 
             }

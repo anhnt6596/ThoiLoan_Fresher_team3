@@ -19,6 +19,7 @@ var listBuildingConfigDir = [
     "res/Config json/TownHall.json",
 ];
 
+//Ham doc file JSON
 listBuildingConfigDir.forEach(function(dir) {
     cc.loader.loadJson(dir, function(error, data){
         var building = config.building;

@@ -216,10 +216,21 @@ var ShopCatalogyScreen = Popup.extend({
                     var locationInNode = target.convertToNodeSpace(touch.getLocation());
                     var s = target.getContentSize();
                     var rect = cc.rect(0, 0, s.width, s.height);
-
+                    var _level = 11;
                     if (cc.rectContainsPoint(rect, locationInNode)) {
                         if(!self._moving){
                             cc.log("Click Item " + itemName);
+                            var buildingInfo = {
+                                _id: '_99',
+                                name: itemName,
+                                level: _level,
+                                posX: 17,
+                                posY: 17,
+                                width: config.building[itemName][_level].width,
+                                height: config.building[itemName][_level].height,
+                            };
+                            cc.director.popToRootScene();
+                            MAP.buildNewContruction(buildingInfo);
                         }
                     }
                 }
