@@ -20,9 +20,11 @@ var ShopCatalogyScreen = Popup.extend({
         this._obj = JSON.parse(shopInfo);
 
         this._resInfoBottom = new cc.Sprite('res/Art/GUIs/shop_gui/res_info.png');
-        this._resInfoBottom.x = cc.winSize.width/2;
-        this._resInfoBottom.y = this._resInfoBottom.height/2;
+        this._resInfoBottom.setAnchorPoint(0, 0);
+        this._resInfoBottom.x = 0;
+        this._resInfoBottom.y = 0;
         this._resInfoBottom.scaleX = cc.winSize.width/this._resInfoBottom.width;
+        this._resInfoBottom.scaleY = this._resInfo.height * this._resInfo.scaleY / this._resInfoBottom.height;
         this.addChild(this._resInfoBottom, 1, 1);
 
         this.initItems(text);
@@ -33,15 +35,16 @@ var ShopCatalogyScreen = Popup.extend({
             onTouchBegan: function(touch, event){return true;},
             onTouchMoved: function(touch, event){
                 var dx = touch.getDelta().x;
-                if(dx > 0){
-                    self._direction = true;
-                }else{
-                    self._direction = false;
-                }
-
                 for(var i = 0; i < self._itemList.length; i++){
                     self._itemList[i].stopAllActions();
                     self._itemList[i].x += dx;
+                }
+
+                if(self._itemList[0].x > gap_x){
+                    self._direction = true;
+                }
+                if(self._itemList[self._itemList.length - 1].x < cc.winSize.width - gap_x - ITEM_WIDTH){
+                    self._direction = false;
                 }
             },
             onTouchEnded: function(touch, event){
@@ -104,7 +107,7 @@ var ShopCatalogyScreen = Popup.extend({
         this._info.y = this._item.y + this._item.height - this._info.height - 10;
         this._item.addChild(this._info, 3, 3);
 
-        var name = new cc.LabelTTF(itemName.toUpperCase(), "Arial", 20);
+        var name = new cc.LabelBMFont(itemName, 'res/Art/Fonts/soji_20.fnt');
         name.setAnchorPoint(0, 0);
         name.x = this._item.x + (ITEM_WIDTH-name.width)/2;
         name.y = this._item.y + ITEM_HEIGHT - name.height - 17;
@@ -124,9 +127,10 @@ var ShopCatalogyScreen = Popup.extend({
         var time = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
         var time = time ? time : '0s';
 
-        var timeLabel = new cc.LabelTTF(time, "Arial", 20);
+        //var timeLabel = new cc.LabelTTF(time, "Arial", 20);
+        var timeLabel = new cc.LabelBMFont(time, 'res/Art/Fonts/soji_20.fnt');
         timeLabel.setAnchorPoint(0, 0);
-        timeLabel.setPosition(clock.x + clock.width + 10, clock.y + 5);
+        timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
         this._item.addChild(timeLabel, 4, 4);
 
         var gold = catalogy[itemName].gold;
@@ -140,23 +144,50 @@ var ShopCatalogyScreen = Popup.extend({
         }else if(elixir){
             unit = new cc.Sprite('res/Art/GUIs/shop_gui/elixir.png');
         }else if(darkElixir){
-            unit = new cc.Sprite('res/Art/GUIs/shop_gui/icon_dElixir_bar.png');
+            unit = new cc.Sprite('res/Art/GUIs/Main_Gui/darkElixir_icon.png');
         }
         else if(coin && coin !== undefined){
             unit = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
         }else{
-            unit = new cc.LabelTTF("Free", "Arial", 20);
+            unit = new cc.LabelBMFont("Free", 'res/Art/Fonts/soji_20.fnt');
         }
         unit.setAnchorPoint(0, 0);
-        unit.setPosition(this._item.x + this._item.width - unit.width - 20, this._item.y + 15);
+        unit.setPosition(this._item.x + this._item.width - unit.width - 20, this._item.y + 20);
         this._item.addChild(unit, 4, 4);
 
         var cost;
-        cost = (gold ? gold.toFixed(3) : '') + (elixir ? elixir.toFixed(3) : '') + (darkElixir ? darkElixir.toFixed(3) : '') + (coin ? coin.toFixed(3) : '');
-        var costLabel = new cc.LabelTTF(cost, "Arial", 20);
+        //cost = (gold ? gold.toFixed(3) : '') + (elixir ? elixir.toFixed(3) : '') + (darkElixir ? darkElixir.toFixed(3) : '') + (coin ? coin.toFixed(3) : '');
+        cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
+        var costLabel = new cc.LabelBMFont(cost, 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
-        costLabel.setPosition(unit.x - costLabel.width - 10, unit.y + 5);
+        costLabel.setPosition(unit.x - costLabel.width - 7, unit.y);
         this._item.addChild(costLabel, 4, 4);
+
+
+        //info bottom
+        var goldDemo = 2258025;
+        var elixirDemo = 809258;
+        var darkElixirDemo = 17934;
+        var coinDemo = 1996;
+
+        //this.createInfoUserResource(goldDemo, elixirDemo, darkElixirDemo, coinDemo);
+
+
+        var itemBarCoin = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarCoin.setAnchorPoint(0, 0);
+        itemBarCoin.setPosition(this._resInfoBottom.x + itemBarCoin.width, this._resInfoBottom.y+itemBarCoin.height/2);
+        this.addChild(itemBarCoin, this._resInfoBottom.getLocalZOrder(), 1);
+
+        var amountGold = new cc.LabelBMFont(goldDemo, 'res/Art/Fonts/soji_20.fnt');
+        amountGold.setAnchorPoint(0, 0);
+        amountGold.setPosition(itemBarCoin.x + 10, itemBarCoin.y+5);
+        this.addChild(amountGold, 3, 3);
+
+        var itemGold = new cc.Sprite('res/Art/GUIs/shop_gui/icon_gold_bar.png');
+        itemGold.setAnchorPoint(0, 0);
+        itemGold.setPosition(itemBarCoin.x + itemBarCoin.width - itemGold.width + 10, itemBarCoin.y);
+        this.addChild(itemGold, 3, 3);
+
 
 
         var self = this;
@@ -183,6 +214,47 @@ var ShopCatalogyScreen = Popup.extend({
         this._item.retain();
     },
 
+    createInfoUserResource:function(gold, elixir, darkElixir, coin){
+        var itemBarGold = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarGold.setAnchorPoint(0, 0);
+        var itemBarElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarElixir.setAnchorPoint(0, 0);
+        var itemBarDarkElixir = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarDarkElixir.setAnchorPoint(0, 0);
+        var itemBarCoin = new cc.Sprite('res/Art/GUIs/shop_gui/res_bar.png');
+        itemBarCoin.setAnchorPoint(0, 0);
+
+
+        var itemGold = new cc.Sprite('res/Art/GUIs/shop_gui/icon_gold_bar.png');
+        itemGold.setAnchorPoint(0, 0);
+        var itemElixir = new cc.Sprite('res/Art/GUIs/shop_gui/icon_elixir_bar.png');
+        itemElixir.setAnchorPoint(0, 0);
+        var itemDarkElixir = new cc.Sprite('res/Art/GUIs/shop_gui/icon_dElixir_bar.png');
+        itemDarkElixir.setAnchorPoint(0, 0);
+        var itemCoin = new cc.Sprite('res/Art/GUIs/shop_gui/icon_g_bar.png');
+        itemCoin.setAnchorPoint(0, 0);
+
+
+        var amountGold = new cc.LabelBMFont(gold.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
+        amountGold.setAnchorPoint(0, 0);
+        var amountElixir = new cc.LabelBMFont(elixir.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
+        amountElixir.setAnchorPoint(0, 0);
+        var amountDarkElixir = new cc.LabelBMFont(darkElixir.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
+        amountDarkElixir.setAnchorPoint(0, 0);
+        var amountCoin = new cc.LabelBMFont(coin.toFixed(3), 'res/Art/Fonts/soji_12.fnt');
+        amountCoin.setAnchorPoint(0, 0);
+
+
+
+
+
+        //itemBar.scaleX = (amountLabel.width + 10)/ itemBar.width;
+        //itemBar.scaleY = (amountLabel.height +10)/ itemBar.height;
+
+
+        this._resInfoBottom.addChild();
+    },
+
     onExit:function(){
         this._super();
         cc.log("-----------Exit ShopCatalogyScreen-----------");
@@ -192,16 +264,13 @@ var ShopCatalogyScreen = Popup.extend({
     onCloseCallback:function () {
         this._itemList.length = 0;
         cc.eventManager.removeListener(this.listener);
-        //cc.director.runScene(createMapScene());
-        cc.director.popScene();
-        cc.director.popScene();
+        cc.director.popToRootScene();
     },
 
     //ghi de ham trong popup
     onBackCallback:function () {
         this._itemList.length = 0;
         cc.eventManager.removeListener(this.listener);
-        //fr.view(ShopScreen);
         cc.director.popScene();
     }
 
