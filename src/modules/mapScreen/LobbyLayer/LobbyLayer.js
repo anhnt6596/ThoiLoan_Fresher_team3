@@ -40,8 +40,7 @@ var LobbyLayer = cc.Layer.extend({
         shopScene.addChild(shopScreen);
         cc.director.pushScene(shopScene);
     },
-    onAttack: function() {}
-    ,
-
-
+    onAttack: function() {
+        MAP.buildNewContruction();
+    },
 });

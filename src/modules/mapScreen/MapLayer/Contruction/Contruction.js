@@ -1,4 +1,5 @@
 var Contruction = cc.Class.extend({
+    _status: 'complete',
     ctor: function(info) {
         // this._super();
         this.info = info;
@@ -19,16 +20,29 @@ var Contruction = cc.Class.extend({
         });
         MAP.arrows[this.info.width].runAction(act);
         if (this.grass) this.grass.opacity = 0;
-        MAP.greenBGs[this.info.width].attr({
-            x: coor.x,
-            y: coor.y,
-            opacity: 230,
-        });
-        MAP.redBGs[this.info.width].attr({
-            x: coor.x,
-            y: coor.y,
-            opacity: 0,
-        });
+        if (this.checkNewPosition({ x: this.info.posX, y: this.info.posY })) {
+            MAP.greenBGs[this.info.width].attr({
+                opacity: 230,
+                x: coor.x,
+                y: coor.y,
+            });
+            MAP.redBGs[this.info.width].attr({
+                opacity: 0,
+                x: coor.x,
+                y: coor.y,
+            });
+        } else {
+            MAP.greenBGs[this.info.width].attr({
+                opacity: 0,
+                x: coor.x,
+                y: coor.y,
+            });
+            MAP.redBGs[this.info.width].attr({
+                opacity: 230,
+                x: coor.x,
+                y: coor.y,
+            });
+        } 
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
@@ -52,7 +66,7 @@ var Contruction = cc.Class.extend({
         this.tempY = mapPos.y;
         this.setImgCoor(coor); // đặt lại vị trí
         // setzOrder
-        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10;
+        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10 + 1;
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
@@ -77,7 +91,22 @@ var Contruction = cc.Class.extend({
                 x: coor.x,
                 y: coor.y,
             });
-        }  
+        }
+        
+        MAP.arrows[this.info.width].attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        if (this._status === 'setting') {
+            MAP.cancelBtn.attr({
+                x: coor.x - (this.info.width - 1) / 2 * TILE_WIDTH,
+                y: coor.y + 2 * TILE_HEIGHT,
+            });
+            MAP.acceptBtn.attr({
+                x: coor.x + (this.info.width + 1) / 2 * TILE_WIDTH,
+                y: coor.y + 2 * TILE_HEIGHT,
+            });
+        }
     },
     setImgCoor: function(coor) {
         this.buildingImg.attr({
@@ -89,10 +118,6 @@ var Contruction = cc.Class.extend({
             y: coor.y,
         });
         this.shadow && this.shadow.attr({
-            x: coor.x,
-            y: coor.y,
-        });
-        MAP.arrows[this.info.width].attr({
             x: coor.x,
             y: coor.y,
         });
@@ -118,15 +143,18 @@ var Contruction = cc.Class.extend({
         }
         return true;
     },
+    setStatus: function(status) {
+        this._status = status;
+    },
     addShadow: function() {
         switch (this.info.name) {
-            case 'BDH':
+            case 'BDH_1':
                 this.squareShadow(2);
                 break;
-            case 'TOW':
+            case 'TOW_1':
                 this.squareShadow(4);
                 break;
-            case 'BAR':
+            case 'BAR_1':
             case 'RES_1':
                 this.squareShadow(3);
                 break
@@ -171,5 +199,11 @@ var Contruction = cc.Class.extend({
         var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2 - TILE_WIDTH * (this.info.width / 2);
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
         return { x: newX, y: newY };
+    },
+    remove: function() {
+        this.removeTarget();
+        MAP.removeChild(this.buildingImg);
+        MAP.removeChild(this.grass);
+        this.shadow && MAP.removeChild(this.shadow);
     }
 });
