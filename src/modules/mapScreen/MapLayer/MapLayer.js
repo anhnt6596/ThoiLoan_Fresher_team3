@@ -134,6 +134,8 @@ var MapLayer = cc.Layer.extend({
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);
@@ -165,8 +167,6 @@ var MapLayer = cc.Layer.extend({
             var arrowMoveRes = res.map.arrow_move[i];
             var arrow = new cc.Sprite(arrowMoveRes)
             arrow.attr({
-                anchorX: 0,
-                anchorY: 0,
                 opacity: 0,
             });
             this.addChild(arrow, Z.ARROW_MOVE);
@@ -175,8 +175,6 @@ var MapLayer = cc.Layer.extend({
             var greenBGres = res.map.green_bg[i];
             var greenBG = new cc.Sprite(greenBGres)
             greenBG.attr({
-                anchorX: 0,
-                anchorY: 0,
                 scale: 2,
                 opacity: 0,
             });
@@ -186,8 +184,6 @@ var MapLayer = cc.Layer.extend({
             var redBGres = res.map.red_bg[i];
             var redBG = new cc.Sprite(redBGres)
             redBG.attr({
-                anchorX: 0,
-                anchorY: 0,
                 scale: 2,
                 opacity: 0,
             });
@@ -196,8 +192,6 @@ var MapLayer = cc.Layer.extend({
         }
         var cancelBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/cancel.png');
         cancelBtn.attr({
-            anchorX: 0,
-            anchorY: 0,
             opacity: 0,
         });
         this.addChild(cancelBtn, 1000);
@@ -205,8 +199,6 @@ var MapLayer = cc.Layer.extend({
 
         var acceptBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/accept.png');
         acceptBtn.attr({
-            anchorX: 0,
-            anchorY: 0,
             opacity: 0,
         });
         this.addChild(acceptBtn, 1000);
@@ -476,12 +468,12 @@ var MapLayer = cc.Layer.extend({
     setVXbtn: function(targetedObject) {
         var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
         this.cancelBtn.attr({
-            x: coor.x + (targetedObject.info.width - 3) / 2 * TILE_WIDTH,
+            x: coor.x + TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
             opacity: 255,
         });
         this.acceptBtn.attr({
-            x: coor.x + (targetedObject.info.width + 1) / 2 * TILE_WIDTH,
+            x: coor.x - TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
             opacity: 255,
         });

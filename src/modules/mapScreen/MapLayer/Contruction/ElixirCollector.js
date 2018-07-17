@@ -10,20 +10,18 @@ var ElixirCollector = CollectorBuilding.extend({
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
-            anchorX: 0,
-            anchorY: 0,
-            x: coor.x + this.img_x,
-            y: coor.y + this.img_y,
+            x: coor.x,
+            y: coor.y,
         });
         var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
         var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
-        animSprite.anchorX = 0;
-        animSprite.anchorY = 0;
-        animSprite.x = 0;
-        animSprite.y = 0;
+        animSprite.attr({
+            x: buildingImg.width / 2,
+            y: buildingImg.height / 2,
+        });
         animSprite.runAction(elixirCollectorAnim.repeatForever());
     }
 });

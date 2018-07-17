@@ -10,12 +10,21 @@ var Barrack = Building.extend({
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
-            anchorX: 0,
-            anchorY: 0,
-            x: coor.x + this.img_x,
-            y: coor.y + this.img_y,
+            x: coor.x,
+            y: coor.y,
         });
         var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
+        if (this.info.level >= 4) {
+            var animsDir = this.info.level <= 8 ? 'BAR_1_' + this.info.level + '_effect_' : 'BAR_1_8_effect_';
+            var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2,
+                y: buildingImg.height / 2,
+            });
+            animSprite.runAction(buildingAnim.repeatForever());
+        }
     }
 });
