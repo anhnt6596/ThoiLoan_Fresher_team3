@@ -121,6 +121,7 @@ var rootMapPos = {
 var MapLayer = cc.Layer.extend({
     _targetedObject: null,
     _isMovingBuilding: false,
+    _isBuilding: false,
     ctor: function() {
         this._super();
         MAP = this;
@@ -145,43 +146,8 @@ var MapLayer = cc.Layer.extend({
     initContructions: function(contructions) {
         var self = this;
         contructions.forEach(function(contruction, i) {
-            var name = contruction.name;
-            switch (name) {
-                case 'TOW_1':
-                    var townHall = new TownHall(contruction);
-                    objectRefs.push(townHall);
-                    break;
-                case 'BDH_1':
-                    var builderHut = new BuilderHut(contruction);
-                    objectRefs.push(builderHut);
-                    break;
-                case 'AMC_1':
-                    var armyCamp = new ArmyCamp(contruction);
-                    objectRefs.push(armyCamp);
-                    break;
-                case 'BAR_1':
-                    var barrack = new Barrack(contruction);
-                    objectRefs.push(barrack);
-                    break;
-                case 'STO_1':
-                    var goldStorage = new GoldStorage(contruction);
-                    objectRefs.push(goldStorage);
-                    break;
-                case 'STO_2':
-                    var elixirStorage = new ElixirStorage(contruction);
-                    objectRefs.push(elixirStorage);
-                    break;
-                case 'RES_1':
-                    var goldMine = new GoldMine(contruction);
-                    objectRefs.push(goldMine);
-                    break;
-                case 'RES_2':
-                    var elixirCollector = new ElixirCollector(contruction);
-                    objectRefs.push(elixirCollector);
-                    break;
-                default:
-                    break;
-            }
+            var newBuilding = self.createBuilding(contruction);
+            objectRefs.push(newBuilding);
         });
     },
     initImpediments: function(impediments) {
@@ -196,7 +162,7 @@ var MapLayer = cc.Layer.extend({
         this.greenBGs[0] = null;
         this.redBGs[0] = null;
         for (var i = 1; i <= 5; i++) {
-            var arrowMoveRes = 'res/Art/Map/map_obj_bg/BG/arrowmove' + i + '.png';
+            var arrowMoveRes = res.map.arrow_move[i];
             var arrow = new cc.Sprite(arrowMoveRes)
             arrow.attr({
                 anchorX: 0,
@@ -206,7 +172,7 @@ var MapLayer = cc.Layer.extend({
             this.addChild(arrow, Z.ARROW_MOVE);
             this.arrows[i] = arrow;
 
-            var greenBGres = 'res/Art/Map/map_obj_bg/BG/GREEN_' + i + '.png';
+            var greenBGres = res.map.green_bg[i];
             var greenBG = new cc.Sprite(greenBGres)
             greenBG.attr({
                 anchorX: 0,
@@ -217,7 +183,7 @@ var MapLayer = cc.Layer.extend({
             this.addChild(greenBG, Z.GREEN_BG);
             this.greenBGs[i] = greenBG;
 
-            var redBGres = 'res/Art/Map/map_obj_bg/BG/RED_' + i + '.png';
+            var redBGres = res.map.red_bg[i];
             var redBG = new cc.Sprite(redBGres)
             redBG.attr({
                 anchorX: 0,
@@ -228,6 +194,23 @@ var MapLayer = cc.Layer.extend({
             this.addChild(redBG, Z.RED_BG);
             this.redBGs[i] = redBG;
         }
+        var cancelBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/cancel.png');
+        cancelBtn.attr({
+            anchorX: 0,
+            anchorY: 0,
+            opacity: 0,
+        });
+        this.addChild(cancelBtn, 1000);
+        this.cancelBtn = cancelBtn;
+
+        var acceptBtn = new ccui.Button('res/Art/GUIs/Action_Building_Icon/accept.png');
+        acceptBtn.attr({
+            anchorX: 0,
+            anchorY: 0,
+            opacity: 0,
+        });
+        this.addChild(acceptBtn, 1000);
+        this.acceptBtn = acceptBtn;
     },
     createLogicArray: function(contructions, impediments) {
         mapLogicArray = [];
@@ -302,7 +285,7 @@ var MapLayer = cc.Layer.extend({
         });
         this.addChild(mapBackground, Z.TILEMAP);
         this.mapWidth = bg_bl.width + bg_br.width + 500;
-        this.mapHeight = bg_bl.height + bg_tl.height + 500;
+        this.mapHeight = bg_bl.height + bg_tl.height + 800;
     },
     addTouchListener: function() {
         var self = this;
@@ -350,7 +333,11 @@ var MapLayer = cc.Layer.extend({
         var tp = touch.getLocation();
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
-        if (this._startTouch && this._startTouch.x == tp.x && this._startTouch.y == tp.y) { // nếu touch mà ko di chuyển
+        if (this._startTouch
+            && this._startTouch.x == tp.x
+            && this._startTouch.y == tp.y
+            && !this._isBuilding
+        ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
         }
         if (this._isMovingObject) {
@@ -380,6 +367,7 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
+            cc.log(target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
                 if (objectRefs[i].info && objectRefs[i].info._id && objectRefs[i].info._id == target_id) {
                     var newTarget = objectRefs[i];
@@ -398,6 +386,102 @@ var MapLayer = cc.Layer.extend({
                 }
             }
         })();
+    },
+    createBuilding: function(buildingInfo) {
+        var newBuilding;
+        switch (buildingInfo.name) {
+            case 'TOW_1':
+                newBuilding = new TownHall(buildingInfo);
+                break;
+            case 'BDH_1':
+                newBuilding = new BuilderHut(buildingInfo);
+                break;
+            case 'AMC_1':
+                newBuilding = new ArmyCamp(buildingInfo);
+                break;
+            case 'BAR_1':
+                newBuilding = new Barrack(buildingInfo);
+                break;
+            case 'STO_1':
+                newBuilding = new GoldStorage(buildingInfo);
+                break;
+            case 'STO_2':
+                newBuilding = new ElixirStorage(buildingInfo);
+                break;
+            case 'RES_1':
+                newBuilding = new GoldMine(buildingInfo);
+                break;
+            case 'RES_2':
+                newBuilding = new ElixirCollector(buildingInfo);
+                break;
+            default:
+                break;
+        }
+        return newBuilding;
+    },
+
+    buildNewContruction: function(buildingInfo) {
+        this._isBuilding = true;
+        //var newBuilding = new BuilderHut(buildingInfo);
+        var newBuilding = this.createBuilding(buildingInfo);
+        newBuilding.setStatus('setting');
+        this._targetedObject && this._targetedObject.removeTarget();
+        this._targetedObject = newBuilding;
+        newBuilding.onTarget();
+        // contructionList.push(buildingInfo);
+        // objectRefs.push(newBuilding);
+        // this.createLogicArray(contructionList, {});
+        this.cancelBtn.addClickEventListener(function() {
+            this._isBuilding = false;
+            newBuilding.remove();
+            this._targetedObject = null;
+            this.cancelBtn.attr({
+                x: -1000,
+                y: -1000,
+                opacity: 0,
+            });
+            this.acceptBtn.attr({
+                x: -1000,
+                y: -1000,
+                opacity: 0,
+            });
+        }.bind(this));
+
+        this.acceptBtn.addClickEventListener(function() {
+            if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
+                this._isBuilding = false;
+                newBuilding.removeTarget();
+                this._targetedObject = null;
+                contructionList.push(buildingInfo);
+                objectRefs.push(newBuilding);
+                this.createLogicArray(contructionList, {});
+                this.cancelBtn.attr({
+                    x: -1000,
+                    y: -1000,
+                    opacity: 0,
+                });
+                this.acceptBtn.attr({
+                    x: -1000,
+                    y: -1000,
+                    opacity: 0,
+                });
+            }
+        }.bind(this));
+
+        this.setVXbtn(this._targetedObject);
+    },
+    setVXbtn: function(targetedObject) {
+        var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
+        this.cancelBtn.attr({
+            x: coor.x + (targetedObject.info.width - 3) / 2 * TILE_WIDTH,
+            y: coor.y + 2 * TILE_HEIGHT,
+            opacity: 255,
+        });
+        this.acceptBtn.attr({
+            x: coor.x + (targetedObject.info.width + 1) / 2 * TILE_WIDTH,
+            y: coor.y + 2 * TILE_HEIGHT,
+            opacity: 255,
+        });
     },
     moveMap: function(touch) {
         if (this.prevTouchId !== touch.getID()) this.prevTouchId = touch.getID();

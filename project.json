@@ -20,6 +20,7 @@
     "jsList": [
         "src/data/Resource.js",
         "src/data/ResourceAnimation.js",
+        "src/data/ConfigData.js",
         "src/framework/AnimationMgr.js",
         "src/framework/Framework.js",
         "src/framework/GUI.js",

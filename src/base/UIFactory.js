@@ -90,12 +90,12 @@ gv.TextField = function(text,placeholder, x ,y){
 gv.user = {
     uuid: "",
     id :"",
-    name: "",
-    exp : "",
-    coin :"",
-    gold :"",
-    elixir :"",
-    darkElixir :"",
+    name: "Duy Nguyen",
+    exp : "300",
+    coin :"576",
+    gold :"10000",
+    elixir :"2367",
+    darkElixir :"256",
     builderNumber :"",
 
 }

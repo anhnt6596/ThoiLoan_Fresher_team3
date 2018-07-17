@@ -6,7 +6,7 @@ var Barrack = Building.extend({
         this.addBuildingImg();
     },
     addBuildingImg: function() {
-        var buildingImg = new cc.Sprite('res/Art/Buildings/barrack/BAR_1_'+ this.info.level +'/idle/image0000.png');
+        var buildingImg = new cc.Sprite(res.building.barrack[this.info.level]);
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
@@ -15,7 +15,7 @@ var Barrack = Building.extend({
             x: coor.x + this.img_x,
             y: coor.y + this.img_y,
         });
-        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 3) / 2) * 10;
+        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
     }
 });

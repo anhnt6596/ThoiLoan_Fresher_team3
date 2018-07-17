@@ -1,6 +1,3 @@
-/**
- * Created by GSN on 6/2/2015.
- */
 var res = res || {};
 
 // res.map = {
@@ -15,9 +12,6 @@ var res = res || {};
 /**
  * Created by linhrafa on 7/10/2018.
  */
-
-
-
 
 var res = {
     mg_armyicon : 'res/Art/GUIs/Main_Gui/army_icon.png',
@@ -63,12 +57,258 @@ res.map = {
     map_br: mapDir + '1_0003_Layer-2.png',
     map_tl: mapDir + '1_0000_Layer-3.png',
     map_tr: mapDir + '1_0002_Layer-4.png',
+    arrow_move: [
+        mapDir + 'map_obj_bg/BG/arrowmove1.png',
+        mapDir + 'map_obj_bg/BG/arrowmove1.png',
+        mapDir + 'map_obj_bg/BG/arrowmove2.png',
+        mapDir + 'map_obj_bg/BG/arrowmove3.png',
+        mapDir + 'map_obj_bg/BG/arrowmove4.png',
+        mapDir + 'map_obj_bg/BG/arrowmove5.png',
+    ],
+    green_bg: [
+        mapDir + 'map_obj_bg/BG/GREEN_1.png',
+        mapDir + 'map_obj_bg/BG/GREEN_1.png',
+        mapDir + 'map_obj_bg/BG/GREEN_2.png',
+        mapDir + 'map_obj_bg/BG/GREEN_3.png',
+        mapDir + 'map_obj_bg/BG/GREEN_4.png',
+        mapDir + 'map_obj_bg/BG/GREEN_5.png',
+    ],
+    red_bg: [
+        mapDir + 'map_obj_bg/BG/RED_1.png',
+        mapDir + 'map_obj_bg/BG/RED_1.png',
+        mapDir + 'map_obj_bg/BG/RED_2.png',
+        mapDir + 'map_obj_bg/BG/RED_3.png',
+        mapDir + 'map_obj_bg/BG/RED_4.png',
+        mapDir + 'map_obj_bg/BG/RED_5.png',
+    ],
+    grass: [
+        mapDir + 'map_obj_bg/BG_0/1.png',
+        mapDir + 'map_obj_bg/BG_0/1.png',
+        mapDir + 'map_obj_bg/BG_0/2.png',
+        mapDir + 'map_obj_bg/BG_0/3.png',
+        mapDir + 'map_obj_bg/BG_0/4.png',
+        mapDir + 'map_obj_bg/BG_0/5.png',
+    ],
 };
 
-var buildingsDir = 'res/Art/Buildings/'
+var guiDir = 'res/Art/GUIs/';
+
+res.gui = {
+    action_building_icon: {
+        accept: guiDir + 'Action_Building_Icon/accept.png',
+        accept: guiDir + 'Action_Building_Icon/cancel.png',
+    },
+};
+
+var buildingsDir = 'res/Art/Buildings/';
 
 res.building = {
     builder_hut: buildingsDir + 'builder hut/idle/image0000.png',
+    army_camp: [
+        buildingsDir + 'army camp/AMC_1_1/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_1/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_2/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_3/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_4/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_5/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_6/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_7/idle/image0000.png',
+        buildingsDir + 'army camp/AMC_1_8/idle/image0000.png',
+    ],
+    barrack: [
+        buildingsDir + 'barrack/BAR_1_1/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_1/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_2/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_3/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_4/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_5/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_6/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_7/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_8/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_9/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_10/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_11/idle/image0000.png',
+        buildingsDir + 'barrack/BAR_1_12/idle/image0000.png',
+    ],
+    elixir_collector: [
+        buildingsDir + 'elixir collector/RES_2_1/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_1/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_2/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_3/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_4/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_5/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_6/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_7/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_8/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_9/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_10/idle/image0000.png',
+        buildingsDir + 'elixir collector/RES_2_11/idle/image0000.png',
+    ],
+    elixir_storage: [
+        [],
+        [
+            buildingsDir + 'elixir storage/STO_2_1/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_1/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_1/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_1/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_2/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_2/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_2/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_2/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_3/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_3/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_3/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_3/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_4/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_4/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_4/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_4/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_5/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_5/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_5/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_5/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_6/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_6/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_6/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_6/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_7/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_7/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_7/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_7/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_8/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_8/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_8/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_8/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_9/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_9/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_9/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_9/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_10/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_10/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_10/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_10/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'elixir storage/STO_2_11/idle/image0000.png',
+            buildingsDir + 'elixir storage/STO_2_11/idle/image0001.png',
+            buildingsDir + 'elixir storage/STO_2_11/idle/image0002.png',
+            buildingsDir + 'elixir storage/STO_2_11/idle/image0003.png',
+        ],
+    ],
+    gold_mine: [
+        buildingsDir + 'gold mine/RES_1_1/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_1/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_2/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_3/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_4/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_5/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_6/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_7/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_8/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_9/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_10/idle/image0000.png',
+        buildingsDir + 'gold mine/RES_1_11/idle/image0000.png',
+    ],
+    gold_storage: [
+        [],
+        [
+            buildingsDir + 'gold storage/STO_1_1/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_1/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_1/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_1/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_2/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_2/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_2/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_2/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_3/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_3/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_3/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_3/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_4/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_4/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_4/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_4/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_5/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_5/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_5/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_5/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_6/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_6/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_6/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_6/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_7/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_7/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_7/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_7/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_8/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_8/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_8/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_8/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_9/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_9/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_9/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_9/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_10/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_10/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_10/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_10/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'gold storage/STO_1_11/idle/image0000.png',
+            buildingsDir + 'gold storage/STO_1_11/idle/image0001.png',
+            buildingsDir + 'gold storage/STO_1_11/idle/image0002.png',
+            buildingsDir + 'gold storage/STO_1_11/idle/image0003.png',
+        ],
+    ],
+    townhall: [
+        buildingsDir + 'townhall/TOW_1_1/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_1/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_2/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_3/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_4/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_5/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_6/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_7/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_8/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_9/idle/image0000.png',
+        buildingsDir + 'townhall/TOW_1_10/idle/image0000.png',
+    ],
 };
 
 var g_mainmenu = [

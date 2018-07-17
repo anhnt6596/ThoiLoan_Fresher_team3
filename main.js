@@ -82,8 +82,8 @@ cc.game.onStart = function () {
         //  fr.view(LoadingScreen);
         //fr.view(MapLayer);
         //  fr.view(LoadingScreen);
-        //fr.view(MapLayer);
         fr.view(LoginScreen);
+        //fr.view(LoginScreen);
     }, this);
 };
 cc.game.run();

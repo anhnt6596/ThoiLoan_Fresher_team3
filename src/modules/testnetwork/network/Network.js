@@ -6,9 +6,12 @@ var gv = gv||{};
 var testnetwork = testnetwork||{};
 count =0;
 
+var NETWORK = NETWORK || null;
+
 testnetwork.Connector = cc.Class.extend({
     ctor:function(gameClient)
     {
+        NETWORK = this;
         this.gameClient = gameClient;
         gameClient.packetFactory.addPacketMap(testnetwork.packetMap);
         gameClient.receivePacketSignal.add(this.onReceivedPacket, this);
@@ -40,6 +43,18 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
+                break;
+            case gv.CMD.MOVE_CONSTRUCTION:
+                //short packet.validate //success=1; false=0;
+                if (packet.validate) {
+                    cc.log("VI TRI DA DC CAP NHAT");
+                }
+                else {
+                    cc.log("VI TRI DA CO NHA O");
+                }
+                break;
+            case gv.CMD.ADD_CONSTRUCTION:
+                //short packet.validate //success=1; false=0;
                 break;
         }
     },
@@ -73,6 +88,18 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.darkElixir = packet.darkElixir;
         gv.user.builderNumber = packet.builderNumber;
 
+    },
+    sendMoveConstruction:function(id,x,y) {
+        cc.log("sendMoveConstruction" +id+" "+x+ " "+y);
+        var pk = this.gameClient.getOutPacket(CmdSendMove);
+        pk.pack(id, x, y);
+        this.gameClient.sendPacket(pk);
+    },
+    sendAddConstruction:function(id,x,y){
+        cc.log("sendAddConstruction" +id+" "+x+ " "+y);
+        var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
+        pk.pack(id, x, y);
+        this.gameClient.sendPacket(pk);
     }
 
 });

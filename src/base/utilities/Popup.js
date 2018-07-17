@@ -10,7 +10,7 @@ var Popup = cc.Layer.extend({
     _data:null,
 
     ctor:function(width, height, x, y, text, data, bool) {
-        cc.log("-----------ctor Popup-----------");
+        //cc.log("-----------ctor Popup-----------");
         this._super();
         //this.init(width, height, x, y, text, data, bool);
         this._data = data;
@@ -109,15 +109,15 @@ var Popup = cc.Layer.extend({
         cc.director.popScene();
     },
 
-    onEnter:function(){
-        cc.log("-----------onEnter Popup-----------");
-        this._super();
-    },
-
-    onExit:function(){
-        cc.log("-----------onExit Popup-----------");
-        this._super();
-    }
+    //onEnter:function(){
+    //    cc.log("-----------onEnter Popup-----------");
+    //    this._super();
+    //},
+    //
+    //onExit:function(){
+    //    cc.log("-----------onExit Popup-----------");
+    //    this._super();
+    //}
 });
 
 Popup.scene = function (width, height, x, y, text, data, bool) {

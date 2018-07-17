@@ -10,6 +10,7 @@ gv.CMD.USER_INFO = 1001;
 
 gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
+gv.ADD_CONSTRUCTION = 2003;
 
 gv.CMD.TEST = 3001;
 
@@ -100,6 +101,27 @@ CmdSendMove = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.MOVE_CONSTRUCTION);
+ 
+        },
+        pack:function(id, x, y){
+            this.packHeader();
+            this.putInt(parseInt(id));
+            this.putInt(x);
+            this.putInt(y);
+            //this.putInt(22);
+            //this.putInt(27);
+            this.updateSize();
+        }
+    }
+)
+
+CmdSendAddConstruction = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.ADD_CONSTRUCTION);
 
         },
         pack:function(id, x, y){
@@ -111,6 +133,7 @@ CmdSendMove = fr.OutPacket.extend(
         }
     }
 )
+
 
 CmdSendTest = fr.OutPacket.extend(
     {
@@ -188,15 +211,20 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 console.log("/n");
                 this.width = 3;
                 this.height = 3;
-                contructionList[i] = {
-                    _id: this._id,
-                    name: this.name,
-                    level: this.level,
-                    posX: this.posX,
-                    posY: this.posY,
-                    width: this.name === 'BDH_1' ? 2 : 3,
-                    height: this.name === 'BDH_1' ? 2 : 3,
-                };
+                //cc.log('>>>>>>', config.building[this.name][1].width);
+                cc.log('>>>>>>', this.name);
+                if (config.building[this.name]) {
+                    var contruction = {
+                       _id: this._id,
+                       name: this.name,
+                       level: this.level,
+                       posX: this.posX,
+                       posY: this.posY,
+                       width: config.building[this.name][1].width,
+                       height: config.building[this.name][1].height,
+                    };
+                    contructionList.push(contruction);
+                }
 
             }
            //console.log(contructionList);
@@ -255,6 +283,17 @@ testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
         },
         readData:function(){
             this.validate  = this.getBool();
+        }
+    }
+);
+testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
         }
     }
 );
