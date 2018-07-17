@@ -15,26 +15,27 @@ var ShopCatalogyScreen = Popup.extend({
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
         this._super(width, height, x, y, text, data, bool);
         this.init(text);
+
     },
 
     init:function (text) {
+        this._itemList = [];
+
         var self = this;
         cc.loader.loadJson("res/Config json/ShopInfo.json", function(error, data){
             self._obj = data;
         });
         this._user = gv.user;
 
-
+        //create bottom bar
         this._resInfoBottom = new cc.Sprite('res/Art/GUIs/shop_gui/res_info.png');
         this._resInfoBottom.setAnchorPoint(0, 0);
-        this._resInfoBottom.x = 0;
-        this._resInfoBottom.y = 0;
+        this._resInfoBottom.setPosition(0, 0);
         this._resInfoBottom.scaleX = cc.winSize.width/this._resInfoBottom.width;
         this._resInfoBottom.scaleY = this._resInfo.height * this._resInfo.scaleY / this._resInfoBottom.height;
         this.addChild(this._resInfoBottom, 1, 1);
-
-        //info bottom
         this.createInfoUserResource(this._user.gold, this._user.elixir, this._user.darkElixir, this._user.coin);
+
 
         this.initItems(text);
 
@@ -90,9 +91,12 @@ var ShopCatalogyScreen = Popup.extend({
 
     initItems:function(text){
         var catalogy = this._obj[text];
+        var size = 0;
         for (var item in catalogy) {
             this.createItem(text, item);
+            size++;
         }
+
 
         for(var i = 0; i < this._itemList.length; i++){
             this._itemList[i].x = (i+1)*gap_x + i*ITEM_WIDTH;
@@ -150,30 +154,40 @@ var ShopCatalogyScreen = Popup.extend({
         var darkElixir = catalogy[itemName].darkElixir;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
 
-        var unit = null;
+        var unitLabel = null;
+        var unit = '';
         if(gold && gold !== undefined){
-            unit = new cc.Sprite('res/Art/GUIs/shop_gui/gold.png');
+            unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/gold.png');
+            unit = 'gold';
         }else if(elixir){
-            unit = new cc.Sprite('res/Art/GUIs/shop_gui/elixir.png');
+            unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/elixir.png');
+            unit = 'elixir';
         }else if(darkElixir){
-            unit = new cc.Sprite('res/Art/GUIs/Main_Gui/darkElixir_icon.png');
+            unitLabel = new cc.Sprite('res/Art/GUIs/Main_Gui/darkElixir_icon.png');
+            unit = 'darkElixir';
         }
         else if(coin && coin !== undefined){
-            unit = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
+            unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
+            unit = 'coin';
         }else{
-            unit = new cc.LabelBMFont("Free", 'res/Art/Fonts/soji_20.fnt');
+            unitLabel = new cc.LabelBMFont("Free", 'res/Art/Fonts/soji_20.fnt');
         }
-        unit.setAnchorPoint(0, 0);
-        unit.setPosition(this._item.x + this._item.width - unit.width - 20, this._item.y + 20);
-        this._item.addChild(unit, 4, 4);
+        unitLabel.setAnchorPoint(0, 0);
+        unitLabel.setPosition(this._item.x + this._item.width - unitLabel.width - 20, this._item.y + 20);
+        this._item.addChild(unitLabel, 4, 4);
 
         var cost;
-        //cost = (gold ? gold.toFixed(3) : '') + (elixir ? elixir.toFixed(3) : '') + (darkElixir ? darkElixir.toFixed(3) : '') + (coin ? coin.toFixed(3) : '');
         cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
+        
+
         var costLabel = new cc.LabelBMFont(cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
-        costLabel.setPosition(unit.x - costLabel.width - 7, unit.y);
+        costLabel.setPosition(unitLabel.x - costLabel.width - 7, unitLabel.y);
+        if(parseInt(cost) > this._user[unit]){
+            costLabel.setColor(cc.color(255, 0, 0, 255));
+        }
         this._item.addChild(costLabel, 4, 4);
+
 
         var num = 0;
         for(var i = 0; i < contructionList.length; i++){
@@ -181,10 +195,6 @@ var ShopCatalogyScreen = Popup.extend({
                 num++;
             }
         }
-        var numLabel = new cc.LabelBMFont(num + "/" + catalogy[itemName].amount, 'res/Art/Fonts/soji_20.fnt');
-        numLabel.setAnchorPoint(0, 0);
-        numLabel.setPosition(this._item.x + this._item.width * this._item.scaleX - numLabel.width - 15, clock.y + 5);
-        this._item.addChild(numLabel, 4, 4);
 
         var currentLevelTownHall = 1;
         for(var i = 0; i < contructionList.length; i++){
@@ -193,16 +203,33 @@ var ShopCatalogyScreen = Popup.extend({
             }
         }
 
-        var condition = (num == catalogy[itemName].amount) || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired);
+        var maxBuilding;
+        cc.loader.loadJson("res/Config json/TownHall.json", function(error, data){
+            if(itemName == 'BDH_1'){
+                maxBuilding = 5;
+            }else{
+                maxBuilding = data['TOW_1'][currentLevelTownHall][itemName];
+            }
+        });
+
+        var numLabel = new cc.LabelBMFont(num + "/" + maxBuilding, 'res/Art/Fonts/soji_20.fnt');
+        numLabel.setAnchorPoint(0, 0);
+        numLabel.setPosition(this._item.x + this._item.width * this._item.scaleX - numLabel.width - 15, clock.y + 5);
+        this._item.addChild(numLabel, 4, 4);
+
+
+        var condition = (num == maxBuilding || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired));
         //Required TownHall Level and Amount
         if(condition){
             this._item.setColor(cc.color(128, 128, 128, 255));
             this._item.removeChild(bg);
-            var requiredLabel = new cc.LabelBMFont("Require TownHall level " + catalogy[itemName].townHallLevelRequired, 'res/Art/Fonts/soji_12.fnt');
-            requiredLabel.setAnchorPoint(0, 0);
-            requiredLabel.setPosition(this._item.x + (this._item.width - requiredLabel.width)/2, clock.y + clock.height + 10);
-            requiredLabel.setColor(cc.color(255, 0, 0, 255));
-            this._item.addChild(requiredLabel, 4, 4);
+            if(currentLevelTownHall < catalogy[itemName].townHallLevelRequired){
+                var requiredLabel = new cc.LabelBMFont("Require TownHall level " + catalogy[itemName].townHallLevelRequired, 'res/Art/Fonts/soji_12.fnt');
+                requiredLabel.setAnchorPoint(0, 0);
+                requiredLabel.setPosition(this._item.x + (this._item.width - requiredLabel.width)/2, clock.y + clock.height + 10);
+                requiredLabel.setColor(cc.color(255, 0, 0, 255));
+                this._item.addChild(requiredLabel, 4, 4);
+            }
         }
 
         var self = this;
@@ -216,28 +243,31 @@ var ShopCatalogyScreen = Popup.extend({
                     var locationInNode = target.convertToNodeSpace(touch.getLocation());
                     var s = target.getContentSize();
                     var rect = cc.rect(0, 0, s.width, s.height);
-                    var _level = 11;
+
                     if (cc.rectContainsPoint(rect, locationInNode)) {
                         if(!self._moving){
+                            var length = contructionList.length + 1;
+                            var id = (length < 10) ? ("_0" + length) : ("_" + length);
+                            var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {
-                                _id: '_99',
+                                _id: id,
                                 name: itemName,
                                 level: _level,
-                                posX: 17,
-                                posY: 17,
-                                width: config.building[itemName][_level].width,
-                                height: config.building[itemName][_level].height,
+                                posX: 14,
+                                posY: 14,
+                                width: catalogy[itemName].width,
+                                height: catalogy[itemName].height
                             };
-                            cc.director.popToRootScene();
                             MAP.buildNewContruction(buildingInfo);
+                            cc.director.popToRootScene();
+
                         }
                     }
                 }
             });
             cc.eventManager.addListener(listener, this._item);
         }
-
 
         this._itemList.push(this._item);
         this._item.retain();
@@ -327,14 +357,14 @@ var ShopCatalogyScreen = Popup.extend({
 
     //ghi de ham trong popup
     onCloseCallback:function () {
-        this._itemList.length = 0;
+        this._itemList = [];
         cc.eventManager.removeListener(this.listener);
         cc.director.popToRootScene();
     },
 
     //ghi de ham trong popup
     onBackCallback:function () {
-        this._itemList.length = 0;
+        this._itemList = [];
         cc.eventManager.removeListener(this.listener);
         cc.director.popScene();
     }
