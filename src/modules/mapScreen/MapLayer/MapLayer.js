@@ -19,7 +19,7 @@ var MAP = MAP || null;
          posY: 19,
          width: 4,
          height: 4,
-         level: 5,
+         level: 2,
      },
      {
          _id: '_03',
@@ -421,6 +421,7 @@ var MapLayer = cc.Layer.extend({
         }
         return newBuilding;
     },
+
     buildNewContruction: function(buildingInfo) {
         this._isBuilding = true;
         LOBBY.hideLobby();
