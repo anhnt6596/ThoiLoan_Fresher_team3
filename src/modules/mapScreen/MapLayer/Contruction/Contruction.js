@@ -104,7 +104,7 @@ var Contruction = cc.Class.extend({
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
-
+        sendMoveConstruction(this.info._id, mapPos.x, mapPos.y);
         // call_API_update_position(this.info._id, mapPos.x, mapPos.y); linhrafa
     },
     checkNewPosition: function(mapPos) {
@@ -171,5 +171,11 @@ var Contruction = cc.Class.extend({
         var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2 - TILE_WIDTH * (this.info.width / 2);
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
         return { x: newX, y: newY };
+    },
+    sendMoveConstruction:function(id,x,y){
+        cc.log("sendMoveConstruction");
+        var pk = this.gameClient.getOutPacket(CmdSendMove);
+        pk.pack(id,x,y);
+        this.gameClient.sendPacket(pk);
     }
 });

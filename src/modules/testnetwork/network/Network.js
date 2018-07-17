@@ -4,7 +4,7 @@
 //var count =0;
 var gv = gv||{};
 var testnetwork = testnetwork||{};
-
+count =0;
 
 testnetwork.Connector = cc.Class.extend({
     ctor:function(gameClient)
@@ -25,13 +25,13 @@ testnetwork.Connector = cc.Class.extend({
                 this.sendLoginRequest();
                 break;
             case gv.CMD.USER_LOGIN:
-            
-
+                this.sendGetUserInfo();
+                //LoginScreen = fr.getCurrentScreen();
                 //fr.getCurrentScreen().onFinishLogin(packet.username, packet.password);
-                //break;
+                break;
             case gv.CMD.USER_INFO:
-                //count++;
-                //cc.log(">>>>>>count" + count);
+                count++;
+                cc.log(">>>>>>count" + count);
                 //this.setUserInfomation();
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);

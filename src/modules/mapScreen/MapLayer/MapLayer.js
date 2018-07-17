@@ -2,7 +2,7 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-var contructionList = [
+var contructionList1 = [
     {
         _id: '_01',
         name: 'BDH_1',
