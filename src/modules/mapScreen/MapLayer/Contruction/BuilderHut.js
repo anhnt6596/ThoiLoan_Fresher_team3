@@ -19,5 +19,8 @@ var BuilderHut = Building.extend({
         });
         var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
-    }
+    },
+    upgrade: function() {
+        cc.log('Nhà này không upgrade được');
+    },
 });

@@ -2,116 +2,134 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
- var contructionList = [
-     {
-         _id: '_01',
-         name: 'BDH_1',
-         level: 1,
-         posX: 10,
-         posY: 10,
-         width: 2,
-         height: 2,
-     },
-     {
-         _id: '_02',
-         name: 'TOW_1',
-         posX: 19,
-         posY: 19,
-         width: 4,
-         height: 4,
-         level: 8,
-     },
-     {
-         _id: '_03',
-         name: 'AMC_1',
-         posX: 0,
-         posY: 0,
-         width: 5,
-         height: 5,
-         level: 1,
-     },
-     {
-         _id: '_04',
-         name: 'BAR_1',
-         posX: 10,
-         posY: 5,
-         width: 3,
-         height: 3,
-         level: 2,
-     },
-     {
-         _id: '_05',
-         name: 'BAR_1',
-         posX: 5,
-         posY: 5,
-         width: 3,
-         height: 3,
-         level: 5,
-     },
-     {
-         _id: '_06',
-         name: 'STO_1',
-         posX: 5,
-         posY: 10,
-         width: 3,
-         height: 3,
-         level: 2,
-     },
-     {
-         _id: '_07',
-         name: 'STO_1',
-         posX: 5,
-         posY: 15,
-         width: 3,
-         height: 3,
-         level: 4,
-     },
-     {
-         _id: '_08',
-         name: 'STO_2',
-         posX: 5,
-         posY: 20,
-         width: 3,
-         height: 3,
-         level: 5,
-     },
-     {
-         _id: '_09',
-         name: 'STO_2',
-         posX: 5,
-         posY: 25,
-         width: 3,
-         height: 3,
-         level: 1,
-     },
-     {
-         _id: '_10',
-         name: 'RES_1',
-         posX: 5,
-         posY: 30,
-         width: 3,
-         height: 3,
-         level: 11,
-     },
-     {
-         _id: '_11',
-         name: 'RES_1',
-         posX: 10,
-         posY: 30,
-         width: 3,
-         height: 3,
-         level: 4,
-     },
-     {
-         _id: '_12',
-         name: 'RES_2',
-         posX: 15,
-         posY: 30,
-         width: 3,
-         height: 3,
-         level: 11,
-     },
- ];
+var contructionList = [
+    {
+        _id: '_01',
+        name: 'BDH_1',
+        level: 1,
+        posX: 10,
+        posY: 10,
+        width: 2,
+        height: 2,
+    },
+    {
+        _id: '_02',
+        name: 'TOW_1',
+        posX: 19,
+        posY: 19,
+        width: 4,
+        height: 4,
+        level: 2,
+    },
+    {
+        _id: '_03',
+        name: 'AMC_1',
+        posX: 0,
+        posY: 0,
+        width: 5,
+        height: 5,
+        level: 1,
+    },
+    {
+        _id: '_04',
+        name: 'BAR_1',
+        posX: 10,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_05',
+        name: 'BAR_1',
+        posX: 5,
+        posY: 5,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_06',
+        name: 'STO_1',
+        posX: 5,
+        posY: 10,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_07',
+        name: 'STO_1',
+        posX: 5,
+        posY: 15,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_08',
+        name: 'STO_2',
+        posX: 5,
+        posY: 20,
+        width: 3,
+        height: 3,
+        level: 5,
+    },
+    {
+        _id: '_09',
+        name: 'STO_2',
+        posX: 5,
+        posY: 25,
+        width: 3,
+        height: 3,
+        level: 1,
+    },
+    {
+        _id: '_10',
+        name: 'RES_1',
+        posX: 5,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
+    {
+        _id: '_11',
+        name: 'RES_1',
+        posX: 10,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 4,
+    },
+    {
+        _id: '_12',
+        name: 'RES_2',
+        posX: 15,
+        posY: 30,
+        width: 3,
+        height: 3,
+        level: 11,
+    },
+    {
+        _id: '_13',
+        name: 'RES_2',
+        posX: 2,
+        posY: 35,
+        width: 3,
+        height: 3,
+        level: 2,
+    },
+    {
+        _id: '_14',
+        name: 'RES_2',
+        posX: 35,
+        posY: 2,
+        width: 3,
+        height: 3,
+        level: 3,
+    },
+];
 
 var contructionList = contructionList || [];
 
@@ -149,7 +167,7 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
-            objectRefs.push(newBuilding);
+            newBuilding && objectRefs.push(newBuilding);
         });
     },
     initImpediments: function(impediments) {
@@ -336,8 +354,8 @@ var MapLayer = cc.Layer.extend({
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
         if (this._startTouch
-            && this._startTouch.x == tp.x
-            && this._startTouch.y == tp.y
+            && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
+            && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
             && !this._isBuilding
         ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
@@ -424,6 +442,7 @@ var MapLayer = cc.Layer.extend({
 
     buildNewContruction: function(buildingInfo) {
         this._isBuilding = true;
+        LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
         newBuilding.setStatus('setting');
@@ -447,6 +466,7 @@ var MapLayer = cc.Layer.extend({
                 y: -1000,
                 opacity: 0,
             });
+            LOBBY.showLobby();
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
@@ -467,6 +487,7 @@ var MapLayer = cc.Layer.extend({
                     y: -1000,
                     opacity: 0,
                 });
+                LOBBY.showLobby();
             }
         }.bind(this));
 
