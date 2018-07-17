@@ -19,7 +19,7 @@ var MAP = MAP || null;
          posY: 19,
          width: 4,
          height: 4,
-         level: 2,
+         level: 8,
      },
      {
          _id: '_03',
