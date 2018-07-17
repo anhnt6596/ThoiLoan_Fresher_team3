@@ -4,7 +4,7 @@ var Building = Contruction.extend({
         this.initGrass();
     },
     initGrass: function() {
-        var resGrass = 'res/Art/Map/map_obj_bg/BG_0/' + this.info.width + '.png';
+        var resGrass = res.map.grass[this.info.width];
         var grass = new cc.Sprite(resGrass);
         this.grass = grass;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);

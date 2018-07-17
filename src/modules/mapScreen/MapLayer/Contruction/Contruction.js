@@ -66,7 +66,7 @@ var Contruction = cc.Class.extend({
         this.tempY = mapPos.y;
         this.setImgCoor(coor); // đặt lại vị trí
         // setzOrder
-        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10 + 1;
+        var newZ = this.caluclateZOrder(mapPos);
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
@@ -99,7 +99,7 @@ var Contruction = cc.Class.extend({
         });
         if (this._status === 'setting') {
             MAP.cancelBtn.attr({
-                x: coor.x - (this.info.width - 1) / 2 * TILE_WIDTH,
+                x: coor.x - (this.info.width - 3) / 2 * TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
             });
             MAP.acceptBtn.attr({
@@ -145,6 +145,10 @@ var Contruction = cc.Class.extend({
     },
     setStatus: function(status) {
         this._status = status;
+    },
+    caluclateZOrder: function(mapPos) {
+        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10 + 1;
+        return newZ;
     },
     addShadow: function() {
         switch (this.info.name) {
