@@ -149,7 +149,7 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
-            objectRefs.push(newBuilding);
+            newBuilding && objectRefs.push(newBuilding);
         });
     },
     initImpediments: function(impediments) {
@@ -423,6 +423,7 @@ var MapLayer = cc.Layer.extend({
     },
     buildNewContruction: function(buildingInfo) {
         this._isBuilding = true;
+        LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
         newBuilding.setStatus('setting');
@@ -446,6 +447,7 @@ var MapLayer = cc.Layer.extend({
                 y: -1000,
                 opacity: 0,
             });
+            LOBBY.showLobby();
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
@@ -466,6 +468,7 @@ var MapLayer = cc.Layer.extend({
                     y: -1000,
                     opacity: 0,
                 });
+                LOBBY.showLobby();
             }
         }.bind(this));
 

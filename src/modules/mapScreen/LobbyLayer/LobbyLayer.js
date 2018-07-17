@@ -4,6 +4,7 @@ var LobbyLayer = cc.Layer.extend({
     ctor:function() {
         this._super();
         LOBBY = this;
+        LOBBY = this;
         var size = cc.winSize;
         var yBtn = size.height/3;
 
@@ -32,6 +33,9 @@ var LobbyLayer = cc.Layer.extend({
         this.addChild(BuilderBar);
         var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield');
         this.addChild(ShieldBar);
+
+        var avt = new TopCenterBar(100, size.width - 100);
+        this.addChild(avt);
     },
     onOpenShop: function(){
         // fr.view(ShopScreen);
@@ -43,4 +47,16 @@ var LobbyLayer = cc.Layer.extend({
     onAttack: function() {
         MAP.buildNewContruction();
     },
+    hideLobby: function() {
+        this.attr({
+            x: - 100000,
+            y: - 100000,
+        });
+    },
+    showLobby: function() {
+        this.attr({
+            x: 0,
+            y: 0,
+        });
+    }
 });
