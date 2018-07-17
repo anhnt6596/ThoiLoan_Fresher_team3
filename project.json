@@ -65,7 +65,8 @@
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
         "src/modules/mapScreen/LobbyLayer/ResourceBar.js",
         "src/modules/mapScreen/LobbyLayer/TopCenterBar.js",
-        "src/modules/mapScreen/LobbyLayer/Avartar.js",
+        "src/modules/mapScreen/LobbyLayer/TopLeftBar.js",
+        "src/modules/mapScreen/LobbyLayer/ObjectMenu.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js"
     ]
