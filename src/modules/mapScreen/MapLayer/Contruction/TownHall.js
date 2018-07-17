@@ -7,7 +7,7 @@ var TownHall = Building.extend({
     },
     addBuildingImg: function() {
         var level = this.info.level || 1;
-        var dir = 'res/Art/Buildings/townhall/TOW_1_'+ level +'/idle/image0000.png';
+        var dir = res.building.townhall[this.info.level];
         var buildingImg = new cc.Sprite(dir);
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
@@ -17,7 +17,7 @@ var TownHall = Building.extend({
             x: coor.x + this.img_x,
             y: coor.y + this.img_y,
         });
-        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 3) / 2) * 10;
+        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
     }
 });

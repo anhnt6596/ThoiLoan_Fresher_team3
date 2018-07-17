@@ -148,43 +148,8 @@ var MapLayer = cc.Layer.extend({
     initContructions: function(contructions) {
         var self = this;
         contructions.forEach(function(contruction, i) {
-            var name = contruction.name;
-            switch (name) {
-                case 'TOW_1':
-                    var townHall = new TownHall(contruction);
-                    objectRefs.push(townHall);
-                    break;
-                case 'BDH_1':
-                    var builderHut = new BuilderHut(contruction);
-                    objectRefs.push(builderHut);
-                    break;
-                case 'AMC_1':
-                    var armyCamp = new ArmyCamp(contruction);
-                    objectRefs.push(armyCamp);
-                    break;
-                case 'BAR_1':
-                    var barrack = new Barrack(contruction);
-                    objectRefs.push(barrack);
-                    break;
-                case 'STO_1':
-                    var goldStorage = new GoldStorage(contruction);
-                    objectRefs.push(goldStorage);
-                    break;
-                case 'STO_2':
-                    var elixirStorage = new ElixirStorage(contruction);
-                    objectRefs.push(elixirStorage);
-                    break;
-                case 'RES_1':
-                    var goldMine = new GoldMine(contruction);
-                    objectRefs.push(goldMine);
-                    break;
-                case 'RES_2':
-                    var elixirCollector = new ElixirCollector(contruction);
-                    objectRefs.push(elixirCollector);
-                    break;
-                default:
-                    break;
-            }
+            var newBuilding = self.createBuilding(contruction);
+            objectRefs.push(newBuilding);
         });
     },
     initImpediments: function(impediments) {
@@ -199,7 +164,7 @@ var MapLayer = cc.Layer.extend({
         this.greenBGs[0] = null;
         this.redBGs[0] = null;
         for (var i = 1; i <= 5; i++) {
-            var arrowMoveRes = 'res/Art/Map/map_obj_bg/BG/arrowmove' + i + '.png';
+            var arrowMoveRes = res.map.arrow_move[i];
             var arrow = new cc.Sprite(arrowMoveRes)
             arrow.attr({
                 anchorX: 0,
@@ -209,7 +174,7 @@ var MapLayer = cc.Layer.extend({
             this.addChild(arrow, Z.ARROW_MOVE);
             this.arrows[i] = arrow;
 
-            var greenBGres = 'res/Art/Map/map_obj_bg/BG/GREEN_' + i + '.png';
+            var greenBGres = res.map.green_bg[i];
             var greenBG = new cc.Sprite(greenBGres)
             greenBG.attr({
                 anchorX: 0,
@@ -220,7 +185,7 @@ var MapLayer = cc.Layer.extend({
             this.addChild(greenBG, Z.GREEN_BG);
             this.greenBGs[i] = greenBG;
 
-            var redBGres = 'res/Art/Map/map_obj_bg/BG/RED_' + i + '.png';
+            var redBGres = res.map.red_bg[i];
             var redBG = new cc.Sprite(redBGres)
             redBG.attr({
                 anchorX: 0,

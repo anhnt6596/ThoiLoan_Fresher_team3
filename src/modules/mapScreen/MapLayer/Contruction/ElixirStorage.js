@@ -16,12 +16,12 @@ var ElixirStorage = StorageBuilding.extend({
             x: coor.x + this.img_x,
             y: coor.y + this.img_y,
         });
-        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 3) / 2) * 10;
+        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
 
         var buildingImage = [];
         for (var i = 0; i < 4; i++) {
-            buildingImage[i] = new cc.Sprite('res/Art/Buildings/elixir storage/STO_2_'+ this.info.level +'/idle/image000' + i + '.png');
+            buildingImage[i] = new cc.Sprite(res.building.elixir_storage[this.info.level][i]);
             buildingImage[i].attr({
                 anchorX: 0,
                 anchorY: 0,

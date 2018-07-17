@@ -6,7 +6,7 @@ var ElixirCollector = CollectorBuilding.extend({
         this.addBuildingImg();
     },
     addBuildingImg: function() {
-        var buildingImg = new cc.Sprite('res/Art/Buildings/elixir collector/RES_2_' + this.info.level + '/idle/image0000.png');
+        var buildingImg = new cc.Sprite(res.building.elixir_collector[this.info.level]);
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
@@ -15,7 +15,7 @@ var ElixirCollector = CollectorBuilding.extend({
             x: coor.x + this.img_x,
             y: coor.y + this.img_y,
         });
-        var zOrder = 1000 - (this.info.posX + this.info.posY + (this.info.height - 3) / 2) * 10;
+        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
         var goldmineAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_0', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
