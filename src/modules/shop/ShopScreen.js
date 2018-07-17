@@ -58,43 +58,39 @@ var ShopScreen = Popup.extend({
     },
 
     createCatalogy:function(catalogyName){
-        this._catalogy = new ccui.Button('res/Art/GUIs/shop_gui/slot_catalogy.png');
-        this._catalogy.anchorX = 0;
-        this._catalogy.anchorY = 0;
+        //this._catalogy = new ccui.Button('res/Art/GUIs/shop_gui/slot_catalogy.png');
+        this._catalogy = new cc.Sprite('res/Art/GUIs/shop_gui/slot_catalogy.png');
+        this._catalogy.setAnchorPoint(0, 0);
 
         var bg = new cc.Sprite('res/Art/GUIs/shop_gui/catalogy_bg.png');
-        bg.anchorX = 0;
-        bg.anchorY = 0;
+        bg.setAnchorPoint(0, 0);
         this._catalogy.addChild(bg, 1, 1);
 
         var ha = new cc.Sprite('res/Art/GUIs/shop_gui/' + catalogyName + '.png');
-        ha.anchorX = 0;
-        ha.anchorY = 0;
+        ha.setAnchorPoint(0, 0);
         this._catalogy.addChild(ha, 2, 2);
 
         var titleBg = new cc.Sprite('res/Art/GUIs/shop_gui/title_background.png');
-        titleBg.anchorX = 0;
-        titleBg.anchorY = 0;
+        titleBg.setAnchorPoint(0, 0);
         titleBg.x = this._catalogy.x + 6;
         this._catalogy.addChild(titleBg, 3, 3);
 
-        //var name = new cc.LabelTTF(this.switchToName(catalogyName).toUpperCase(), "Arial", 20);
         var name = new cc.LabelBMFont(this.switchToName(catalogyName).toUpperCase(), 'res/Art/Fonts/soji_20.fnt');
         //name.scale = 0.8;
-        name.anchorX = 0;
-        name.anchorY = 0;
+        name.setAnchorPoint(0, 0);
         name.x = titleBg.x + (CATALOGY_WIDTH-name.width)/2;
         name.y = titleBg.y + (titleBg.height-name.height)/2;
         this._catalogy.addChild(name, 4, 4);
 
         var self = this;
         var listener = cc.EventListener.create({
-            event: cc.EventListener.MOUSE,
-            onMouseDown: function (event) {
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            onTouchBegan: function (touch, event) {
+                return true;
             },
-            onMouseUp: function (event) {
+            onTouchEnded: function (touch, event) {
                 var target = event.getCurrentTarget();
-                var locationInNode = target.convertToNodeSpace(event.getLocation());
+                var locationInNode = target.convertToNodeSpace(touch.getLocation());
                 var s = target.getContentSize();
                 var rect = cc.rect(0, 0, s.width, s.height);
 
@@ -111,6 +107,7 @@ var ShopScreen = Popup.extend({
         this._catalogyList.push(this._catalogy);
         this._catalogy.retain();
     },
+
 
     onEnter:function(){
         cc.log("-----------onEnter ShopScreen-----------");

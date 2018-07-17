@@ -147,7 +147,7 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
-            objectRefs.push(newBuilding);
+            newBuilding && objectRefs.push(newBuilding);
         });
     },
     initImpediments: function(impediments) {
@@ -334,8 +334,8 @@ var MapLayer = cc.Layer.extend({
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
         if (this._startTouch
-            && this._startTouch.x == tp.x
-            && this._startTouch.y == tp.y
+            && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
+            && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
             && !this._isBuilding
         ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
@@ -422,6 +422,7 @@ var MapLayer = cc.Layer.extend({
 
     buildNewContruction: function(buildingInfo) {
         this._isBuilding = true;
+        LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
         newBuilding.setStatus('setting');
@@ -445,6 +446,7 @@ var MapLayer = cc.Layer.extend({
                 y: -1000,
                 opacity: 0,
             });
+            LOBBY.showLobby();
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
@@ -465,6 +467,7 @@ var MapLayer = cc.Layer.extend({
                     y: -1000,
                     opacity: 0,
                 });
+                LOBBY.showLobby();
             }
         }.bind(this));
 

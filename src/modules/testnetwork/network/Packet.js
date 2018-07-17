@@ -101,7 +101,7 @@ CmdSendMove = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.MOVE_CONSTRUCTION);
- 
+
         },
         pack:function(id, x, y){
             this.packHeader();

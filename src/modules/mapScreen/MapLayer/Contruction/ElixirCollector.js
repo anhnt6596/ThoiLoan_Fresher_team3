@@ -1,6 +1,6 @@
 var ElixirCollector = CollectorBuilding.extend({
-    img_x: -28,
-    img_y: -50,
+    img_x: -22,
+    img_y: -44,
     ctor: function(info) {
         this._super(info);
         this.addBuildingImg();
@@ -17,13 +17,13 @@ var ElixirCollector = CollectorBuilding.extend({
         });
         var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
-        var goldmineAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_0', 0, 9, 0.2);
+        var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
         animSprite.anchorX = 0;
         animSprite.anchorY = 0;
-        animSprite.x = this.img_x;
-        animSprite.y = this.img_y;
-        animSprite.runAction(goldmineAnim.repeatForever());
+        animSprite.x = 0;
+        animSprite.y = 0;
+        animSprite.runAction(elixirCollectorAnim.repeatForever());
     }
 });

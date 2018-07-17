@@ -348,6 +348,42 @@ var g_resources = [
     "localize/en.txt",
 ];
 
+var name = name || {};
+name.building = {
+    TOW_1: {
+        vi: 'Nhà chính',
+        en: 'Tower',
+    },
+    BDH_1: {
+        vi: 'Nhà thợ xây',
+        en: 'Builder Hut',
+    },
+    AMC_1: {
+        vi: 'Doanh Trại',
+        en: 'Army Camp',
+    },
+    BAR_1: {
+        vi: 'Nhà lính',
+        en: 'Barrack',
+    },
+    STO_1: {
+        vi: 'Kho vàng',
+        en: 'Gold Storage',
+    },
+    STO_2: {
+        vi: 'Kho dầu',
+        en: 'Elixir Storage',
+    },
+    RES_1: {
+        vi: 'Mỏ vàng',
+        en: 'Gold Mine',
+    },
+    RES_2: {
+        vi: 'Mỏ dầu',
+        en: 'Elixir Collector',
+    },
+};
+
 var TILE_WIDTH = 76;
 var TILE_HEIGHT = 57;
 

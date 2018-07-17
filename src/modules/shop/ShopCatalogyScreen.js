@@ -10,6 +10,7 @@ var ShopCatalogyScreen = Popup.extend({
     _obj:null,
     _moving:false,
     _user:null,
+    _mapLogic:[],
 
     ctor:function (width, height, x, y, text, data, bool) {
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
@@ -20,6 +21,52 @@ var ShopCatalogyScreen = Popup.extend({
 
     init:function (text) {
         this._itemList = [];
+        this._mapLogic = [];
+
+
+
+        this._mapLogic = new Array(42);
+        for (var i = 0; i < 42; i++) {
+            this._mapLogic[i] = new Array(42);
+        }
+
+        //Set giua ban do = 0
+        for(var v = 1; v < 41; v++){
+            for(var t = 1; t < 41; t++){
+                this._mapLogic[v][t] = 0;
+            }
+        }
+
+        //Set bien cua ban do
+        for(var m = 0; m < 42; m++){
+            this._mapLogic[0][m] = -1;
+        }
+        for(var n = 0; n < 42; n++){
+            this._mapLogic[41][n] = -1;
+        }
+        for(var p = 0; p < 42; p++){
+            this._mapLogic[p][0] = -1;
+        }
+        for(var q = 0; q < 42; q++){
+            this._mapLogic[q][41] = -1;
+        }
+
+
+        for(var k in contructionList){
+            var item = contructionList[k];
+            this._mapLogic[item.posX][item.posY] = 1;
+            for(var a = 0; a < item.width; a++){
+                for(var b = 0; b < item.height; b++){
+                    this._mapLogic[item.posX + a][item.posY + b] = 1;
+                }
+            }
+        }
+
+        //for(var x = 0; x < this._mapLogic.length; x++){
+        //    for(var y = 0; y < this._mapLogic[0].length; y++){
+        //        cc.log("Map[" + x + "][" + y + "] = "+this._mapLogic[x][y]);
+        //    }
+        //}
 
         var self = this;
         cc.loader.loadJson("res/Config json/ShopInfo.json", function(error, data){
@@ -118,11 +165,29 @@ var ShopCatalogyScreen = Popup.extend({
         ha.setAnchorPoint(0, 0);
         this._item.addChild(ha, 2, 2);
 
-        this._info = new cc.Sprite('res/Art/GUIs/shop_gui/info.png');
+        this._info = new ccui.Button('res/Art/GUIs/shop_gui/info.png');
         this._info.setAnchorPoint(0, 0);
         this._info.x = this._item.x + this._item.width - this._info.width - 10;
         this._info.y = this._item.y + this._item.height - this._info.height - 10;
         this._item.addChild(this._info, 3, 3);
+
+        var listenerInfo = cc.EventListener.create({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            onTouchBegan: function(touch, event){return true;},
+            onTouchMoved: function(touch, event){},
+            onTouchEnded: function(touch, event){
+                var target = event.getCurrentTarget();
+                var locationInNode = target.convertToNodeSpace(touch.getLocation());
+                var s = target.getContentSize();
+                var rect = cc.rect(0, 0, s.width, s.height);
+
+                if (cc.rectContainsPoint(rect, locationInNode)) {
+                    cc.log("Info");
+                }
+            }
+        });
+        cc.eventManager.addListener(listenerInfo, this._info);
+
 
         var name = new cc.LabelBMFont(itemName, 'res/Art/Fonts/soji_20.fnt');
         name.setAnchorPoint(0, 0);
@@ -178,7 +243,7 @@ var ShopCatalogyScreen = Popup.extend({
 
         var cost;
         cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
-        
+
 
         var costLabel = new cc.LabelBMFont(cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
@@ -232,6 +297,26 @@ var ShopCatalogyScreen = Popup.extend({
             }
         }
 
+
+        //Tinh toa do suggest
+        var width = catalogy[itemName].width;
+        var height = catalogy[itemName].height;
+        var maxScore = this.checkAvailablePosition(1, 1, width, height);
+        var posXMax = 1;
+        var posYMax = 1;
+
+        for(var a = 1; a < this._mapLogic.length; a++){
+            for(var b = 1; b < this._mapLogic[0].length; b++){
+                var score = this.checkAvailablePosition(a, b, width, height);
+                if(score > maxScore){
+                    maxScore = score;
+                    posXMax = a;
+                    posYMax = b;
+                }
+            }
+        }
+
+
         var self = this;
         if(!condition){
             var listener = cc.EventListener.create({
@@ -254,8 +339,8 @@ var ShopCatalogyScreen = Popup.extend({
                                 _id: id,
                                 name: itemName,
                                 level: _level,
-                                posX: 14,
-                                posY: 14,
+                                posX: posXMax,
+                                posY: posYMax,
                                 width: catalogy[itemName].width,
                                 height: catalogy[itemName].height
                             };
@@ -272,6 +357,51 @@ var ShopCatalogyScreen = Popup.extend({
         this._itemList.push(this._item);
         this._item.retain();
     },
+
+    checkAvailablePosition:function(posX, posY, width, height){
+        if(posX + width > 39 || posY + height > 39){
+            return false;
+        }
+        for(var k = 0; k < width; k++){
+            for(var h = 0; h < height; h++){
+                if(this._mapLogic[posX + k][posY + h] == 0){
+                    continue;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return this.scoringPosition(posX, posY, width, height);
+    },
+
+    //Ham tinh diem dua vao boundary cua building
+    scoringPosition:function(posX, posY, width, height){
+        var score = 0;
+
+        for(var m = posY - 1; m < posY + width + 1; m++){
+            if(this._mapLogic[posX - 1][m] == 1){
+                score++;
+            }
+        }
+        for(var n = posY - 1; n < posY + width + 1; n++){
+            if(this._mapLogic[posX + width][n] == 1){
+                score++;
+            }
+        }
+        for(var i = posX; i < posX + width; i++){
+            if(this._mapLogic[i][posY - 1] == 1){
+                score++;
+            }
+        }
+        for(var j = posX; j < posX + width; j++){
+            if(this._mapLogic[j][posY + width] == 1){
+                score++;
+            }
+        }
+
+        return score;
+    },
+
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
         //Gold
