@@ -107,11 +107,11 @@ var Contruction = cc.Class.extend({
         });
         if (this._status === 'setting') {
             MAP.cancelBtn.attr({
-                x: coor.x + TILE_WIDTH,
+                x: coor.x - TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
             });
             MAP.acceptBtn.attr({
-                x: coor.x - TILE_WIDTH,
+                x: coor.x + TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
             });
         }
