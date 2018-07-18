@@ -47,17 +47,17 @@ var contructionList = [
         status: 'complete',
         startTime: 0
     },
-    //{
-    //    _id: '_05',
-    //    name: 'BDH_1',
-    //    posX: 5,
-    //    posY: 5,
-    //    width: 2,
-    //    height: 2,
-    //    level: 1,
-    //    status: 'complete',
-    //    startTime: 0
-    //},
+    {
+        _id: '_05',
+        name: 'BDH_1',
+        posX: 5,
+        posY: 5,
+        width: 2,
+        height: 2,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
     {
         _id: '_06',
         name: 'STO_1',
@@ -496,7 +496,7 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 //Kiem tra tai nguyen co du khong
-                var g = checkUserResources();
+                var g = checkUserResources(buildingInfo.cost);
                 if(g > 0){
                     //Show popup dung G de mua tai nguyen
 

@@ -94,7 +94,7 @@ var ShopScreen = Popup.extend({
                 if (cc.rectContainsPoint(rect, locationInNode)) {
                     var shopCatalogyScreen = new ShopCatalogyScreen(cc.winSize.width, cc.winSize.height, 0, 0, self.switchToName(catalogyName), null, true);
                     var scene = new cc.Scene();
-                    scene.addChild(shopCatalogyScreen);
+                    scene.addChild(shopCatalogyScreen, 0, 17);
                     cc.director.pushScene(scene);
                 }
             }

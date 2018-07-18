@@ -1,5 +1,5 @@
 gap_x = 20;
-
+var g_ShopCatalogyScreen;
 var ShopCatalogyScreen = Popup.extend({
 
     _resInfoBottom:null,
@@ -16,7 +16,7 @@ var ShopCatalogyScreen = Popup.extend({
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
         this._super(width, height, x, y, text, data, bool);
         this.init(text);
-
+        g_ShopCatalogyScreen = this;
     },
 
     init:function (text) {
@@ -167,6 +167,14 @@ var ShopCatalogyScreen = Popup.extend({
         this._info.y = this._item.y + this._item.height - this._info.height - 10;
         this._item.addChild(this._info, 3, 3);
 
+        this._info.addClickEventListener((function() {
+            this.onInfo = this.onInfo.bind(this);
+            this.onInfo(itemName);
+        }).bind(this));
+
+        //this._info.addClickEventListener(() => this.onInfo('aaaaa'));
+
+
         var listenerInfo = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             onTouchBegan: function(touch, event){return true;},
@@ -185,8 +193,8 @@ var ShopCatalogyScreen = Popup.extend({
         cc.eventManager.addListener(listenerInfo, this._info);
 
 
-        //var nameLabel = name.building[itemName].en;
-        var nameLabel = itemName;
+        var nameLabel = name.building[itemName].en;
+        //var nameLabel = itemName;
         nameLabel = new cc.LabelBMFont(nameLabel, 'res/Art/Fonts/soji_20.fnt');
         nameLabel.setAnchorPoint(0, 0);
         nameLabel.x = this._item.x + (ITEM_WIDTH-nameLabel.width)/2;
@@ -426,6 +434,19 @@ var ShopCatalogyScreen = Popup.extend({
         return score;
     },
 
+    onInfo:function(itemName){
+        var x = cc.winSize.width*7/9;
+        var y = cc.winSize.height*8.5/9;
+        var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].disabled = true;
+            children[i].enabled = false;
+        }
+        //cc.eventManager.removeListener(this.listener);
+        this.getParent().addChild(popup, 2);
+    },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
         //Gold
