@@ -501,6 +501,8 @@ var MapLayer = cc.Layer.extend({
                 var g = checkUserResources(buildingInfo.cost);
                 if(g > 0){
                     //Show popup dung G de mua tai nguyen
+                    //Neu k du G thi THOAT
+                    //Neu du G thi di tiep
 
                 }
 
@@ -509,13 +511,17 @@ var MapLayer = cc.Layer.extend({
                     //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
                         var coin = getGToReleaseBuilder();
                         //Can coin de release 1 builder
+                    //Neu k du G thi THOAT
+                    //Neu du G thi di tiep
                     //Neu ok, Chuyen trang thai nha dc release sang 'complete'
                 }
 
                 //Gui yeu cau xac nhan len server
+                //NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
 
 
                 //Nhan phan hoi succeed tu server
+
 
 
                 //Tru tien cua nguoi choi
