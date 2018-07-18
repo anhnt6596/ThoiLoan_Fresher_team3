@@ -47,17 +47,17 @@ var contructionList = [
         status: 'complete',
         startTime: 0
     },
-    {
-        _id: '_05',
-        name: 'BDH_1',
-        posX: 5,
-        posY: 5,
-        width: 2,
-        height: 2,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
+    //{
+    //    _id: '_05',
+    //    name: 'BDH_1',
+    //    posX: 5,
+    //    posY: 5,
+    //    width: 2,
+    //    height: 2,
+    //    level: 1,
+    //    status: 'complete',
+    //    startTime: 0
+    //},
     {
         _id: '_06',
         name: 'STO_1',

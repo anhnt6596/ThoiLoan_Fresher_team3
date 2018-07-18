@@ -185,11 +185,13 @@ var ShopCatalogyScreen = Popup.extend({
         cc.eventManager.addListener(listenerInfo, this._info);
 
 
-        var name = new cc.LabelBMFont(itemName, 'res/Art/Fonts/soji_20.fnt');
-        name.setAnchorPoint(0, 0);
-        name.x = this._item.x + (ITEM_WIDTH-name.width)/2;
-        name.y = this._item.y + ITEM_HEIGHT - name.height - 17;
-        this._item.addChild(name, 4, 4);
+        //var nameLabel = name.building[itemName].en;
+        var nameLabel = itemName;
+        nameLabel = new cc.LabelBMFont(nameLabel, 'res/Art/Fonts/soji_20.fnt');
+        nameLabel.setAnchorPoint(0, 0);
+        nameLabel.x = this._item.x + (ITEM_WIDTH-nameLabel.width)/2;
+        nameLabel.y = this._item.y + ITEM_HEIGHT - nameLabel.height - 17;
+        this._item.addChild(nameLabel, 4, 4);
 
         var clock = new cc.Sprite('res/Art/GUIs/shop_gui/time.png');
         clock.setAnchorPoint(0, 0);
@@ -214,6 +216,21 @@ var ShopCatalogyScreen = Popup.extend({
         var elixir = catalogy[itemName].elixir ? catalogy[itemName].elixir : 0;
         var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
+
+        var amountBDH_1 = 0;
+        for(var k in contructionList){
+            if(contructionList[k].status == 'complete' && contructionList[k].name == 'BDH_1'){
+                amountBDH_1++;
+            }
+        }
+
+        if(itemName == 'BDH_1'){
+            cc.loader.loadJson("res/Config json/BuilderHut.json", function(error, data){
+                coin = data['BDH_1'][amountBDH_1 + 1].coin;
+            });
+        }
+
+
 
         var unitLabel = null;
         var unit = '';
