@@ -11,10 +11,8 @@ var GoldStorage = StorageBuilding.extend({
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
-            anchorX: 0,
-            anchorY: 0,
-            x: coor.x + this.img_x,
-            y: coor.y + this.img_y,
+            x: coor.x,
+            y: coor.y,
         });
         var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
         MAP.addChild(buildingImg, zOrder);
@@ -23,8 +21,6 @@ var GoldStorage = StorageBuilding.extend({
         for (var i = 0; i < 4; i++) {
             buildingImage[i] = new cc.Sprite(res.building.gold_storage[this.info.level][i]);
             buildingImage[i].attr({
-                anchorX: 0,
-                anchorY: 0,
                 opacity: 0,
             });
             buildingImg.addChild(buildingImage[i], 10);

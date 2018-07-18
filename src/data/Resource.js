@@ -374,13 +374,49 @@ name.building = {
         vi: 'Kho dầu',
         en: 'Elixir Storage',
     },
+    STO_3: {
+        vi: 'Kho dầu đen',
+        en: 'Dark Elixir Storage',
+    },
     RES_1: {
         vi: 'Mỏ vàng',
         en: 'Gold Mine',
     },
     RES_2: {
         vi: 'Mỏ dầu',
-        en: 'Elixir Collector',
+        en: 'Elixir Mine',
+    },
+    RES_3: {
+        vi: 'Mỏ dầu đen',
+        en: 'Dark Elixir Mine',
+    },
+    LAB_1: {
+        vi: '',
+        en: 'Laboratory',
+    },
+    SPF_1: {
+        vi: '',
+        en: 'Spell Factory',
+    },
+    KQB_1: {
+        vi: '',
+        en: 'King',
+    },
+    KQB_2: {
+        vi: '',
+        en: 'Queen',
+    },
+    KQB_3: {
+        vi: '',
+        en: 'Temple',
+    },
+    BAR_2: {
+        vi: '',
+        en: 'X-men House',
+    },
+    KQB_4: {
+        vi: '',
+        en: 'KQB_4',
     },
 };
 

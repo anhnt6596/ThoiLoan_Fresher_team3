@@ -124,9 +124,9 @@ CmdSendAddConstruction = fr.OutPacket.extend(
             this.setCmdId(gv.CMD.ADD_CONSTRUCTION);
 
         },
-        pack:function(id, x, y){
+        pack:function(type, x, y){
             this.packHeader();
-            this.putInt(parseInt(id));
+            this.putInt(parseInt(type));
             this.putInt(x);
             this.putInt(y);
             this.updateSize();
@@ -220,6 +220,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                        level: this.level,
                        posX: this.posX,
                        posY: this.posY,
+                        status: this.status,
                        width: config.building[this.name][1].width,
                        height: config.building[this.name][1].height,
                     };

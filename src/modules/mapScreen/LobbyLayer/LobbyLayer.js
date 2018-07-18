@@ -1,7 +1,8 @@
 var LOBBY = LOBBY || null;
 var LobbyLayer = cc.Layer.extend({
-    ctor:function() {
+    ctor:function(userInfo) {
         this._super();
+        this.userInfo = userInfo;
         LOBBY = this;
     
         this.init();
@@ -31,6 +32,9 @@ var LobbyLayer = cc.Layer.extend({
         this.addChild(elixirBar);
         var darkElixirBar = new ResourceBar(size.width - 118, size.height - 160, 'dark_elixir');
         this.addChild(darkElixirBar);
+
+        var gBar = new GBar(size.width - 106, size.height - 210, this.userInfo.coin);
+        this.addChild(gBar);
         // Top Center Bar
         var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army');
         this.addChild(ArmyBar);
@@ -56,7 +60,7 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        MAP.buildNewContruction();
+        //
     },
     hideLobby: function() {
         this.attr({
@@ -71,14 +75,16 @@ var LobbyLayer = cc.Layer.extend({
         });
     },
     showObjectMenu: function(object = {}) {
-        var showAct = cc.moveBy(0.2, cc.p(0, 200));
+        var showAct = cc.moveTo(0.2, cc.p(0, 0));
         var fadeInAct = cc.FadeIn(0.2);
+        this.objectMenu.stopAllActions();
         this.objectMenu.runAction(showAct);
         this.objectMenu.runAction(fadeInAct);
     },
     hideObjectMenu: function(object) {
-        var hideAct = cc.moveBy(0.2, cc.p(0, -200));
+        var hideAct = cc.moveTo(0.2, cc.p(0, -200));
         var fadeOutAct = cc.FadeOut(0.2);
+        this.objectMenu.stopAllActions();
         this.objectMenu.runAction(hideAct);
         this.objectMenu.runAction(fadeOutAct);
     },

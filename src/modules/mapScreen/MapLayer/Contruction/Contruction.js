@@ -8,19 +8,22 @@ var Contruction = cc.Class.extend({
     init: function() {
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
+        this._oldX = this.info.posX;
+        this._oldY = this.info.posY;
 
         this.addShadow();
         this.addNameText();
     },
     onTarget: function() {
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        cc.log('targeted pos' + this.info.posX + '/' + this.info.posY);
         var act = new cc.FadeIn(0.2);
         MAP.arrows[this.info.width].attr({
             x: coor.x,
             y: coor.y,
         });
         MAP.arrows[this.info.width].runAction(act);
-        if (this.grass) this.grass.opacity = 0;
+        //if (this.grass) this.grass.opacity = 0;
         this.nameText.opacity = 255;
         if (this.checkNewPosition({ x: this.info.posX, y: this.info.posY })) {
             MAP.greenBGs[this.info.width].attr({
@@ -50,7 +53,7 @@ var Contruction = cc.Class.extend({
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
         MAP.arrows[this.info.width].runAction(act);
-        if (this.grass) this.grass.opacity = 255;
+        //if (this.grass) this.grass.opacity = 255;
         this.nameText.opacity = 0;
         MAP.greenBGs[this.info.width].attr({
             opacity: 0,
@@ -104,19 +107,19 @@ var Contruction = cc.Class.extend({
         });
         if (this._status === 'setting') {
             MAP.cancelBtn.attr({
-                x: coor.x - (this.info.width - 3) / 2 * TILE_WIDTH,
+                x: coor.x - TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
             });
             MAP.acceptBtn.attr({
-                x: coor.x + (this.info.width + 1) / 2 * TILE_WIDTH,
+                x: coor.x + TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
             });
         }
     },
     setImgCoor: function(coor) {
         this.buildingImg.attr({
-            x: coor.x + this.img_x,
-            y: coor.y + this.img_y,
+            x: coor.x,
+            y: coor.y,
         });
         this.grass && this.grass.attr({
             x: coor.x,
@@ -127,22 +130,21 @@ var Contruction = cc.Class.extend({
             y: coor.y,
         });
         this.nameText.attr({
-            x: coor.x + this.info.width / 2 * TILE_WIDTH,
-            y: coor.y + this.info.height * TILE_HEIGHT + 50,
+            x: coor.x,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
         });
     },
     updatePosition: function(mapPos) {
-        var oldX = this.info.posX;
-        var oldX = this.info.posY;
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
-        // sendMoveConstruction(this.info._id, mapPos.x, mapPos.y);
-        if(this.status === 'setting') {
-            call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-        } else { //move Construction
-            NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+        try {
+            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
+                NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+            }
+        } catch (error) {
+            cc.log('network error!');
         }
     },
     checkNewPosition: function(mapPos) {
@@ -190,8 +192,6 @@ var Contruction = cc.Class.extend({
         this.shadow = shadow;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         shadow.attr({
-            anchorX: 0,
-            anchorY: 0,
             scale: 2,
             x: coor.x,
             y: coor.y,
@@ -204,8 +204,6 @@ var Contruction = cc.Class.extend({
         this.shadow = shadow;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         shadow.attr({
-            anchorX: 0,
-            anchorY: 0,
             scale: 2,
             x: coor.x,
             y: coor.y,
@@ -218,10 +216,8 @@ var Contruction = cc.Class.extend({
         this.nameText = nameText;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         nameText.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: coor.x + this.info.width / 2 * TILE_WIDTH,
-            y: coor.y + this.info.height * TILE_HEIGHT + 50,
+            x: coor.x,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
             color: cc.color(255, 255, 0, 255),
             opacity: 0,
         });
@@ -231,16 +227,14 @@ var Contruction = cc.Class.extend({
         this.levelText = levelText;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         levelText.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
             x: nameText.width / 2,
             y: -5,
         });
         nameText.addChild(levelText, 1000);
     },
     xyOnMap: function(posX, posY) {
-        var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2 - TILE_WIDTH * (this.info.width / 2);
-        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 - TILE_HEIGHT * 0.5;
+        var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2;
+        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
         return { x: newX, y: newY };
     },
 
@@ -260,5 +254,8 @@ var Contruction = cc.Class.extend({
         this.addBuildingImg();
 
         this.levelText.setString('cấp ' + this.info.level);
-    }
+    },
+    addBuildingImg: function() {
+
+    },
 });

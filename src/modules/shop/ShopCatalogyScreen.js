@@ -1,5 +1,5 @@
 gap_x = 20;
-
+var g_ShopCatalogyScreen;
 var ShopCatalogyScreen = Popup.extend({
 
     _resInfoBottom:null,
@@ -16,15 +16,14 @@ var ShopCatalogyScreen = Popup.extend({
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
         this._super(width, height, x, y, text, data, bool);
         this.init(text);
-
+        g_ShopCatalogyScreen = this;
     },
 
     init:function (text) {
         this._itemList = [];
         this._mapLogic = [];
 
-
-
+        //tao ban do 42x42
         this._mapLogic = new Array(42);
         for (var i = 0; i < 42; i++) {
             this._mapLogic[i] = new Array(42);
@@ -50,7 +49,6 @@ var ShopCatalogyScreen = Popup.extend({
         for(var q = 0; q < 42; q++){
             this._mapLogic[q][41] = -1;
         }
-
 
         for(var k in contructionList){
             var item = contructionList[k];
@@ -144,11 +142,9 @@ var ShopCatalogyScreen = Popup.extend({
             size++;
         }
 
-
         for(var i = 0; i < this._itemList.length; i++){
             this._itemList[i].x = (i+1)*gap_x + i*ITEM_WIDTH;
             this._itemList[i].y = this._resInfoBottom.height + (cc.winSize.height - this._resInfo.height - this._resInfoBottom.height - this._itemList[i].height)/2;
-
             this.addChild(this._itemList[i], 3);
         }
     },
@@ -171,6 +167,14 @@ var ShopCatalogyScreen = Popup.extend({
         this._info.y = this._item.y + this._item.height - this._info.height - 10;
         this._item.addChild(this._info, 3, 3);
 
+        this._info.addClickEventListener((function() {
+            this.onInfo = this.onInfo.bind(this);
+            this.onInfo(itemName);
+        }).bind(this));
+
+        //this._info.addClickEventListener(() => this.onInfo('aaaaa'));
+
+
         var listenerInfo = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             onTouchBegan: function(touch, event){return true;},
@@ -189,11 +193,13 @@ var ShopCatalogyScreen = Popup.extend({
         cc.eventManager.addListener(listenerInfo, this._info);
 
 
-        var name = new cc.LabelBMFont(itemName, 'res/Art/Fonts/soji_20.fnt');
-        name.setAnchorPoint(0, 0);
-        name.x = this._item.x + (ITEM_WIDTH-name.width)/2;
-        name.y = this._item.y + ITEM_HEIGHT - name.height - 17;
-        this._item.addChild(name, 4, 4);
+        var nameLabel = name.building[itemName].en;
+        //var nameLabel = itemName;
+        nameLabel = new cc.LabelBMFont(nameLabel, 'res/Art/Fonts/soji_20.fnt');
+        nameLabel.setAnchorPoint(0, 0);
+        nameLabel.x = this._item.x + (ITEM_WIDTH-nameLabel.width)/2;
+        nameLabel.y = this._item.y + ITEM_HEIGHT - nameLabel.height - 17;
+        this._item.addChild(nameLabel, 4, 4);
 
         var clock = new cc.Sprite('res/Art/GUIs/shop_gui/time.png');
         clock.setAnchorPoint(0, 0);
@@ -214,10 +220,27 @@ var ShopCatalogyScreen = Popup.extend({
         timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
         this._item.addChild(timeLabel, 4, 4);
 
-        var gold = catalogy[itemName].gold;
-        var elixir = catalogy[itemName].elixir;
-        var darkElixir = catalogy[itemName].darkElixir;
+        var gold = catalogy[itemName].gold ? catalogy[itemName].gold : 0;
+        var elixir = catalogy[itemName].elixir ? catalogy[itemName].elixir : 0;
+        var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
+
+        var amountBDH = 0;
+        for(var k in contructionList){
+            if(contructionList[k].name == 'BDH_1'){         //Can kiem tra them contructionList[k].status == 'complete' cho tong quat
+                amountBDH++;
+            }
+        }
+
+
+        if(itemName == 'BDH_1'){
+            if(amountBDH < 5){
+                coin = config.building['BDH_1'][amountBDH + 1].coin;
+            }else{
+                coin = "Max Amount";
+            }
+        }
+
 
         var unitLabel = null;
         var unit = '';
@@ -232,8 +255,12 @@ var ShopCatalogyScreen = Popup.extend({
             unit = 'darkElixir';
         }
         else if(coin && coin !== undefined){
-            unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
-            unit = 'coin';
+            if(itemName == 'BDH_1' && amountBDH == 5){
+                unitLabel = new cc.LabelBMFont("", 'res/Art/Fonts/soji_20.fnt');
+            }else{
+                unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
+                unit = 'coin';
+            }
         }else{
             unitLabel = new cc.LabelBMFont("Free", 'res/Art/Fonts/soji_20.fnt');
         }
@@ -241,10 +268,7 @@ var ShopCatalogyScreen = Popup.extend({
         unitLabel.setPosition(this._item.x + this._item.width - unitLabel.width - 20, this._item.y + 20);
         this._item.addChild(unitLabel, 4, 4);
 
-        var cost;
-        cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
-
-
+        var cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
         var costLabel = new cc.LabelBMFont(cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
         costLabel.setPosition(unitLabel.x - costLabel.width - 7, unitLabel.y);
@@ -316,6 +340,12 @@ var ShopCatalogyScreen = Popup.extend({
             }
         }
 
+        var costBuilding = {
+            gold: gold,
+            elixir: elixir,
+            darkElixir: darkElixir,
+            coin: coin
+        };
 
         var self = this;
         if(!condition){
@@ -342,7 +372,9 @@ var ShopCatalogyScreen = Popup.extend({
                                 posX: posXMax,
                                 posY: posYMax,
                                 width: catalogy[itemName].width,
-                                height: catalogy[itemName].height
+                                height: catalogy[itemName].height,
+                                buildTime: catalogy[itemName].buildTime,
+                                cost: costBuilding
                             };
                             MAP.buildNewContruction(buildingInfo);
                             cc.director.popToRootScene();
@@ -402,6 +434,19 @@ var ShopCatalogyScreen = Popup.extend({
         return score;
     },
 
+    onInfo:function(itemName){
+        var x = cc.winSize.width*7/9;
+        var y = cc.winSize.height*8.5/9;
+        var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].disabled = true;
+            children[i].enabled = false;
+        }
+        //cc.eventManager.removeListener(this.listener);
+        this.getParent().addChild(popup, 2);
+    },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
         //Gold
