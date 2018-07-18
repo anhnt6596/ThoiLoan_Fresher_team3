@@ -56,7 +56,7 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        MAP.buildNewContruction();
+        //
     },
     hideLobby: function() {
         this.attr({

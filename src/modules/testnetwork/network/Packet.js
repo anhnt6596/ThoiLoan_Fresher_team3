@@ -7,7 +7,11 @@ gv.CMD.HAND_SHAKE = 0;
 gv.CMD.USER_LOGIN = 1;
 
 gv.CMD.USER_INFO = 1001;
+
 gv.CMD.GET_MAP_INFO = 2001;
+gv.CMD.MOVE_CONSTRUCTION =2002;
+gv.ADD_CONSTRUCTION = 2003;
+
 gv.CMD.TEST = 3001;
 
 testnetwork = testnetwork||{};
@@ -32,7 +36,7 @@ CmdSendHandshake = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 CmdSendUserInfo = fr.OutPacket.extend(
     {
 
@@ -51,7 +55,7 @@ CmdSendUserInfo = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 CmdSendMapInfo = fr.OutPacket.extend(
     {
 
@@ -70,7 +74,7 @@ CmdSendMapInfo = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 CmdSendLogin = fr.OutPacket.extend(
     {
@@ -90,21 +94,46 @@ CmdSendLogin = fr.OutPacket.extend(
     }
 )
 
-//CmdSendMove = fr.OutPacket.extend(
-//    {
-//        ctor:function()
-//        {
-//            this._super();
-//            this.initData(100);
-//            this.setCmdId(gv.CMD.MOVE);
-//        },
-//        pack:function(direction){
-//            this.packHeader();
-//            this.putShort(direction);
-//            this.updateSize();
-//        }
-//    }
-//)
+CmdSendMove = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.MOVE_CONSTRUCTION);
+
+        },
+        pack:function(id, x, y){
+            this.packHeader();
+            this.putInt(parseInt(id));
+            this.putInt(x);
+            this.putInt(y);
+            //this.putInt(22);
+            //this.putInt(27);
+            this.updateSize();
+        }
+    }
+)
+
+CmdSendAddConstruction = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.ADD_CONSTRUCTION);
+
+        },
+        pack:function(id, x, y){
+            this.packHeader();
+            this.putInt(parseInt(id));
+            this.putInt(x);
+            this.putInt(y);
+            this.updateSize();
+        }
+    }
+)
+
 
 CmdSendTest = fr.OutPacket.extend(
     {
@@ -120,7 +149,7 @@ CmdSendTest = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 /**
  * InPacket
@@ -158,7 +187,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
-            contructionList1 = [];
+            contructionList = [];
         },
         readData:function(){
             this.n = this.getInt();
@@ -194,7 +223,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                        width: config.building[this.name][1].width,
                        height: config.building[this.name][1].height,
                     };
-                    contructionList1.push(contruction);
+                    contructionList.push(contruction);
                 }
 
             }
@@ -246,15 +275,25 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
     }
 );
 
-testnetwork.packetMap[gv.CMD.MOVE] = fr.InPacket.extend(
+testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
         {
             this._super();
         },
         readData:function(){
-            this.x = this.getInt();
-            this.y = this.getInt();
+            this.validate  = this.getBool();
+        }
+    }
+);
+testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
         }
     }
 );

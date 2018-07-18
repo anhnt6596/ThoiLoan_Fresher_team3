@@ -9,8 +9,6 @@ var Building = Contruction.extend({
         this.grass = grass;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         grass.attr({
-            anchorX: 0,
-            anchorY: 0,
             scale: 2,
             x: coor.x,
             y: coor.y,
