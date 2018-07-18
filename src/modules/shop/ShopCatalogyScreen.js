@@ -23,8 +23,7 @@ var ShopCatalogyScreen = Popup.extend({
         this._itemList = [];
         this._mapLogic = [];
 
-
-
+        //tao ban do 42x42
         this._mapLogic = new Array(42);
         for (var i = 0; i < 42; i++) {
             this._mapLogic[i] = new Array(42);
@@ -50,7 +49,6 @@ var ShopCatalogyScreen = Popup.extend({
         for(var q = 0; q < 42; q++){
             this._mapLogic[q][41] = -1;
         }
-
 
         for(var k in contructionList){
             var item = contructionList[k];
@@ -144,11 +142,9 @@ var ShopCatalogyScreen = Popup.extend({
             size++;
         }
 
-
         for(var i = 0; i < this._itemList.length; i++){
             this._itemList[i].x = (i+1)*gap_x + i*ITEM_WIDTH;
             this._itemList[i].y = this._resInfoBottom.height + (cc.winSize.height - this._resInfo.height - this._resInfoBottom.height - this._itemList[i].height)/2;
-
             this.addChild(this._itemList[i], 3);
         }
     },
