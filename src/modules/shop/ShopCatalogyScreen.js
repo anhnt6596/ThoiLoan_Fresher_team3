@@ -217,19 +217,21 @@ var ShopCatalogyScreen = Popup.extend({
         var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
 
-        var amountBDH_1 = 0;
+        var amountBDH = 0;
         for(var k in contructionList){
-            if(contructionList[k].status == 'complete' && contructionList[k].name == 'BDH_1'){
-                amountBDH_1++;
+            if(contructionList[k].name == 'BDH_1'){         //Can kiem tra them contructionList[k].status == 'complete' cho tong quat
+                amountBDH++;
             }
         }
 
-        if(itemName == 'BDH_1'){
-            cc.loader.loadJson("res/Config json/BuilderHut.json", function(error, data){
-                coin = data['BDH_1'][amountBDH_1 + 1].coin;
-            });
-        }
 
+        if(itemName == 'BDH_1'){
+            if(amountBDH < 5){
+                coin = config.building['BDH_1'][amountBDH + 1].coin;
+            }else{
+                coin = "Max Amount";
+            }
+        }
 
 
         var unitLabel = null;
@@ -245,8 +247,12 @@ var ShopCatalogyScreen = Popup.extend({
             unit = 'darkElixir';
         }
         else if(coin && coin !== undefined){
-            unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
-            unit = 'coin';
+            if(itemName == 'BDH_1' && amountBDH == 5){
+                unitLabel = new cc.LabelBMFont("", 'res/Art/Fonts/soji_20.fnt');
+            }else{
+                unitLabel = new cc.Sprite('res/Art/GUIs/shop_gui/g.png');
+                unit = 'coin';
+            }
         }else{
             unitLabel = new cc.LabelBMFont("Free", 'res/Art/Fonts/soji_20.fnt');
         }
@@ -327,12 +333,11 @@ var ShopCatalogyScreen = Popup.extend({
         }
 
         var costBuilding = {
-            gold, elixir, darkElixir, coin,
+            gold: gold,
+            elixir: elixir,
+            darkElixir: darkElixir,
+            coin: coin
         };
-        //costBuilding.gold = gold;
-        //costBuilding.elixir = elixir;
-        //costBuilding.darkElixir = darkElixir;
-        //costBuilding.coin = coin;
 
         var self = this;
         if(!condition){

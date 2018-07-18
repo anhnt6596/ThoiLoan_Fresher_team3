@@ -556,7 +556,7 @@ var MapLayer = cc.Layer.extend({
         LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
-        newBuilding.setStatus('setting');
+        newBuilding.setStatus('pending');
         this._targetedObject && this._targetedObject.removeTarget();
         this._targetedObject = newBuilding;
         newBuilding.onTarget();
@@ -582,19 +582,20 @@ var MapLayer = cc.Layer.extend({
 
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
-                ////Kiem tra tai nguyen co du khong
-                //var g = checkUserResources();
-                //if(g > 0){
-                //    //Show popup dung G de mua tai nguyen
-                //}
-                //
-                ////Kiem tra tho xay ranh khong
-                //if(!checkIsFreeBuilder){
-                //    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
-                //        var coin = getGToReleaseBuilder();
-                //        //Can coin de release 1 builder
-                //    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-                //}
+                //Kiem tra tai nguyen co du khong
+                var g = checkUserResources();
+                if(g > 0){
+                    //Show popup dung G de mua tai nguyen
+
+                }
+
+                //Kiem tra tho xay ranh khong
+                if(!checkIsFreeBuilder){
+                    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                        var coin = getGToReleaseBuilder();
+                        //Can coin de release 1 builder
+                    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
+                }
 
                 //Gui yeu cau xac nhan len server
 
