@@ -17,8 +17,8 @@ var contructionList = [
     {
         _id: '_02',
         name: 'TOW_1',
-        posX: 0,
-        posY: 30,
+        posX: 19,
+        posY: 19,
         width: 4,
         height: 4,
         level: 5,
@@ -47,17 +47,17 @@ var contructionList = [
         status: 'complete',
         startTime: 0
     },
-    //{
-    //    _id: '_05',
-    //    name: 'BDH_1',
-    //    posX: 5,
-    //    posY: 5,
-    //    width: 2,
-    //    height: 2,
-    //    level: 1,
-    //    status: 'complete',
-    //    startTime: 0
-    //},
+    {
+       _id: '_05',
+       name: 'BDH_1',
+       posX: 5,
+       posY: 5,
+       width: 2,
+       height: 2,
+       level: 1,
+       status: 'complete',
+       startTime: 0
+    },
     {
         _id: '_06',
         name: 'STO_1',
@@ -148,6 +148,8 @@ var MapLayer = cc.Layer.extend({
     _targetedObject: null,
     _isMovingBuilding: false,
     _isBuilding: false,
+    mapWidth: 4200,
+    mapHeight: 3200,
     ctor: function() {
         this._super();
         MAP = this;
@@ -156,6 +158,7 @@ var MapLayer = cc.Layer.extend({
 
         this.init();
         this.addTouchListener();
+        this.addKeyboardListener();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
@@ -168,7 +171,7 @@ var MapLayer = cc.Layer.extend({
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
         
-        this.scale = 0.8;
+        this.scale = 1;
         for (var i = 0; i < objectRefs.length; i++) {
             if(objectRefs[i].info.name === 'TOW_1') {
                 var town = objectRefs[i];
@@ -326,8 +329,6 @@ var MapLayer = cc.Layer.extend({
             scale: 1,
         });
         this.addChild(mapBackground, Z.TILEMAP);
-        this.mapWidth = bg_bl.width + bg_br.width;
-        this.mapHeight = bg_bl.height + bg_tl.height;
     },
     addTouchListener: function() {
         var self = this;
@@ -342,6 +343,7 @@ var MapLayer = cc.Layer.extend({
     onTouchBegan: function(touch, event) {
         var tp = touch.getLocation();
         var coorInMap = this.calculateCoor(tp);
+        cc.log('coorInMap: ', coorInMap.x + '/' + coorInMap.y);
         var mapPos = this.calculatePos(coorInMap);
         cc.log('x/y: ', mapPos.x + '/' + mapPos.y);
 
@@ -553,12 +555,12 @@ var MapLayer = cc.Layer.extend({
     setVXbtn: function(targetedObject) {
         var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
         this.cancelBtn.attr({
-            x: coor.x + TILE_WIDTH,
+            x: coor.x - TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
             opacity: 255,
         });
         this.acceptBtn.attr({
-            x: coor.x - TILE_WIDTH,
+            x: coor.x + TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
             opacity: 255,
         });
@@ -572,15 +574,18 @@ var MapLayer = cc.Layer.extend({
             curPos = this.limitMoveMap(curPos);
             this.x = curPos.x;
             this.y = curPos.y;
-            curPos = null;
         }
     },
+    zoomMap: function() {
+
+    },
     limitMoveMap: function(pos) {
+        var size = cc.winSize;
         var curPos = pos;
         if (curPos.x > 0) curPos.x = 0;
         if (curPos.y > 0) curPos.y = 0;
-        if (curPos.x < - this.mapWidth * this.scale) curPos.x = -this.mapWidth * this.scale;
-        if (curPos.y < - this.mapHeight * this.scale) curPos.y = -this.mapHeight * this.scale;
+        if (curPos.x < - this.mapWidth * this.scale + size.width) curPos.x = -this.mapWidth * this.scale + size.width;
+        if (curPos.y < - this.mapHeight * this.scale + size.height) curPos.y = -this.mapHeight * this.scale + size.height;
         return curPos;
     },
     calculatePos: function(coorInMap) {
@@ -602,5 +607,54 @@ var MapLayer = cc.Layer.extend({
         result.x = coor.x * this.scale;
         result.y = coor.y * this.scale;
         return result;
-    }
+    },
+    addKeyboardListener: function() {
+        var self = this;
+        cc.log('Keyboard Listener');
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function (key, event) {
+                var tp = { // cái này là tâm điểm của zoom
+                    x: self.mapWidth / 2,
+                    y: self.mapHeight / 2,
+                };
+                var scaleNumber = 1.1;
+                if(key == 73 && self.scale < 2) {
+                    var curPos = {
+                        x: self.x,
+                        y: self.y,
+                    };
+                    var newPos = {
+                        x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
+                        y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
+                    }
+                    newPos = self.limitMoveMap(newPos);
+                    self.attr({
+                        x: newPos.x,
+                        y: newPos.y,
+                    });
+                    self.scale *= scaleNumber;
+                }
+
+                if(key == 79 && self.scale > 0.4) {
+                    self.scale /= scaleNumber;
+                    var curPos = {
+                        x: self.x,
+                        y: self.y,
+                    };
+                    var newPos = {
+                        x: curPos.x + tp.x * (scaleNumber - 1) * self.scale,
+                        y: curPos.y + tp.y * (scaleNumber - 1) * self.scale,
+                    }
+                    newPos = self.limitMoveMap(newPos);
+                    self.attr({
+                        x: newPos.x,
+                        y: newPos.y,
+                    });
+                }
+            },
+            onKeyReleased: function(key, event) {
+            }
+        }, this);
+    },
 });

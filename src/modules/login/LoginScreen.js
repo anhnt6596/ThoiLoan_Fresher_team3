@@ -30,6 +30,7 @@ var LoginScreen = cc.Layer.extend({
 
     loginTrucTiep: function(){
         cc.director.runScene(createMapScene());
+        this.setUserResourcesCapacity();
     },
     onSelectLogin:function(sender)
     {
@@ -81,5 +82,4 @@ var LoginScreen = cc.Layer.extend({
         gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
         gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
     }
-
 });
