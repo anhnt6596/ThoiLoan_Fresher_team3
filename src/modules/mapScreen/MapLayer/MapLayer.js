@@ -2,7 +2,120 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-var contructionList1 = [
+//var contructionList1 = [
+//    {
+//        _id: '_01',
+//        name: 'BDH_1',
+//        level: 1,
+//        posX: 10,
+//        posY: 10,
+//        width: 2,
+//        height: 2,
+//    },
+//    {
+//        _id: '_02',
+//        name: 'TOW_1',
+//        posX: 19,
+//        posY: 19,
+//        width: 4,
+//        height: 4,
+//        level: 5,
+//    },
+//    {
+//        _id: '_03',
+//        name: 'AMC_1',
+//        posX: 0,
+//        posY: 0,
+//        width: 5,
+//        height: 5,
+//        level: 1,
+//    },
+//    {
+//        _id: '_04',
+//        name: 'BAR_1',
+//        posX: 10,
+//        posY: 5,
+//        width: 3,
+//        height: 3,
+//        level: 2,
+//    },
+//    {
+//        _id: '_05',
+//        name: 'BAR_1',
+//        posX: 5,
+//        posY: 5,
+//        width: 3,
+//        height: 3,
+//        level: 5,
+//    },
+//    {
+//        _id: '_06',
+//        name: 'STO_1',
+//        posX: 5,
+//        posY: 10,
+//        width: 3,
+//        height: 3,
+//        level: 2,
+//    },
+//    {
+//        _id: '_07',
+//        name: 'STO_1',
+//        posX: 5,
+//        posY: 15,
+//        width: 3,
+//        height: 3,
+//        level: 4,
+//    },
+//    {
+//        _id: '_08',
+//        name: 'STO_2',
+//        posX: 5,
+//        posY: 20,
+//        width: 3,
+//        height: 3,
+//        level: 5,
+//    },
+//    {
+//        _id: '_09',
+//        name: 'STO_2',
+//        posX: 5,
+//        posY: 25,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//    },
+//    {
+//        _id: '_10',
+//        name: 'RES_1',
+//        posX: 5,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 11,
+//    },
+//    {
+//        _id: '_11',
+//        name: 'RES_1',
+//        posX: 10,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 4,
+//    },
+//    {
+//        _id: '_12',
+//        name: 'RES_2',
+//        posX: 15,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 11,
+//    },
+//];
+
+
+
+var contructionList = [
     {
         _id: '_01',
         name: 'BDH_1',
@@ -11,6 +124,8 @@ var contructionList1 = [
         posY: 10,
         width: 2,
         height: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_02',
@@ -20,6 +135,8 @@ var contructionList1 = [
         width: 4,
         height: 4,
         level: 5,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_03',
@@ -29,6 +146,8 @@ var contructionList1 = [
         width: 5,
         height: 5,
         level: 1,
+        status: 'pending',
+        startTime: 0
     },
     {
         _id: '_04',
@@ -38,15 +157,19 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_05',
-        name: 'BAR_1',
+        name: 'BDH_1',
         posX: 5,
         posY: 5,
-        width: 3,
-        height: 3,
-        level: 5,
+        width: 2,
+        height: 2,
+        level: 1,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_06',
@@ -56,6 +179,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_07',
@@ -65,6 +190,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 4,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_08',
@@ -74,6 +201,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 5,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_09',
@@ -83,6 +212,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 1,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_10',
@@ -92,6 +223,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 11,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_11',
@@ -101,6 +234,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 4,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_12',
@@ -110,8 +245,12 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 11,
+        status: 'complete',
+        startTime: 0
     },
 ];
+
+
 
 var rootMapPos = {
     x: 2100,
@@ -443,6 +582,32 @@ var MapLayer = cc.Layer.extend({
 
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
+                ////Kiem tra tai nguyen co du khong
+                //var g = checkUserResources();
+                //if(g > 0){
+                //    //Show popup dung G de mua tai nguyen
+                //}
+                //
+                ////Kiem tra tho xay ranh khong
+                //if(!checkIsFreeBuilder){
+                //    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                //        var coin = getGToReleaseBuilder();
+                //        //Can coin de release 1 builder
+                //    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
+                //}
+
+                //Gui yeu cau xac nhan len server
+
+
+                //Nhan phan hoi succeed tu server
+
+
+                //Tru tien cua nguoi choi
+                reduceUserResources(buildingInfo.cost);
+                //Thong so Resource trem map can dc update lai
+
+
+                //Cap nhat lai map va listBuilding o client
                 this._isBuilding = false;
                 newBuilding.removeTarget();
                 this._targetedObject = null;
@@ -460,6 +625,8 @@ var MapLayer = cc.Layer.extend({
                     opacity: 0,
                 });
                 LOBBY.showLobby();
+
+                //Hien thi thoi gian dem nguoc va hinh anh thang tho xay (neu co)
             }
         }.bind(this));
 

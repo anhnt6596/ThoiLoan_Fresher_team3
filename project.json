@@ -36,6 +36,7 @@
         "src/base/IconButton.js",
         "src/base/UtilityUI.js",
         "src/base/utilities/Popup.js",
+        "src/base/utilities/Functional.js",
         "src/base/Effects.js",
         "src/libs/md5.js",
         "src/libs/signals.js",

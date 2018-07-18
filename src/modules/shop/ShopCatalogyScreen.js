@@ -210,9 +210,9 @@ var ShopCatalogyScreen = Popup.extend({
         timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
         this._item.addChild(timeLabel, 4, 4);
 
-        var gold = catalogy[itemName].gold;
-        var elixir = catalogy[itemName].elixir;
-        var darkElixir = catalogy[itemName].darkElixir;
+        var gold = catalogy[itemName].gold ? catalogy[itemName].gold : 0;
+        var elixir = catalogy[itemName].elixir ? catalogy[itemName].elixir : 0;
+        var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
 
         var unitLabel = null;
@@ -237,10 +237,7 @@ var ShopCatalogyScreen = Popup.extend({
         unitLabel.setPosition(this._item.x + this._item.width - unitLabel.width - 20, this._item.y + 20);
         this._item.addChild(unitLabel, 4, 4);
 
-        var cost;
-        cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
-
-
+        var cost = (gold ? gold : '') + (elixir ? elixir : '') + (darkElixir ? darkElixir : '') + (coin ? coin : '');
         var costLabel = new cc.LabelBMFont(cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), 'res/Art/Fonts/soji_20.fnt');
         costLabel.setAnchorPoint(0, 0);
         costLabel.setPosition(unitLabel.x - costLabel.width - 7, unitLabel.y);
@@ -312,6 +309,13 @@ var ShopCatalogyScreen = Popup.extend({
             }
         }
 
+        var costBuilding = {
+            gold, elixir, darkElixir, coin,
+        };
+        //costBuilding.gold = gold;
+        //costBuilding.elixir = elixir;
+        //costBuilding.darkElixir = darkElixir;
+        //costBuilding.coin = coin;
 
         var self = this;
         if(!condition){
@@ -338,7 +342,9 @@ var ShopCatalogyScreen = Popup.extend({
                                 posX: posXMax,
                                 posY: posYMax,
                                 width: catalogy[itemName].width,
-                                height: catalogy[itemName].height
+                                height: catalogy[itemName].height,
+                                buildTime: catalogy[itemName].buildTime,
+                                cost: costBuilding
                             };
                             MAP.buildNewContruction(buildingInfo);
                             cc.director.popToRootScene();
