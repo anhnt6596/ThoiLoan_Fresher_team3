@@ -26,14 +26,17 @@ var LobbyLayer = cc.Layer.extend({
     initBar: function() {
         var size = cc.winSize;
         // Resource Bar
-        var goldBar = new ResourceBar(size.width - 118, size.height - 40, 'gold');
+        var goldBar = new ResourceBar(size.width - 118, size.height - 40, 'gold', this.userInfo);
+        this.goldBar = goldBar;
         this.addChild(goldBar);
-        var elixirBar = new ResourceBar(size.width - 118, size.height - 100, 'elixir');
+        var elixirBar = new ResourceBar(size.width - 118, size.height - 100, 'elixir', this.userInfo);
+        this.elixirBar = elixirBar;
         this.addChild(elixirBar);
-        var darkElixirBar = new ResourceBar(size.width - 118, size.height - 160, 'dark_elixir');
+        var darkElixirBar = new ResourceBar(size.width - 118, size.height - 160, 'dark_elixir', this.userInfo);
+        this.darkElixirBar = darkElixirBar;
         this.addChild(darkElixirBar);
-
         var gBar = new GBar(size.width - 106, size.height - 210, this.userInfo.coin);
+        this.gBar = gBar;
         this.addChild(gBar);
         // Top Center Bar
         var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army');
@@ -43,7 +46,8 @@ var LobbyLayer = cc.Layer.extend({
         var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield');
         this.addChild(ShieldBar);
 
-        var topLeftBar = new TopLeftBar(50, size.height - 75);
+        var topLeftBar = new TopLeftBar(50, size.height - 75, this.userInfo);
+        this.topLeftBar = topLeftBar;
         this.addChild(topLeftBar);
     },
     initObjectMenu: function() {
@@ -61,6 +65,10 @@ var LobbyLayer = cc.Layer.extend({
     },
     onAttack: function() {
         //
+        gv.user.coin = parseInt(gv.user.coin) + 10;
+        gv.user.gold = parseInt(gv.user.gold) + 1000;
+        gv.user.elixir = parseInt(gv.user.elixir) + 1000;
+        this.update(gv.user);
     },
     hideLobby: function() {
         this.attr({
@@ -87,5 +95,11 @@ var LobbyLayer = cc.Layer.extend({
         this.objectMenu.stopAllActions();
         this.objectMenu.runAction(hideAct);
         this.objectMenu.runAction(fadeOutAct);
+    },
+    update: function(userInfo) {
+        this.gBar.update(userInfo);
+        this.goldBar.update(userInfo);
+        this.elixirBar.update(userInfo);
+        this.darkElixirBar.update(userInfo);
     },
 });

@@ -76,6 +76,7 @@ var reduceUserResources = function(costBuilding){
     gv.user.elixir -= costBuilding.elixir;
     gv.user.darkElixir -= costBuilding.darkElixir;
     gv.user.coin -= costBuilding.coin;
+    LOBBY.update(gv.user);
 };
 
 

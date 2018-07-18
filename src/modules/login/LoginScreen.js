@@ -29,8 +29,8 @@ var LoginScreen = cc.Layer.extend({
     },
 
     loginTrucTiep: function(){
-        cc.director.runScene(createMapScene());
         this.setUserResourcesCapacity();
+        cc.director.runScene(createMapScene());
     },
     onSelectLogin:function(sender)
     {

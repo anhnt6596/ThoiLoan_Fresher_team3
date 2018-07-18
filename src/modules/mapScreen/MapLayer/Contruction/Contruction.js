@@ -105,7 +105,7 @@ var Contruction = cc.Class.extend({
             x: coor.x,
             y: coor.y,
         });
-        if (this._status === 'setting') {
+        if (this._status === 'pending') {
             MAP.cancelBtn.attr({
                 x: coor.x - TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
@@ -140,7 +140,7 @@ var Contruction = cc.Class.extend({
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
-            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
+            if(this._status !== 'pending' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
             }
         } catch (error) {
