@@ -8,19 +8,22 @@ var Contruction = cc.Class.extend({
     init: function() {
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
+        this._oldX = this.info.posX;
+        this._oldY = this.info.posY;
 
         this.addShadow();
         this.addNameText();
     },
     onTarget: function() {
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        cc.log('targeted pos' + this.info.posX + '/' + this.info.posY);
         var act = new cc.FadeIn(0.2);
         MAP.arrows[this.info.width].attr({
             x: coor.x,
             y: coor.y,
         });
         MAP.arrows[this.info.width].runAction(act);
-        if (this.grass) this.grass.opacity = 0;
+        //if (this.grass) this.grass.opacity = 0;
         this.nameText.opacity = 255;
         if (this.checkNewPosition({ x: this.info.posX, y: this.info.posY })) {
             MAP.greenBGs[this.info.width].attr({
@@ -50,7 +53,7 @@ var Contruction = cc.Class.extend({
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
         MAP.arrows[this.info.width].runAction(act);
-        if (this.grass) this.grass.opacity = 255;
+        //if (this.grass) this.grass.opacity = 255;
         this.nameText.opacity = 0;
         MAP.greenBGs[this.info.width].attr({
             opacity: 0,
@@ -132,16 +135,12 @@ var Contruction = cc.Class.extend({
         });
     },
     updatePosition: function(mapPos) {
-        var oldX = this.info.posX;
-        var oldX = this.info.posY;
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
-            if(this.status === 'setting') {
-                call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-            } else { //move Construction
+            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
             }
         } catch (error) {
@@ -255,5 +254,8 @@ var Contruction = cc.Class.extend({
         this.addBuildingImg();
 
         this.levelText.setString('cấp ' + this.info.level);
-    }
+    },
+    addBuildingImg: function() {
+
+    },
 });

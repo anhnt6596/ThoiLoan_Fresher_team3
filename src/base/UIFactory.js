@@ -87,6 +87,7 @@ gv.TextField = function(text,placeholder, x ,y){
     _tf.setColor(cc.color(220,220,220,255));
     return _tf;
 }
+
 gv.user = {
     uuid: "",
     id :"",
@@ -97,5 +98,4 @@ gv.user = {
     elixir :"2367",
     darkElixir :"256",
     builderNumber :"",
-
 }
