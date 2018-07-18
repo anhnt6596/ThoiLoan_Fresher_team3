@@ -8,6 +8,8 @@ var Contruction = cc.Class.extend({
     init: function() {
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
+        this._oldX = this.info.posX;
+        this._oldY = this.info.posY;
 
         this.addShadow();
         this.addNameText();
@@ -133,16 +135,12 @@ var Contruction = cc.Class.extend({
         });
     },
     updatePosition: function(mapPos) {
-        var oldX = this.info.posX;
-        var oldX = this.info.posY;
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
-            if(this.status === 'setting') {
-                call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-            } else { //move Construction
+            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
             }
         } catch (error) {

@@ -1,6 +1,3 @@
-CATALOGY_WIDTH = 241;
-CATALOGY_HEIGHT = 186;
-
 var ShopScreen = Popup.extend({
 
     _catalogyList:[],

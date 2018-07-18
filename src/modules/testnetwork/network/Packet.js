@@ -220,6 +220,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                        level: this.level,
                        posX: this.posX,
                        posY: this.posY,
+                        status: this.status,
                        width: config.building[this.name][1].width,
                        height: config.building[this.name][1].height,
                     };

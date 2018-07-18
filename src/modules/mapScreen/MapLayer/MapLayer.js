@@ -2,7 +2,7 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-var contructionList1 = [
+var contructionList = [
     {
         _id: '_01',
         name: 'BDH_1',
@@ -11,15 +11,19 @@ var contructionList1 = [
         posY: 10,
         width: 2,
         height: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_02',
         name: 'TOW_1',
-        posX: 19,
-        posY: 19,
+        posX: 0,
+        posY: 30,
         width: 4,
         height: 4,
         level: 5,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_03',
@@ -29,6 +33,8 @@ var contructionList1 = [
         width: 5,
         height: 5,
         level: 1,
+        status: 'pending',
+        startTime: 0
     },
     {
         _id: '_04',
@@ -38,15 +44,19 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_05',
-        name: 'BAR_1',
+        name: 'BDH_1',
         posX: 5,
         posY: 5,
-        width: 3,
-        height: 3,
-        level: 5,
+        width: 2,
+        height: 2,
+        level: 1,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_06',
@@ -56,6 +66,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 2,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_07',
@@ -65,6 +77,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 4,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_08',
@@ -74,6 +88,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 5,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_09',
@@ -83,6 +99,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 1,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_10',
@@ -92,6 +110,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 11,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_11',
@@ -101,6 +121,8 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 4,
+        status: 'complete',
+        startTime: 0
     },
     {
         _id: '_12',
@@ -110,8 +132,12 @@ var contructionList1 = [
         width: 3,
         height: 3,
         level: 11,
+        status: 'complete',
+        startTime: 0
     },
 ];
+
+
 
 var rootMapPos = {
     x: 2100,
@@ -141,9 +167,33 @@ var MapLayer = cc.Layer.extend({
         this.initContructions(contructionList);
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
+        
         this.scale = 0.8;
-        this.x = - (this.mapWidth + cc.winSize.width) / 2;
-        this.y = - (this.mapHeight + cc.winSize.height) / 2;
+        for (var i = 0; i < objectRefs.length; i++) {
+            if(objectRefs[i].info.name === 'TOW_1') {
+                var town = objectRefs[i];
+                this.setMapPositionToObject(town);
+                break;
+            }
+        }
+    },
+    setMapPositionToObject: function(town) {
+        var size = cc.winSize;
+        var mapPosition;
+        var xy = town.xyOnMap(town.info.posX, town.info.posY);
+        mapPosition = this.reverseMapCoor(xy);
+        cc.log('town.info.pos + ' + town.info.posX + '/' + town.info.posY);
+        cc.log('mapPosition + ' + mapPosition.x + '/' + mapPosition.y);
+        
+        var p = {x: 0, y: 0};
+        p.x = (-mapPosition.x) + size.width/2;
+        p.y = (-mapPosition.y) + size.height/2;
+        cc.log('p + ' + p.x + '/' + p.y);
+        p = this.limitMoveMap(p);
+        this.attr({
+            x: p.x,
+            y: p.y,
+        });
     },
     initContructions: function(contructions) {
         var self = this;
@@ -276,8 +326,8 @@ var MapLayer = cc.Layer.extend({
             scale: 1,
         });
         this.addChild(mapBackground, Z.TILEMAP);
-        this.mapWidth = bg_bl.width + bg_br.width + 500;
-        this.mapHeight = bg_bl.height + bg_tl.height + 800;
+        this.mapWidth = bg_bl.width + bg_br.width;
+        this.mapHeight = bg_bl.height + bg_tl.height;
     },
     addTouchListener: function() {
         var self = this;
@@ -369,9 +419,6 @@ var MapLayer = cc.Layer.extend({
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
                         self._targetedObject.onTarget();
-                        cc.log('>>>>>>>>>>>>>>>>>posX' + self._targetedObject.info.posX);
-                        cc.log('>>>>>>>>>>>>>>>>>posY' + self._targetedObject.info.posX);
-                        //self.reorderChild(self._targetedObject, 1000);
                         break;
                     }
                 } else {
@@ -422,6 +469,7 @@ var MapLayer = cc.Layer.extend({
         newBuilding.setStatus('setting');
         this._targetedObject && this._targetedObject.removeTarget();
         this._targetedObject = newBuilding;
+        this.setMapPositionToObject(newBuilding);
         newBuilding.onTarget();
         // contructionList.push(buildingInfo);
         // objectRefs.push(newBuilding);
@@ -441,13 +489,41 @@ var MapLayer = cc.Layer.extend({
                 opacity: 0,
             });
             LOBBY.showLobby();
-            this.cancelBtn.addClickEventListener(function(){
-                cc.log('disable');
-            });
+            this.cancelBtn.addClickEventListener(doNothing);
+            this.acceptBtn.addClickEventListener(doNothing);
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
+                ////Kiem tra tai nguyen co du khong
+                //var g = checkUserResources();
+                //if(g > 0){
+                //    //Show popup dung G de mua tai nguyen
+                //}
+                //
+                ////Kiem tra tho xay ranh khong
+                //if(!checkIsFreeBuilder){
+                //    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                //        var coin = getGToReleaseBuilder();
+                //        //Can coin de release 1 builder
+                //    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
+                //}
+
+                //Gui yeu cau xac nhan len server
+
+
+                //Nhan phan hoi succeed tu server
+
+
+                //Tru tien cua nguoi choi
+                reduceUserResources(buildingInfo.cost);
+                //Thong so Resource trem map can dc update lai
+
+
+                //Cap nhat lai map va listBuilding o client
+
+                // call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+                
                 this._isBuilding = false;
                 newBuilding.removeTarget();
                 this._targetedObject = null;
@@ -465,9 +541,10 @@ var MapLayer = cc.Layer.extend({
                     opacity: 0,
                 });
                 LOBBY.showLobby();
-                this.cancelBtn.addClickEventListener(function(){
-                    cc.log('disable');
-                });
+                this.cancelBtn.addClickEventListener(doNothing);
+                this.acceptBtn.addClickEventListener(doNothing);
+
+                //Hien thi thoi gian dem nguoc va hinh anh thang tho xay (neu co)
             }
         }.bind(this));
 
@@ -492,15 +569,19 @@ var MapLayer = cc.Layer.extend({
             var delta = touch.getDelta();
             var curPos = cc.p(this.x, this.y);
             curPos = cc.pAdd(curPos, delta);
-            if (curPos.x > 0) curPos.x = 0;
-            if (curPos.y > 0) curPos.y = 0;
-            if (curPos.x < - this.mapWidth * this.scale) curPos.x = -this.mapWidth * this.scale;
-            if (curPos.y < - this.mapHeight * this.scale) curPos.y = -this.mapHeight * this.scale;
-            // curPos = cc.pClamp(curPos, cc.p(0, 0), cc.p((cc.winSize.width - 3054), (cc.winSize.height - 2100)));
+            curPos = this.limitMoveMap(curPos);
             this.x = curPos.x;
             this.y = curPos.y;
             curPos = null;
         }
+    },
+    limitMoveMap: function(pos) {
+        var curPos = pos;
+        if (curPos.x > 0) curPos.x = 0;
+        if (curPos.y > 0) curPos.y = 0;
+        if (curPos.x < - this.mapWidth * this.scale) curPos.x = -this.mapWidth * this.scale;
+        if (curPos.y < - this.mapHeight * this.scale) curPos.y = -this.mapHeight * this.scale;
+        return curPos;
     },
     calculatePos: function(coorInMap) {
         var coor = { x: 0, y: 0 };
@@ -514,6 +595,12 @@ var MapLayer = cc.Layer.extend({
         var result = { x: 0, y: 0 };
         result.x = (tp.x - this.x) / this.scale;
         result.y = (tp.y - this.y) / this.scale;
+        return result;
+    },
+    reverseMapCoor: function(coor) {
+        var result = { x: 0, y: 0 };
+        result.x = coor.x * this.scale;
+        result.y = coor.y * this.scale;
         return result;
     }
 });
