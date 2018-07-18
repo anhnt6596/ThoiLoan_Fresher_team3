@@ -68,6 +68,8 @@ var getGToReleaseBuilder = function(){
 };
 
 
+
+
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
     gv.user.gold -= costBuilding.gold;
@@ -75,6 +77,8 @@ var reduceUserResources = function(costBuilding){
     gv.user.darkElixir -= costBuilding.darkElixir;
     gv.user.coin -= costBuilding.coin;
 };
+
+
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
