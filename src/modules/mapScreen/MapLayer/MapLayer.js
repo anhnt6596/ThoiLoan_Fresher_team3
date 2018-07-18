@@ -369,6 +369,8 @@ var MapLayer = cc.Layer.extend({
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
                         self._targetedObject.onTarget();
+                        cc.log('>>>>>>>>>>>>>>>>>posX' + self._targetedObject.info.posX);
+                        cc.log('>>>>>>>>>>>>>>>>>posY' + self._targetedObject.info.posX);
                         //self.reorderChild(self._targetedObject, 1000);
                         break;
                     }
@@ -439,6 +441,9 @@ var MapLayer = cc.Layer.extend({
                 opacity: 0,
             });
             LOBBY.showLobby();
+            this.cancelBtn.addClickEventListener(function(){
+                cc.log('disable');
+            });
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
@@ -460,6 +465,9 @@ var MapLayer = cc.Layer.extend({
                     opacity: 0,
                 });
                 LOBBY.showLobby();
+                this.cancelBtn.addClickEventListener(function(){
+                    cc.log('disable');
+                });
             }
         }.bind(this));
 
