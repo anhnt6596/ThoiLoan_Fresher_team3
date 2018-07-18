@@ -40,8 +40,9 @@ var TopLeftBar = cc.Node.extend({
         var nameText = userInfo.name || 'Fresher 9 - Team 3';
         var name = new cc.LabelBMFont(nameText, 'res/Art/Fonts/soji_24.fnt');
         name.attr({
-            x: 54,
-            y: 50,
+            anchorX: 0,
+            x: -36,
+            y: 52,
         });
         this.addChild(name);
     },
