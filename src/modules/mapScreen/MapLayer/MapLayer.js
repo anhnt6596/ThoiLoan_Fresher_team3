@@ -498,26 +498,29 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 //Kiem tra tai nguyen co du khong
-                var g = checkUserResources(buildingInfo.cost);
-                if(g > 0){
-                    //Show popup dung G de mua tai nguyen
-                    //Neu k du G thi THOAT
-                    //Neu du G thi di tiep
-
-                }
-
-                //Kiem tra tho xay ranh khong
-                if(!checkIsFreeBuilder){
-                    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
-                        var coin = getGToReleaseBuilder();
-                        //Can coin de release 1 builder
-                    //Neu k du G thi THOAT
-                    //Neu du G thi di tiep
-                    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-                }
+                //var g = checkUserResources(buildingInfo.cost);
+                //if(g > 0){
+                //    //Show popup dung G de mua tai nguyen
+                //    //Neu k du G thi THOAT
+                //    //Neu du G thi di tiep
+                //
+                //}
+                //
+                ////Kiem tra tho xay ranh khong
+                //if(!checkIsFreeBuilder){
+                //    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                //        var coin = getGToReleaseBuilder();
+                //        //Can coin de release 1 builder
+                //    //Neu k du G thi THOAT
+                //    //Neu du G thi di tiep
+                //    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
+                //}
 
                 //Gui yeu cau xac nhan len server
-                //NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
+                cc.log(buildingInfo.name);
+                cc.log(buildingInfo.posX);
+                cc.log(buildingInfo.posY);
+                NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
 
 
                 //Nhan phan hoi succeed tu server

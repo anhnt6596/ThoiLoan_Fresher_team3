@@ -111,7 +111,10 @@ var ShopCatalogyScreen = Popup.extend({
                     if(self._direction){
                         if(self._itemList[0].x > gap_x){
                             for(var i = 0; i < self._itemList.length; i++){
-                                self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
+                                self._leftAction = cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y));
+                                self._leftAction.setTag(1);
+                                self._itemList[i].runAction(self._leftAction);
+                                //self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
                             }
                         }
                     }else{
@@ -443,9 +446,11 @@ var ShopCatalogyScreen = Popup.extend({
         for(var i in children){
             children[i].disabled = true;
             children[i].enabled = false;
+            //cc.ActionManager.pauseTarget(children[i]);
         }
         //cc.eventManager.removeListener(this.listener);
-        this.getParent().addChild(popup, 2);
+        //this.getParent().addChild(popup, 2);
+        cc.director.getRunningScene().addChild(popup, 2);
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
@@ -529,6 +534,7 @@ var ShopCatalogyScreen = Popup.extend({
         this._super();
         cc.log("-----------Exit ShopCatalogyScreen-----------");
     },
+
 
     //ghi de ham trong popup
     onCloseCallback:function () {

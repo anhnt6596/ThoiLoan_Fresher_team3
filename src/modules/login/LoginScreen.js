@@ -20,8 +20,8 @@ var LoginScreen = cc.Layer.extend({
 
         var btnLogin = gv.commonButton(200, 64, size.width/2, yBtn,"Login");
         this.addChild(btnLogin);
-         //btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
-        btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
+         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
+        //btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
 
         this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
         this.addChild(this.lblLog);
