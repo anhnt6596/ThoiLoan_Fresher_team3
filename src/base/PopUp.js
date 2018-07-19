@@ -23,7 +23,7 @@ ui.PopUp = cc.Node.extend({
         this.addChild(background, 0);
         var frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
         frame.attr({
-            scale: 2,
+            scale: 2.3,
             x: 0,
             y: 0,
         });
@@ -31,20 +31,20 @@ ui.PopUp = cc.Node.extend({
 
         var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
         closeBtn.attr({
-            x: 335,
-            y: 225,
-            scale: 2,
+            x: frame.width - 30,
+            y: frame.height - 25,
+            scale: 1,
         });
-        this.addChild(closeBtn, 2);
+        frame.addChild(closeBtn, 2);
         closeBtn.addClickEventListener(this.close.bind(this));
 
         var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
         titleText.attr({
-            x: 0,
-            y: 225,
-            scale: 1.5,
+            x: frame.width / 2,
+            y: 245,
+            scale: 1,
         });
-        this.addChild(titleText, 2);
+        frame.addChild(titleText, 2);
 
         content.forEach(element => {
             this.addChild(element, 2)
@@ -52,9 +52,7 @@ ui.PopUp = cc.Node.extend({
         this.openAction();
     },
     openAction: function() {
-        var act1 = new cc.ScaleTo(0.25, 1.1, 1.1);
-        var act2 = new cc.ScaleTo(0.15, 1, 1);
-        this.runAction(new cc.Sequence(act1, act2));
+        this.runAction(ui.BounceEff());
     },
     close: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);

@@ -48,6 +48,8 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
+        this.buildingImg.runAction(ui.BounceEff());
+        this.buildingImg.runAction(ui.targettingEff().repeatForever());
         LOBBY.showObjectMenu();
     },
     removeTarget: function() {
@@ -66,6 +68,8 @@ var Contruction = cc.Class.extend({
         this.setImgCoor(coor);
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
+        this.buildingImg.stopAllActions();
+        this.buildingImg.runAction(ui.backToDefaultColor());
         LOBBY.hideObjectMenu();
     },
     moving: function(mapPos) {
@@ -257,9 +261,9 @@ var Contruction = cc.Class.extend({
         this.info.level = this.info.level + 1;
         MAP.removeChild(this.buildingImg);
         this.addBuildingImg();
-
         this.levelText.setString('cấp ' + this.info.level);
-        var effLevelUp = ui.makeAnimation('level_up_', 0, 11, 0.2);
+        
+        // var effLevelUp = ui.makeAnimation('level_up_', 0, 11, 0.2);
     },
     addBuildingImg: function() {
 
