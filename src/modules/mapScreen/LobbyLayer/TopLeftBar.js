@@ -1,5 +1,5 @@
 var TopLeftBar = cc.Node.extend({
-    ctor: function(x, y) {
+    ctor: function(x, y, userInfo) {
         this._super();
         this.x = x;
         this.y = y;
@@ -37,5 +37,13 @@ var TopLeftBar = cc.Node.extend({
             y: -18,
         });
         this.addChild(rankIcon, 5);
+        var nameText = userInfo.name || 'Fresher 9 - Team 3';
+        var name = new cc.LabelBMFont(nameText, 'res/Art/Fonts/soji_24.fnt');
+        name.attr({
+            anchorX: 0,
+            x: -36,
+            y: 52,
+        });
+        this.addChild(name);
     },
 });

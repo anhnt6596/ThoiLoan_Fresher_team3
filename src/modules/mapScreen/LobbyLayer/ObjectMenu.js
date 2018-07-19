@@ -15,6 +15,27 @@ var ObjectMenu = cc.Node.extend({
         upgradeBtn.addClickEventListener(this.upgrade.bind(this));
     },
     upgrade: function() {
-        MAP._targetedObject && MAP._targetedObject.upgrade();
+        // MAP._targetedObject && MAP._targetedObject.upgrade();
+        var titleText = new cc.LabelBMFont('Nâng cấp đi', 'res/Art/Fonts/soji_24.fnt');
+        titleText.attr({
+            x: 0,
+            y: 0,
+            scale: 1.5,
+        });
+        var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
+        acceptBtn.attr({
+            x: 0,
+            y: -100,
+        });
+        var content = [
+            titleText,
+            acceptBtn,
+        ];
+        var upgradePopUp = new ui.PopUp('Nâng cấp', content, acceptBtn);
+        MAPSCENE.addChild(upgradePopUp, 1000);
+        acceptBtn.addClickEventListener(() => {
+            MAP._targetedObject && MAP._targetedObject.upgrade();
+            upgradePopUp.close();
+        });
     },
 });

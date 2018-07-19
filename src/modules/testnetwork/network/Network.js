@@ -55,6 +55,14 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.ADD_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
+                if (packet.validate) {
+                    cc.log("XAC NHAN XAY");
+
+
+                }
+                else {
+                    cc.log("KHONG XAY DUOC");
+                }
                 break;
         }
     },
@@ -95,10 +103,10 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id, x, y);
         this.gameClient.sendPacket(pk);
     },
-    sendAddConstruction:function(id,x,y){
-        cc.log("sendAddConstruction" +id+" "+x+ " "+y);
+    sendAddConstruction:function(type,x,y){
+        cc.log("sendAddConstruction" +type+" "+x+ " "+y);
         var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
-        pk.pack(id, x, y);
+        pk.pack(type, x, y);
         this.gameClient.sendPacket(pk);
     }
 

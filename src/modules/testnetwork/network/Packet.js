@@ -124,9 +124,9 @@ CmdSendAddConstruction = fr.OutPacket.extend(
             this.setCmdId(gv.CMD.ADD_CONSTRUCTION);
 
         },
-        pack:function(id, x, y){
+        pack:function(type, x, y){
             this.packHeader();
-            this.putInt(parseInt(id));
+            this.putInt(parseInt(type));
             this.putInt(x);
             this.putInt(y);
             this.updateSize();
