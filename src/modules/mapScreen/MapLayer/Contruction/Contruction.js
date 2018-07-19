@@ -258,7 +258,8 @@ var Contruction = cc.Class.extend({
         this.addBuildingImg();
         this.levelText.setString('cấp ' + this.info.level);
         
-        // var effLevelUp = ui.makeAnimation('level_up_', 0, 11, 0.2);
+        // var lvUpanims = ui.makeAnimation('construct_levelup_', 0, 6, 0.2);
+        // this.buildingImg.runAction(lvUpanims);
     },
     addBuildingImg: function() {
 
