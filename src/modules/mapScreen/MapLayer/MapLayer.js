@@ -165,7 +165,7 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
-        // cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/levelup/levelup.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/levelup/levelup.plist');
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);
