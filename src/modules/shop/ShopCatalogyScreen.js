@@ -439,19 +439,8 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var x = cc.winSize.width*7/9;
-        var y = cc.winSize.height*8.5/9;
-        var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
-
-        var children = this.getChildren();
-        for(var i in children){
-            children[i].disabled = true;
-            children[i].enabled = false;
-            //cc.ActionManager.pauseTarget(children[i]);
-        }
-        //cc.eventManager.removeListener(this.listener);
-        //this.getParent().addChild(popup, 2);
-        cc.director.getRunningScene().addChild(popup, 2);
+        var popup = ui.PopUp(itemName, null);
+        this.getParent().addChild(popup);
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){

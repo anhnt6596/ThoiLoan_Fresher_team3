@@ -283,7 +283,7 @@ testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            this.validate  = this.getBool();
+            this.validate  = this.getShort();
         }
     }
 );
