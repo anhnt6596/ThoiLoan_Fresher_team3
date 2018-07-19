@@ -518,9 +518,6 @@ var MapLayer = cc.Layer.extend({
                 //}
 
                 //Gui yeu cau xac nhan len server
-                cc.log(buildingInfo.name);
-                cc.log(buildingInfo.posX);
-                cc.log(buildingInfo.posY);
                 NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
 
 
@@ -538,6 +535,7 @@ var MapLayer = cc.Layer.extend({
                 // call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
                 
                 this._isBuilding = false;
+                newBuilding.setStatus('complete');
                 newBuilding.removeTarget();
                 this._targetedObject = null;
                 contructionList.push(buildingInfo);

@@ -141,7 +141,12 @@ var Contruction = cc.Class.extend({
         this.tempY = mapPos.y;
         try {
             if(this._status !== 'pending' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
+                cc.log('sendMove>>>>>>>>>>>>>>>before');
+                cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
+                cc.log('sendMove>>>>>>>>>>>>>>>mapPos.x' + mapPos.x);
+                //cc.log('sendMove>>>>>>>>>>>>>>>mapPos.y' + mapPos.y);
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+                cc.log('sendMove>>>>>>>>>>>>>>>after');
             }
         } catch (error) {
             cc.log('network error!');

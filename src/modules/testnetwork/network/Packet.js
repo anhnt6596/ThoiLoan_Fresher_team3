@@ -193,7 +193,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             this.n = this.getInt();
             console.log("Co tat ca "+this.n+" nha/n");
             for (var i=0;i<this.n;i++){
-                this._id = this.getInt().toString();
+                this._id = this.getInt();
                 //cc.log("nha so: "+ this.id);
                 this.name = this.getString();
                 //this.name = "STO_1";
