@@ -41,7 +41,7 @@ var TinyPopup = cc.Layer.extend({
     onCloseCallback:function () {
         var dad = this.getParent();
         var bro = dad.getChildByTag(17);
-        var broChildren = bro.getChildren();
+        if (bro) var broChildren = bro.getChildren();
         for(var i in broChildren){
             broChildren[i].disabled = false;
             broChildren[i].enabled = true;
