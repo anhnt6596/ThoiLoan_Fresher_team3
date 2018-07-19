@@ -10,7 +10,7 @@ gv.CMD.USER_INFO = 1001;
 
 gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
-gv.ADD_CONSTRUCTION = 2003;
+gv.CMD.ADD_CONSTRUCTION = 2003;
 
 gv.CMD.TEST = 3001;
 
@@ -126,7 +126,7 @@ CmdSendAddConstruction = fr.OutPacket.extend(
         },
         pack:function(type, x, y){
             this.packHeader();
-            this.putInt(parseInt(type));
+            this.putString(type);
             this.putInt(x);
             this.putInt(y);
             this.updateSize();
@@ -283,7 +283,7 @@ testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            this.validate  = this.getBool();
+            this.validate  = this.getShort();
         }
     }
 );
