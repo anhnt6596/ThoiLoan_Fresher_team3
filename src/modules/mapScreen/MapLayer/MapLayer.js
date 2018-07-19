@@ -165,6 +165,7 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/levelup/levelup.plist');
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);
@@ -617,16 +618,19 @@ var MapLayer = cc.Layer.extend({
     },
     addKeyboardListener: function() {
         var self = this;
+        var size = cc.winSize;
         cc.log('Keyboard Listener');
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (key, event) {
+                var x = (size.width / 2 - self.x) / self.scale;
+                var y = (size.height / 2 - self.y) / self.scale;
                 var tp = { // cái này là tâm điểm của zoom
-                    x: self.mapWidth / 2,
-                    y: self.mapHeight / 2,
+                    x,
+                    y,
                 };
                 var scaleNumber = 1.1;
-                if(key == 73 && self.scale < 2) {
+                if(key == 73 && self.scale < 2) { // zoomIn
                     var curPos = {
                         x: self.x,
                         y: self.y,
@@ -635,7 +639,6 @@ var MapLayer = cc.Layer.extend({
                         x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
                         y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
                     }
-                    newPos = self.limitMoveMap(newPos);
                     self.attr({
                         x: newPos.x,
                         y: newPos.y,
@@ -643,7 +646,7 @@ var MapLayer = cc.Layer.extend({
                     self.scale *= scaleNumber;
                 }
 
-                if(key == 79 && self.scale > 0.4) {
+                if(key == 79 && self.scale > 0.4) { // zoomOut
                     self.scale /= scaleNumber;
                     var curPos = {
                         x: self.x,

@@ -48,6 +48,8 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
+        this.buildingImg.runAction(ui.BounceEff());
+        this.buildingImg.runAction(ui.targettingEff().repeatForever());
         LOBBY.showObjectMenu();
     },
     removeTarget: function() {
@@ -66,6 +68,8 @@ var Contruction = cc.Class.extend({
         this.setImgCoor(coor);
         this.tempX = this.info.posX;
         this.tempY = this.info.posY;
+        this.buildingImg.stopAllActions();
+        this.buildingImg.runAction(ui.backToDefaultColor());
         LOBBY.hideObjectMenu();
     },
     moving: function(mapPos) {
@@ -105,7 +109,7 @@ var Contruction = cc.Class.extend({
             x: coor.x,
             y: coor.y,
         });
-        if (this._status === 'setting') {
+        if (this._status === 'pending') {
             MAP.cancelBtn.attr({
                 x: coor.x - TILE_WIDTH,
                 y: coor.y + 2 * TILE_HEIGHT,
@@ -140,7 +144,7 @@ var Contruction = cc.Class.extend({
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
-            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
+            if(this._status !== 'pending' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
             }
         } catch (error) {
@@ -252,8 +256,9 @@ var Contruction = cc.Class.extend({
         this.info.level = this.info.level + 1;
         MAP.removeChild(this.buildingImg);
         this.addBuildingImg();
-
         this.levelText.setString('cấp ' + this.info.level);
+        
+        // var effLevelUp = ui.makeAnimation('level_up_', 0, 11, 0.2);
     },
     addBuildingImg: function() {
 

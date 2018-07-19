@@ -34,6 +34,7 @@
         "src/base/Resource.js",
         "src/base/UIFactory.js",
         "src/base/IconButton.js",
+        "src/base/PopUp.js",
         "src/base/UtilityUI.js",
         "src/base/utilities/Popup.js",
         "src/base/utilities/TinyPopup.js",

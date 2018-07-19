@@ -91,7 +91,7 @@ gv.TextField = function(text,placeholder, x ,y){
 gv.user = {
     uuid: "",
     id :"",
-    name: "Duy Nguyen",
+    name: "Fresher 9 - Team 3",
     exp : "300",
     coin :"576",
     gold :"10000",

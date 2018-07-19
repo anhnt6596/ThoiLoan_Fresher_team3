@@ -8,6 +8,7 @@ var GBar = cc.Sprite.extend({
         var ratio = 0.5;
 
         var valueText = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_16.fnt');
+        this.valueText = valueText;
         valueText.attr({
             anchorX: 1,
             anchorY: 0,
@@ -25,5 +26,8 @@ var GBar = cc.Sprite.extend({
             y: 0,
         });
         this.addChild(icon);
+    },
+    update: function(userInfo) {
+        this.valueText.setString(formatNumber(userInfo.coin));
     }
 });
