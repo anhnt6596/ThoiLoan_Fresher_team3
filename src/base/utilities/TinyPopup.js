@@ -1,70 +1,68 @@
-var TinyPopup = cc.Layer.extend({
+var TinyPopup = cc.Node.extend({
+    _frame:null,
 
-    _btnCan:null,
-    _btnFunction:null,
-    _close:null,
-    _data:null,
 
-    //bool: dang popup thong thuong (true) hay popup co 2 button (false)
-    ctor:function(width, height, x, y, text, data, type) {
+    //type = true (X)
+    //type = false (X + functinal Btn)
+    ctor:function(width, height, title, data, type) {
         this._super();
-        //this.init(width, height, x, y, text, data, type);
-        this._data = data;
+        this.init(width, height, title, data, type);
+    },
 
-        var bg = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
-        bg.setAnchorPoint(0, 0);
-        bg.setPosition(x, y);
-        bg.scaleX = width/bg.width;
-        bg.scaleY = height/bg.height;
-        this.addChild(bg, 0, 0);
+    init:function(width, height, title, data, type){
+        this.attr({
+            x: cc.winSize.width / 2,
+            y: cc.winSize.height / 2,
+            width: cc.winSize.width,
+            height: cc.winSize.height,
+            color: cc.color(100, 100, 100, 100),
+        });
 
-        var label = new cc.LabelBMFont(text.toUpperCase(), 'res/Art/Fonts/soji_24.fnt');
-        label.scale = 1.5;
-        label.setAnchorPoint(0, 0);
-        label.setPosition((cc.winSize.width - label.width*label.scaleX)/2, bg.y + height - label.height*label.scaleY - 20);
-        this.addChild(label, 200, 200);
+        var background = new ccui.Button('res/Art/GUIs/pop_up/bg_color.png', 'res/Art/GUIs/pop_up/bg_color.png');
+        background.attr({
+            x: 0,
+            y: 0,
+            scale: 100,
+        });
+        this.addChild(background, 0);
 
+        this._frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
+        this._frame.attr({
+            scale: 2.3,
+            x: 0,
+            y: 0,
+        });
+        this.addChild(this._frame, 1);
 
         if(type){
-            var closeItem = new cc.MenuItemImage('res/Art/GUIs/shop_gui/close.png', 'res/Art/GUIs/shop_gui/close.png', this.onCloseCallback, this);
-            var closeMenu = new cc.Menu(closeItem);
-            closeMenu.width = closeItem.width;
-            closeMenu.height = closeItem.height;
-            closeMenu.setAnchorPoint(0, 0);
-            closeMenu.setPosition(bg.x + width - closeMenu.width, bg.y + height - closeMenu.height);
-            this.addChild(closeMenu, 2, 2);
-        }else{
-
-        }
-    },
-    
-    onCloseCallback:function () {
-        var dad = this.getParent();
-        var bro = dad.getChildByTag(17);
-        if (bro) var broChildren = bro.getChildren();
-        for(var i in broChildren){
-            broChildren[i].disabled = false;
-            broChildren[i].enabled = true;
+            var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
+            closeBtn.attr({
+                x: this._frame.width - 30,
+                y: this._frame.height - 25,
+                scale: 1,
+            });
+            this._frame.addChild(closeBtn, 2);
+            closeBtn.addClickEventListener(this.close.bind(this));
         }
 
-        dad.removeChild(this);
 
+        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
+        titleText.attr({
+            x: this._frame.width / 2,
+            y: 245,
+            scale: 1,
+        });
+        this._frame.addChild(titleText, 2);
+
+
+        this.openAction();
+    },
+    openAction: function() {
+        this.runAction(ui.BounceEff());
+    },
+    close: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
     },
 
-    //onEnter:function(){
-    //    cc.log("-----------onEnter TinyPopup-----------");
-    //    this._super();
-    //},
-    //
-    //onExit:function(){
-    //    cc.log("-----------onExit TinyPopup-----------");
-    //    this._super();
-    //}
 });
-
-TinyPopup.scene = function (width, height, x, y, text, data, type) {
-    var scene = new cc.Scene();
-    var layer = new TinyPopup(width, height, x, y, text, data, type);
-    scene.addChild(layer);
-    return scene;
-};

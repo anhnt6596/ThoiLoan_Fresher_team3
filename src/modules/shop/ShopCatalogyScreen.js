@@ -439,8 +439,9 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var popup = ui.PopUp(itemName, null);
-        this.getParent().addChild(popup);
+        var popup = new TinyPopup(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, null, true);
+        cc.director.getRunningScene().addChild(popup, 200);
+
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
