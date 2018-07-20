@@ -105,3 +105,7 @@ var formatNumber = function(number){
 }
 
 var doNothing = function() {};
+
+var randomInt = function(start, end) {
+    return Math.floor(Math.random() * (end - start + 1)) + start;
+}

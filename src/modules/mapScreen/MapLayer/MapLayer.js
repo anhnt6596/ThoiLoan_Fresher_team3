@@ -135,6 +135,61 @@ var contructionList = [
         status: 'complete',
         startTime: 0
     },
+    {
+        _id: '_13',
+        name: 'DEF_1',
+        posX: 35,
+        posY: 35,
+        width: 3,
+        height: 3,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
+    {
+        _id: '_14',
+        name: 'DEF_1',
+        posX: 35,
+        posY: 32,
+        width: 3,
+        height: 3,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
+    {
+        _id: '_15',
+        name: 'DEF_1',
+        posX: 32,
+        posY: 35,
+        width: 3,
+        height: 3,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
+    {
+        _id: '_16',
+        name: 'DEF_1',
+        posX: 32,
+        posY: 32,
+        width: 3,
+        height: 3,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
+    {
+        _id: '_17',
+        name: 'DEF_1',
+        posX: 32,
+        posY: 29,
+        width: 3,
+        height: 3,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+    },
 ];
 
 
@@ -172,7 +227,7 @@ var MapLayer = cc.Layer.extend({
         // this.initImpediment(impedimentList);
         this.createLogicArray(contructionList, {});
         
-        this.scale = 1;
+        this.scale = 0.5;
         for (var i = 0; i < objectRefs.length; i++) {
             if(objectRefs[i].info.name === 'TOW_1') {
                 var town = objectRefs[i];
@@ -457,6 +512,9 @@ var MapLayer = cc.Layer.extend({
                 break;
             case 'RES_2':
                 newBuilding = new ElixirCollector(buildingInfo);
+                break;
+            case 'DEF_1':
+                newBuilding = new Cannon(buildingInfo);
                 break;
             default:
                 break;
