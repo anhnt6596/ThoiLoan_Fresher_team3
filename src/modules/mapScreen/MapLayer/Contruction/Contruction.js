@@ -262,10 +262,23 @@ var Contruction = cc.Class.extend({
         MAP.removeChild(this.buildingImg);
         this.addBuildingImg();
         this.levelText.setString('cấp ' + this.info.level);
-        
-        // var effLevelUp = ui.makeAnimation('level_up_', 0, 11, 0.2);
+        this.showLevelUpEffect();
     },
     addBuildingImg: function() {
 
+    },
+    showLevelUpEffect: function() {
+        var lvUpAnims = ui.makeAnimation('construct_levelup_', 0, 6, 0.15);
+        var lvUpEffSprite = new cc.Sprite();
+        MAP.addChild(lvUpEffSprite, 1100);
+        lvUpEffSprite.attr({
+            x: this.buildingImg.x -TILE_WIDTH / 8,
+            y: this.buildingImg.y + TILE_HEIGHT * (this.info.height + 1) / 2,
+            scale: this.info.width,
+        });
+        var act2 = cc.callFunc(function() {
+            MAP.removeChild(lvUpEffSprite);
+        });
+        lvUpEffSprite.runAction(new cc.Sequence(lvUpAnims, act2));
     },
 });

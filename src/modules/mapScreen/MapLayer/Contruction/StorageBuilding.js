@@ -23,5 +23,6 @@ var StorageBuilding = Building.extend({
 
         this.levelText.setString('cấp ' + this.info.level);
         this.presentImg();
+        this.showLevelUpEffect();
     }
 });
