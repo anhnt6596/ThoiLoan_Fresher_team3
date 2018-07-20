@@ -1,12 +1,13 @@
 var Cannon = DefenseBuilding.extend({
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var level = this.info.level || 1;
         var dir = res.building.canon_base[level];
         var buildingImg = new cc.Sprite(dir);
+        buildingImg.setCascadeColorEnabled(true); 
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({

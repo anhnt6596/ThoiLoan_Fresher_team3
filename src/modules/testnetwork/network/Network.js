@@ -122,10 +122,11 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("send GetServerTime");
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();
+    },
+    sendAddResource: function(gold, elixir, darkElixir, coin) {
+        cc.log('Add Resource');
+        var pk = this.gameClient.getOutPacket(CmdSendAddResource);
+        pk.pack(gold, elixir, darkElixir, coin);
         this.gameClient.sendPacket(pk);
     }
-
 });
-
-
-

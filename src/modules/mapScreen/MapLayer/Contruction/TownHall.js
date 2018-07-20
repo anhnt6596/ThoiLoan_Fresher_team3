@@ -3,7 +3,7 @@ var TownHall = Building.extend({
     img_y: -40,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var level = this.info.level || 1;

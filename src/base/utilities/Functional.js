@@ -72,16 +72,16 @@ var getGToReleaseBuilder = function(){
 
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
-    if(gv.user.gold > costBuilding.gold){
+    if(gv.user.gold >= costBuilding.gold){
         gv.user.gold -= costBuilding.gold;
     }
-    if(gv.user.elixir > costBuilding.elixir){
+    if(gv.user.elixir >= costBuilding.elixir){
         gv.user.elixir -= costBuilding.elixir;
     }
-    if(gv.user.darkElixir > costBuilding.darkElixir){
+    if(gv.user.darkElixir >= costBuilding.darkElixir){
         gv.user.darkElixir -= costBuilding.darkElixir;
     }
-    if(gv.user.coin > costBuilding.coin){
+    if(gv.user.coin >= costBuilding.coin){
         gv.user.coin -= costBuilding.coin;
     }
 
@@ -123,3 +123,8 @@ var getCurrentClientTime = function(){
     var date = new Date();
     return date.getTime();
 };
+
+
+var timeToString = function(second) {
+    return second + 's';
+}

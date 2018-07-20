@@ -13,6 +13,7 @@ gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
 
 gv.CMD.GET_SERVER_TIME = 2100;
+gv.CMD.ADD_RESOURCE = 2500;
 
 gv.CMD.TEST = 3001;
 
@@ -170,6 +171,22 @@ CmdSendTest = fr.OutPacket.extend(
     }
 );
 
+CmdSendAddResource = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.ADD_RESOURCE);
+    },
+    pack: function(gold, elixir, darkElixir, coin) {
+        this.packHeader();
+        this.putInt(gold);
+        this.putInt(elixir);
+        this.putInt(darkElixir);
+        this.putInt(coin);
+        this.putInt();
+    }
+});
+
 /**
  * InPacket
  */
@@ -213,9 +230,12 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
+                cc.log("name Nha: " + this.name);
                 this.posX = this.getInt();
                 this.posY = this.getInt();
                 this.level = this.getInt();
+                cc.log("Level: " + this.level);
+
                 this.status = this.getString();
                 this.startTime = this.getLong();
 

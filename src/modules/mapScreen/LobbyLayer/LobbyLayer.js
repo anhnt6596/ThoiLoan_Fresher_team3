@@ -69,6 +69,7 @@ var LobbyLayer = cc.Layer.extend({
         gv.user.gold = parseInt(gv.user.gold) + 1000;
         gv.user.elixir = parseInt(gv.user.elixir) + 1000;
         this.update(gv.user);
+        NETWORK.sendAddResource(1000, 1000, 0, 10);
     },
     hideLobby: function() {
         this.attr({
