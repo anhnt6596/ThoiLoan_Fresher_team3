@@ -435,17 +435,31 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var x = cc.winSize.width*7/9;
-        var y = cc.winSize.height*8.5/9;
-        var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
+        //var x = cc.winSize.width*7/9;
+        //var y = cc.winSize.height*8.5/9;
+        //var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
+        //
+        //var children = this.getChildren();
+        //for(var i in children){
+        //    children[i].disabled = true;
+        //    children[i].enabled = false;
+        //}
+        ////cc.eventManager.removeListener(this.listener);
+        //this.getParent().addChild(popup, 2);
 
-        var children = this.getChildren();
-        for(var i in children){
-            children[i].disabled = true;
-            children[i].enabled = false;
-        }
-        //cc.eventManager.removeListener(this.listener);
-        this.getParent().addChild(popup, 2);
+        var titleText = new cc.LabelBMFont('Here is there', 'res/Art/Fonts/soji_24.fnt');
+        titleText.attr({
+            x: 0,
+            y: 0,
+            scale: 1.1,
+        });
+
+        var content = [
+            titleText,
+        ];
+
+        var upgradePopUp = new ui.PopUp(name.building[itemName].en, content);
+        this.addChild(upgradePopUp, 1000);
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
