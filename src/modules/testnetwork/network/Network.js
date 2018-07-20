@@ -108,9 +108,11 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
         pk.pack(type, x, y);
         this.gameClient.sendPacket(pk);
+    },
+    sendAddResource: function(gold, elixir, darkElixir, coin) {
+        cc.log('Add Resource');
+        var pk = this.gameClient.getOutPacket(CmdSendAddResource);
+        pk.pack(gold, elixir, darkElixir, coin);
+        this.gameClient.sendPacket(pk);
     }
-
 });
-
-
-

@@ -109,3 +109,7 @@ var doNothing = function() {};
 var randomInt = function(start, end) {
     return Math.floor(Math.random() * (end - start + 1)) + start;
 }
+
+var timeToString = function(second) {
+    return second + 's';
+}

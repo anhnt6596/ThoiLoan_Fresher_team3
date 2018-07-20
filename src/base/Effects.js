@@ -26,3 +26,11 @@ ui.targettingEff = function() {
 ui.backToDefaultColor = function() {
     return cc.tintTo(0, 255, 255, 255);
 };
+
+ui.landingEffect = function() {
+    var act1 = new cc.MoveBy(0.15, cc.p(0, -7));
+    var act2 = new cc.MoveBy(0.05, cc.p(0, 7));
+
+    var seq1 = new cc.Sequence(act1, act2);
+    return seq1;
+};

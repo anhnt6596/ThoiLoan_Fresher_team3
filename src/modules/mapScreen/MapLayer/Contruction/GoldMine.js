@@ -3,7 +3,7 @@ var GoldMine = CollectorBuilding.extend({
     img_y: -26,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.gold_mine[this.info.level]);

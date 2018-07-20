@@ -1,9 +1,7 @@
 var Barrack = Building.extend({
-    img_x: -131,
-    img_y: -160,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.barrack[this.info.level]);

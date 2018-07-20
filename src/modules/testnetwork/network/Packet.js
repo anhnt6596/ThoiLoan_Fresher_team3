@@ -10,7 +10,9 @@ gv.CMD.USER_INFO = 1001;
 
 gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
-gv.ADD_CONSTRUCTION = 2003;
+gv.CMD.ADD_CONSTRUCTION = 2003;
+
+gv.CMD.ADD_RESOURCE = 2500;
 
 gv.CMD.TEST = 3001;
 
@@ -150,6 +152,22 @@ CmdSendTest = fr.OutPacket.extend(
         }
     }
 );
+
+CmdSendAddResource = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.ADD_RESOURCE);
+    },
+    pack: function(gold, elixir, darkElixir, coin) {
+        this.packHeader();
+        this.putInt(gold);
+        this.putInt(elixir);
+        this.putInt(darkElixir);
+        this.putInt(coin);
+        this.putInt();
+    }
+});
 
 /**
  * InPacket

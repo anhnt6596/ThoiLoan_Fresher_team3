@@ -3,8 +3,8 @@ var ElixirStorage = StorageBuilding.extend({
     img_y: -72,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
-        this.presentImg();
+        // this.addBuildingImg();
+        // this.presentImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Node();

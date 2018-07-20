@@ -22,7 +22,7 @@ var contructionList = [
         width: 4,
         height: 4,
         level: 5,
-        status: 'complete',
+        status: 'upgrade',
         startTime: 0
     },
     {
@@ -33,7 +33,7 @@ var contructionList = [
         width: 5,
         height: 5,
         level: 1,
-        status: 'pending',
+        status: 'complete',
         startTime: 0
     },
     {
@@ -153,7 +153,7 @@ var contructionList = [
         posY: 32,
         width: 3,
         height: 3,
-        level: 1,
+        level: 3,
         status: 'complete',
         startTime: 0
     },
@@ -164,7 +164,7 @@ var contructionList = [
         posY: 35,
         width: 3,
         height: 3,
-        level: 1,
+        level: 5,
         status: 'complete',
         startTime: 0
     },
@@ -175,7 +175,7 @@ var contructionList = [
         posY: 32,
         width: 3,
         height: 3,
-        level: 1,
+        level: 7,
         status: 'complete',
         startTime: 0
     },
@@ -186,13 +186,184 @@ var contructionList = [
         posY: 29,
         width: 3,
         height: 3,
-        level: 1,
+        level: 9,
         status: 'complete',
         startTime: 0
     },
 ];
 
-
+var obstacleLists = [
+    {
+        _id: '5000',
+        name: 'OBS_1',
+        posX: 38,
+        posY: 38,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5001',
+        name: 'OBS_1',
+        posX: 38,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5002',
+        name: 'OBS_2',
+        posX: 38,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5003',
+        name: 'OBS_3',
+        posX: 38,
+        posY: 4,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5004',
+        name: 'OBS_4',
+        posX: 36,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5005',
+        name: 'OBS_5',
+        posX: 36,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5006',
+        name: 'OBS_6',
+        posX: 34,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5007',
+        name: 'OBS_7',
+        posX: 30,
+        posY: 10,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5008',
+        name: 'OBS_8',
+        posX: 27,
+        posY: 10,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5009',
+        name: 'OBS_9',
+        posX: 34,
+        posY: 6,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5010',
+        name: 'OBS_10',
+        posX: 32,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5011',
+        name: 'OBS_11',
+        posX: 32,
+        posY: 4,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5012',
+        name: 'OBS_12',
+        posX: 32,
+        posY: 6,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5013',
+        name: 'OBS_13',
+        posX: 36,
+        posY: 8,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5014',
+        name: 'OBS_14',
+        posX: 33,
+        posY: 8,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5015',
+        name: 'OBS_15',
+        posX: 30,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5016',
+        name: 'OBS_16',
+        posX: 30,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+];
 
 var rootMapPos = {
     x: 2100,
@@ -224,8 +395,8 @@ var MapLayer = cc.Layer.extend({
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);
-        // this.initImpediment(impedimentList);
-        this.createLogicArray(contructionList, {});
+        this.initObstacles(obstacleLists);
+        this.createLogicArray(contructionList, obstacleLists);
         
         this.scale = 0.5;
         for (var i = 0; i < objectRefs.length; i++) {
@@ -259,6 +430,13 @@ var MapLayer = cc.Layer.extend({
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
             newBuilding && objectRefs.push(newBuilding);
+        });
+    },
+    initObstacles: function(obstacles) {
+        var self = this;
+        obstacles.forEach(function(obstacle) {
+            var newObstacle = new Obstacle(obstacle);
+            objectRefs.push(newObstacle);
         });
     },
     initImpediments: function(impediments) {
@@ -313,7 +491,7 @@ var MapLayer = cc.Layer.extend({
         this.addChild(acceptBtn, 1000);
         this.acceptBtn = acceptBtn;
     },
-    createLogicArray: function(contructions, impediments) {
+    createLogicArray: function(contructions, obstacles) {
         mapLogicArray = [];
         var i = 0;
         var j = 0;
@@ -331,6 +509,16 @@ var MapLayer = cc.Layer.extend({
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
                     mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
+                }
+            }
+        }
+        for (obstacle in obstacles) {
+            var _inRow = obstacles[obstacle].posX;
+            var _inColumn = obstacles[obstacle].posY;
+            var _size = obstacles[obstacle].width;
+            for (var i = 0; i < _size; i++) {
+                for (var j = 0; j < _size; j++) {
+                    mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
         }
@@ -424,6 +612,7 @@ var MapLayer = cc.Layer.extend({
         var mapPos = this.calculatePos(coorInMap);
         if (this._isMovingObject) {
             this._targetedObject.moving(mapPos);
+            LOBBY.hideLobby();
         } else {
             this.moveMap(touch);
         }
@@ -444,7 +633,8 @@ var MapLayer = cc.Layer.extend({
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
                 this._targetedObject.updatePosition(mapPos);
                 this.updateContructionList(this._targetedObject.info);
-                this.createLogicArray(contructionList, {});
+                this.createLogicArray(contructionList, obstacleLists);
+                LOBBY.showLobby();
             } else {
                 // this._targetedObject.returnLastPosition();
             }
@@ -464,6 +654,7 @@ var MapLayer = cc.Layer.extend({
         contructionList = newContructionList;
     },
     targetObject: function(mapPos) {
+        LOBBY.showLobby();
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
@@ -527,7 +718,7 @@ var MapLayer = cc.Layer.extend({
         LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
-        newBuilding.setStatus('pending');
+        newBuilding.setStatus('setting');
         this._targetedObject && this._targetedObject.removeTarget();
         this._targetedObject = newBuilding;
         this.setMapPositionToObject(newBuilding);
@@ -597,7 +788,7 @@ var MapLayer = cc.Layer.extend({
                 this._targetedObject = null;
                 contructionList.push(buildingInfo);
                 objectRefs.push(newBuilding);
-                this.createLogicArray(contructionList, {});
+                this.createLogicArray(contructionList, obstacleLists);
                 this.cancelBtn.attr({
                     x: -1000,
                     y: -1000,
