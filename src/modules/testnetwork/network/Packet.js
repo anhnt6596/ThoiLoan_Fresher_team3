@@ -12,6 +12,8 @@ gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
 
+gv.CMD.GET_SERVER_TIME = 2100;
+
 gv.CMD.TEST = 3001;
 
 testnetwork = testnetwork||{};
@@ -92,7 +94,7 @@ CmdSendLogin = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 CmdSendMove = fr.OutPacket.extend(
     {
@@ -113,7 +115,7 @@ CmdSendMove = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 CmdSendAddConstruction = fr.OutPacket.extend(
     {
@@ -132,7 +134,24 @@ CmdSendAddConstruction = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
+
+
+CmdGetServerTime = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.GET_SERVER_TIME);
+        },
+        pack:function(){
+            this.packHeader();
+            this.updateSize();
+        }
+
+    }
+);
 
 
 CmdSendTest = fr.OutPacket.extend(
@@ -191,28 +210,15 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.n = this.getInt();
-            console.log("Co tat ca "+this.n+" nha/n");
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
-                //cc.log("nha so: "+ this.id);
                 this.name = this.getString();
-                //this.name = "STO_1";
-                cc.log(", type: "+ this.name);
                 this.posX = this.getInt();
-                cc.log(", posX: "+ this.posX);
                 this.posY = this.getInt();
-                cc.log(", posY: "+ this.posY);
                 this.level = this.getInt();
-                cc.log(", level: "+ this.level);
-                this.timebuild = this.getInt();
-                cc.log(", timebuild: "+ this.timebuild);
                 this.status = this.getString();
-                cc.log(", status: "+ this.status);
-                console.log("/n");
-                this.width = 3;
-                this.height = 3;
-                //cc.log('>>>>>>', config.building[this.name][1].width);
-                cc.log('>>>>>>', this.name);
+                this.startTime = this.getLong();
+
                 if (config.building[this.name]) {
                     var contruction = {
                        _id: this._id,
@@ -221,6 +227,8 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                        posX: this.posX,
                        posY: this.posY,
                         status: this.status,
+                        startTime: this.startTime,
+                        buildTime: config.building[this.name][this.level].buildTime,
                        width: config.building[this.name][1].width,
                        height: config.building[this.name][1].height,
                     };
@@ -230,17 +238,17 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             }
            //console.log(contructionList);
             this.n_obs = this.getInt();
-            cc.log("size"+ this.n_obs);
+            //cc.log("size"+ this.n_obs);
             console.log("Co tat ca "+this.n_obs+" obs");
             for ( var j=0;j<this.n_obs;j++) {
                 this.idObs = this.getInt();
-                cc.log("obs so: " + this.idObs);
+                //cc.log("obs so: " + this.idObs);
                 this.typeObs = this.getString();
-                cc.log(", type: " + this.typeObs);
+                //cc.log(", type: " + this.typeObs);
                 this.posXObs = this.getInt();
-                cc.log(", posX: " + this.posXObs);
+                //cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
-                cc.log(", posY: " + this.posYObs);
+                //cc.log(", posY: " + this.posYObs);
 
                 console.log("/n");
             }
@@ -257,21 +265,23 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.id = this.getInt();
-            cc.log("id = "+this.id);
+            //cc.log("id = "+this.id);
             this.name = this.getString();
-            cc.log("name = "+this.name);
+            //cc.log("name = "+this.name);
             this.exp = this.getLong();
-            cc.log("exp = "+this.exp);
+            //cc.log("exp = "+this.exp);
             this.coin = this.getInt();
-            cc.log("coin = "+this.coin);
+            //cc.log("coin = "+this.coin);
             this.gold = this.getInt();
-            cc.log("gold = "+this.gold);
+            //cc.log("gold = "+this.gold);
             this.elixir = this.getInt();
-            cc.log("elixir = "+this.elixir);
+            //cc.log("elixir = "+this.elixir);
             this.darkElixir = this.getInt();
-            cc.log("darkElixir = "+this.darkElixir);
+            //cc.log("darkElixir = "+this.darkElixir);
             this.builderNumber = this.getInt();
-            cc.log("builderNumber = "+this.builderNumber);
+            //cc.log("builderNumber = "+this.builderNumber);
+            this.serverTime = this.getLong();
+            //cc.log("server time: " + this.serverTime);
         }
     }
 );
@@ -295,6 +305,18 @@ testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
         },
         readData:function(){
             this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.currentServerTime  = this.getLong();
         }
     }
 );

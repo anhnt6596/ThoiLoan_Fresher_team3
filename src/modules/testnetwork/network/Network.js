@@ -5,6 +5,7 @@
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 count =0;
+var validatedBuild = false;
 
 var NETWORK = NETWORK || null;
 
@@ -33,8 +34,7 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onFinishLogin(packet.username, packet.password);
                 break;
             case gv.CMD.USER_INFO:
-                count++;
-                cc.log(">>>>>>count" + count);
+
                 //this.setUserInfomation();
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
@@ -48,6 +48,7 @@ testnetwork.Connector = cc.Class.extend({
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
                     cc.log("VI TRI DA DC CAP NHAT");
+
                 }
                 else {
                     cc.log("VI TRI DA CO NHA O");
@@ -56,14 +57,22 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.ADD_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
-                    cc.log("XAC NHAN XAY");
+                    cc.log("XAC NHAN XAY tu SERVER");
+                    validatedBuild = true;
 
-
+                    contructionList.push(buildingWait);
+                    objectRefs.push(newBuildingG);
+                    MAP.createLogicArray(contructionList, {});
+                    cc.log('Nha moi da duoc push');
+                    buildingWait = null;
+                    newBuildingG = null;
                 }
                 else {
                     cc.log("KHONG XAY DUOC");
                 }
                 break;
+            case gv.CMD.GET_SERVER_TIME:
+                DeltaTime = getCurrentClientTime() - packet.currentServerTime;
         }
     },
     sendGetUserInfo:function()
@@ -107,6 +116,12 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("sendAddConstruction" +type+" "+x+ " "+y);
         var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
         pk.pack(type, x, y);
+        this.gameClient.sendPacket(pk);
+    },
+    sendGetServerTime:function(){
+        cc.log("send GetServerTime");
+        var pk = this.gameClient.getOutPacket(CmdGetServerTime);
+        pk.pack();
         this.gameClient.sendPacket(pk);
     }
 

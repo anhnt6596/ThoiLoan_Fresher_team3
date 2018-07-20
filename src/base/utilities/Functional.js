@@ -45,7 +45,7 @@ var checkUserResources = function(costBuilding){
         g += darkElixirToG(costBuilding.darkElixir - gv.user.darkElixir);
     }
     if(gv.user.coin < costBuilding.coin){
-        g += costBuilding.coin - gv.user.coin;
+        g += gv.user.coin - costBuilding.coin;          //Khong du g <=> g < 0
     }
     return g;
 };
@@ -72,10 +72,19 @@ var getGToReleaseBuilder = function(){
 
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
-    gv.user.gold -= costBuilding.gold;
-    gv.user.elixir -= costBuilding.elixir;
-    gv.user.darkElixir -= costBuilding.darkElixir;
-    gv.user.coin -= costBuilding.coin;
+    if(gv.user.gold > costBuilding.gold){
+        gv.user.gold -= costBuilding.gold;
+    }
+    if(gv.user.elixir > costBuilding.elixir){
+        gv.user.elixir -= costBuilding.elixir;
+    }
+    if(gv.user.darkElixir > costBuilding.darkElixir){
+        gv.user.darkElixir -= costBuilding.darkElixir;
+    }
+    if(gv.user.coin > costBuilding.coin){
+        gv.user.coin -= costBuilding.coin;
+    }
+
     LOBBY.update(gv.user);
 };
 
@@ -83,13 +92,13 @@ var reduceUserResources = function(costBuilding){
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
-
+    return Math.floor(gold);
 };
 var elixirToG = function(elixir){
-
+    return Math.floor(elixir);
 };
 var darkElixirToG = function(darkElixir){
-
+    return Math.floor(darkElixir);
 };
 
 
@@ -102,10 +111,15 @@ var timeToG = function(time){
 //Format Number
 var formatNumber = function(number){
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
+};
 
 var doNothing = function() {};
 
 var randomInt = function(start, end) {
     return Math.floor(Math.random() * (end - start + 1)) + start;
-}
+};
+
+var getCurrentClientTime = function(){
+    var date = new Date();
+    return date.getTime();
+};

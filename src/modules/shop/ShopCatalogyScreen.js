@@ -228,6 +228,13 @@ var ShopCatalogyScreen = Popup.extend({
         var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
 
+
+        //var gold = config.building[itemName][1].gold ? config.building[itemName][1].gold : 0;
+        //var elixir = config.building[itemName][1].elixir ? config.building[itemName][1].elixir : 0;
+        //var darkElixir = config.building[itemName][1].darkElixir ? config.building[itemName][1].darkElixir : 0;
+        //var coin = config.building[itemName][1].coin ? config.building[itemName][1].coin : 0;
+
+
         var amountBDH = 0;
         for(var k in contructionList){
             if(contructionList[k].name == 'BDH_1'){         //Can kiem tra them contructionList[k].status == 'complete' cho tong quat

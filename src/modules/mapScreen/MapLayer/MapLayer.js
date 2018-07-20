@@ -2,195 +2,200 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
-var contructionList = [
-    {
-        _id: '_01',
-        name: 'BDH_1',
-        level: 1,
-        posX: 10,
-        posY: 10,
-        width: 2,
-        height: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_02',
-        name: 'TOW_1',
-        posX: 19,
-        posY: 19,
-        width: 4,
-        height: 4,
-        level: 5,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_03',
-        name: 'AMC_1',
-        posX: 0,
-        posY: 0,
-        width: 5,
-        height: 5,
-        level: 1,
-        status: 'pending',
-        startTime: 0
-    },
-    {
-        _id: '_04',
-        name: 'BAR_1',
-        posX: 10,
-        posY: 5,
-        width: 3,
-        height: 3,
-        level: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-       _id: '_05',
-       name: 'BDH_1',
-       posX: 5,
-       posY: 5,
-       width: 2,
-       height: 2,
-       level: 1,
-       status: 'complete',
-       startTime: 0
-    },
-    {
-        _id: '_06',
-        name: 'STO_1',
-        posX: 5,
-        posY: 10,
-        width: 3,
-        height: 3,
-        level: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_07',
-        name: 'STO_1',
-        posX: 5,
-        posY: 15,
-        width: 3,
-        height: 3,
-        level: 4,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_08',
-        name: 'STO_2',
-        posX: 5,
-        posY: 20,
-        width: 3,
-        height: 3,
-        level: 5,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_09',
-        name: 'STO_2',
-        posX: 5,
-        posY: 25,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_10',
-        name: 'RES_1',
-        posX: 5,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_11',
-        name: 'RES_1',
-        posX: 10,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 4,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_12',
-        name: 'RES_2',
-        posX: 15,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_13',
-        name: 'DEF_1',
-        posX: 35,
-        posY: 35,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_14',
-        name: 'DEF_1',
-        posX: 35,
-        posY: 32,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_15',
-        name: 'DEF_1',
-        posX: 32,
-        posY: 35,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_16',
-        name: 'DEF_1',
-        posX: 32,
-        posY: 32,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_17',
-        name: 'DEF_1',
-        posX: 32,
-        posY: 29,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-];
+var DeltaTime = 0;                      //Client - Server
+
+var buildingWait = null;
+var newBuildingG = null;
+
+//var contructionList = [
+//    {
+//        _id: '_01',
+//        name: 'BDH_1',
+//        level: 1,
+//        posX: 10,
+//        posY: 10,
+//        width: 2,
+//        height: 2,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_02',
+//        name: 'TOW_1',
+//        posX: 19,
+//        posY: 19,
+//        width: 4,
+//        height: 4,
+//        level: 5,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_03',
+//        name: 'AMC_1',
+//        posX: 0,
+//        posY: 0,
+//        width: 5,
+//        height: 5,
+//        level: 1,
+//        status: 'pending',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_04',
+//        name: 'BAR_1',
+//        posX: 10,
+//        posY: 5,
+//        width: 3,
+//        height: 3,
+//        level: 2,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//       _id: '_05',
+//       name: 'BDH_1',
+//       posX: 5,
+//       posY: 5,
+//       width: 2,
+//       height: 2,
+//       level: 1,
+//       status: 'complete',
+//       startTime: 0
+//    },
+//    {
+//        _id: '_06',
+//        name: 'STO_1',
+//        posX: 5,
+//        posY: 10,
+//        width: 3,
+//        height: 3,
+//        level: 2,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_07',
+//        name: 'STO_1',
+//        posX: 5,
+//        posY: 15,
+//        width: 3,
+//        height: 3,
+//        level: 4,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_08',
+//        name: 'STO_2',
+//        posX: 5,
+//        posY: 20,
+//        width: 3,
+//        height: 3,
+//        level: 5,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_09',
+//        name: 'STO_2',
+//        posX: 5,
+//        posY: 25,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_10',
+//        name: 'RES_1',
+//        posX: 5,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 11,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_11',
+//        name: 'RES_1',
+//        posX: 10,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 4,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_12',
+//        name: 'RES_2',
+//        posX: 15,
+//        posY: 30,
+//        width: 3,
+//        height: 3,
+//        level: 11,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_13',
+//        name: 'DEF_1',
+//        posX: 35,
+//        posY: 35,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_14',
+//        name: 'DEF_1',
+//        posX: 35,
+//        posY: 32,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_15',
+//        name: 'DEF_1',
+//        posX: 32,
+//        posY: 35,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_16',
+//        name: 'DEF_1',
+//        posX: 32,
+//        posY: 32,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//    {
+//        _id: '_17',
+//        name: 'DEF_1',
+//        posX: 32,
+//        posY: 29,
+//        width: 3,
+//        height: 3,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//    },
+//];
 
 
 
@@ -214,6 +219,7 @@ var MapLayer = cc.Layer.extend({
         this.init();
         this.addTouchListener();
         this.addKeyboardListener();
+        //this.updateTimeStamp();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
@@ -557,13 +563,39 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 //Kiem tra tai nguyen co du khong
-                //var g = checkUserResources(buildingInfo.cost);
-                //if(g > 0){
-                //    //Show popup dung G de mua tai nguyen
-                //    //Neu k du G thi THOAT
-                //    //Neu du G thi di tiep
-                //
-                //}
+                var g = checkUserResources(buildingInfo.cost);
+                cc.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG = " + g);
+
+                if(g == 0){
+                    //Tru tien cua nguoi choi
+                    reduceUserResources(buildingInfo.cost);
+                } else if(g > 0){
+                    //Show popup dung G de mua tai nguyen
+                    //var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G", null, false);
+                    //cc.director.getRunningScene().addChild(popup, 2000000);
+                    if(gv.user.coin < g){
+                        cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
+                        return false;
+                    }
+                    //Neu k du G thi THOAT
+                    //Neu du G thi di tiep
+
+                    if(gv.user.gold < buildingInfo.cost.gold){
+                        buildingInfo.cost.gold = gv.user.gold;
+                    }
+                    if(gv.user.elixir < buildingInfo.cost.elixir){
+                        buildingInfo.cost.elixir = gv.user.elixir;
+                    }
+                    if(gv.user.darkElixir < buildingInfo.cost.darkElixir){
+                        buildingInfo.cost.darkElixir = gv.user.darkElixir;
+                    }
+                    buildingInfo.cost.coin = g;
+
+                    reduceUserResources(buildingInfo.cost);
+                } else {
+                    cc.log('KHONG du G ===> KHONG xay duoc nha');
+                    return;
+                }
                 //
                 ////Kiem tra tho xay ranh khong
                 //if(!checkIsFreeBuilder){
@@ -577,28 +609,17 @@ var MapLayer = cc.Layer.extend({
 
                 //Gui yeu cau xac nhan len server
                 NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
+                cc.log("Gui request XAY NHA");
 
 
-                //Nhan phan hoi succeed tu server
 
 
 
-                //Tru tien cua nguoi choi
-                reduceUserResources(buildingInfo.cost);
-                //Thong so Resource trem map can dc update lai
-
-
-                //Cap nhat lai map va listBuilding o client
-
-                // call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-                
                 this._isBuilding = false;
                 newBuilding.setStatus('complete');
                 newBuilding.removeTarget();
                 this._targetedObject = null;
-                contructionList.push(buildingInfo);
-                objectRefs.push(newBuilding);
-                this.createLogicArray(contructionList, {});
+
                 this.cancelBtn.attr({
                     x: -1000,
                     y: -1000,
@@ -609,6 +630,20 @@ var MapLayer = cc.Layer.extend({
                     y: -1000,
                     opacity: 0,
                 });
+
+                //set Globel
+                buildingWait = buildingInfo;
+                newBuildingG = newBuilding;
+
+                //if(validatedBuild){
+                //    contructionList.push(buildingInfo);
+                //    objectRefs.push(newBuilding);
+                //    this.createLogicArray(contructionList, {});
+                //    cc.log('Nha moi da duoc push');
+                //}else{
+                //    cc.log('Nha moi CHUA duoc push');
+                //}
+
                 LOBBY.showLobby();
                 this.cancelBtn.addClickEventListener(doNothing);
                 this.acceptBtn.addClickEventListener(doNothing);
@@ -726,4 +761,12 @@ var MapLayer = cc.Layer.extend({
             }
         }, this);
     },
+    updateTimeStamp: function() {
+        NETWORK.sendGetServerTime();
+        cc.log(DeltaTime);
+        var self = this;
+        setTimeout(function() {
+            self.updateTimeStamp();
+        }, 10000);
+    }
 });
