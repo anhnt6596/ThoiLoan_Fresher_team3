@@ -65,12 +65,16 @@
         "src/modules/mapScreen/MapLayer/Contruction/CollectorBuilding.js",
         "src/modules/mapScreen/MapLayer/Contruction/GoldMine.js",
         "src/modules/mapScreen/MapLayer/Contruction/ElixirCollector.js",
+        "src/modules/mapScreen/MapLayer/Contruction/DefenseBuilding.js",
+        "src/modules/mapScreen/MapLayer/Contruction/Cannon.js",
+        "src/modules/mapScreen/MapLayer/Obstacle/Obstacle.js",
         "src/modules/mapScreen/LobbyLayer/LobbyLayer.js",
         "src/modules/mapScreen/LobbyLayer/ResourceBar.js",
         "src/modules/mapScreen/LobbyLayer/GBar.js",
         "src/modules/mapScreen/LobbyLayer/TopCenterBar.js",
         "src/modules/mapScreen/LobbyLayer/TopLeftBar.js",
         "src/modules/mapScreen/LobbyLayer/ObjectMenu.js",
+        "src/modules/mapScreen/PopUp/UpgradePopUp.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js"
     ]

@@ -13,15 +13,16 @@ var StorageBuilding = Building.extend({
             else self.buildingImage[i].opacity = 0;
         });
     },
-    upgrade: function() {
-        if (this.info.level < 11) this.upgradeComplete();
-    },
-    upgradeComplete: function() {
-        this.info.level = this.info.level + 1;
-        MAP.removeChild(this.buildingImg);
-        this.addBuildingImg();
+    // upgrade: function() {
+    //     if (this.info.level < 11) this.upgradeComplete();
+    // },
+    // upgradeComplete: function() {
+    //     this.info.level = this.info.level + 1;
+    //     MAP.removeChild(this.buildingImg);
+    //     this.addBuildingImg();
 
-        this.levelText.setString('cấp ' + this.info.level);
-        this.presentImg();
-    }
+    //     this.levelText.setString('cấp ' + this.info.level);
+    //     this.presentImg();
+    //     this.showLevelUpEffect();
+    // }
 });

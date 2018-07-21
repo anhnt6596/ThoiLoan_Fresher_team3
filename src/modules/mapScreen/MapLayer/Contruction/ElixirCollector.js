@@ -3,7 +3,7 @@ var ElixirCollector = CollectorBuilding.extend({
     img_y: -44,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.elixir_collector[this.info.level]);

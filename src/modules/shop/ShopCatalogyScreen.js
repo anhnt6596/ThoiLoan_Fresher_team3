@@ -111,7 +111,10 @@ var ShopCatalogyScreen = Popup.extend({
                     if(self._direction){
                         if(self._itemList[0].x > gap_x){
                             for(var i = 0; i < self._itemList.length; i++){
-                                self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
+                                self._leftAction = cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y));
+                                self._leftAction.setTag(1);
+                                self._itemList[i].runAction(self._leftAction);
+                                //self._itemList[i].runAction(cc.moveTo(0.2, cc.p((i+1)*gap_x + i*ITEM_WIDTH, self._itemList[i].y)));
                             }
                         }
                     }else{
@@ -224,6 +227,13 @@ var ShopCatalogyScreen = Popup.extend({
         var elixir = catalogy[itemName].elixir ? catalogy[itemName].elixir : 0;
         var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
         var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
+
+
+        //var gold = config.building[itemName][1].gold ? config.building[itemName][1].gold : 0;
+        //var elixir = config.building[itemName][1].elixir ? config.building[itemName][1].elixir : 0;
+        //var darkElixir = config.building[itemName][1].darkElixir ? config.building[itemName][1].darkElixir : 0;
+        //var coin = config.building[itemName][1].coin ? config.building[itemName][1].coin : 0;
+
 
         var amountBDH = 0;
         for(var k in contructionList){
@@ -361,8 +371,9 @@ var ShopCatalogyScreen = Popup.extend({
 
                     if (cc.rectContainsPoint(rect, locationInNode)) {
                         if(!self._moving){
-                            var length = contructionList.length + 1;
-                            var id = (length < 10) ? ("_0" + length) : ("_" + length);
+                            //var id = (length < 10) ? ("_0" + length) : ("_" + length);
+                            var last = contructionList[contructionList.length-1];
+                            var id = last._id + 1;
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {
@@ -374,6 +385,7 @@ var ShopCatalogyScreen = Popup.extend({
                                 width: catalogy[itemName].width,
                                 height: catalogy[itemName].height,
                                 buildTime: catalogy[itemName].buildTime,
+                                status: 'pending',
                                 cost: costBuilding
                             };
                             MAP.buildNewContruction(buildingInfo);
@@ -435,31 +447,9 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        //var x = cc.winSize.width*7/9;
-        //var y = cc.winSize.height*8.5/9;
-        //var popup = new TinyPopup(x, y, (cc.winSize.width - x)/2, (cc.winSize.height - y)/2, name.building[itemName].en + " Level 1", null, true);
-        //
-        //var children = this.getChildren();
-        //for(var i in children){
-        //    children[i].disabled = true;
-        //    children[i].enabled = false;
-        //}
-        ////cc.eventManager.removeListener(this.listener);
-        //this.getParent().addChild(popup, 2);
+        var popup = new TinyPopup(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, null, true);
+        cc.director.getRunningScene().addChild(popup, 200);
 
-        var titleText = new cc.LabelBMFont('Here is there', 'res/Art/Fonts/soji_24.fnt');
-        titleText.attr({
-            x: 0,
-            y: 0,
-            scale: 1.1,
-        });
-
-        var content = [
-            titleText,
-        ];
-
-        var upgradePopUp = new ui.PopUp(name.building[itemName].en, content);
-        this.addChild(upgradePopUp, 1000);
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
@@ -543,6 +533,7 @@ var ShopCatalogyScreen = Popup.extend({
         this._super();
         cc.log("-----------Exit ShopCatalogyScreen-----------");
     },
+
 
     //ghi de ham trong popup
     onCloseCallback:function () {

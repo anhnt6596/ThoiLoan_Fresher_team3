@@ -309,6 +309,94 @@ res.building = {
         buildingsDir + 'townhall/TOW_1_9/idle/image0000.png',
         buildingsDir + 'townhall/TOW_1_10/idle/image0000.png',
     ],
+    canon_base: [
+        buildingsDir + 'defense_base/DEF_1_1_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_1_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_2_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_3_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_4_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_5_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_6_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_7_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_8_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_9_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_10_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_11_Shadow.png',
+        buildingsDir + 'defense_base/DEF_1_12_Shadow.png',
+    ],
+    canon: [
+        [],
+        [
+            buildingsDir + 'cannon/canon_1/idle/image0000.png',
+            buildingsDir + 'cannon/canon_1/idle/image0001.png',
+            buildingsDir + 'cannon/canon_1/idle/image0002.png',
+            buildingsDir + 'cannon/canon_1/idle/image0003.png',
+            buildingsDir + 'cannon/canon_1/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_2/idle/image0000.png',
+            buildingsDir + 'cannon/canon_2/idle/image0001.png',
+            buildingsDir + 'cannon/canon_2/idle/image0002.png',
+            buildingsDir + 'cannon/canon_2/idle/image0003.png',
+            buildingsDir + 'cannon/canon_2/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_3/idle/image0000.png',
+            buildingsDir + 'cannon/canon_3/idle/image0001.png',
+            buildingsDir + 'cannon/canon_3/idle/image0002.png',
+            buildingsDir + 'cannon/canon_3/idle/image0003.png',
+            buildingsDir + 'cannon/canon_3/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_4/idle/image0000.png',
+            buildingsDir + 'cannon/canon_4/idle/image0001.png',
+            buildingsDir + 'cannon/canon_4/idle/image0002.png',
+            buildingsDir + 'cannon/canon_4/idle/image0003.png',
+            buildingsDir + 'cannon/canon_4/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_5/idle/image0000.png',
+            buildingsDir + 'cannon/canon_5/idle/image0001.png',
+            buildingsDir + 'cannon/canon_5/idle/image0002.png',
+            buildingsDir + 'cannon/canon_5/idle/image0003.png',
+            buildingsDir + 'cannon/canon_5/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_6/idle/image0000.png',
+            buildingsDir + 'cannon/canon_6/idle/image0001.png',
+            buildingsDir + 'cannon/canon_6/idle/image0002.png',
+            buildingsDir + 'cannon/canon_6/idle/image0003.png',
+            buildingsDir + 'cannon/canon_6/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_7/idle/image0000.png',
+            buildingsDir + 'cannon/canon_7/idle/image0001.png',
+            buildingsDir + 'cannon/canon_7/idle/image0002.png',
+            buildingsDir + 'cannon/canon_7/idle/image0003.png',
+            buildingsDir + 'cannon/canon_7/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_8/idle/image0000.png',
+            buildingsDir + 'cannon/canon_8/idle/image0001.png',
+            buildingsDir + 'cannon/canon_8/idle/image0002.png',
+            buildingsDir + 'cannon/canon_8/idle/image0003.png',
+            buildingsDir + 'cannon/canon_8/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_9/idle/image0000.png',
+            buildingsDir + 'cannon/canon_9/idle/image0001.png',
+            buildingsDir + 'cannon/canon_9/idle/image0002.png',
+            buildingsDir + 'cannon/canon_9/idle/image0003.png',
+            buildingsDir + 'cannon/canon_9/idle/image0004.png',
+        ],
+        [
+            buildingsDir + 'cannon/canon_10/idle/image0000.png',
+            buildingsDir + 'cannon/canon_10/0idle/image0001.png',
+            buildingsDir + 'cannon/canon_10/idle/image0002.png',
+            buildingsDir + 'cannon/canon_10/idle/image0003.png',
+            buildingsDir + 'cannon/canon_10/idle/image0004.png',
+        ],
+    ]
 };
 
 var g_mainmenu = [
@@ -418,6 +506,10 @@ name.building = {
         vi: '',
         en: 'KQB_4',
     },
+    DEF_1: {
+        vi: 'Thần công',
+        en: 'Cannon',
+    }
 };
 
 var TILE_WIDTH = 76;

@@ -1,9 +1,7 @@
 var ArmyCamp = Building.extend({
-    img_x: 0,
-    img_y: 0,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.army_camp[this.info.level]);

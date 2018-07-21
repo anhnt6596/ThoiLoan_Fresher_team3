@@ -45,7 +45,7 @@ var checkUserResources = function(costBuilding){
         g += darkElixirToG(costBuilding.darkElixir - gv.user.darkElixir);
     }
     if(gv.user.coin < costBuilding.coin){
-        g += costBuilding.coin - gv.user.coin;
+        g += gv.user.coin - costBuilding.coin;          //Khong du g de mua building ma can g <=> g < 0
     }
     return g;
 };
@@ -57,25 +57,60 @@ var getGToReleaseBuilder = function(){
     var minTimeRemain = Infinity;
     for(var k in contructionList){
         if(contructionList[k].status == "pending") {
-            //var timeRemain = contructionList[k].buildTime - (timeHienTai - contructionList[k].StartTime;
-            //if(timeRemain < min){
-            //  min = timeRemain;
-            //}
+            var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
+            cc.log("=================Log ham getGToReleaseBuilder=================");
+            cc.log("buildTime: " + contructionList[k].buildTime*1000);
+            cc.log("currentServerTime: " + getCurrentServerTime());
+            cc.log("startTime: " + contructionList[k].startTime);
+            cc.log("DeltaTime: " + DeltaTime);
+            
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+            }
         }
     }
-
-    return timeToG(minTimeRemain);
+    cc.log("G phai tra: " + timeToG(minTimeRemain/1000));
+    cc.log("=================HET ham getGToReleaseBuilder=================");
+    if(minTimeRemain == Infinity){
+        return 0;
+    }else{
+        return timeToG(minTimeRemain/1000);
+    }
 };
 
+//Tra ve id cua nha ma co thoi gian con lai la it nhat
+var getIdBuildingMinRemainTime = function(){
+    var minTimeRemain = Infinity;
+    var id = null;
+    for(var k in contructionList){
+        if(contructionList[k].status == "pending") {
+            var timeRemain = contructionList[k].buildTime * 1000 - (getCurrentServerTime() - contructionList[k].startTime);
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+                id = contructionList[k]._id;
+            }
+        }
+    }
+    return id;
+}
 
 
 
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
-    gv.user.gold -= costBuilding.gold;
-    gv.user.elixir -= costBuilding.elixir;
-    gv.user.darkElixir -= costBuilding.darkElixir;
-    gv.user.coin -= costBuilding.coin;
+    if(gv.user.gold >= costBuilding.gold){
+        gv.user.gold -= costBuilding.gold;
+    }
+    if(gv.user.elixir >= costBuilding.elixir){
+        gv.user.elixir -= costBuilding.elixir;
+    }
+    if(gv.user.darkElixir >= costBuilding.darkElixir){
+        gv.user.darkElixir -= costBuilding.darkElixir;
+    }
+    if(gv.user.coin >= costBuilding.coin){
+        gv.user.coin -= costBuilding.coin;
+    }
+
     LOBBY.update(gv.user);
 };
 
@@ -83,25 +118,42 @@ var reduceUserResources = function(costBuilding){
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
-
+    return Math.floor(gold);
 };
 var elixirToG = function(elixir){
-
+    return Math.floor(elixir);
 };
 var darkElixirToG = function(darkElixir){
-
+    return Math.floor(darkElixir);
 };
 
 
-//Quy doi thoi gian sang G
+//Quy doi thoi gian (s) sang G
 var timeToG = function(time){
-
+    return Math.ceil(time/60);
 };
 
 
 //Format Number
 var formatNumber = function(number){
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
+};
 
 var doNothing = function() {};
+
+var randomInt = function(start, end) {
+    return Math.floor(Math.random() * (end - start + 1)) + start;
+};
+
+var getCurrentClientTime = function(){
+    var date = new Date();
+    return date.getTime();
+};
+
+var getCurrentServerTime = function(){
+    return getCurrentClientTime() - DeltaTime;
+};
+
+var timeToString = function(second) {
+    return second + 's';
+};

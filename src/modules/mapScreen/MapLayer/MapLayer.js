@@ -2,142 +2,374 @@ var mapLogicArray = mapLogicArray || [];
 var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
+var DeltaTime = 0;                  //Client - Server
+var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
+
+var useGforResources = false;
+var useGforBuilder = false;
+
 var contructionList = [
-    {
-        _id: '_01',
-        name: 'BDH_1',
-        level: 1,
-        posX: 10,
-        posY: 10,
-        width: 2,
-        height: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_02',
-        name: 'TOW_1',
-        posX: 19,
-        posY: 19,
-        width: 4,
-        height: 4,
-        level: 5,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_03',
-        name: 'AMC_1',
-        posX: 0,
-        posY: 0,
-        width: 5,
-        height: 5,
-        level: 1,
-        status: 'pending',
-        startTime: 0
-    },
-    {
-        _id: '_04',
-        name: 'BAR_1',
-        posX: 10,
-        posY: 5,
-        width: 3,
-        height: 3,
-        level: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-       _id: '_05',
-       name: 'BDH_1',
-       posX: 5,
-       posY: 5,
-       width: 2,
-       height: 2,
-       level: 1,
-       status: 'complete',
-       startTime: 0
-    },
-    {
-        _id: '_06',
-        name: 'STO_1',
-        posX: 5,
-        posY: 10,
-        width: 3,
-        height: 3,
-        level: 2,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_07',
-        name: 'STO_1',
-        posX: 5,
-        posY: 15,
-        width: 3,
-        height: 3,
-        level: 4,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_08',
-        name: 'STO_2',
-        posX: 5,
-        posY: 20,
-        width: 3,
-        height: 3,
-        level: 5,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_09',
-        name: 'STO_2',
-        posX: 5,
-        posY: 25,
-        width: 3,
-        height: 3,
-        level: 1,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_10',
-        name: 'RES_1',
-        posX: 5,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_11',
-        name: 'RES_1',
-        posX: 10,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 4,
-        status: 'complete',
-        startTime: 0
-    },
-    {
-        _id: '_12',
-        name: 'RES_2',
-        posX: 15,
-        posY: 30,
-        width: 3,
-        height: 3,
-        level: 11,
-        status: 'complete',
-        startTime: 0
-    },
+//     {
+//         _id: '_01',
+//         name: 'BDH_1',
+//         level: 1,
+//         posX: 10,
+//         posY: 10,
+//         width: 2,
+//         height: 2,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_02',
+//         name: 'TOW_1',
+//         posX: 19,
+//         posY: 19,
+//         width: 4,
+//         height: 4,
+//         level: 5,
+//         status: 'upgrade',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_03',
+//         name: 'AMC_1',
+//         posX: 0,
+//         posY: 0,
+//         width: 5,
+//         height: 5,
+//         level: 1,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_04',
+//         name: 'BAR_1',
+//         posX: 10,
+//         posY: 5,
+//         width: 3,
+//         height: 3,
+//         level: 2,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//        _id: '_05',
+//        name: 'BDH_1',
+//        posX: 5,
+//        posY: 5,
+//        width: 2,
+//        height: 2,
+//        level: 1,
+//        status: 'complete',
+//        startTime: 0
+//     },
+//     {
+//         _id: '_06',
+//         name: 'STO_1',
+//         posX: 5,
+//         posY: 10,
+//         width: 3,
+//         height: 3,
+//         level: 2,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_07',
+//         name: 'STO_1',
+//         posX: 5,
+//         posY: 15,
+//         width: 3,
+//         height: 3,
+//         level: 4,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_08',
+//         name: 'STO_2',
+//         posX: 5,
+//         posY: 20,
+//         width: 3,
+//         height: 3,
+//         level: 5,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_09',
+//         name: 'STO_2',
+//         posX: 5,
+//         posY: 25,
+//         width: 3,
+//         height: 3,
+//         level: 1,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_10',
+//         name: 'RES_1',
+//         posX: 5,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 11,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_11',
+//         name: 'RES_1',
+//         posX: 10,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 4,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_12',
+//         name: 'RES_2',
+//         posX: 15,
+//         posY: 30,
+//         width: 3,
+//         height: 3,
+//         level: 11,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_13',
+//         name: 'DEF_1',
+//         posX: 35,
+//         posY: 35,
+//         width: 3,
+//         height: 3,
+//         level: 1,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_14',
+//         name: 'DEF_1',
+//         posX: 35,
+//         posY: 32,
+//         width: 3,
+//         height: 3,
+//         level: 3,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_15',
+//         name: 'DEF_1',
+//         posX: 32,
+//         posY: 35,
+//         width: 3,
+//         height: 3,
+//         level: 5,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_16',
+//         name: 'DEF_1',
+//         posX: 32,
+//         posY: 32,
+//         width: 3,
+//         height: 3,
+//         level: 7,
+//         status: 'complete',
+//         startTime: 0
+//     },
+//     {
+//         _id: '_17',
+//         name: 'DEF_1',
+//         posX: 32,
+//         posY: 29,
+//         width: 3,
+//         height: 3,
+//         level: 9,
+//         status: 'complete',
+//         startTime: 0
+//     },
 ];
 
-
+var obstacleLists = [
+    {
+        _id: '5000',
+        name: 'OBS_1',
+        posX: 38,
+        posY: 38,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5001',
+        name: 'OBS_1',
+        posX: 38,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5002',
+        name: 'OBS_2',
+        posX: 38,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5003',
+        name: 'OBS_3',
+        posX: 38,
+        posY: 4,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5004',
+        name: 'OBS_4',
+        posX: 36,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5005',
+        name: 'OBS_5',
+        posX: 36,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5006',
+        name: 'OBS_6',
+        posX: 34,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5007',
+        name: 'OBS_7',
+        posX: 30,
+        posY: 10,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5008',
+        name: 'OBS_8',
+        posX: 27,
+        posY: 10,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5009',
+        name: 'OBS_9',
+        posX: 34,
+        posY: 6,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5010',
+        name: 'OBS_10',
+        posX: 32,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5011',
+        name: 'OBS_11',
+        posX: 32,
+        posY: 4,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5012',
+        name: 'OBS_12',
+        posX: 32,
+        posY: 6,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5013',
+        name: 'OBS_13',
+        posX: 36,
+        posY: 8,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5014',
+        name: 'OBS_14',
+        posX: 33,
+        posY: 8,
+        width: 3,
+        height: 3,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5015',
+        name: 'OBS_15',
+        posX: 30,
+        posY: 0,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+    {
+        _id: '5016',
+        name: 'OBS_16',
+        posX: 30,
+        posY: 2,
+        width: 2,
+        height: 2,
+        status: 'present',
+        startTime: 0,
+    },
+];
 
 var rootMapPos = {
     x: 2100,
@@ -159,20 +391,21 @@ var MapLayer = cc.Layer.extend({
         this.init();
         this.addTouchListener();
         this.addKeyboardListener();
+        //this.updateTimeStamp();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_2_effects/RES_2_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
-        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/levelup/levelup.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/effects_1.plist');
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);
-        // this.initImpediment(impedimentList);
-        this.createLogicArray(contructionList, {});
+        this.initObstacles(obstacleLists);
+        this.createLogicArray(contructionList, obstacleLists);
         
-        this.scale = 1;
+        this.scale = 0.5;
         for (var i = 0; i < objectRefs.length; i++) {
             if(objectRefs[i].info.name === 'TOW_1') {
                 var town = objectRefs[i];
@@ -204,6 +437,13 @@ var MapLayer = cc.Layer.extend({
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
             newBuilding && objectRefs.push(newBuilding);
+        });
+    },
+    initObstacles: function(obstacles) {
+        var self = this;
+        obstacles.forEach(function(obstacle) {
+            var newObstacle = new Obstacle(obstacle);
+            objectRefs.push(newObstacle);
         });
     },
     initImpediments: function(impediments) {
@@ -258,7 +498,7 @@ var MapLayer = cc.Layer.extend({
         this.addChild(acceptBtn, 1000);
         this.acceptBtn = acceptBtn;
     },
-    createLogicArray: function(contructions, impediments) {
+    createLogicArray: function(contructions, obstacles) {
         mapLogicArray = [];
         var i = 0;
         var j = 0;
@@ -276,6 +516,16 @@ var MapLayer = cc.Layer.extend({
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
                     mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
+                }
+            }
+        }
+        for (obstacle in obstacles) {
+            var _inRow = obstacles[obstacle].posX;
+            var _inColumn = obstacles[obstacle].posY;
+            var _size = obstacles[obstacle].width;
+            for (var i = 0; i < _size; i++) {
+                for (var j = 0; j < _size; j++) {
+                    mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
         }
@@ -369,6 +619,7 @@ var MapLayer = cc.Layer.extend({
         var mapPos = this.calculatePos(coorInMap);
         if (this._isMovingObject) {
             this._targetedObject.moving(mapPos);
+            LOBBY.hideLobby();
         } else {
             this.moveMap(touch);
         }
@@ -389,7 +640,8 @@ var MapLayer = cc.Layer.extend({
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
                 this._targetedObject.updatePosition(mapPos);
                 this.updateContructionList(this._targetedObject.info);
-                this.createLogicArray(contructionList, {});
+                this.createLogicArray(contructionList, obstacleLists);
+                LOBBY.showLobby();
             } else {
                 // this._targetedObject.returnLastPosition();
             }
@@ -409,6 +661,7 @@ var MapLayer = cc.Layer.extend({
         contructionList = newContructionList;
     },
     targetObject: function(mapPos) {
+        LOBBY.showLobby();
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
@@ -458,6 +711,9 @@ var MapLayer = cc.Layer.extend({
             case 'RES_2':
                 newBuilding = new ElixirCollector(buildingInfo);
                 break;
+            case 'DEF_1':
+                newBuilding = new Cannon(buildingInfo);
+                break;
             default:
                 break;
         }
@@ -465,11 +721,21 @@ var MapLayer = cc.Layer.extend({
     },
 
     buildNewContruction: function(buildingInfo) {
+
+        cc.log("So nha dang pending: " + checkPendingBuilding());
+        cc.log("So tho xay hien co: " + checkBuilder());
+        var freeBuilder = checkBuilder() - checkPendingBuilding();
+        cc.log("So tho xay dang ranh: " + freeBuilder);
+        for(var item in contructionList){
+            cc.log("Nha: " + contructionList[item].name + ", status: " + contructionList[item].status + ", startTime: " + contructionList[item].startTime);
+        }
+
+
         this._isBuilding = true;
         LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
         var newBuilding = this.createBuilding(buildingInfo);
-        newBuilding.setStatus('pending');
+        newBuilding.setStatus('setting');
         this._targetedObject && this._targetedObject.removeTarget();
         this._targetedObject = newBuilding;
         this.setMapPositionToObject(newBuilding);
@@ -497,69 +763,133 @@ var MapLayer = cc.Layer.extend({
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
+            var listener = {};
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 //Kiem tra tai nguyen co du khong
-                var g = checkUserResources(buildingInfo.cost);
-                if(g > 0){
-                    //Show popup dung G de mua tai nguyen
-                    //Neu k du G thi THOAT
-                    //Neu du G thi di tiep
+                var gResources = checkUserResources(buildingInfo.cost);
+                if(gResources == 0){
+                    //Kiem tra tho xay ranh khong
+                    if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
+                       //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                            var gBuilder = getGToReleaseBuilder();
+                            if(gv.user.coin < gBuilder){
+                                //Show popup khong du G va thoat
+                                cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
+                                var listener = {};
+                                listener.contentBuyG = "Please add more G to buy missing resources!";
+                                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
+                                cc.director.getRunningScene().addChild(popup, 2000000);
+                                // return false;
+                            }else{
+                                //Show popup dung G de release 1 tho xay
+                                listener.type = 'builder';
+                                listener.building = buildingInfo;
+                                listener.newBuilding = newBuilding;
+                                listener.gBuilder = gBuilder;
+                                
+                                ReducedTempResources.gold = buildingInfo.cost.gold;
+                                ReducedTempResources.elixir = buildingInfo.cost.elixir;
+                                ReducedTempResources.darkElixir = buildingInfo.cost.darkElixir;
 
+                                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
+                                cc.director.getRunningScene().addChild(popup, 2000000);
+                            }
+                           
+                    }else{
+                        NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
+                        cc.log("Gui request XAY NHA");
+                        reduceUserResources(buildingInfo.cost);
+                        this.resetReducedTempResources();
+                        this.updateMapWhenValidatedBuild(newBuilding, buildingInfo);
+                    }
+                // } else if(gResources > 0 && !useGforResources){
+                } else if(gResources > 0){
+                    if(gv.user.coin < gResources){
+                        //Show popup khong du G va thoat
+                        cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
+                        var listener = {};
+                        listener.contentBuyG = "Please add more G to buy missing resources!";
+                        var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
+                        cc.director.getRunningScene().addChild(popup, 2000000);
+                        // return false;
+                    }else{
+                        //Show popup dung G de mua tai nguyen
+                        listener.type = 'resources';
+                        listener.building = buildingInfo;
+                        listener.newBuilding = newBuilding;
+                        listener.gResources = gResources;
+                        var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
+                        cc.director.getRunningScene().addChild(popup, 2000000);
+                    }
+                } else {
+                    cc.log('KHONG du G ===> KHONG xay duoc nha');
+                    var listener = {};
+                    listener.contentBuyG = "Please add more G to buy this item!";
+                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough G to build this building", null, true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
                 }
-
-                //Kiem tra tho xay ranh khong
-                if(!checkIsFreeBuilder){
-                    //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
-                        var coin = getGToReleaseBuilder();
-                        //Can coin de release 1 builder
-                    //Neu k du G thi THOAT
-                    //Neu du G thi di tiep
-                    //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-                }
-
-                //Gui yeu cau xac nhan len server
-                //NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
-
-
-                //Nhan phan hoi succeed tu server
-
-
-
-                //Tru tien cua nguoi choi
-                reduceUserResources(buildingInfo.cost);
-                //Thong so Resource trem map can dc update lai
-
-
-                //Cap nhat lai map va listBuilding o client
-
-                // call_API_new_construction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-                
-                this._isBuilding = false;
-                newBuilding.removeTarget();
-                this._targetedObject = null;
-                contructionList.push(buildingInfo);
-                objectRefs.push(newBuilding);
-                this.createLogicArray(contructionList, {});
-                this.cancelBtn.attr({
-                    x: -1000,
-                    y: -1000,
-                    opacity: 0,
-                });
-                this.acceptBtn.attr({
-                    x: -1000,
-                    y: -1000,
-                    opacity: 0,
-                });
-                LOBBY.showLobby();
-                this.cancelBtn.addClickEventListener(doNothing);
-                this.acceptBtn.addClickEventListener(doNothing);
-
-                //Hien thi thoi gian dem nguoc va hinh anh thang tho xay (neu co)
             }
         }.bind(this));
 
         this.setVXbtn(this._targetedObject);
     },
+
+    resetReducedTempResources:function(){
+        ReducedTempResources.gold = 0;
+        ReducedTempResources.elixir = 0;
+        ReducedTempResources.darkElixir = 0;
+        ReducedTempResources.coin = 0;
+    },
+
+    updateMapWhenValidatedBuild:function(newBuilding, buildingInfo){
+        this._isBuilding = false;
+        // newBuilding.setStatus('pending');
+        newBuilding._status = 'pending';
+        newBuilding.removeTarget();
+        this._targetedObject = null;
+        this.cancelBtn.attr({
+            x: -1000,
+            y: -1000,
+            opacity: 0,
+        });
+        this.acceptBtn.attr({
+            x: -1000,
+            y: -1000,
+            opacity: 0,
+        });
+
+        cc.log("TAM hien thi o CLIENT");
+        if(buildingInfo.buildTime > 0){
+            buildingInfo.status = 'pending';
+            buildingInfo.startTime = getCurrentServerTime();
+        }else{
+            buildingInfo.status = 'complete';
+            buildingInfo.startTime = 0;
+        }
+        
+        
+        contructionList.push(buildingInfo);
+        objectRefs.push(newBuilding);
+        MAP.createLogicArray(contructionList, {});
+        cc.log('Nha moi da duoc push TAM vao MAP');
+
+        var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
+        var max = buildingInfo.buildTime;
+        cc.log("=================== buildTime: " + buildingInfo.buildTime);
+        cc.log("=================== CurrentServerTime: " + getCurrentServerTime());
+        cc.log("=================== startTimeur: " + buildingInfo.startTime);
+
+        cc.log("=================== cur: " + cur);
+        cc.log("=================== max: " + max);
+
+        newBuilding.build(cur, max)
+
+
+        LOBBY.showLobby();
+        this.cancelBtn.addClickEventListener(doNothing);
+        this.acceptBtn.addClickEventListener(doNothing);
+    },
+
     setVXbtn: function(targetedObject) {
         var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
         this.cancelBtn.attr({
@@ -667,4 +997,12 @@ var MapLayer = cc.Layer.extend({
             }
         }, this);
     },
+    updateTimeStamp: function() {
+        NETWORK.sendGetServerTime();
+        cc.log(DeltaTime);
+        var self = this;
+        setTimeout(function() {
+            self.updateTimeStamp();
+        }, 10000);
+    }
 });

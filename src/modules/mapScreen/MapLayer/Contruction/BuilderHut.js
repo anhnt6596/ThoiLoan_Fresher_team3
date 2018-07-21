@@ -1,11 +1,9 @@
 var MAP = MAP || null;
 
 var BuilderHut = Building.extend({
-    img_x: -31,
-    img_y: -52,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
+        // this.addBuildingImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.builder_hut);

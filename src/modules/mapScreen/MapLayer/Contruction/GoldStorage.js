@@ -3,11 +3,12 @@ var GoldStorage = StorageBuilding.extend({
     img_y: -105,
     ctor: function(info) {
         this._super(info);
-        this.addBuildingImg();
-        this.presentImg();
+        // this.addBuildingImg();
+        // this.presentImg();
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Node();
+        buildingImg.setCascadeColorEnabled(true); 
         this.buildingImg = buildingImg;
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         buildingImg.attr({
