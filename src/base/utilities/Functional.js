@@ -137,11 +137,13 @@ var randomInt = function(start, end) {
     return Math.floor(Math.random() * (end - start + 1)) + start;
 };
 
+//ms
 var getCurrentClientTime = function(){
     var date = new Date();
     return date.getTime();
 };
 
+//ms
 var getCurrentServerTime = function(){
     return getCurrentClientTime() - DeltaTime;
 };

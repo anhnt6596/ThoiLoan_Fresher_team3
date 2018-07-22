@@ -5,7 +5,6 @@
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 count =0;
-var validatedBuild = false;
 
 var NETWORK = NETWORK || null;
 
@@ -70,6 +69,9 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_SERVER_TIME:
                 DeltaTime = getCurrentClientTime() - packet.currentServerTime;
+                updateTimeFlag = true;
+                cc.log("SERVER TIME nhan ve: " + packet.currentServerTime + " ms");
+                cc.log("Delta = CurrentClientTime - CurrentServerTime: " + DeltaTime + " ms");
         }
     },
     sendGetUserInfo:function()
@@ -117,9 +119,10 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
     },
     sendGetServerTime:function(){
-        cc.log("send GetServerTime");
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log("CLIENT da gui yeu cau get Server Time");
     },
     sendAddResource: function(gold, elixir, darkElixir, coin) {
         cc.log('Add Resource');

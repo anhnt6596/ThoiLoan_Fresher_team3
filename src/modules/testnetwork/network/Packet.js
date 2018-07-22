@@ -336,6 +336,7 @@ testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
+            cc.log("SERVER da phan hoi Current Server Time");
         },
         readData:function(){
             this.currentServerTime  = this.getLong();

@@ -407,14 +407,20 @@ var fakeTimeFunction = function(sender, cur, max) {
 var fakeBuildTimeFunction = function(sender, cur, max) {
     var tick = () => {
         setTimeout(() => {
-            cur +=1;
+            if(updateTimeFlag){
+                cc.log("--------------------------------------------------------updateTimeFlag == true");
+                cur = (getCurrentServerTime() - sender.startTime)/1000;
+                updateTimeFlag = false;
+            }
             if (cur >= max) {
                 sender.buildComplete();
                 return;
             } else {
                 tick();
+                // sender.updateTimeBar(cur, max);
                 sender.updateTimeBar(cur, max);
             }
+            cur +=1;
         }, 1000);
     }
     tick();

@@ -3,6 +3,8 @@ var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
 var DeltaTime = 0;                  //Client - Server
+var updateTimeFlag = false;         //cu 10s thi co nay = true
+
 var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 var LastReduceResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 
@@ -389,7 +391,7 @@ var MapLayer = cc.Layer.extend({
         this.init();
         this.addTouchListener();
         this.addKeyboardListener();
-        //this.updateTimeStamp();
+        this.updateTimeStamp();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/RES_1_effects/RES_1_effects.plist');
@@ -866,15 +868,21 @@ var MapLayer = cc.Layer.extend({
         if(buildingInfo.buildTime > 0){
             buildingInfo.status = 'pending';
             buildingInfo.startTime = getCurrentServerTime();
+            newBuilding.startTime = getCurrentServerTime();
         }else{
             buildingInfo.status = 'complete';
             buildingInfo.startTime = 0;
+            newBuilding.startTime = 0;
         }
             
         contructionList.push(buildingInfo);
-        var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
-        var max = buildingInfo.buildTime;
-        newBuilding.build(cur, max);
+        
+        if(buildingInfo.buildTime){
+            var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
+            var max = buildingInfo.buildTime;
+            newBuilding.build(cur, max);
+        }
+        
         objectRefs.push(newBuilding);
         MAP.createLogicArray(contructionList, {});
         cc.log('Nha moi da duoc push TAM vao MAP');
@@ -993,7 +1001,6 @@ var MapLayer = cc.Layer.extend({
     },
     updateTimeStamp: function() {
         NETWORK.sendGetServerTime();
-        cc.log(DeltaTime);
         var self = this;
         setTimeout(function() {
             self.updateTimeStamp();
