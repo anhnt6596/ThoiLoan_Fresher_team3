@@ -107,6 +107,16 @@ var reduceUserResources = function(costBuilding){
 };
 
 
+//Tang tai nguyen cua user
+var increaseUserResources = function(resources){
+    gv.user.gold += resources.gold;
+    gv.user.elixir += resources.elixir;
+    gv.user.darkElixir += resources.darkElixir;
+    gv.user.coin += resources.coin;
+
+    LOBBY.update(gv.user);
+};
+
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
@@ -150,4 +160,16 @@ var getCurrentServerTime = function(){
 
 var timeToString = function(second) {
     return second + 's';
+};
+
+//time: ms
+var timeToReadable = function(time){
+    var day = Math.floor(time/86400000);
+    var hour = Math.floor((time - 86400000*day)/3600000);
+    var minute = Math.floor((time - 86400000*day - 3600000*hour)/60000);
+    var second = Math.floor((time - 86400000*day - 3600000*hour - 60000*minute)/60000);
+    var milli = time - 86400000*day - 3600000*hour - 60000*minute - 60000*second;
+    var t = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'') + (milli ? (milli + 'ms'):'');
+    t = t ? t : '0ms';
+    return t;
 };

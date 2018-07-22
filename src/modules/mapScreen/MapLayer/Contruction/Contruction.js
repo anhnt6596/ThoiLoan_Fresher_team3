@@ -417,7 +417,6 @@ var fakeBuildTimeFunction = function(sender, cur, max) {
                 return;
             } else {
                 tick();
-                // sender.updateTimeBar(cur, max);
                 sender.updateTimeBar(cur, max);
             }
             cur +=1;

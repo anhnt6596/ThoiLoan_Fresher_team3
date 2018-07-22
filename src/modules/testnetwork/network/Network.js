@@ -5,6 +5,7 @@
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 count =0;
+var requestedServerTime = 0;
 
 var NETWORK = NETWORK || null;
 
@@ -62,16 +63,19 @@ testnetwork.Connector = cc.Class.extend({
                     objectRefs = objectRefs.pop();
                     MAP.createLogicArray(contructionList, {});
                     //Khoi phuc tien cho user (Can xet them T.H server chua kip phan hoi FALSE thi user da request xay tiep)
+                    increaseUserResources(LastReduceResources);
+
+                    //Cap nhat lai map
                     
 
                     cc.log("SERVER TU CHOI XAY và CLIENT da CAP NHAT lai nha CHUA duoc xay");
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
+                requestedServerTime++;
                 DeltaTime = getCurrentClientTime() - packet.currentServerTime;
                 updateTimeFlag = true;
-                cc.log("SERVER TIME nhan ve: " + packet.currentServerTime + " ms");
-                cc.log("Delta = CurrentClientTime - CurrentServerTime: " + DeltaTime + " ms");
+                cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
         }
     },
     sendGetUserInfo:function()
@@ -104,6 +108,7 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.darkElixir = packet.darkElixir;
         gv.user.builderNumber = packet.builderNumber;
         DeltaTime = getCurrentClientTime() - packet.serverTime;
+        cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
 
     },
     sendMoveConstruction:function(id,x,y) {
