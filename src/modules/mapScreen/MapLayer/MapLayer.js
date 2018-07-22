@@ -4,9 +4,7 @@ var MAP = MAP || null;
 
 var DeltaTime = 0;                  //Client - Server
 var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
-
-var useGforResources = false;
-var useGforBuilder = false;
+var LastReduceResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 
 var contructionList = [
 //     {
@@ -726,11 +724,12 @@ var MapLayer = cc.Layer.extend({
         cc.log("So tho xay hien co: " + checkBuilder());
         var freeBuilder = checkBuilder() - checkPendingBuilding();
         cc.log("So tho xay dang ranh: " + freeBuilder);
+        cc.log("=======================Map=======================");
         for(var item in contructionList){
-            cc.log("Nha: " + contructionList[item].name + ", status: " + contructionList[item].status + ", startTime: " + contructionList[item].startTime);
+            cc.log("Nha: " + contructionList[item].name + ", id: " + contructionList[item]._id + ", status: " + contructionList[item].status + ", startTime: " + contructionList[item].startTime);
         }
-
-
+        cc.log("=======================Het Map=======================");
+    
         this._isBuilding = true;
         LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
@@ -771,60 +770,41 @@ var MapLayer = cc.Layer.extend({
                     //Kiem tra tho xay ranh khong
                     if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
                        //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
-                            var gBuilder = getGToReleaseBuilder();
-                            if(gv.user.coin < gBuilder){
-                                //Show popup khong du G va thoat
-                                cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
-                                var listener = {};
-                                listener.contentBuyG = "Please add more G to buy missing resources!";
-                                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
-                                cc.director.getRunningScene().addChild(popup, 2000000);
-                                // return false;
-                            }else{
-                                //Show popup dung G de release 1 tho xay
-                                listener.type = 'builder';
-                                listener.building = buildingInfo;
-                                listener.newBuilding = newBuilding;
-                                listener.gBuilder = gBuilder;
-                                
-                                ReducedTempResources.gold = buildingInfo.cost.gold;
-                                ReducedTempResources.elixir = buildingInfo.cost.elixir;
-                                ReducedTempResources.darkElixir = buildingInfo.cost.darkElixir;
-
-                                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
-                                cc.director.getRunningScene().addChild(popup, 2000000);
-                            }
-                           
+                        var gBuilder = getGToReleaseBuilder();
+                        if(gv.user.coin < gBuilder){
+                            //Show popup khong du G va thoat
+                            cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
+                            var listener = {contentBuyG:"Please add more G to release a builder!"};
+                            var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "All builders are busy", null, true, listener);
+                            cc.director.getRunningScene().addChild(popup, 2000000);
+                        }else{
+                            //Show popup dung G de release 1 tho xay
+                            _.extend(ReducedTempResources, buildingInfo.cost);
+                            var listener = {type:'builder', building:buildingInfo, newBuilding:newBuilding, gBuilder:gBuilder};
+                            var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
+                            cc.director.getRunningScene().addChild(popup, 2000000);
+                        }
                     }else{
-                        NETWORK.sendAddConstruction(buildingInfo.name, buildingInfo.posX, buildingInfo.posY);
-                        cc.log("Gui request XAY NHA");
-                        reduceUserResources(buildingInfo.cost);
-                        this.resetReducedTempResources();
-                        this.updateMapWhenValidatedBuild(newBuilding, buildingInfo);
+                        _.extend(ReducedTempResources, buildingInfo.cost);
+                        this.sendRequestAddConstruction(newBuilding, buildingInfo, buildingInfo.cost);                      
                     }
-                // } else if(gResources > 0 && !useGforResources){
                 } else if(gResources > 0){
                     if(gv.user.coin < gResources){
                         //Show popup khong du G va thoat
                         cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
-                        var listener = {};
-                        listener.contentBuyG = "Please add more G to buy missing resources!";
+                        var listener = {contentBuyG:"Please add more G to buy missing resources!"};
+                        // listener.contentBuyG = "Please add more G to buy missing resources!";
                         var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
                         cc.director.getRunningScene().addChild(popup, 2000000);
-                        // return false;
                     }else{
                         //Show popup dung G de mua tai nguyen
-                        listener.type = 'resources';
-                        listener.building = buildingInfo;
-                        listener.newBuilding = newBuilding;
-                        listener.gResources = gResources;
+                        var listener = {type:'resources', building:buildingInfo, newBuilding:newBuilding, gResources:gResources};
                         var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }
                 } else {
                     cc.log('KHONG du G ===> KHONG xay duoc nha');
-                    var listener = {};
-                    listener.contentBuyG = "Please add more G to buy this item!";
+                    var listener = {contentBuyG:"Please add more G to buy this item!"};
                     var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough G to build this building", null, true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
@@ -832,6 +812,30 @@ var MapLayer = cc.Layer.extend({
         }.bind(this));
 
         this.setVXbtn(this._targetedObject);
+    },
+
+    sendRequestAddConstruction: function(newBuilding, building, reducedUserResources){
+        NETWORK.sendAddConstruction(building.name, building.posX, building.posY);
+        cc.log("Gui request XAY NHA");
+        reduceUserResources(reducedUserResources);
+        this.logReducedUserResources();
+        _.extend(LastReduceResources, reducedUserResources);
+        this.resetReducedTempResources();
+        this.updateMapWhenValidatedBuild(newBuilding, building);
+    },
+
+    logReducedUserResources:function(){
+        cc.log("========================REDUCED USER RESOURCE========================");
+        cc.log("Gold:                   " + ReducedTempResources.gold);
+        cc.log("Elixir:                 " + ReducedTempResources.elixir);
+        cc.log("Dark Elixir:            " + ReducedTempResources.darkElixir);
+        cc.log("Coin (G):               " + ReducedTempResources.coin);
+        cc.log("========================REMAIN USER RESOURCE========================");
+        cc.log("Gold remain:            " + gv.user.gold);
+        cc.log("Elixir remain:          " + gv.user.elixir);
+        cc.log("Dark Elixir remain:     " + gv.user.darkElixir);
+        cc.log("Coin (G) remain:        " + gv.user.coin);
+        cc.log("====================================================================");
     },
 
     resetReducedTempResources:function(){
@@ -866,24 +870,14 @@ var MapLayer = cc.Layer.extend({
             buildingInfo.status = 'complete';
             buildingInfo.startTime = 0;
         }
-        
-        
+            
         contructionList.push(buildingInfo);
+        var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
+        var max = buildingInfo.buildTime;
+        newBuilding.build(cur, max);
         objectRefs.push(newBuilding);
         MAP.createLogicArray(contructionList, {});
         cc.log('Nha moi da duoc push TAM vao MAP');
-
-        var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
-        var max = buildingInfo.buildTime;
-        cc.log("=================== buildTime: " + buildingInfo.buildTime);
-        cc.log("=================== CurrentServerTime: " + getCurrentServerTime());
-        cc.log("=================== startTimeur: " + buildingInfo.startTime);
-
-        cc.log("=================== cur: " + cur);
-        cc.log("=================== max: " + max);
-
-        newBuilding.build(cur, max)
-
 
         LOBBY.showLobby();
         this.cancelBtn.addClickEventListener(doNothing);

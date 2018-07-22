@@ -293,7 +293,7 @@ var Contruction = cc.Class.extend({
         cc.log("================================> _id: " + this._id);
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
-                contructionList[item].status = 'complete';
+                contructionList[item].status = 'complete';  
                 return;
             }
         }
@@ -410,6 +410,7 @@ var fakeBuildTimeFunction = function(sender, cur, max) {
             cur +=1;
             if (cur >= max) {
                 sender.buildComplete();
+                return;
             } else {
                 tick();
                 sender.updateTimeBar(cur, max);

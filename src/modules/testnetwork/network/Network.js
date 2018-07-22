@@ -62,6 +62,8 @@ testnetwork.Connector = cc.Class.extend({
                     contructionList = contructionList.pop();
                     objectRefs = objectRefs.pop();
                     MAP.createLogicArray(contructionList, {});
+                    //Khoi phuc tien cho user (Can xet them T.H server chua kip phan hoi FALSE thi user da request xay tiep)
+                    
 
                     cc.log("SERVER TU CHOI XAY và CLIENT da CAP NHAT lai nha CHUA duoc xay");
                 }

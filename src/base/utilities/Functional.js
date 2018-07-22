@@ -45,7 +45,7 @@ var checkUserResources = function(costBuilding){
         g += darkElixirToG(costBuilding.darkElixir - gv.user.darkElixir);
     }
     if(gv.user.coin < costBuilding.coin){
-        g += gv.user.coin - costBuilding.coin;          //Khong du g de mua building ma can g <=> g < 0
+        g = gv.user.coin - costBuilding.coin;          //Khong du g de mua building ma can g <=> g < 0
     }
     return g;
 };
@@ -58,19 +58,11 @@ var getGToReleaseBuilder = function(){
     for(var k in contructionList){
         if(contructionList[k].status == "pending") {
             var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
-            cc.log("=================Log ham getGToReleaseBuilder=================");
-            cc.log("buildTime: " + contructionList[k].buildTime*1000);
-            cc.log("currentServerTime: " + getCurrentServerTime());
-            cc.log("startTime: " + contructionList[k].startTime);
-            cc.log("DeltaTime: " + DeltaTime);
-            
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
             }
         }
     }
-    cc.log("G phai tra: " + timeToG(minTimeRemain/1000));
-    cc.log("=================HET ham getGToReleaseBuilder=================");
     if(minTimeRemain == Infinity){
         return 0;
     }else{
@@ -136,7 +128,7 @@ var timeToG = function(time){
 
 //Format Number
 var formatNumber = function(number){
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 var doNothing = function() {};

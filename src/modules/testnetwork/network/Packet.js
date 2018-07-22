@@ -230,7 +230,8 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
-                cc.log("name Nha: " + this.name);
+                cc.log("========================name Nha: " + this.name);
+                cc.log("_id: " + this._id);
                 this.posX = this.getInt();
                 this.posY = this.getInt();
                 this.level = this.getInt();

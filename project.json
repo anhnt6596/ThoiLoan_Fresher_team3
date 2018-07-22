@@ -76,6 +76,7 @@
         "src/modules/mapScreen/LobbyLayer/ObjectMenu.js",
         "src/modules/mapScreen/PopUp/UpgradePopUp.js",
         "src/modules/shop/ShopScreen.js",
-        "src/modules/shop/ShopCatalogyScreen.js"
+        "src/modules/shop/ShopCatalogyScreen.js",
+        "src/modules/shop/Suggest.js"
     ]
 }
