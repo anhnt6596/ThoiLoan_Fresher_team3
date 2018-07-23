@@ -506,7 +506,7 @@ var MapLayer = cc.Layer.extend({
         for (i = 0; i < 40; i++) {
             var row = [];
             for(j = 0; j < 40; j++) {
-                row.push(0);
+                row.push(-1);
             }
             mapLogicArray.push(row);
         }
@@ -666,9 +666,10 @@ var MapLayer = cc.Layer.extend({
         var self = this;
         mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
-            cc.log(target_id);
+            cc.log('target_id: ' + target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
-                if (objectRefs[i].info && objectRefs[i].info._id && objectRefs[i].info._id == target_id) {
+                // cc.log('bool ' + objectRefs[i].info._id == target_id);
+                if (objectRefs[i].info && objectRefs[i].info._id >= 0 && objectRefs[i].info._id == target_id) {
                     var newTarget = objectRefs[i];
                     if (newTarget === self._targetedObject) {
                         break; // nếu chọn object cũ thì thôi
@@ -872,6 +873,7 @@ var MapLayer = cc.Layer.extend({
             newBuilding.startTime = getCurrentServerTime();
         }else{
             buildingInfo.status = 'complete';
+            newBuilding.setStatus('complete');
             buildingInfo.startTime = 0;
             newBuilding.startTime = 0;
         }
@@ -892,7 +894,9 @@ var MapLayer = cc.Layer.extend({
         this.cancelBtn.addClickEventListener(doNothing);
         this.acceptBtn.addClickEventListener(doNothing);
     },
-
+    removeObstacle: function(obstacle) {
+        obstacle.remove();
+    },
     setVXbtn: function(targetedObject) {
         var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
         this.cancelBtn.attr({
