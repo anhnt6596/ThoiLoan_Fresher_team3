@@ -117,6 +117,40 @@ var increaseUserResources = function(resources){
     LOBBY.update(gv.user);
 };
 
+var setUserResourcesCapacity = function(){
+    var goldCapacity = 0;
+    var elixirCapacity = 0;
+    var darkElixirCapacity = 0;
+    var currentLevelTownHall = 1;
+
+    for(var k in contructionList){
+        var build = contructionList[k];
+        if(build.status == 'complete'){
+            if(build.name == 'STO_1'){
+                goldCapacity += config.building['STO_1'][build.level].capacity;
+            }else if(build.name == 'STO_2'){
+                elixirCapacity += config.building['STO_2'][build.level].capacity;
+            }else if(build.name == 'STO_3'){
+                darkElixirCapacity += config.building['STO_3'][build.level].capacity;
+            }
+        }
+    }
+
+    for(var k in contructionList){
+        if(contructionList[k].name == 'TOW_1'){
+            currentLevelTownHall = contructionList[k].level;
+        }
+    }
+
+    cc.log('gv.user.maxCapacityGold: ' + goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold);
+    cc.log('gv.user.maxCapacityElixir: ' + elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir);
+    cc.log('gv.user.maxCapacityDarkElixir: ' + darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir);
+
+    gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
+    gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
+    gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
+}
+
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){

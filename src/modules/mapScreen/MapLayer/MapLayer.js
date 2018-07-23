@@ -876,7 +876,6 @@ var MapLayer = cc.Layer.extend({
             buildingInfo.startTime = 0;
             newBuilding.startTime = 0;
         }
-            
         contructionList.push(buildingInfo);
         
         if(buildingInfo.buildTime){
