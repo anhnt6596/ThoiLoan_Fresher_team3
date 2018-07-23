@@ -44,6 +44,9 @@ var createUpgradePopUp = function() {
         MAP._targetedObject && MAP._targetedObject.upgrade();
         upgradePopUp.close();
     });
+
+    var content = createUpgradePopUpContent();
+
 };
 
 var createNewRequireItem = function(type, value, num) {
@@ -77,4 +80,8 @@ var createNewRequireItem = function(type, value, num) {
             break;
     }
     return titleText;
+};
+
+var createUpgradePopUpContent = function() {
+    var content = new cc.Sprite();
 };

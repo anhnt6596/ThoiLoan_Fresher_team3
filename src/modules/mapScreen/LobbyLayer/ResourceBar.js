@@ -90,6 +90,7 @@ var ResourceBar = cc.Sprite.extend({
         switch (this.type) {
             case 'gold':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
+                cc.log('>>>>>>>>>>>>>dbnfdjsbgvjsdngj>', userInfo.maxCapacityGold);
                 textValue = formatNumber(userInfo.gold || 0);
                 ratio = userInfo.gold / userInfo.maxCapacityGold || 1;
                 break;
@@ -110,7 +111,7 @@ var ResourceBar = cc.Sprite.extend({
         if (ratio < 0) ratio = 0;
         this.valueBar.setTextureRect(cc.rect(this.valueBar.width * (1 - ratio), 0, this.valueBar.width, this.valueBar.height));
         this.valueBar.x = 0.5 + (1 - ratio) * this.valueBar.width;
-
+        
         this.maxText.setString(maxTextValue);
         this.valueText.setString(textValue);
     },

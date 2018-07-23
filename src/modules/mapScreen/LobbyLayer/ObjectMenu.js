@@ -24,7 +24,7 @@ var ObjectMenu = cc.Node.extend({
         this.addChild(upgradeBtn);
         upgradeBtn.addClickEventListener(this.upgrade.bind(this));
 
-        var cancelBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/cancel.png', 'Cancel');
+        var cancelBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/cancel_icon.png', 'Cancel');
         this._listBtn.push(cancelBtn);
         this.cancelBtn = cancelBtn;
         this.addChild(cancelBtn);

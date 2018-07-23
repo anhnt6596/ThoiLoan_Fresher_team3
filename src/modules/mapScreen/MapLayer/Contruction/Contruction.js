@@ -305,6 +305,8 @@ var Contruction = cc.Class.extend({
                 return;
             }
         }
+        setUserResourcesCapacity();
+        LOBBY.update();
     },
     upgrade: function() {
         this.setStatus('upgrade');

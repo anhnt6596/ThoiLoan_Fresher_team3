@@ -183,7 +183,7 @@ CmdSendAddResource = fr.OutPacket.extend({
         this.putInt(elixir);
         this.putInt(darkElixir);
         this.putInt(coin);
-        this.putInt();
+        this.updateSize();
     }
 });
 
