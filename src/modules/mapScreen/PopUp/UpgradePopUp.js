@@ -1,10 +1,4 @@
 var createUpgradePopUp = function() {
-    var titleText = new cc.LabelBMFont('Nâng cấp đi', 'res/Art/Fonts/soji_24.fnt');
-    titleText.attr({
-        x: 0,
-        y: 0,
-        scale: 1.5,
-    });
     var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
     acceptBtn.attr({
         x: 0,
@@ -12,7 +6,6 @@ var createUpgradePopUp = function() {
         scale: 1.5,
     });
     var content = [
-        titleText,
         acceptBtn,
     ];
     var req = {};
@@ -38,15 +31,24 @@ var createUpgradePopUp = function() {
         content.push(item);
         num += 1;
     }
+
+    var nextBuildingImg = showNextBuildingImg(MAP._targetedObject.info);
+    nextBuildingImg.attr({
+        x: -250,
+        y: 100,
+    });
+    content.push(nextBuildingImg);
+
+    // var nextBuildingInfo = showNextBuildingInfo(MAP._targetedObject.info);
+    // content.push(nextBuildingImg);
+
     var upgradePopUp = new ui.PopUp('Nâng cấp', content, acceptBtn);
+
     MAPSCENE.addChild(upgradePopUp, 1000);
     acceptBtn.addClickEventListener(() => {
         MAP._targetedObject && MAP._targetedObject.upgrade();
         upgradePopUp.close();
     });
-
-    var content = createUpgradePopUpContent();
-
 };
 
 var createNewRequireItem = function(type, value, num) {
@@ -82,6 +84,115 @@ var createNewRequireItem = function(type, value, num) {
     return titleText;
 };
 
-var createUpgradePopUpContent = function() {
+var showNextBuildingImg = function(info) {
+    var nextLevel = info.level + 1;
     var content = new cc.Sprite();
+    var grass = new cc.Sprite(res.map.grass[info.width]);
+    grass.attr({
+        scale: 2,
+    });
+    var buildingImg;
+    switch (info.name) {
+        case 'TOW_1':
+            buildingImg = new cc.Sprite(res.building.townhall[nextLevel]);
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'AMC_1':
+            buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
+            var buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2 + 3,
+                y: buildingImg.height / 2 + 38,
+            });
+            animSprite.runAction(buildingAnim.repeatForever());
+            break;
+        case 'BAR_1':
+            buildingImg = new cc.Sprite(res.building.barrack[nextLevel]);
+            if (nextLevel >= 4) {
+                var animsDir = nextLevel <= 8 ? 'BAR_1_' + nextLevel + '_effect_' : 'BAR_1_8_effect_';
+                var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
+                var animSprite = new cc.Sprite();
+                buildingImg.addChild(animSprite, 11);
+                animSprite.attr({
+                    x: buildingImg.width / 2,
+                    y: buildingImg.height / 2,
+                });
+                animSprite.runAction(buildingAnim.repeatForever());
+            }
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'RES_1':
+            buildingImg = new cc.Sprite(res.building.gold_mine[nextLevel]);
+
+            var goldmineAnim = ui.makeAnimation('RES_1_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2,
+                y: buildingImg.height / 2,
+            });
+            animSprite.runAction(goldmineAnim.repeatForever());
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'RES_2':
+            buildingImg = new cc.Sprite(res.building.elixir_collector[nextLevel]);
+
+            var elixirCollectorAnim = ui.makeAnimation('RES_2_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2,
+                y: buildingImg.height / 2,
+            });
+            animSprite.runAction(elixirCollectorAnim.repeatForever());
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'STO_1':
+            buildingImg = new cc.Sprite(res.building.gold_storage[nextLevel][3]);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'STO_2':
+            buildingImg = new cc.Sprite(res.building.elixir_storage[nextLevel][3]);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        default:
+            buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
+            break;
+    }
+    content.addChild(grass, 4);
+    content.addChild(buildingImg, 6);
+    content.setScale(4 / info.width);
+    return content;
+};
+
+var showNextBuildingInfo = function(info) {
+    
 };
