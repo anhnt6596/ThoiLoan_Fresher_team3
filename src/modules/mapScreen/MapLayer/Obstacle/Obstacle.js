@@ -35,9 +35,34 @@ var Obstacle = cc.Class.extend({
     onTarget: function() {
         this.objImg.runAction(ui.BounceEff());
         this.objImg.runAction(ui.targettingEff().repeatForever());
+        LOBBY.showObjectMenu(MAP._targetedObject);
     },
     removeTarget: function() {
         this.objImg.stopAllActions();
         this.objImg.runAction(ui.backToDefaultColor());
-    }
+        LOBBY.hideObjectMenu(MAP._targetedObject);
+    },
+    remove: function(obstacle) {
+        this.removeComplete();
+    },
+    removeComplete: function() {
+        var newObstacleList = obstacleLists.filter(element => {
+            if (element._id == this.info._id) return false;
+            return true;
+        });
+        obstacleLists = newObstacleList;
+        this.removeImg();
+        MAP.createLogicArray(contructionList, obstacleLists);
+    },
+    removeImg: function() {
+        this.removeTarget();
+        this.grass.attr({
+            x: -1000000,
+            y: -1000000,
+        });
+        this.objImg.attr({
+            x: -1000000,
+            y: -1000000,
+        });
+    },
 });

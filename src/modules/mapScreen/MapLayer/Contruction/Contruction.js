@@ -64,7 +64,7 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
-        LOBBY.showObjectMenu();
+        LOBBY.showObjectMenu(MAP._targetedObject);
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
@@ -183,7 +183,7 @@ var Contruction = cc.Class.extend({
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
         for (var i = 0; i < this.info.width; i++) {
             for (var j = 0; j < this.info.height; j++) {
-                if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== 0 && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
+                if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== -1 && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
                     return false;
                 }
             }
@@ -192,6 +192,7 @@ var Contruction = cc.Class.extend({
     },
     setStatus: function(status) {
         this._status = status;
+        LOBBY.showObjectMenu(MAP._targetedObject);
     },
     caluclateZOrder: function(mapPos) {
         var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10 + 1;
