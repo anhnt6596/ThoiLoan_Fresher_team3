@@ -87,7 +87,8 @@ var LobbyLayer = cc.Layer.extend({
             y: 0,
         });
     },
-    showObjectMenu: function(object = {}) {
+    showObjectMenu: function(object) {
+        this.objectMenu.setUpValidBtn(object);
         var showAct = cc.moveTo(0.2, cc.p(0, 0));
         var fadeInAct = cc.FadeIn(0.2);
         this.objectMenu.stopAllActions();
