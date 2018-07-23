@@ -785,6 +785,7 @@ var MapLayer = cc.Layer.extend({
                             //Show popup dung G de release 1 tho xay
                             _.extend(ReducedTempResources, buildingInfo.cost);
                             var listener = {type:'builder', building:buildingInfo, newBuilding:newBuilding, gBuilder:gBuilder};
+                            //var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
                             var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
                             cc.director.getRunningScene().addChild(popup, 2000000);
                         }

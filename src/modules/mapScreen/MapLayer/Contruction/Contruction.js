@@ -359,6 +359,7 @@ var Contruction = cc.Class.extend({
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{
                 //Show popup dung G de mua tai nguyen
+                this.cost = costBuilding;
                 var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
                 var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
@@ -372,20 +373,22 @@ var Contruction = cc.Class.extend({
     },
 
     upgradeComplete: function() {
-        cc.log("====================================================LEVEL sau khi upgrade: " + this.level);
+        NETWORK.sendFinishTimeConstruction(this._id);
         this.level += 1;
+        cc.log("====================================================LEVEL sau khi upgrade: " + this.level);
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;
         this.addBuildingImg();
-        this.levelText.setString('cấp ' + this.info.level);
+        this.levelText.setString('cấp ' + this.level);
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
+                contructionList[item].level += 1;
                 return;
             }
         }

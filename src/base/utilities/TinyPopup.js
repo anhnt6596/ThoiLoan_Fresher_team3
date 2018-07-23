@@ -160,7 +160,7 @@ var TinyPopup = cc.Node.extend({
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{
                     //Show popup dung G de release 1 tho xay
-                    var listener2 = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
+                    var listener2 = {type:'builderUpgrade', building:this._listener.building, gBuilder:gBuilder};
                     var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener2);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
@@ -178,13 +178,16 @@ var TinyPopup = cc.Node.extend({
             }
             for(var k in objectRefs){
                 if(objectRefs[k]._id == idBuildingWillComplete){
-                    objectRefs[k].buildComplete();
+                    if(objectRefs[k]._status == 'pending'){
+                        objectRefs[k].buildComplete();
+                    }else if(objectRefs[k]._status == 'upgrade'){
+                        objectRefs[k].upgradeComplete();
+                    }
                 }
             }
             MAP.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);            
         }
         else if(this._listener.type == 'builderUpgrade'){
-            cc.log("====================================================HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             ReducedTempResources.coin += this._listener.gBuilder;
             //Neu ok, Chuyen trang thai nha dc release sang 'complete'
             var idBuildingWillComplete = getIdBuildingMinRemainTime();
@@ -198,10 +201,8 @@ var TinyPopup = cc.Node.extend({
                     if(objectRefs[k]._status == 'pending'){
                         objectRefs[k].buildComplete();
                     }else if(objectRefs[k]._status == 'upgrade'){
-
                         objectRefs[k].upgradeComplete();
                     }
-
                 }
             }
             NETWORK.sendRequestUpgradeConstruction(this._listener.building, ReducedTempResources);
