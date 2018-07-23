@@ -28,6 +28,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(cancelBtn);
         this.cancelBtn = cancelBtn;
         this.addChild(cancelBtn);
+        cancelBtn.addClickEventListener(this.cancel.bind(this));
 
         var quickFinishBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/quick_finish.png', 'Quick\nFinish');
         this._listBtn.push(quickFinishBtn);
@@ -46,6 +47,9 @@ var ObjectMenu = cc.Node.extend({
     },
     remove: function() {
         MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
+    },
+    cancel: function() {
+        MAP._targetedObject && createCancelPopUp();
     },
     setUpValidBtn: function(object) {
         this.hideAll();
