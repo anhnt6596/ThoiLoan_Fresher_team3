@@ -45,7 +45,7 @@ var checkUserResources = function(costBuilding){
         g += darkElixirToG(costBuilding.darkElixir - gv.user.darkElixir);
     }
     if(gv.user.coin < costBuilding.coin){
-        g += costBuilding.coin - gv.user.coin;
+        g = gv.user.coin - costBuilding.coin;          //Khong du g de mua building ma can g <=> g < 0
     }
     return g;
 };
@@ -57,51 +57,119 @@ var getGToReleaseBuilder = function(){
     var minTimeRemain = Infinity;
     for(var k in contructionList){
         if(contructionList[k].status == "pending") {
-            //var timeRemain = contructionList[k].buildTime - (timeHienTai - contructionList[k].StartTime;
-            //if(timeRemain < min){
-            //  min = timeRemain;
-            //}
+            var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+            }
         }
     }
-
-    return timeToG(minTimeRemain);
+    if(minTimeRemain == Infinity){
+        return 0;
+    }else{
+        return timeToG(minTimeRemain/1000);
+    }
 };
 
+//Tra ve id cua nha ma co thoi gian con lai la it nhat
+var getIdBuildingMinRemainTime = function(){
+    var minTimeRemain = Infinity;
+    var id = null;
+    for(var k in contructionList){
+        if(contructionList[k].status == "pending") {
+            var timeRemain = contructionList[k].buildTime * 1000 - (getCurrentServerTime() - contructionList[k].startTime);
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+                id = contructionList[k]._id;
+            }
+        }
+    }
+    return id;
+}
 
 
 
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
-    gv.user.gold -= costBuilding.gold;
-    gv.user.elixir -= costBuilding.elixir;
-    gv.user.darkElixir -= costBuilding.darkElixir;
-    gv.user.coin -= costBuilding.coin;
+    if(gv.user.gold >= costBuilding.gold){
+        gv.user.gold -= costBuilding.gold;
+    }
+    if(gv.user.elixir >= costBuilding.elixir){
+        gv.user.elixir -= costBuilding.elixir;
+    }
+    if(gv.user.darkElixir >= costBuilding.darkElixir){
+        gv.user.darkElixir -= costBuilding.darkElixir;
+    }
+    if(gv.user.coin >= costBuilding.coin){
+        gv.user.coin -= costBuilding.coin;
+    }
+
     LOBBY.update(gv.user);
 };
 
 
+//Tang tai nguyen cua user
+var increaseUserResources = function(resources){
+    gv.user.gold += resources.gold;
+    gv.user.elixir += resources.elixir;
+    gv.user.darkElixir += resources.darkElixir;
+    gv.user.coin += resources.coin;
+
+    LOBBY.update(gv.user);
+};
+
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
-
+    return Math.floor(gold);
 };
 var elixirToG = function(elixir){
-
+    return Math.floor(elixir);
 };
 var darkElixirToG = function(darkElixir){
-
+    return Math.floor(darkElixir);
 };
 
 
-//Quy doi thoi gian sang G
+//Quy doi thoi gian (s) sang G
 var timeToG = function(time){
-
+    return Math.ceil(time/60);
 };
 
 
 //Format Number
 var formatNumber = function(number){
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 var doNothing = function() {};
+
+var randomInt = function(start, end) {
+    return Math.floor(Math.random() * (end - start + 1)) + start;
+};
+
+//ms
+var getCurrentClientTime = function(){
+    var date = new Date();
+    return date.getTime();
+};
+
+//ms
+var getCurrentServerTime = function(){
+    return getCurrentClientTime() - DeltaTime;
+};
+
+var timeToString = function(second) {
+    return second + 's';
+};
+
+//time: ms
+var timeToReadable = function(time){
+    var day = Math.floor(time/86400000);
+    var hour = Math.floor((time - 86400000*day)/3600000);
+    var minute = Math.floor((time - 86400000*day - 3600000*hour)/60000);
+    var second = Math.floor((time - 86400000*day - 3600000*hour - 60000*minute)/60000);
+    var milli = time - 86400000*day - 3600000*hour - 60000*minute - 60000*second;
+    var t = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'') + (milli ? (milli + 'ms'):'');
+    t = t ? t : '0ms';
+    return t;
+};

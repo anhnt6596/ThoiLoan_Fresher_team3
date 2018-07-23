@@ -105,7 +105,6 @@ var ShopScreen = Popup.extend({
         this._catalogy.retain();
     },
 
-
     onEnter:function(){
         cc.log("-----------onEnter ShopScreen-----------");
         this._super();
