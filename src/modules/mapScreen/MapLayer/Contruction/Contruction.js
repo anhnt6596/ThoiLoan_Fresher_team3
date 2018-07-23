@@ -278,7 +278,14 @@ var Contruction = cc.Class.extend({
     build: function(cur, max) {
         this.setStatus('pending');
         this.addTimeBar(cur, max);
-        fakeBuildTimeFunction(this, cur, max);
+        //fakeBuildTimeFunction(this, cur, max);
+        this.countDown(cur, max);
+    },
+    updateCountdown:function(cur, max){
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+
+        this.build(cur, max);
     },
     buildComplete: function() {
         this.buildingImg && MAP.removeChild(this.buildingImg);
@@ -386,6 +393,28 @@ var Contruction = cc.Class.extend({
     },
     addBuildingImg: function() {
         // để rỗng
+    },
+    countDown: function(cur, max){
+        var tick = () => {
+            setTimeout(() => {
+                //if(updateTimeFlag){
+                //    cc.log("--------------------------------------------------------updateTimeFlag == true");
+                //    cur = (getCurrentServerTime() - this.startTime)/1000;
+                //    updateTimeFlag = false;
+                //}
+                cur = (getCurrentServerTime() - this.startTime)/1000;
+                if (cur >= max) {
+                    this.buildComplete();
+                    return;
+                } else {
+                    this.updateTimeBar(cur, max);
+                    tick();
+                }
+                cur +=1;
+            }, 1000);
+        }
+        //Chay 1 lan
+        tick();
     }
 });
 
@@ -422,5 +451,6 @@ var fakeBuildTimeFunction = function(sender, cur, max) {
             cur +=1;
         }, 1000);
     }
+    //Chay 1 lan
     tick();
 }

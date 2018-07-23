@@ -155,7 +155,7 @@ var getCurrentClientTime = function(){
 
 //ms
 var getCurrentServerTime = function(){
-    return getCurrentClientTime() - DeltaTime;
+    return getCurrentClientTime() - DeltaTime - BONUS_TIME;
 };
 
 var timeToString = function(second) {

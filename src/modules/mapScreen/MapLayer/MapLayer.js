@@ -3,6 +3,7 @@ var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 
 var DeltaTime = 0;                  //Client - Server
+var BONUS_TIME = 2;
 var updateTimeFlag = false;         //cu 10s thi co nay = true
 
 var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};

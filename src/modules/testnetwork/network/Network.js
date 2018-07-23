@@ -74,8 +74,9 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_SERVER_TIME:
                 requestedServerTime++;
                 DeltaTime = getCurrentClientTime() - packet.currentServerTime;
-                updateTimeFlag = true;
+                //updateTimeFlag = true;
                 cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
+                break;
         }
     },
     sendGetUserInfo:function()
