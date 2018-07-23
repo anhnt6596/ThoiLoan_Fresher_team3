@@ -773,7 +773,7 @@ var MapLayer = cc.Layer.extend({
                 if(gResources == 0){
                     //Kiem tra tho xay ranh khong
                     if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
-                       //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' va co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                       //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' hoac 'upgrade' ma co [buildTime - (timeHienTai - StartTime)] la nho nhat
                         var gBuilder = getGToReleaseBuilder();
                         if(gv.user.coin < gBuilder){
                             //Show popup khong du G va thoat
@@ -790,7 +790,7 @@ var MapLayer = cc.Layer.extend({
                         }
                     }else{
                         _.extend(ReducedTempResources, buildingInfo.cost);
-                        this.sendRequestAddConstruction(newBuilding, buildingInfo, buildingInfo.cost);                      
+                        this.sendRequestAddConstruction(newBuilding, buildingInfo, buildingInfo.cost);
                     }
                 } else if(gResources > 0){
                     if(gv.user.coin < gResources){

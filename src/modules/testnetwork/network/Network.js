@@ -66,9 +66,15 @@ testnetwork.Connector = cc.Class.extend({
                     increaseUserResources(LastReduceResources);
 
                     //Cap nhat lai map
-                    
 
                     cc.log("SERVER TU CHOI XAY và CLIENT da CAP NHAT lai nha CHUA duoc xay");
+                }
+                break;
+            case gv.CMD.UPGRADE_CONSTRUCTION:
+                if (packet.validate) {
+                    cc.log("XAC NHAN UPGRADE tu SERVER");
+                }else {
+                    cc.log("SERVER TU CHOI UPGRADE");
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
@@ -77,6 +83,7 @@ testnetwork.Connector = cc.Class.extend({
                 //updateTimeFlag = true;
                 cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
                 break;
+
         }
     },
     sendGetUserInfo:function()
@@ -122,6 +129,45 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("sendAddConstruction" +type+" "+x+ " "+y);
         var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
         pk.pack(type, x, y);
+        this.gameClient.sendPacket(pk);
+    },
+    sendUpgradeConstruction:function(id){
+        cc.log("sendUpgradeConstruction" +id);
+        var pk = this.gameClient.getOutPacket(CmdSendUpgradeConstruction);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+    },
+    sendRequestUpgradeConstruction:function(building, reducedUserResources){
+        NETWORK.sendUpgradeConstruction(building._id);
+        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
+        reduceUserResources(reducedUserResources);
+        MAP.logReducedUserResources();
+        _.extend(LastReduceResources, reducedUserResources);
+        MAP.resetReducedTempResources();
+
+
+        building.setStatus('upgrade');
+        building.startTime = getCurrentServerTime();
+        var cur = (getCurrentServerTime() - building.startTime)/1000;
+        var max = config.building[building.name][building.level+1].buildTime;
+        building.addTimeBar(cur, max);
+        building.countDown(cur, max);
+        building.buildTime = max;
+        //cc.log(building.buildTime);
+        for(var item in contructionList){
+            if(contructionList[item]._id == building._id){
+                contructionList[item].status = 'upgrade';
+                contructionList[item].startTime = building.startTime;
+                contructionList[item].buildTime = max;
+                return;
+            }
+        }
+    },
+    //Finish build or Finish upgrade
+    sendFinishTimeConstruction:function(id){
+        cc.log("sendTimeFinishConstruction: " +id);
+        var pk = this.gameClient.getOutPacket(CmdSendFinishTimeConstruction);
+        pk.pack(id);
         this.gameClient.sendPacket(pk);
     },
     sendGetServerTime:function(){

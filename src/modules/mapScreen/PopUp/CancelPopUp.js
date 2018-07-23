@@ -23,26 +23,19 @@ var createCancelPopUp = function() {
         req.darkElixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].darkElixir || 0;
     };
     var num = 0;
-    if (req.goldReq > 0) {
-        var item = createNewRequireItem('gold', req.goldReq, num);
-        content.push(item);
-        num += 1;
-    }
-    if (req.elixirReq > 0) {
-        var item = createNewRequireItem('elixir', req.elixirReq, num);
-        content.push(item);
-        num += 1;
-    }
-    if (req.darkElixirReq > 0) {
-        var item = createNewRequireItem('dark_elixir', req.darkElixirReq, num);
-        content.push(item);
-        num += 1;
-    }
-    var upgradePopUp = new ui.PopUp('Cancel', content, acceptBtn);
-    MAPSCENE.addChild(upgradePopUp, 1000);
+    titleText = new cc.LabelBMFont('Confirm', 'res/Art/Fonts/soji_20.fnt');
+    titleText.attr({
+        x: 0,
+        y: -230 - num * 30,
+        scale: 1.5,
+    });
+    content.push(titleText);
+    num += 1;
+    var cancelPopUp = new ui.PopUp('Cancel', content, acceptBtn);
+    MAPSCENE.addChild(cancelPopUp, 1000);
     acceptBtn.addClickEventListener(() => {
-        MAP._targetedObject && MAP._targetedObject.upgrade();
-        upgradePopUp.close();
+        MAP._targetedObject && MAP._targetedObject.cancel();
+        cancelPopUp.close();
     });
 };
 

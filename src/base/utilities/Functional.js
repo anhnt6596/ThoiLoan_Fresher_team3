@@ -2,7 +2,7 @@
 var checkPendingBuilding = function(){
     var pendingBuilding = 0;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending"){                 //co the de bang "building" va "upgrading"
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade"){                 //co the de bang "building" va "upgrading"
             pendingBuilding++;
         }
     }
@@ -56,7 +56,7 @@ var checkUserResources = function(costBuilding){
 var getGToReleaseBuilder = function(){
     var minTimeRemain = Infinity;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending") {
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
             var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
@@ -75,7 +75,7 @@ var getIdBuildingMinRemainTime = function(){
     var minTimeRemain = Infinity;
     var id = null;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending") {
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
             var timeRemain = contructionList[k].buildTime * 1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;

@@ -5,7 +5,10 @@ var Contruction = cc.Class.extend({
         this.info = info;
         this._status = this.info.status;
         this.buildTime = info.buildTime;
+        this.startTime = info.startTime;
         this._id = info._id;
+        this.name = info.name;
+        this.level = info.level;
         this.init();
     },
     init: function() {
@@ -21,11 +24,15 @@ var Contruction = cc.Class.extend({
         this.presentImg(); // chỉ có ở nhà chứa
     },
     setBuildingStatus: function() {
-        if (this._status === 'upgrade') {
-            var cur = 0;
-            var max = 10;
-            this.addTimeBar(cur, max);
-            fakeTimeFunction(this, cur, max);
+        if (this._status === 'upgrade' || this._status === 'pending' && this.startTime) {
+            var cur = (getCurrentServerTime() - this.startTime)/1000;
+            cc.log("============================start time: " +this.startTime);
+            var max = this.buildTime;
+            if(!this.timeBar){
+                this.addTimeBar(cur, max);
+                this.countDown(cur, max);
+            }
+
         };
     },
     onTarget: function() {
@@ -274,21 +281,17 @@ var Contruction = cc.Class.extend({
         this.removeTarget();
         MAP.removeChild(this.buildingImg);
         MAP.removeChild(this.grass);
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
         this.shadow && MAP.removeChild(this.shadow);
     },
     build: function(cur, max) {
         this.setStatus('pending');
         this.addTimeBar(cur, max);
-        //fakeBuildTimeFunction(this, cur, max);
         this.countDown(cur, max);
     },
-    updateCountdown:function(cur, max){
-        this.timeBar && MAP.removeChild(this.timeBar);
-        this.timeBar = null;
-
-        this.build(cur, max);
-    },
     buildComplete: function() {
+        NETWORK.sendFinishTimeConstruction(this._id);
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
@@ -301,22 +304,76 @@ var Contruction = cc.Class.extend({
         cc.log("================================> _id: " + this._id);
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
-                contructionList[item].status = 'complete';  
+                contructionList[item].status = 'complete';
                 return;
             }
         }
         setUserResourcesCapacity();
-        LOBBY.update();
+        LOBBY.update(gv.user);
     },
     upgrade: function() {
-        this.setStatus('upgrade');
-        var cur = 0;
-        var max = 10;
-        this.addTimeBar(cur, max);
-        fakeTimeFunction(this, cur, max);
+        //Check du tai nguyen upgrade hay k
+        //var gold = config.building[this.name][this.level+1].gold || 0;
+        //var elixir = config.building[this.name][this.level+1].elixir || 0;
+        //var darkElixir = config.building[this.name][this.level+1].darkElixir || 0;
+        //var coin = config.building[this.name][this.level+1].coin || 0;
+
+        var gold = config.building[this.name][this.level+1].gold ? config.building[this.name][this.level+1].gold : 0;
+        var elixir = config.building[this.name][this.level+1].elixir ? config.building[this.name][this.level+1].elixir : 0;
+        var darkElixir = config.building[this.name][this.level+1].darkElixir ? config.building[this.name][this.level+1].darkElixir : 0;
+        var coin = config.building[this.name][this.level+1].coin ? config.building[this.name][this.level+1].coin : 0;
+
+        var costBuilding = { gold: gold, elixir: elixir, darkElixir: darkElixir, coin: coin };
+
+
+        var gResources = checkUserResources(costBuilding);
+        if(gResources == 0){
+            //Kiem tra tho xay ranh khong
+            if(!checkIsFreeBuilder()){
+                //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' hoac 'upgrade' ma co [buildTime - (timeHienTai - StartTime)] la nho nhat
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    //Show popup khong du G va thoat
+                    cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
+                    var listener = {contentBuyG:"Please add more G to release a builder!"};
+                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "All builders are busy", null, true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }else{
+                    //Show popup dung G de release 1 tho xay
+                    _.extend(ReducedTempResources, costBuilding);
+                    var listener = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
+                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            }else{
+                _.extend(ReducedTempResources, costBuilding);
+                NETWORK.sendRequestUpgradeConstruction(this, costBuilding);
+            }
+        } else if(gResources > 0){
+            if(gv.user.coin < gResources){
+                //Show popup khong du G va thoat
+                cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
+                var listener = {contentBuyG:"Please add more G to buy missing resources!"};
+                // listener.contentBuyG = "Please add more G to buy missing resources!";
+                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }else{
+                //Show popup dung G de mua tai nguyen
+                var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
+                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        } else {
+            cc.log('KHONG du G ===> KHONG xay duoc nha');
+            var listener = {contentBuyG:"Please add more G to buy this item!"};
+            var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough G to build this building", null, true, listener);
+            cc.director.getRunningScene().addChild(popup, 2000000);
+        }
     },
+
     upgradeComplete: function() {
-        this.info.level = this.info.level + 1;
+        cc.log("====================================================LEVEL sau khi upgrade: " + this.level);
+        this.level += 1;
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
@@ -326,7 +383,58 @@ var Contruction = cc.Class.extend({
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
+        for(var item in contructionList){
+            if(contructionList[item]._id == this._id){
+                contructionList[item].status = 'complete';
+                return;
+            }
+        }
     },
+    cancel: function(){
+        if (this._status == 'upgrade') this.cancelUpgrade();
+        else if (this._status == 'pending') this.cancelBuild();
+    },
+    cancelUpgrade: function() {
+        //cc.log('cancel upgrade');
+
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.upgradeBarrier && this.buildingImg.removeChild(this.upgradeBarrier);
+        this.timeBar = null;
+        this.setStatus('complete');
+
+        //setUserResourcesCapacity();
+        //LOBBY.update(gv.user);
+    },
+    cancelBuild: function() {
+        cc.log('cancel build');
+
+        var newContructionList = contructionList.filter(element => {
+            if (element._id === this._id) return false;
+            return true;
+        });
+
+        contructionList = newContructionList;
+        MAP.createLogicArray(contructionList, obstacleLists);
+
+        MAP._targetedObject = null;
+        this.remove();
+
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
+    },
+    removeComplete:function(){
+        var newContructionList = contructionList.filter(element => {
+                if (element._id == this._id) return false;
+                return true;
+            });
+        contructionList = newContructionList;
+        this.removeImg();
+        MAP.createLogicArray(contructionList, obstacleLists);
+    },
+    removeImg:function(){
+
+    },
+
     addBuildingImg: function() {
         //
     },
@@ -411,7 +519,9 @@ var Contruction = cc.Class.extend({
                     return;
                 } else {
                     this.updateTimeBar(cur, max);
-                    tick();
+                    if(this._status == 'pending' || this._status == 'upgrade'){
+                        tick();
+                    }
                 }
                 cur +=1;
             }, 1000);
