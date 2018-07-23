@@ -21,7 +21,7 @@ var Contruction = cc.Class.extend({
         this.presentImg(); // chỉ có ở nhà chứa
     },
     setBuildingStatus: function() {
-        if (this._status === 'upgrade') {
+        if (this._status === 'upgrade' || this._status === 'pending') {
             var cur = 0;
             var max = 10;
             this.addTimeBar(cur, max);
