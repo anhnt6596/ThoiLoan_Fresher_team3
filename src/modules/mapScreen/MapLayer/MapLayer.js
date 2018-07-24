@@ -199,7 +199,7 @@ var contructionList = [
 //     },
 ];
 
-var obstacleLists = [
+var obstacleLists1 = [
     {
         _id: '5000',
         name: 'OBS_1',

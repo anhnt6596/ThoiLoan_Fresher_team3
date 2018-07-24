@@ -250,6 +250,7 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
 );
 
 var contructionList = contructionList || [];
+var obstacleLists = obstacleLists || [];
 
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
@@ -257,6 +258,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         {
             this._super();
             contructionList = [];
+            obstacleLists = [];
         },
         readData:function(){
             this.n = this.getInt();
@@ -292,7 +294,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 }
 
             }
-           //console.log(contructionList);
+            //console.log(contructionList);
             this.n_obs = this.getInt();
             //cc.log("size"+ this.n_obs);
             console.log("Co tat ca "+this.n_obs+" obs");
@@ -307,6 +309,15 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 //cc.log(", posY: " + this.posYObs);
 
                 console.log("/n");
+                var obstacle = {
+                    _id: this.idObs,
+                    name: this.typeObs,
+                    posX: this.posXObs,
+                    posY: this.posYObs,
+                    width: config.obtacle[this.typeObs][1].width,
+                    height: config.obtacle[this.typeObs][1].height,
+                }
+                obstacleLists.push(obstacle);
             }
 
         }
