@@ -860,6 +860,8 @@ var MapLayer = cc.Layer.extend({
         MAP.createLogicArray(contructionList, {});
         cc.log('Nha moi da duoc push TAM vao MAP');
 
+        updateBuilderNumber();
+
         LOBBY.showLobby();
         this.cancelBtn.addClickEventListener(doNothing);
         this.acceptBtn.addClickEventListener(doNothing);
