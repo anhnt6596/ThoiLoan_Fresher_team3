@@ -526,3 +526,5 @@ var Z = {
     ARROW_MOVE: 999,
     TARGET: 1000, 
 }
+
+var SOUND = true;

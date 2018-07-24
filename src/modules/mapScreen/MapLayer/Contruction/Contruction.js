@@ -71,6 +71,7 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
+        this.onTargetSound();
         LOBBY.showObjectMenu(MAP._targetedObject);
     },
     removeTarget: function() {
@@ -167,6 +168,7 @@ var Contruction = cc.Class.extend({
         if (this.tempX !== this.info.posX && this.tempX !== this.info.posY) {
             var eff = ui.landingEffect();
             this.buildingImg.runAction(eff);
+            this.onPlaceSound();
         }
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
@@ -523,5 +525,57 @@ var Contruction = cc.Class.extend({
         }
         //Chay 1 lan
         tick();
-    }
+    },
+    onTargetSound: function() {
+        if (SOUND) {
+            switch (this.info.name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_pickup);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_pickup);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_pickup);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_pickup);
+                    break;
+                default:
+                    break;
+            }
+        }
+    },
+    onPlaceSound: function() {
+        if (SOUND) {
+            switch (this.info.name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_place);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_place);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_place);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_place);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_place);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_place);
+                    break;
+                default:
+                    break;
+            }
+        }
+    },
 });
