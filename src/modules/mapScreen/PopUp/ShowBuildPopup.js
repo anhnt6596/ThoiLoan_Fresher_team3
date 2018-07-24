@@ -41,7 +41,6 @@ var ShowBuildPopup = TinyPopup.extend({
         }else if(this._listener.type == 'builder'){
             ReducedTempResources.coin += this._listener.gBuilder;
             //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-            var idBuildingWillComplete = getIdBuildingMinRemainTime();
             finishSmallestRemainingTimeBuilding();
             NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);
         }

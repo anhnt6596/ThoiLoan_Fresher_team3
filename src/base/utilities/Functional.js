@@ -190,8 +190,12 @@ var setUserResourcesCapacity = function(){
 };
 
 var updateBuilderNumber = function(){
-    gv.user.builderNumber = checkBuilder();
-    gv.user.freeBuilderNumber = gv.user.builderNumber - checkPendingBuilding();
+    gv.user.allBuilder = checkBuilder();
+    var a = checkPendingBuilding();
+    gv.user.freeBuilder = gv.user.allBuilder - a;
+    cc.log("========================================== All Builder: " + gv.user.allBuilder);
+    cc.log("========================================== Busy Builder: " + a);
+    cc.log("========================================== Free Builder: " + gv.user.freeBuilder);
 };
 
 

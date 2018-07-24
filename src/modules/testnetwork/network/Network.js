@@ -108,6 +108,7 @@ testnetwork.Connector = cc.Class.extend({
     },
     setUserInfomation:function(packet){
         DeltaTime = getCurrentClientTime() - packet.serverTime;
+        cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
         gv.user.id = packet.id;
         gv.user.name = packet.name;
         gv.user.exp = packet.exp;
@@ -115,10 +116,10 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
-        gv.user.builderNumber = packet.builderNumber;
-        gv.user.freeBuilderNumber = gv.user.builderNumber - checkPendingBuilding();
-        cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
-
+        gv.user.allBuilder = packet.builderNumber;
+        gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
+        cc.log("========================================== All Builder: " + gv.user.allBuilder);
+        cc.log("========================================== Free Builder: " + gv.user.freeBuilder);
     },
     sendMoveConstruction:function(id,x,y) {
         cc.log("sendMoveConstruction" +id+" "+x+ " "+y);
@@ -139,6 +140,7 @@ testnetwork.Connector = cc.Class.extend({
         logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
         resetReducedTempResources();
+        //updateBuilderNumber();
         MAP.updateMapWhenValidatedBuild(newBuilding, building);
     },
     sendUpgradeConstruction:function(id){
@@ -154,6 +156,7 @@ testnetwork.Connector = cc.Class.extend({
         logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
         resetReducedTempResources();
+        //updateBuilderNumber();
 
 
         building.setStatus('upgrade');
@@ -163,15 +166,20 @@ testnetwork.Connector = cc.Class.extend({
         building.addTimeBar(cur, max);
         building.countDown(cur, max);
         building.buildTime = max;
-        //cc.log(building.buildTime);
+
+
         for(var item in contructionList){
             if(contructionList[item]._id == building._id){
                 contructionList[item].status = 'upgrade';
                 contructionList[item].startTime = building.startTime;
                 contructionList[item].buildTime = max;
-                return;
+                break;
             }
         }
+
+        updateBuilderNumber();
+        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION ===========    DUY ==========================");
+
     },
     //Finish build or Finish upgrade
     sendFinishTimeConstruction:function(id){
