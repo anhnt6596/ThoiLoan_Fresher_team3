@@ -34,7 +34,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(quickFinishBtn);
         this.quickFinishBtn = quickFinishBtn;
         this.addChild(quickFinishBtn);
-        //quickFinishBtn.addClickEventListener();
+        quickFinishBtn.addClickEventListener(this.quickFinish.bind(this));
 
         var removeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/remove_icon.png', 'Remove');
         this._listBtn.push(removeBtn);
@@ -50,7 +50,13 @@ var ObjectMenu = cc.Node.extend({
         MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
     },
     cancel: function() {
+        //Neu MAP._targetedObject != undefine, null, 0 thi ve phai moi chay
         MAP._targetedObject && createCancelPopUp();
+    },
+    quickFinish: function(){
+        if(!MAP._targetedObject){
+            //Tao popup quick finish
+        }
     },
     setUpValidBtn: function(object) {
         this.hideAll();
