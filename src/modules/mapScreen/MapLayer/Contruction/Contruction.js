@@ -3,7 +3,7 @@ var Contruction = cc.Class.extend({
     ctor: function(info) {
         // this._super();
         this.info = info;
-        this._status = this.info.status;
+        this._status = info.status;
         this.buildTime = info.buildTime;
         this.startTime = info.startTime;
         this._id = info._id;
@@ -375,6 +375,7 @@ var Contruction = cc.Class.extend({
     upgradeComplete: function() {
         NETWORK.sendFinishTimeConstruction(this._id);
         this.level += 1;
+        this.info.level = this.info.level + 1;
         cc.log("====================================================LEVEL sau khi upgrade: " + this.level);
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;

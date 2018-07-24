@@ -38,36 +38,3 @@ var createCancelPopUp = function() {
         cancelPopUp.close();
     });
 };
-
-var createNewRequireItem = function(type, value, num) {
-    var titleText;
-    switch (type) {
-        case 'gold':
-            titleText = new cc.LabelBMFont('Vàng: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
-            break;
-        case 'elixir':
-            titleText = new cc.LabelBMFont('Dầu: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
-            break;
-        case 'dark_elixir':
-            titleText = new cc.LabelBMFont('Dầu đen: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
-            break;
-        default:
-            break;
-    }
-    return titleText;
-};
