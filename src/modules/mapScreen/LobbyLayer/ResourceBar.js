@@ -92,17 +92,17 @@ var ResourceBar = cc.Sprite.extend({
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
                 cc.log('>>>>>>>>>>>>>dbnfdjsbgvjsdngj>', userInfo.maxCapacityGold);
                 textValue = formatNumber(userInfo.gold || 0);
-                ratio = userInfo.gold / userInfo.maxCapacityGold || 1;
+                ratio = userInfo.gold / userInfo.maxCapacityGold || 0;
                 break;
             case 'elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityElixir || 0);
                 textValue = formatNumber(userInfo.elixir || 0);
-                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 1;
+                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 0;
                 break;
             case 'dark_elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityDarkElixir || 0);
                 textValue = formatNumber(userInfo.darkElixir || 0);
-                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 1;
+                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 0;
                 break;
             default:
                 break;
