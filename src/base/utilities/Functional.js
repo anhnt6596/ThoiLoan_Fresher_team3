@@ -187,7 +187,12 @@ var setUserResourcesCapacity = function(){
     gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
     gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
     gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
-}
+};
+
+var updateBuilderNumber = function(){
+    gv.user.builderNumber = checkBuilder();
+    gv.user.freeBuilderNumber = gv.user.builderNumber - checkPendingBuilding();
+};
 
 
 //Quy doi tai nguyen sang G

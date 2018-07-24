@@ -107,6 +107,7 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
     },
     setUserInfomation:function(packet){
+        DeltaTime = getCurrentClientTime() - packet.serverTime;
         gv.user.id = packet.id;
         gv.user.name = packet.name;
         gv.user.exp = packet.exp;
@@ -115,7 +116,7 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
         gv.user.builderNumber = packet.builderNumber;
-        DeltaTime = getCurrentClientTime() - packet.serverTime;
+        gv.user.freeBuilderNumber = gv.user.builderNumber - checkPendingBuilding();
         cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
 
     },

@@ -11,9 +11,9 @@ var ShopCatalogyScreen = Popup.extend({
     _user:null,
     _mapLogic:[],
 
-    ctor:function (width, height, x, y, text, data, bool) {
+    ctor:function (width, height, text, data, bool) {
         cc.log("-----------Ctor ShopCatalogyScreen-----------");
-        this._super(width, height, x, y, text, data, bool);
+        this._super(width, height, text, data, bool);
         this.init(text);
     },
 
@@ -331,9 +331,8 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var popup = new TinyPopup(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, null, true, null);
+        var popup = new ShopItemInfo(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, true, null);
         cc.director.getRunningScene().addChild(popup, 200);
-
     },
 
     createInfoUserResource:function(gold, elixir, darkElixir, coin){
@@ -432,10 +431,3 @@ var ShopCatalogyScreen = Popup.extend({
         cc.director.popScene();
     }
 });
-
-ShopCatalogyScreen.scene = function (catalogyName) {
-    var scene = new cc.Scene();
-    var layer = new ShopCatalogyScreen(catalogyName);
-    scene.addChild(layer);
-    return scene;
-};

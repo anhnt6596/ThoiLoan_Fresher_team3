@@ -58,7 +58,7 @@ var LobbyLayer = cc.Layer.extend({
     },
     onOpenShop: function(){
         // fr.view(ShopScreen);
-        var shopScreen = new ShopScreen(cc.winSize.width, cc.winSize.height, 0, 0, "SHOP", null, true);
+        var shopScreen = new ShopScreen(cc.winSize.width, cc.winSize.height, "SHOP", null, true);
         var shopScene = new cc.Scene();
         shopScene.addChild(shopScreen);
         cc.director.pushScene(shopScene);

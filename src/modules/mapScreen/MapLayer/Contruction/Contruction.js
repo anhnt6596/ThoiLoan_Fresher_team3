@@ -277,14 +277,7 @@ var Contruction = cc.Class.extend({
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
         return { x: newX, y: newY };
     },
-    remove: function() {
-        this.removeTarget();
-        MAP.removeChild(this.buildingImg);
-        MAP.removeChild(this.grass);
-        this.timeBar && MAP.removeChild(this.timeBar);
-        this.timeBar = null;
-        this.shadow && MAP.removeChild(this.shadow);
-    },
+
     build: function(cur, max) {
         this.setStatus('pending');
         this.addTimeBar(cur, max);
@@ -308,6 +301,7 @@ var Contruction = cc.Class.extend({
                 break;
             }
         }
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
@@ -319,12 +313,12 @@ var Contruction = cc.Class.extend({
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
                     var listener = {contentBuyG:"Please add more G to release a builder!"};
-                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "All builders are busy", null, true, listener);
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{
                     _.extend(ReducedTempResources, costBuilding);
                     var listener = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
-                    var popup = new ShowUpgradePopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
+                    var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
@@ -334,17 +328,17 @@ var Contruction = cc.Class.extend({
         } else if(gResources > 0){
             if(gv.user.coin < gResources){
                 var listener = {contentBuyG:"Please add more G to buy missing resources!"};
-                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
+                var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{
                 this.cost = costBuilding;
                 var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
-                var popup = new ShowUpgradePopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
+                var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
         } else {
             var listener = {contentBuyG:"Please add more G to buy this item!"};
-            var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough G to build this building", null, true, listener);
+            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
             cc.director.getRunningScene().addChild(popup, 2000000);
         }
     },
@@ -370,6 +364,7 @@ var Contruction = cc.Class.extend({
             }
         }
 
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
@@ -385,6 +380,7 @@ var Contruction = cc.Class.extend({
         this.timeBar = null;
         this.setStatus('complete');
 
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
@@ -402,8 +398,18 @@ var Contruction = cc.Class.extend({
         MAP._targetedObject = null;
         this.remove();
 
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
+    },
+    remove:function() {
+        this.removeTarget();
+        MAP.removeChild(this.buildingImg);
+        MAP.removeChild(this.grass);
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+        this.shadow && MAP.removeChild(this.shadow);
+        this.setStatus('delete');
     },
     removeComplete:function(){
         var newContructionList = contructionList.filter(element => {

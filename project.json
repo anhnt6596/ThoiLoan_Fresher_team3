@@ -48,7 +48,6 @@
         "src/modules/testnetwork/network/Packet.js",
         "src/modules/testnetwork/ScreenNetwork.js",
         "src/modules/test/ScreenTest.js",
-        "src/modules/test/DuyTest.js",
         "src/modules/loading/LoadingScreen.js",
         "src/modules/login/LoginScreen.js",
         "src/modules/mapScreen/MapScreen.js",
@@ -80,6 +79,7 @@
         "src/modules/mapScreen/PopUp/ShowUpgradePopUp.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js",
+        "src/modules/shop/ShopItemInfo.js",
         "src/modules/shop/Suggest.js"
     ]
 }

@@ -5,12 +5,15 @@ var TinyPopup = cc.Node.extend({
     //type = true (X)
     //type = false (X + functinal Btn)
     //listener la 1 obj: listener.type = "resource" || "builder"; listener.building = building
-    ctor:function(width, height, title, data, type, listener) {
+    ctor:function(width, height, title, type, listener) {
         this._super();
-        this.init(width, height, title, data, type, listener);
+        this.init(width, height, title, type, listener);
+        if(listener != null){
+            this.showContent(listener);
+        }
     },
 
-    init:function(width, height, title, data, type, listener){
+    init:function(width, height, title, type, listener){
         this._listener = listener;
         this.attr({
             x: cc.winSize.width / 2,
@@ -30,7 +33,8 @@ var TinyPopup = cc.Node.extend({
 
         this._frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
         this._frame.attr({
-            scale: 2.3,
+            scaleX: width/this._frame.width,
+            scaleY: height/this._frame.height,
             x: 0,
             y: 0,
         });
@@ -74,6 +78,10 @@ var TinyPopup = cc.Node.extend({
         });
         this._frame.addChild(titleText, 2);
 
+        this.openAction();
+    },
+
+    showContent:function(listener){
         if(!listener.contentBuyG){
             var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
@@ -93,7 +101,7 @@ var TinyPopup = cc.Node.extend({
             });
             this._frame.addChild(unit, 2);
         }else{
-            var contentText = new cc.LabelBMFont(listener.contentBuyG, 'res/Art/Fonts/soji_12.fnt');
+            var contentText = new cc.LabelBMFont(listener.contentBuyG, 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
                 x: this._frame.width / 2,
                 y: 145,
@@ -102,9 +110,8 @@ var TinyPopup = cc.Node.extend({
             });
             this._frame.addChild(contentText, 2);
         }
-        
-        this.openAction();
     },
+
     openAction: function() {
         this.runAction(ui.BounceEff());
     },
@@ -112,18 +119,10 @@ var TinyPopup = cc.Node.extend({
     close: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
-        if(this._listener.type == 'resources'){
-            MAP.buildNewContruction(this._listener.building);
-        }else if(this._listener.type == 'builder'){
-            MAP.buildNewContruction(this._listener.building);
-        }
-        MAP.resetReducedTempResources();
     },
 
     ok: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
-
-
     }
 });
