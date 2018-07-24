@@ -191,7 +191,11 @@ var setUserResourcesCapacity = function(){
 
 var updateBuilderNumber = function(){
     gv.user.allBuilder = checkBuilder();
-    gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
+    var a = checkPendingBuilding();
+    gv.user.freeBuilder = gv.user.allBuilder - a;
+    cc.log("========================================== All Builder: " + gv.user.allBuilder);
+    cc.log("========================================== Busy Builder: " + a);
+    cc.log("========================================== Free Builder: " + gv.user.freeBuilder);
 };
 
 
