@@ -45,7 +45,7 @@ var TopCenterBar = cc.Sprite.extend({
             anchorX: 0.5,
             anchorY: 0, 
             x: this.width / 2,
-            y: 0,
+            y: 6,
         });
         this.addChild(valueP);
     },
