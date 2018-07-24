@@ -1,5 +1,5 @@
 var TopCenterBar = cc.Sprite.extend({
-    ctor: function(x, y, type) {
+    ctor: function(x, y, type, userInfo) {
         this._super('res/Art/GUIs/Main_Gui/bg_bar_1.png');
         this.x = x;
         this.y = y;
@@ -9,14 +9,17 @@ var TopCenterBar = cc.Sprite.extend({
         switch (type) {
             case 'builder':
                 title = "Builder";
+                value = '2 / 2';
                 leftIconRes = 'res/Art/GUIs/Main_Gui/builder_icon.png';
                 break;
             case 'army':
                 title = "Army";
+                value = "không";
                 leftIconRes = 'res/Art/GUIs/Main_Gui/army_icon.png';
                 break;
             case 'shield':
                 title = "Shield";
+                value = "không";
                 leftIconRes = 'res/Art/GUIs/Main_Gui/shield.png';
                 break;
             default:
@@ -36,5 +39,15 @@ var TopCenterBar = cc.Sprite.extend({
             y: 25,
         });
         this.addChild(titleP);
-    }
+
+        var valueP = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_12.fnt');
+        valueP.attr({
+            anchorX: 0.5,
+            anchorY: 0, 
+            x: this.width / 2,
+            y: 0,
+        });
+        this.addChild(valueP);
+    },
+    
 });

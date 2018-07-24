@@ -39,11 +39,11 @@ var LobbyLayer = cc.Layer.extend({
         this.gBar = gBar;
         this.addChild(gBar);
         // Top Center Bar
-        var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army');
+        var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army', this.userInfo);
         this.addChild(ArmyBar);
-        var BuilderBar = new TopCenterBar(size.width / 2, size.height - 40, 'builder');
+        var BuilderBar = new TopCenterBar(size.width / 2, size.height - 40, 'builder', this.userInfo);
         this.addChild(BuilderBar);
-        var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield');
+        var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield', this.userInfo);
         this.addChild(ShieldBar);
 
         var topLeftBar = new TopLeftBar(50, size.height - 75, this.userInfo);

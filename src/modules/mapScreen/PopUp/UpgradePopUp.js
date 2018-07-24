@@ -198,7 +198,7 @@ var showNextBuildingImg = function(info) {
 
     content.addChild(grass, 4);
     content.addChild(buildingImg, 6);
-    content.setScale(4 / info.width);
+    content.setScale(3.5 / info.width);
     return content;
 };
 

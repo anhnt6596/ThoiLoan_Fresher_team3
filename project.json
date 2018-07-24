@@ -19,6 +19,7 @@
     ],
     "jsList": [
         "src/data/Resource.js",
+        "src/data/SoundResource.js",
         "src/data/ResourceAnimation.js",
         "src/data/ConfigData.js",
         "src/framework/AnimationMgr.js",
