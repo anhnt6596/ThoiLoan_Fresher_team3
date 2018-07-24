@@ -258,6 +258,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         {
             this._super();
             contructionList = [];
+            obstacleLists = [];
         },
         readData:function(){
             this.n = this.getInt();
