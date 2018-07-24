@@ -4,9 +4,9 @@ var ShopScreen = Popup.extend({
     _catalogy:null,
     _obj:null,
 
-    ctor:function(width, height, x, y, text, data, bool) {
+    ctor:function(width, height, text, data, bool) {
         cc.log("-----------ctor ShopScreen-----------");
-        this._super(width, height, x, y, text, data, bool);
+        this._super(width, height, text, data, bool);
         //this._obj = JSON.parse(shopInfo);
         this.initCatalogy();
     },
@@ -55,7 +55,6 @@ var ShopScreen = Popup.extend({
     },
 
     createCatalogy:function(catalogyName){
-        //this._catalogy = new ccui.Button('res/Art/GUIs/shop_gui/slot_catalogy.png');
         this._catalogy = new cc.Sprite('res/Art/GUIs/shop_gui/slot_catalogy.png');
         this._catalogy.setAnchorPoint(0, 0);
 
@@ -92,7 +91,7 @@ var ShopScreen = Popup.extend({
                 var rect = cc.rect(0, 0, s.width, s.height);
 
                 if (cc.rectContainsPoint(rect, locationInNode)) {
-                    var shopCatalogyScreen = new ShopCatalogyScreen(cc.winSize.width, cc.winSize.height, 0, 0, self.switchToName(catalogyName), null, true);
+                    var shopCatalogyScreen = new ShopCatalogyScreen(cc.winSize.width, cc.winSize.height, self.switchToName(catalogyName), null, true);
                     var scene = new cc.Scene();
                     scene.addChild(shopCatalogyScreen, 0, 17);
                     cc.director.pushScene(scene);

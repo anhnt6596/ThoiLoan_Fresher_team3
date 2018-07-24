@@ -107,6 +107,7 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
     },
     setUserInfomation:function(packet){
+        DeltaTime = getCurrentClientTime() - packet.serverTime;
         gv.user.id = packet.id;
         gv.user.name = packet.name;
         gv.user.exp = packet.exp;
@@ -114,8 +115,8 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
-        gv.user.builderNumber = packet.builderNumber;
-        DeltaTime = getCurrentClientTime() - packet.serverTime;
+        gv.user.allBuilder = packet.builderNumber;
+        gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
         cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
 
     },
@@ -131,6 +132,15 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(type, x, y);
         this.gameClient.sendPacket(pk);
     },
+    sendRequestAddConstruction: function(newBuilding, building, reducedUserResources){
+        this.sendAddConstruction(building.name, building.posX, building.posY);
+        cc.log("Gui request XAY NHA");
+        reduceUserResources(reducedUserResources);
+        logReducedUserResources();
+        _.extend(LastReduceResources, reducedUserResources);
+        resetReducedTempResources();
+        MAP.updateMapWhenValidatedBuild(newBuilding, building);
+    },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeConstruction);
@@ -141,9 +151,9 @@ testnetwork.Connector = cc.Class.extend({
         NETWORK.sendUpgradeConstruction(building._id);
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
         reduceUserResources(reducedUserResources);
-        MAP.logReducedUserResources();
+        logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
-        MAP.resetReducedTempResources();
+        resetReducedTempResources();
 
 
         building.setStatus('upgrade');

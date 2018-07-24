@@ -279,14 +279,7 @@ var Contruction = cc.Class.extend({
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
         return { x: newX, y: newY };
     },
-    remove: function() {
-        this.removeTarget();
-        MAP.removeChild(this.buildingImg);
-        MAP.removeChild(this.grass);
-        this.timeBar && MAP.removeChild(this.timeBar);
-        this.timeBar = null;
-        this.shadow && MAP.removeChild(this.shadow);
-    },
+
     build: function(cur, max) {
         this.setStatus('pending');
         this.addTimeBar(cur, max);
@@ -307,44 +300,27 @@ var Contruction = cc.Class.extend({
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
-                return;
+                break;
             }
         }
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
     upgrade: function() {
-        //Check du tai nguyen upgrade hay k
-        //var gold = config.building[this.name][this.level+1].gold || 0;
-        //var elixir = config.building[this.name][this.level+1].elixir || 0;
-        //var darkElixir = config.building[this.name][this.level+1].darkElixir || 0;
-        //var coin = config.building[this.name][this.level+1].coin || 0;
-
-        var gold = config.building[this.name][this.level+1].gold ? config.building[this.name][this.level+1].gold : 0;
-        var elixir = config.building[this.name][this.level+1].elixir ? config.building[this.name][this.level+1].elixir : 0;
-        var darkElixir = config.building[this.name][this.level+1].darkElixir ? config.building[this.name][this.level+1].darkElixir : 0;
-        var coin = config.building[this.name][this.level+1].coin ? config.building[this.name][this.level+1].coin : 0;
-
-        var costBuilding = { gold: gold, elixir: elixir, darkElixir: darkElixir, coin: coin };
-
-
+        var costBuilding = getResourcesNextLevel(this.name, this.level);
         var gResources = checkUserResources(costBuilding);
         if(gResources == 0){
-            //Kiem tra tho xay ranh khong
             if(!checkIsFreeBuilder()){
-                //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' hoac 'upgrade' ma co [buildTime - (timeHienTai - StartTime)] la nho nhat
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
-                    //Show popup khong du G va thoat
-                    cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
                     var listener = {contentBuyG:"Please add more G to release a builder!"};
-                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "All builders are busy", null, true, listener);
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{
-                    //Show popup dung G de release 1 tho xay
                     _.extend(ReducedTempResources, costBuilding);
                     var listener = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
-                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener);
+                    var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
@@ -353,32 +329,26 @@ var Contruction = cc.Class.extend({
             }
         } else if(gResources > 0){
             if(gv.user.coin < gResources){
-                //Show popup khong du G va thoat
-                cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
                 var listener = {contentBuyG:"Please add more G to buy missing resources!"};
-                // listener.contentBuyG = "Please add more G to buy missing resources!";
-                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough resources to build this building", null, true, listener);
+                var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{
-                //Show popup dung G de mua tai nguyen
                 this.cost = costBuilding;
                 var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
-                var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to buy resources", null, false, listener);
+                var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
         } else {
-            cc.log('KHONG du G ===> KHONG xay duoc nha');
             var listener = {contentBuyG:"Please add more G to buy this item!"};
-            var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Not enough G to build this building", null, true, listener);
+            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
             cc.director.getRunningScene().addChild(popup, 2000000);
         }
     },
 
     upgradeComplete: function() {
         NETWORK.sendFinishTimeConstruction(this._id);
-        this.level += 1;
+        this.level = this.level + 1;
         this.info.level = this.info.level + 1;
-        cc.log("====================================================LEVEL sau khi upgrade: " + this.level);
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
@@ -388,13 +358,17 @@ var Contruction = cc.Class.extend({
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
+
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
-                contructionList[item].level += 1;
-                return;
+                break;
             }
         }
+
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
     },
     cancel: function(){
         if (this._status == 'upgrade') this.cancelUpgrade();
@@ -408,8 +382,9 @@ var Contruction = cc.Class.extend({
         this.timeBar = null;
         this.setStatus('complete');
 
-        //setUserResourcesCapacity();
-        //LOBBY.update(gv.user);
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
     },
     cancelBuild: function() {
         cc.log('cancel build');
@@ -425,8 +400,18 @@ var Contruction = cc.Class.extend({
         MAP._targetedObject = null;
         this.remove();
 
+        updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
+    },
+    remove:function() {
+        this.removeTarget();
+        MAP.removeChild(this.buildingImg);
+        MAP.removeChild(this.grass);
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+        this.shadow && MAP.removeChild(this.shadow);
+        this.setStatus('delete');
     },
     removeComplete:function(){
         var newContructionList = contructionList.filter(element => {
@@ -474,7 +459,8 @@ var Contruction = cc.Class.extend({
 
         processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
-        var t = timeToString(max - cur);
+        //var t = timeToString(max - cur);
+        var t = timeToReadable(max - cur);
         var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
         this.timeText = timeText;
         timeText.attr({
@@ -486,7 +472,8 @@ var Contruction = cc.Class.extend({
     updateTimeBar: function(cur, max) {
         if (this.timeBar) {
             var ratio = cur / max;
-            var t = timeToString(max - cur);
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
             this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
             this.timeText.setString(t);
         }
@@ -521,7 +508,11 @@ var Contruction = cc.Class.extend({
                 //}
                 cur = (getCurrentServerTime() - this.startTime)/1000;
                 if (cur >= max) {
-                    this.buildComplete();
+                    if(this._status == 'pending'){
+                        this.buildComplete();
+                    }else if(this._status == 'upgrade'){
+                        this.upgradeComplete();
+                    }
                     return;
                 } else {
                     this.updateTimeBar(cur, max);
@@ -588,40 +579,3 @@ var Contruction = cc.Class.extend({
         }
     },
 });
-
-var fakeTimeFunction = function(sender, cur, max) {
-    var tick = () => {
-        setTimeout(() => {
-            cur +=1;
-            if (cur >= max) {
-                sender.upgradeComplete();
-            } else {
-                tick();
-                sender.updateTimeBar(cur, max);
-            }
-        }, 1000);
-    }
-    tick();
-};
-
-var fakeBuildTimeFunction = function(sender, cur, max) {
-    var tick = () => {
-        setTimeout(() => {
-            if(updateTimeFlag){
-                cc.log("--------------------------------------------------------updateTimeFlag == true");
-                cur = (getCurrentServerTime() - sender.startTime)/1000;
-                updateTimeFlag = false;
-            }
-            if (cur >= max) {
-                sender.buildComplete();
-                return;
-            } else {
-                tick();
-                sender.updateTimeBar(cur, max);
-            }
-            cur +=1;
-        }, 1000);
-    }
-    //Chay 1 lan
-    tick();
-}
