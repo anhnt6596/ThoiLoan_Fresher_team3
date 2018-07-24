@@ -245,3 +245,11 @@ var timeToReadable = function(time){
     t = t ? t : '0s';
     return t;
 };
+
+var objectSize = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};

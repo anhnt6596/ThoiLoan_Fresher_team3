@@ -3,7 +3,7 @@ var Contruction = cc.Class.extend({
     ctor: function(info) {
         // this._super();
         this.info = info;
-        this._status = this.info.status;
+        this._status = info.status;
         this.buildTime = info.buildTime;
         this.startTime = info.startTime;
         this._id = info._id;
