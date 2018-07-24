@@ -34,6 +34,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(quickFinishBtn);
         this.quickFinishBtn = quickFinishBtn;
         this.addChild(quickFinishBtn);
+        //quickFinishBtn.addClickEventListener();
 
         var removeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/remove_icon.png', 'Remove');
         this._listBtn.push(removeBtn);

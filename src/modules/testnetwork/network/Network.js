@@ -138,10 +138,10 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("Gui request XAY NHA");
         logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
-        resetReducedTempResources();
         //updateBuilderNumber();
         MAP.updateMapWhenValidatedBuild(newBuilding, building);
         reduceUserResources(reducedUserResources);
+        resetReducedTempResources();
     },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
@@ -154,7 +154,6 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
         logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
-        resetReducedTempResources();
         //updateBuilderNumber();
 
 
@@ -178,6 +177,7 @@ testnetwork.Connector = cc.Class.extend({
 
         updateBuilderNumber();
         reduceUserResources(reducedUserResources);
+        resetReducedTempResources();
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION ===========    DUY ==========================");
 
     },
