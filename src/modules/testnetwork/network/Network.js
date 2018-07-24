@@ -131,6 +131,15 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(type, x, y);
         this.gameClient.sendPacket(pk);
     },
+    sendRequestAddConstruction: function(newBuilding, building, reducedUserResources){
+        this.sendAddConstruction(building.name, building.posX, building.posY);
+        cc.log("Gui request XAY NHA");
+        reduceUserResources(reducedUserResources);
+        logReducedUserResources();
+        _.extend(LastReduceResources, reducedUserResources);
+        resetReducedTempResources();
+        MAP.updateMapWhenValidatedBuild(newBuilding, building);
+    },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeConstruction);
@@ -141,9 +150,9 @@ testnetwork.Connector = cc.Class.extend({
         NETWORK.sendUpgradeConstruction(building._id);
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
         reduceUserResources(reducedUserResources);
-        MAP.logReducedUserResources();
+        logReducedUserResources();
         _.extend(LastReduceResources, reducedUserResources);
-        MAP.resetReducedTempResources();
+        resetReducedTempResources();
 
 
         building.setStatus('upgrade');

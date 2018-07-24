@@ -179,11 +179,10 @@ var ShopCatalogyScreen = Popup.extend({
         timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
         this._item.addChild(timeLabel, 4, 4);
 
-        var gold = catalogy[itemName].gold ? catalogy[itemName].gold : 0;
-        var elixir = catalogy[itemName].elixir ? catalogy[itemName].elixir : 0;
-        var darkElixir = catalogy[itemName].darkElixir ? catalogy[itemName].darkElixir : 0;
-        var coin = catalogy[itemName].coin ? catalogy[itemName].coin : 0;
-
+        var gold = catalogy[itemName].gold || 0;
+        var elixir = catalogy[itemName].elixir || 0;
+        var darkElixir = catalogy[itemName].darkElixir || 0;
+        var coin = catalogy[itemName].coin || 0;
 
         var amountBDH = 0;
         for(var k in contructionList){
@@ -332,7 +331,7 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var popup = new TinyPopup(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, null, true);
+        var popup = new TinyPopup(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, null, true, null);
         cc.director.getRunningScene().addChild(popup, 200);
 
     },
