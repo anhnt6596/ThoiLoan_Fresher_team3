@@ -849,7 +849,7 @@ var MapLayer = cc.Layer.extend({
         }
         
         objectRefs.push(newBuilding);
-        MAP.createLogicArray(contructionList, {});
+        MAP.createLogicArray(contructionList, obstacleLists);
 
         updateBuilderNumber();
         LOBBY.showLobby();
