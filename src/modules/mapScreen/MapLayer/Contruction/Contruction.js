@@ -201,10 +201,10 @@ var Contruction = cc.Class.extend({
         MAP.createLogicArray(contructionList, obstacleLists);
     },
     checkNewPosition: function(mapPos) {
-        if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
+        if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this.info.width || mapPos.y > MAPVALUE.MAPSIZE - this.info.height) return false;
         for (var i = 0; i < this.info.width; i++) {
             for (var j = 0; j < this.info.height; j++) {
-                if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== -1 && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
+                if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== MAPVALUE.UNUSED && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
                     return false;
                 }
             }
