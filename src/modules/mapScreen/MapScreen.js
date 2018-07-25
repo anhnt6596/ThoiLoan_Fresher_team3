@@ -5,7 +5,7 @@ var MAPSCENE = MAPSCENE || null;
 createMapScene = function() {
     var game = new cc.Scene();
     MAPSCENE = game;
-    var mapLayer = new MapLayer();
+    var mapLayer = new MapLayer(gv.user);
     var lobbyLayer = new LobbyLayer(gv.user);
     game.addChild(mapLayer, 0);
     game.addChild(lobbyLayer, 1);

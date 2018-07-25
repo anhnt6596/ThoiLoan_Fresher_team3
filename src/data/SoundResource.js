@@ -16,4 +16,10 @@ var sRes = {
 
     builderhut_pickup: 'res/Sounds/sfx/builderhut_pickup.mp3',
     builderhut_place: 'res/Sounds/sfx/builderhut_place.mp3',
+
+    camp_pickup: 'res/Sounds/sfx/camp_pickup.mp3',
+    camp_place: 'res/Sounds/sfx/camp_place.mp3',
+
+    cannon_pickup: 'res/Sounds/sfx/cannon_pickup.mp3',
+    cannon_place: 'res/Sounds/sfx/cannon_place.mp3',
 }

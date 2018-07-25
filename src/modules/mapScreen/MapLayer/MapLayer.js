@@ -383,9 +383,11 @@ var MapLayer = cc.Layer.extend({
     _isBuilding: false,
     mapWidth: 4200,
     mapHeight: 3200,
-    ctor: function() {
+    ctor: function(userInfo) {
         this._super();
         MAP = this;
+        this.userInfo = userInfo;
+
         this.anchorX = 0;
         this.anchorY = 0;
 
@@ -516,6 +518,7 @@ var MapLayer = cc.Layer.extend({
             var _size = contructions[contruction].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
+                    if (_inRow + i <= 39 && _inColumn + j <= 39)
                     mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
                 }
             }
@@ -526,6 +529,7 @@ var MapLayer = cc.Layer.extend({
             var _size = obstacles[obstacle].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
+                    if (_inRow + i <= 39 && _inColumn + j <= 39)
                     mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
@@ -692,7 +696,7 @@ var MapLayer = cc.Layer.extend({
         var newBuilding;
         switch (buildingInfo.name) {
             case 'TOW_1':
-                newBuilding = new TownHall(buildingInfo);
+                newBuilding = new TownHall(buildingInfo, this.userInfo);
                 break;
             case 'BDH_1':
                 newBuilding = new BuilderHut(buildingInfo);
@@ -704,10 +708,10 @@ var MapLayer = cc.Layer.extend({
                 newBuilding = new Barrack(buildingInfo);
                 break;
             case 'STO_1':
-                newBuilding = new GoldStorage(buildingInfo);
+                newBuilding = new GoldStorage(buildingInfo, this.userInfo);
                 break;
             case 'STO_2':
-                newBuilding = new ElixirStorage(buildingInfo);
+                newBuilding = new ElixirStorage(buildingInfo, this.userInfo);
                 break;
             case 'RES_1':
                 newBuilding = new GoldMine(buildingInfo);
@@ -845,7 +849,7 @@ var MapLayer = cc.Layer.extend({
         }
         
         objectRefs.push(newBuilding);
-        MAP.createLogicArray(contructionList, {});
+        MAP.createLogicArray(contructionList, obstacleLists);
 
         updateBuilderNumber();
         LOBBY.showLobby();

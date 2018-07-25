@@ -157,11 +157,11 @@ var Contruction = cc.Class.extend({
         });
         this.nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
         });
         this.timeBar && this.timeBar.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 94,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
         });
     },
     updatePosition: function(mapPos) {
@@ -175,6 +175,7 @@ var Contruction = cc.Class.extend({
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
+            temp.lastMoveBuilding = this;
             if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 cc.log('sendMove>>>>>>>>>>>>>>>before');
                 cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
@@ -187,6 +188,17 @@ var Contruction = cc.Class.extend({
             cc.log('network error!');
         }
 
+    },
+    acceptSendMoveFromServer: function() {
+        this._oldX = this.info.posX;
+        this._oldY = this.info.posY;
+    },
+    sendMoveIsDenined: function() {
+        this.moving({ x: this._oldX, y: this._oldY });
+        this.info.posX = this._oldX;
+        this.info.posY = this._oldY;
+        MAP.updateContructionList(this.info);
+        MAP.createLogicArray(contructionList, obstacleLists);
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
@@ -259,7 +271,7 @@ var Contruction = cc.Class.extend({
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
             color: cc.color(255, 255, 0, 255),
             opacity: 0,
         });
@@ -267,10 +279,10 @@ var Contruction = cc.Class.extend({
         
         var levelText = new cc.LabelBMFont('cấp ' + this.info.level, 'res/Art/Fonts/soji_16.fnt');
         this.levelText = levelText;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
         levelText.attr({
             x: nameText.width / 2,
             y: -5,
+            opacity: this.info.name !== "BDH_1" ? 255 : 0,
         });
         nameText.addChild(levelText, 1000);
     },
@@ -445,9 +457,10 @@ var Contruction = cc.Class.extend({
 
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
         timeBar.attr({
-            x: this.buildingImg.x,
-            y: this.buildingImg.y + (this.info.height / 2) * TILE_HEIGHT + 94,
+            x: coor.x,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
         });
         MAP.addChild(timeBar, 1100);
 
@@ -469,7 +482,7 @@ var Contruction = cc.Class.extend({
         this.timeText = timeText;
         timeText.attr({
             x: timeBar.width / 2,
-            y: 50,
+            y: 42,
         });
         timeBar.addChild(timeText);
     },
@@ -551,6 +564,12 @@ var Contruction = cc.Class.extend({
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_pickup);
                     break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_pickup);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_pickup);
+                    break;
                 default:
                     break;
             }
@@ -576,6 +595,12 @@ var Contruction = cc.Class.extend({
                     break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_place);
+                    break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_place);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_place);
                     break;
                 default:
                     break;

@@ -1,10 +1,6 @@
 var GoldStorage = StorageBuilding.extend({
-    img_x: -78,
-    img_y: -105,
-    ctor: function(info) {
-        this._super(info);
-        // this.addBuildingImg();
-        // this.presentImg();
+    ctor: function(info, userInfo) {
+        this._super(info, userInfo);
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Node();
