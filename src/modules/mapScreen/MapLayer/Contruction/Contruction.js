@@ -175,6 +175,7 @@ var Contruction = cc.Class.extend({
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
+            temp.lastMoveBuilding = this;
             if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
                 cc.log('sendMove>>>>>>>>>>>>>>>before');
                 cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
@@ -187,6 +188,17 @@ var Contruction = cc.Class.extend({
             cc.log('network error!');
         }
 
+    },
+    acceptSendMoveFromServer: function() {
+        this._oldX = this.info.posX;
+        this._oldY = this.info.posY;
+    },
+    sendMoveIsDenined: function() {
+        this.moving({ x: this._oldX, y: this._oldY });
+        this.info.posX = this._oldX;
+        this.info.posY = this._oldY;
+        MAP.updateContructionList(this.info);
+        MAP.createLogicArray(contructionList, obstacleLists);
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > 40 - this.info.width || mapPos.y > 40 - this.info.height) return false;
