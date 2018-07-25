@@ -205,6 +205,14 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log("=======================================CLIENT GUI XAC NHAN FINISH CONSTRUCTION=======================================");
     },
+
+    //Quick Finish
+    sendQuickFinish:function(id){
+        var pk = this.gameClient.getOutPacket(CmdSendQuickFinish);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND QUICK FINISH=======================================");
+    },
     sendGetServerTime:function(){
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();

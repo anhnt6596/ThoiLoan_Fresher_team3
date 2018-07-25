@@ -35,9 +35,9 @@ var finishSmallestRemainingTimeBuilding = function(){
     for(var k in objectRefs){
         if(objectRefs[k]._id == idBuildingWillComplete){
             if(objectRefs[k]._status == 'pending'){
-                objectRefs[k].buildComplete();
+                objectRefs[k].buildComplete(false);
             }else if(objectRefs[k]._status == 'upgrade'){
-                objectRefs[k].upgradeComplete();
+                objectRefs[k].upgradeComplete(false);
             }
         }
     }
@@ -103,15 +103,23 @@ var getIdBuildingMinRemainTime = function(){
 var reduceUserResources = function(costBuilding){
     if(gv.user.gold >= costBuilding.gold){
         gv.user.gold -= costBuilding.gold;
+    }else{
+        gv.user.gold = 0;
     }
     if(gv.user.elixir >= costBuilding.elixir){
         gv.user.elixir -= costBuilding.elixir;
+    }else{
+        gv.user.elixir = 0;
     }
     if(gv.user.darkElixir >= costBuilding.darkElixir){
         gv.user.darkElixir -= costBuilding.darkElixir;
+    }else{
+        gv.user.darkElixir = 0;
     }
     if(gv.user.coin >= costBuilding.coin){
         gv.user.coin -= costBuilding.coin;
+    }else{
+        gv.user.coin = 0;
     }
 
     LOBBY.update(gv.user);
@@ -262,3 +270,5 @@ var objectSize = function(obj) {
     }
     return size;
 };
+
+var listBuildingMissImage = ['RES_3', 'STO_3', 'LAB_1', 'SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2'];

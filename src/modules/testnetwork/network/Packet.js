@@ -15,6 +15,7 @@ gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 
 gv.CMD.GET_SERVER_TIME = 2100;
 gv.CMD.FINISH_TIME_CONSTRUCTION = 2101;
+gv.CMD.QUICK_FINISH = 2102;
 gv.CMD.ADD_RESOURCE = 2500;
 
 gv.CMD.TEST = 3001;
@@ -161,6 +162,23 @@ CmdSendFinishTimeConstruction = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.FINISH_TIME_CONSTRUCTION);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
+
+CmdSendQuickFinish = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.QUICK_FINISH);
         },
         pack:function(id){
             this.packHeader();
