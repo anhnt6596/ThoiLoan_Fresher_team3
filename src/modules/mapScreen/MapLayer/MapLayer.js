@@ -516,6 +516,7 @@ var MapLayer = cc.Layer.extend({
             var _size = contructions[contruction].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
+                    if (_inRow + i <= 39 && _inColumn + j <= 39)
                     mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
                 }
             }
@@ -526,6 +527,7 @@ var MapLayer = cc.Layer.extend({
             var _size = obstacles[obstacle].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
+                    if (_inRow + i <= 39 && _inColumn + j <= 39)
                     mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
