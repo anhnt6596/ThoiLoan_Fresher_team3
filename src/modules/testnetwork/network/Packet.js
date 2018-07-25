@@ -286,7 +286,9 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 cc.log("========================name Nha: " + this.name);
                 cc.log("_id: " + this._id);
                 this.posX = this.getInt();
+                cc.log("posX: " + this.posX);
                 this.posY = this.getInt();
+                cc.log("posY: " + this.posY);
                 this.level = this.getInt();
                 cc.log("Level: " + this.level);
 
