@@ -505,10 +505,10 @@ var MapLayer = cc.Layer.extend({
         mapLogicArray = [];
         var i = 0;
         var j = 0;
-        for (i = 0; i < 40; i++) {
+        for (i = 0; i < MAPVALUE.MAPSIZE; i++) {
             var row = [];
-            for(j = 0; j < 40; j++) {
-                row.push(-1);
+            for(j = 0; j < MAPVALUE.MAPSIZE; j++) {
+                row.push(MAPVALUE.UNUSED);
             }
             mapLogicArray.push(row);
         }
@@ -518,7 +518,7 @@ var MapLayer = cc.Layer.extend({
             var _size = contructions[contruction].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
-                    if (_inRow + i <= 39 && _inColumn + j <= 39)
+                    if (_inRow + i < MAPVALUE.MAPSIZE && _inColumn + j < MAPVALUE.MAPSIZE)
                     mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
                 }
             }
@@ -529,7 +529,7 @@ var MapLayer = cc.Layer.extend({
             var _size = obstacles[obstacle].width;
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
-                    if (_inRow + i <= 39 && _inColumn + j <= 39)
+                    if (_inRow + i < MAPVALUE.MAPSIZE && _inColumn + j < MAPVALUE.MAPSIZE)
                     mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
@@ -670,7 +670,7 @@ var MapLayer = cc.Layer.extend({
     targetObject: function(mapPos) {
         LOBBY.showLobby();
         var self = this;
-        mapPos.x < 40 && mapPos.x >= 0 && mapPos.y < 40 && mapPos.y >= 0 && (function() {
+        mapPos.x < MAPVALUE.MAPSIZE && mapPos.x >= 0 && mapPos.y < MAPVALUE.MAPSIZE && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
             cc.log('target_id: ' + target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
