@@ -1,4 +1,4 @@
-var ShopItemInfo = TinyPopup.extend({
+var ItemInfo = TinyPopup.extend({
 
     ctor:function(width, height, title, type, listener) {
         this._super(width, height, title, type, listener);
@@ -6,37 +6,25 @@ var ShopItemInfo = TinyPopup.extend({
     },
 
     showInfoItem:function(itemName){
-        //var buildingImg = this.showBuildingImg(itemName);
-        //buildingImg.attr({
-        //    x: -250,
-        //    y: 100,
-        //});
-        //
-        //var buildingInfo = this.showBuildingInfo(itemName);
-        //buildingInfo.attr({
-        //    x: -50,
-        //    y: 130,
-        //});
+        //Tren chiem 1/2 chieu cao ben trong cua popup
+            //Trai co hinh anh
+            //Phai co tu 1 toi 4 thanh:
 
 
+        //Duoi co nen trang chua intro, 1 so nha co hinh anh cua cac loai item dc mo khoa
+        //var mapLayer = cc.LayerColor.create(cc.color(100, 128, 128, 255), this._frame.width*this._frame.scaleX, this._frame.height*this._frame.scaleY);
+        //mapLayer.scaleX = this._frame.width*this._frame.scaleX;
+        //mapLayer.scaleY = this._frame.height*this._frame.scaleY;
+        //mapLayer.setAnchorPoint(0, 0);
+        //mapLayer.setPosition(this._frame.x, this._frame.y);
+        //this._frame.addChild(mapLayer, 2);
 
     },
     
-    showBuildingImg:function(itemName){
-
-    },
-
-    showBuildTimeText:function(itemName){
-        
-    },
-    
-    showBuildingInfo:function(itemName){
-        
-    },
 
 
     //ghi de ham trong popup
     onCloseCallback:function () {
         cc.director.popToRootScene();
-    },
+    }
 });

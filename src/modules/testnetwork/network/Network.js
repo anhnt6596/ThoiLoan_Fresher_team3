@@ -7,6 +7,14 @@ var testnetwork = testnetwork||{};
 count =0;
 var requestedServerTime = 0;
 
+//Add Construction
+var buildingAdd = null;
+var newBuildingAdd = null;
+
+//Upgrade Construction
+var buildingUpgrade = null;
+
+
 var NETWORK = NETWORK || null;
 
 testnetwork.Connector = cc.Class.extend({
@@ -57,24 +65,64 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.ADD_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
-                    cc.log("XAC NHAN XAY tu SERVER");
+                    cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
+                    _.extend(LastReduceResources, ReducedTempResources);
+                    MAP.updateMapWhenValidatedBuild(newBuildingAdd, buildingAdd);
+                    reduceUserResources(ReducedTempResources);
+                    logReducedUserResources();
+                    resetReducedTempResources();
+
+                    //reset
+                    buildingAdd = null;
+                    newBuildingAdd = null;
                 }else {
-                    contructionList = contructionList.pop();
-                    objectRefs = objectRefs.pop();
-                    MAP.createLogicArray(contructionList, {});
-                    //Khoi phuc tien cho user (Can xet them T.H server chua kip phan hoi FALSE thi user da request xay tiep)
-                    increaseUserResources(LastReduceResources);
-
-                    //Cap nhat lai map
-
-                    cc.log("SERVER TU CHOI XAY và CLIENT da CAP NHAT lai nha CHUA duoc xay");
+                    cc.log("=======================================SERVER TU CHOI XAY=======================================");
+                    var listener = {contentBuyG:"Please check your connection to server!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to build this construction", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    //reset
+                    buildingAdd = null;
+                    newBuildingAdd = null;
                 }
                 break;
             case gv.CMD.UPGRADE_CONSTRUCTION:
                 if (packet.validate) {
-                    cc.log("XAC NHAN UPGRADE tu SERVER");
+                    cc.log("=======================================XAC NHAN UPGRADE tu SERVER=======================================");
+                    _.extend(LastReduceResources, ReducedTempResources);
+
+                    buildingUpgrade.setStatus('upgrade');
+                    cc.log(buildingUpgrade._status);
+                    buildingUpgrade.startTime = getCurrentServerTime();
+                    cc.log(buildingUpgrade.startTime);
+                    var cur = (getCurrentServerTime() - buildingUpgrade.startTime)/1000;
+                    var max = config.building[buildingUpgrade.name][buildingUpgrade.level+1].buildTime;
+                    buildingUpgrade.addTimeBar(cur, max);
+                    buildingUpgrade.countDown(cur, max);
+                    buildingUpgrade.buildTime = max;
+
+                    for(var item in contructionList){
+                        if(contructionList[item]._id == buildingUpgrade._id){
+                            contructionList[item].status = 'upgrade';
+                            contructionList[item].startTime = buildingUpgrade.startTime;
+                            contructionList[item].buildTime = max;
+                            break;
+                        }
+                    }
+
+                    updateBuilderNumber();
+                    reduceUserResources(ReducedTempResources);
+                    logReducedUserResources();
+                    resetReducedTempResources();
+
+                    //reset
+                    buildingUpgrade = null;
                 }else {
-                    cc.log("SERVER TU CHOI UPGRADE");
+                    cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
+                    var listener = {contentBuyG:"Please check your connection to server!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to upgrade this construction", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    //reset
+                    buildingUpgrade = null;
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
@@ -83,7 +131,6 @@ testnetwork.Connector = cc.Class.extend({
                 //updateTimeFlag = true;
                 cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
                 break;
-
         }
     },
     sendGetUserInfo:function()
@@ -133,15 +180,11 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(type, x, y);
         this.gameClient.sendPacket(pk);
     },
-    sendRequestAddConstruction: function(newBuilding, building, reducedUserResources){
+    sendRequestAddConstruction: function(newBuilding, building){
         this.sendAddConstruction(building.name, building.posX, building.posY);
-        cc.log("Gui request XAY NHA");
-        _.extend(LastReduceResources, reducedUserResources);
-        //updateBuilderNumber();
-        MAP.updateMapWhenValidatedBuild(newBuilding, building);
-        reduceUserResources(reducedUserResources);
-        logReducedUserResources();
-        resetReducedTempResources();
+        cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================");
+        buildingAdd = building;
+        newBuildingAdd = newBuilding;
     },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
@@ -149,33 +192,10 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id);
         this.gameClient.sendPacket(pk);
     },
-    sendRequestUpgradeConstruction:function(building, reducedUserResources){
+    sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);
+        buildingUpgrade = building;
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
-        logReducedUserResources();
-        _.extend(LastReduceResources, reducedUserResources);
-
-        building.setStatus('upgrade');
-        building.startTime = getCurrentServerTime();
-        var cur = (getCurrentServerTime() - building.startTime)/1000;
-        var max = config.building[building.name][building.level+1].buildTime;
-        building.addTimeBar(cur, max);
-        building.countDown(cur, max);
-        building.buildTime = max;
-
-
-        for(var item in contructionList){
-            if(contructionList[item]._id == building._id){
-                contructionList[item].status = 'upgrade';
-                contructionList[item].startTime = building.startTime;
-                contructionList[item].buildTime = max;
-                break;
-            }
-        }
-
-        updateBuilderNumber();
-        reduceUserResources(reducedUserResources);
-        resetReducedTempResources();
     },
     //Finish build or Finish upgrade
     sendFinishTimeConstruction:function(id){
@@ -183,12 +203,13 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
+        cc.log("=======================================CLIENT GUI XAC NHAN FINISH CONSTRUCTION=======================================");
     },
     sendGetServerTime:function(){
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();
         this.gameClient.sendPacket(pk);
-        cc.log("CLIENT da gui yeu cau get Server Time");
+        cc.log("=======================================CLIENT GUI YEU CAU GET SERVER TIME=======================================");
     },
     sendAddResource: function(gold, elixir, darkElixir, coin) {
         cc.log('Add Resource');

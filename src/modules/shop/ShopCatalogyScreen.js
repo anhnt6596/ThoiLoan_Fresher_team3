@@ -302,7 +302,7 @@ var ShopCatalogyScreen = Popup.extend({
                         if(!self._moving){
                             //var id = (length < 10) ? ("_0" + length) : ("_" + length);
                             var last = contructionList[contructionList.length-1];
-                            var id = last._id + 1;
+                            var id = last._id + 1;                      //Sua lai neu lam them chuc nang Cancel
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {
@@ -331,7 +331,7 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var popup = new ShopItemInfo(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, true, null);
+        var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, true, null);
         cc.director.getRunningScene().addChild(popup, 200);
     },
 

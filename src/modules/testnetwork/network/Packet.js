@@ -376,6 +376,18 @@ testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
     }
 );
 
+testnetwork.packetMap[gv.CMD.UPGRADE_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
 testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
     {
         ctor:function()

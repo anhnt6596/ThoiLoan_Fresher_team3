@@ -325,7 +325,7 @@ var Contruction = cc.Class.extend({
                 }
             }else{
                 _.extend(ReducedTempResources, costBuilding);
-                NETWORK.sendRequestUpgradeConstruction(this, costBuilding);
+                NETWORK.sendRequestUpgradeConstruction(this);
             }
         } else if(gResources > 0){
             if(gv.user.coin < gResources){

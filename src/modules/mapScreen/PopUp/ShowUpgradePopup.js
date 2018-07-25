@@ -31,13 +31,13 @@ var ShowUpgradePopup = TinyPopup.extend({
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
-                NETWORK.sendRequestUpgradeConstruction(this._listener.building, ReducedTempResources);
+                NETWORK.sendRequestUpgradeConstruction(this._listener.building);
             }
         }else if(this._listener.type == 'builderUpgrade'){
             ReducedTempResources.coin += this._listener.gBuilder;
             //Neu ok, Chuyen trang thai nha dc release sang 'complete'
             finishSmallestRemainingTimeBuilding();
-            NETWORK.sendRequestUpgradeConstruction(this._listener.building, ReducedTempResources);
+            NETWORK.sendRequestUpgradeConstruction(this._listener.building);
         }
     }
 });

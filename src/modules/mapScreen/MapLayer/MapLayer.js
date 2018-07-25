@@ -774,21 +774,15 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(function() {
             var listener = {};
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
-                //Kiem tra tai nguyen co du khong
                 var gResources = checkUserResources(buildingInfo.cost);
                 if(gResources == 0){
-                    //Kiem tra tho xay ranh khong
                     if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
-                       //Show popup dung G de release 1 tho xay dang xay o 1 cong trinh co status = 'pending' hoac 'upgrade' ma co [buildTime - (timeHienTai - StartTime)] la nho nhat
                         var gBuilder = getGToReleaseBuilder();
                         if(gv.user.coin < gBuilder){
-                            //Show popup khong du G va thoat
-                            cc.log('KHONG du G de release tho xay ===> KHONG xay duoc nha. Thoi gian cho: ' + gBuilder);
                             var listener = {contentBuyG:"Please add more G to release a builder!"};
                             var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
                             cc.director.getRunningScene().addChild(popup, 2000000);
                         }else{
-                            //Show popup dung G de release 1 tho xay
                             _.extend(ReducedTempResources, buildingInfo.cost);
                             var listener = {type:'builder', building:buildingInfo, newBuilding:newBuilding, gBuilder:gBuilder};
                             var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
@@ -796,24 +790,19 @@ var MapLayer = cc.Layer.extend({
                         }
                     }else{
                         _.extend(ReducedTempResources, buildingInfo.cost);
-                        NETWORK.sendRequestAddConstruction(newBuilding, buildingInfo, buildingInfo.cost);
+                        NETWORK.sendRequestAddConstruction(newBuilding, buildingInfo);
                     }
                 } else if(gResources > 0){
                     if(gv.user.coin < gResources){
-                        //Show popup khong du G va thoat
-                        cc.log('KHONG du tai nguyen & KHONG du G ===> KHONG xay duoc nha');
                         var listener = {contentBuyG:"Please add more G to buy missing resources!"};
-                        // listener.contentBuyG = "Please add more G to buy missing resources!";
                         var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }else{
-                        //Show popup dung G de mua tai nguyen
                         var listener = {type:'resources', building:buildingInfo, newBuilding:newBuilding, gResources:gResources};
                         var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }
                 } else {
-                    cc.log('KHONG du G ===> KHONG xay duoc nha');
                     var listener = {contentBuyG:"Please add more G to buy this item!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
@@ -841,7 +830,6 @@ var MapLayer = cc.Layer.extend({
             opacity: 0,
         });
 
-        cc.log("TAM hien thi o CLIENT");
         if(buildingInfo.buildTime > 0){
             buildingInfo.status = 'pending';
             buildingInfo.startTime = getCurrentServerTime();
@@ -862,10 +850,8 @@ var MapLayer = cc.Layer.extend({
         
         objectRefs.push(newBuilding);
         MAP.createLogicArray(contructionList, {});
-        cc.log('Nha moi da duoc push TAM vao MAP');
 
         updateBuilderNumber();
-
         LOBBY.showLobby();
         this.cancelBtn.addClickEventListener(doNothing);
         this.acceptBtn.addClickEventListener(doNothing);

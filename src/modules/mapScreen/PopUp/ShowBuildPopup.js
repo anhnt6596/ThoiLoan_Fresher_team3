@@ -25,24 +25,22 @@ var ShowBuildPopup = TinyPopup.extend({
             if(!checkIsFreeBuilder()){
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
-                    //Show popup khong du G va thoat
                     var listener1 = {contentBuyG:"Please add more G to release a builder!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener1);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{
-                    //Show popup dung G de release 1 tho xay
                     var listener2 = {type:'builder', building:this._listener.building, newBuilding:this._listener.newBuilding, gBuilder:gBuilder};
                     var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener2);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
-                NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);
+                NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building);
             }
         }else if(this._listener.type == 'builder'){
             ReducedTempResources.coin += this._listener.gBuilder;
             //Neu ok, Chuyen trang thai nha dc release sang 'complete'
             finishSmallestRemainingTimeBuilding();
-            NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);
+            NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building);
         }
     }
 });
