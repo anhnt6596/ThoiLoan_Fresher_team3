@@ -5,12 +5,15 @@ var TinyPopup = cc.Node.extend({
     //type = true (X)
     //type = false (X + functinal Btn)
     //listener la 1 obj: listener.type = "resource" || "builder"; listener.building = building
-    ctor:function(width, height, title, data, type, listener) {
+    ctor:function(width, height, title, type, listener) {
         this._super();
-        this.init(width, height, title, data, type, listener);
+        this.init(width, height, title, type, listener);
+        if(listener != null){
+            this.showContent(listener);
+        }
     },
 
-    init:function(width, height, title, data, type, listener){
+    init:function(width, height, title, type, listener){
         this._listener = listener;
         this.attr({
             x: cc.winSize.width / 2,
@@ -30,7 +33,8 @@ var TinyPopup = cc.Node.extend({
 
         this._frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
         this._frame.attr({
-            scale: 2.3,
+            scaleX: width/this._frame.width,
+            scaleY: height/this._frame.height,
             x: 0,
             y: 0,
         });
@@ -74,6 +78,10 @@ var TinyPopup = cc.Node.extend({
         });
         this._frame.addChild(titleText, 2);
 
+        this.openAction();
+    },
+
+    showContent:function(listener){
         if(!listener.contentBuyG){
             var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
@@ -93,7 +101,7 @@ var TinyPopup = cc.Node.extend({
             });
             this._frame.addChild(unit, 2);
         }else{
-            var contentText = new cc.LabelBMFont(listener.contentBuyG, 'res/Art/Fonts/soji_12.fnt');
+            var contentText = new cc.LabelBMFont(listener.contentBuyG, 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
                 x: this._frame.width / 2,
                 y: 145,
@@ -102,9 +110,8 @@ var TinyPopup = cc.Node.extend({
             });
             this._frame.addChild(contentText, 2);
         }
-        
-        this.openAction();
     },
+
     openAction: function() {
         this.runAction(ui.BounceEff());
     },
@@ -112,54 +119,10 @@ var TinyPopup = cc.Node.extend({
     close: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
-        if(this._listener.type == 'resources'){
-            MAP.buildNewContruction(listener.building);
-        }else if(this._listener.type == 'builder'){
-            MAP.buildNewContruction(listener.building);
-        }
-        MAP.resetReducedTempResources();
     },
 
     ok: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
-
-        if(this._listener.type == 'resources'){
-            ReducedTempResources.gold += this._listener.building.cost.gold;
-            ReducedTempResources.elixir += this._listener.building.cost.elixir;
-            ReducedTempResources.darkElixir += this._listener.building.cost.darkElixir;
-            ReducedTempResources.coin += this._listener.gResources;
-            if(!checkIsFreeBuilder()){
-                var gBuilder = getGToReleaseBuilder();
-                if(gv.user.coin < gBuilder){
-                    //Show popup khong du G va thoat
-                    var listener1 = {contentBuyG:"Please add more G to release a builder!"};
-                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "All builders are busy", null, true, listener1);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
-                }else{
-                    //Show popup dung G de release 1 tho xay
-                    var listener2 = {type:'builder', building:this._listener.building, newBuilding:this._listener.newBuilding, gBuilder:gBuilder};
-                    var popup = new TinyPopup(cc.winSize.width*3/5, cc.winSize.height*2/5, "Use G to release a builder", null, false, listener2);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
-                }
-            }else{
-                MAP.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);
-            }
-        }else if(this._listener.type == 'builder'){
-            ReducedTempResources.coin += this._listener.gBuilder;
-            //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-            var idBuildingWillComplete = getIdBuildingMinRemainTime();
-            for(var item in contructionList){
-                if(contructionList[item]._id == idBuildingWillComplete){
-                    contructionList[item].status = 'complete';
-                }
-            }
-            for(var k in objectRefs){
-                if(objectRefs[k]._id == idBuildingWillComplete){
-                    objectRefs[k].buildComplete();
-                }
-            }
-            MAP.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building, ReducedTempResources);            
-        }
     }
 });

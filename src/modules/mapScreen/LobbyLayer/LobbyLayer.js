@@ -41,11 +41,14 @@ var LobbyLayer = cc.Layer.extend({
         this.gBar = gBar;
         this.addChild(gBar);
         // Top Center Bar
-        var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army');
+        var ArmyBar = new TopCenterBar(size.width / 2 - 150, size.height - 40, 'army', this.userInfo);
+        this.ArmyBar = ArmyBar;
         this.addChild(ArmyBar);
-        var BuilderBar = new TopCenterBar(size.width / 2, size.height - 40, 'builder');
+        var BuilderBar = new TopCenterBar(size.width / 2, size.height - 40, 'builder', this.userInfo);
+        this.BuilderBar = BuilderBar;
         this.addChild(BuilderBar);
-        var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield');
+        var ShieldBar = new TopCenterBar(size.width / 2 + 150, size.height - 40, 'shield', this.userInfo);
+        this.ShieldBar = ShieldBar;
         this.addChild(ShieldBar);
 
         var topLeftBar = new TopLeftBar(50, size.height - 75, this.userInfo);
@@ -60,7 +63,7 @@ var LobbyLayer = cc.Layer.extend({
     },
     onOpenShop: function(){
         // fr.view(ShopScreen);
-        var shopScreen = new ShopScreen(cc.winSize.width, cc.winSize.height, 0, 0, "SHOP", null, true);
+        var shopScreen = new ShopScreen(cc.winSize.width, cc.winSize.height, "SHOP", null, true);
         var shopScene = new cc.Scene();
         shopScene.addChild(shopScreen);
         cc.director.pushScene(shopScene);
@@ -107,5 +110,8 @@ var LobbyLayer = cc.Layer.extend({
         this.goldBar.update(userInfo);
         this.elixirBar.update(userInfo);
         this.darkElixirBar.update(userInfo);
+        this.ArmyBar.update(userInfo);
+        this.BuilderBar.update(userInfo);
+        this.ShieldBar.update(userInfo);
     },
 });

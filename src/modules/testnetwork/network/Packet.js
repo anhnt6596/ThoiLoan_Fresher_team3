@@ -11,8 +11,10 @@ gv.CMD.USER_INFO = 1001;
 gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
+gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 
 gv.CMD.GET_SERVER_TIME = 2100;
+gv.CMD.FINISH_TIME_CONSTRUCTION = 2101;
 gv.CMD.ADD_RESOURCE = 2500;
 
 gv.CMD.TEST = 3001;
@@ -125,13 +127,44 @@ CmdSendAddConstruction = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.ADD_CONSTRUCTION);
-
         },
         pack:function(type, x, y){
             this.packHeader();
             this.putString(type);
             this.putInt(x);
             this.putInt(y);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendUpgradeConstruction = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.UPGRADE_CONSTRUCTION);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendFinishTimeConstruction = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.FINISH_TIME_CONSTRUCTION);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
             this.updateSize();
         }
     }
@@ -183,7 +216,7 @@ CmdSendAddResource = fr.OutPacket.extend({
         this.putInt(elixir);
         this.putInt(darkElixir);
         this.putInt(coin);
-        this.putInt();
+        this.updateSize();
     }
 });
 
@@ -217,6 +250,7 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
 );
 
 var contructionList = contructionList || [];
+var obstacleLists = obstacleLists || [];
 
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
@@ -224,6 +258,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         {
             this._super();
             contructionList = [];
+            obstacleLists = [];
         },
         readData:function(){
             this.n = this.getInt();
@@ -240,6 +275,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this.status = this.getString();
                 cc.log("Status: " + this.status);
                 this.startTime = this.getLong();
+                cc.log("Start Time: " + this.startTime);
 
                 if (config.building[this.name]) {
                     var contruction = {
@@ -258,21 +294,30 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 }
 
             }
-           //console.log(contructionList);
+            //console.log(contructionList);
             this.n_obs = this.getInt();
             //cc.log("size"+ this.n_obs);
             console.log("Co tat ca "+this.n_obs+" obs");
             for ( var j=0;j<this.n_obs;j++) {
                 this.idObs = this.getInt();
-                //cc.log("obs so: " + this.idObs);
+                cc.log("obs so: " + this.idObs);
                 this.typeObs = this.getString();
-                //cc.log(", type: " + this.typeObs);
+                cc.log(", type: " + this.typeObs);
                 this.posXObs = this.getInt();
-                //cc.log(", posX: " + this.posXObs);
+                cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
-                //cc.log(", posY: " + this.posYObs);
+                cc.log(", posY: " + this.posYObs);
 
                 console.log("/n");
+                var obstacle = {
+                    _id: this.idObs,
+                    name: this.typeObs,
+                    posX: this.posXObs,
+                    posY: this.posYObs,
+                    width: config.obtacle[this.typeObs][1].width,
+                    height: config.obtacle[this.typeObs][1].height,
+                }
+                obstacleLists.push(obstacle);
             }
 
         }
@@ -320,6 +365,18 @@ testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
     }
 );
 testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.UPGRADE_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
         {

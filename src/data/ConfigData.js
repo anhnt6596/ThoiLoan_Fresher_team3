@@ -17,6 +17,7 @@ var listBuildingConfigDir = [
     "res/Config json/Resource.json",
     "res/Config json/Storage.json",
     "res/Config json/TownHall.json",
+    "res/Config json/Defence.json",
 ];
 
 //Ham doc file JSON
@@ -28,4 +29,8 @@ listBuildingConfigDir.forEach(function(dir) {
     });
 });
 
-cc.log('>>>>>>>>>>>>>', config.building.RES_1[1].width)
+cc.loader.loadJson('res/Config json/Obstacle.json', function(error, data){
+    config.obtacle = data;
+});
+
+//cc.log('>>>>>obstacle>>>>>>>>', config.obtacle.OBS_1[1].width);

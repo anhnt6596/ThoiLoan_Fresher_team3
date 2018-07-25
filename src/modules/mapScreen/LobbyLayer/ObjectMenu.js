@@ -24,15 +24,17 @@ var ObjectMenu = cc.Node.extend({
         this.addChild(upgradeBtn);
         upgradeBtn.addClickEventListener(this.upgrade.bind(this));
 
-        var cancelBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/cancel.png', 'Cancel');
+        var cancelBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/cancel_icon.png', 'Cancel');
         this._listBtn.push(cancelBtn);
         this.cancelBtn = cancelBtn;
         this.addChild(cancelBtn);
+        cancelBtn.addClickEventListener(this.cancel.bind(this));
 
         var quickFinishBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/quick_finish.png', 'Quick\nFinish');
         this._listBtn.push(quickFinishBtn);
         this.quickFinishBtn = quickFinishBtn;
         this.addChild(quickFinishBtn);
+        quickFinishBtn.addClickEventListener(this.quickFinish.bind(this));
 
         var removeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/remove_icon.png', 'Remove');
         this._listBtn.push(removeBtn);
@@ -46,6 +48,26 @@ var ObjectMenu = cc.Node.extend({
     },
     remove: function() {
         MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
+    },
+    cancel: function() {
+        //Neu MAP._targetedObject != undefine, null, 0 thi ve phai moi chay
+        MAP._targetedObject && createCancelPopUp();
+    },
+    quickFinish: function(){
+        if(MAP._targetedObject){
+            var remainTime = MAP._targetedObject.buildTime - (getCurrentServerTime() - MAP._targetedObject.startTime)/1000;
+            var gFinish = timeToG(remainTime);
+            cc.log("==========================================THOI GIAN: " + remainTime);
+            if(gv.user.coin < gFinish){
+                var listener = {contentBuyG:"Please add more G to quick finish this building!"};
+                var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to quick finish this building", true, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }else{
+                var listener = {building:MAP._targetedObject, gResources:gFinish};
+                var popup = new QuickFinishPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to quick finish this building", false, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        }
     },
     setUpValidBtn: function(object) {
         this.hideAll();

@@ -17,21 +17,21 @@ var ResourceBar = cc.Sprite.extend({
                 resIcon = 'res/Art/GUIs/Main_Gui/gold_icon.png';
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
                 textValue = formatNumber(userInfo.gold || 0);
-                ratio = userInfo.gold / userInfo.maxCapacityGold || 1;
+                ratio = userInfo.gold / userInfo.maxCapacityGold || 0;
                 break;
             case 'elixir':
                 resValueBar = 'res/Art/GUIs/Main_Gui/elixir_bar.png';
                 resIcon = 'res/Art/GUIs/Main_Gui/elixir_icon.png';
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityElixir || 0);
                 textValue = formatNumber(userInfo.elixir || 0);
-                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 1;
+                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 0;
                 break;
             case 'dark_elixir':
                 resValueBar = 'res/Art/GUIs/Main_Gui/darkElixir_bar.png';
                 resIcon = 'res/Art/GUIs/Main_Gui/darkElixir_icon.png';
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityDarkElixir || 0);
                 textValue = formatNumber(userInfo.darkElixir || 0);
-                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 1;
+                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 0;
                 break;
             default:
                 break;
@@ -91,17 +91,17 @@ var ResourceBar = cc.Sprite.extend({
             case 'gold':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
                 textValue = formatNumber(userInfo.gold || 0);
-                ratio = userInfo.gold / userInfo.maxCapacityGold || 1;
+                ratio = userInfo.gold / userInfo.maxCapacityGold || 0;
                 break;
             case 'elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityElixir || 0);
                 textValue = formatNumber(userInfo.elixir || 0);
-                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 1;
+                ratio = userInfo.elixir / userInfo.maxCapacityElixir || 0;
                 break;
             case 'dark_elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityDarkElixir || 0);
                 textValue = formatNumber(userInfo.darkElixir || 0);
-                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 1;
+                ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 0;
                 break;
             default:
                 break;
@@ -110,7 +110,7 @@ var ResourceBar = cc.Sprite.extend({
         if (ratio < 0) ratio = 0;
         this.valueBar.setTextureRect(cc.rect(this.valueBar.width * (1 - ratio), 0, this.valueBar.width, this.valueBar.height));
         this.valueBar.x = 0.5 + (1 - ratio) * this.valueBar.width;
-
+        
         this.maxText.setString(maxTextValue);
         this.valueText.setString(textValue);
     },

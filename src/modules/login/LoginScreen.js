@@ -44,7 +44,7 @@ var LoginScreen = cc.Layer.extend({
     },
 
     loginTrucTiep: function(){
-        this.setUserResourcesCapacity();
+        setUserResourcesCapacity();
         cc.director.runScene(createMapScene());
     },
     onSelectLogin:function(sender)
@@ -64,37 +64,7 @@ var LoginScreen = cc.Layer.extend({
         this.lblLog.setString("Connect fail: " + text);
     },
     onFinishGameInfo:function(){
-        this.setUserResourcesCapacity();
+        setUserResourcesCapacity();
         cc.director.runScene(createMapScene());
     },
-
-    setUserResourcesCapacity:function(){
-        var goldCapacity = 0;
-        var elixirCapacity = 0;
-        var darkElixirCapacity = 0;
-        var currentLevelTownHall = 1;
-
-        for(var k in contructionList){
-            var build = contructionList[k];
-            if(build.status == 'complete'){
-                if(build.name == 'STO_1'){
-                    goldCapacity += config.building['STO_1'][build.level].capacity;
-                }else if(build.name == 'STO_2'){
-                    elixirCapacity += config.building['STO_2'][build.level].capacity;
-                }else if(build.name == 'STO_3'){
-                    darkElixirCapacity += config.building['STO_3'][build.level].capacity;
-                }
-            }
-        }
-
-        for(var k in contructionList){
-            if(contructionList[k].name == 'TOW_1'){
-                currentLevelTownHall = contructionList[k].level;
-            }
-        }
-
-        gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
-        gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
-        gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
-    }
 });

@@ -2,7 +2,7 @@
 var checkPendingBuilding = function(){
     var pendingBuilding = 0;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending"){                 //co the de bang "building" va "upgrading"
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade"){                 //co the de bang "building" va "upgrading"
             pendingBuilding++;
         }
     }
@@ -28,6 +28,19 @@ var checkIsFreeBuilder = function(){
         return true;
     }
     return false;
+};
+
+var finishSmallestRemainingTimeBuilding = function(){
+    var idBuildingWillComplete = getIdBuildingMinRemainTime();
+    for(var k in objectRefs){
+        if(objectRefs[k]._id == idBuildingWillComplete){
+            if(objectRefs[k]._status == 'pending'){
+                objectRefs[k].buildComplete();
+            }else if(objectRefs[k]._status == 'upgrade'){
+                objectRefs[k].upgradeComplete();
+            }
+        }
+    }
 };
 
 //Kiem tra tai nguyen co du khong
@@ -56,7 +69,7 @@ var checkUserResources = function(costBuilding){
 var getGToReleaseBuilder = function(){
     var minTimeRemain = Infinity;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending") {
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
             var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
@@ -75,7 +88,7 @@ var getIdBuildingMinRemainTime = function(){
     var minTimeRemain = Infinity;
     var id = null;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending") {
+        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
             var timeRemain = contructionList[k].buildTime * 1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
@@ -84,9 +97,7 @@ var getIdBuildingMinRemainTime = function(){
         }
     }
     return id;
-}
-
-
+};
 
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
@@ -106,6 +117,37 @@ var reduceUserResources = function(costBuilding){
     LOBBY.update(gv.user);
 };
 
+var logReducedUserResources = function(){
+    cc.log("========================REDUCED USER RESOURCE========================");
+    cc.log("Gold:                   " + ReducedTempResources.gold);
+    cc.log("Elixir:                 " + ReducedTempResources.elixir);
+    cc.log("Dark Elixir:            " + ReducedTempResources.darkElixir);
+    cc.log("Coin (G):               " + ReducedTempResources.coin);
+    cc.log("========================REMAIN USER RESOURCE========================");
+    cc.log("Gold remain:            " + gv.user.gold);
+    cc.log("Elixir remain:          " + gv.user.elixir);
+    cc.log("Dark Elixir remain:     " + gv.user.darkElixir);
+    cc.log("Coin (G) remain:        " + gv.user.coin);
+    cc.log("====================================================================");
+};
+
+var resetReducedTempResources = function(){
+    ReducedTempResources.gold = 0;
+    ReducedTempResources.elixir = 0;
+    ReducedTempResources.darkElixir = 0;
+    ReducedTempResources.coin = 0;
+};
+
+var getResourcesNextLevel = function(name, level){
+    var cost = null;
+    var gold = config.building[name][level+1].gold || 0;
+    var elixir = config.building[name][level+1].elixir || 0;
+    var darkElixir = config.building[name][level+1].darkElixir || 0;
+    var coin = config.building[name][level+1].coin || 0;
+
+    cost = { gold: gold, elixir: elixir, darkElixir: darkElixir, coin: coin };
+    return cost;
+};
 
 //Tang tai nguyen cua user
 var increaseUserResources = function(resources){
@@ -115,6 +157,45 @@ var increaseUserResources = function(resources){
     gv.user.coin += resources.coin;
 
     LOBBY.update(gv.user);
+};
+
+var setUserResourcesCapacity = function(){
+    var goldCapacity = 0;
+    var elixirCapacity = 0;
+    var darkElixirCapacity = 0;
+    var currentLevelTownHall = 1;
+
+    for(var k in contructionList){
+        var build = contructionList[k];
+        if(build.status == 'complete' || build.status == 'upgrade'){
+            if(build.name == 'STO_1'){
+                goldCapacity += config.building['STO_1'][build.level].capacity;
+            }else if(build.name == 'STO_2'){
+                elixirCapacity += config.building['STO_2'][build.level].capacity;
+            }else if(build.name == 'STO_3'){
+                darkElixirCapacity += config.building['STO_3'][build.level].capacity;
+            }
+        }
+    }
+
+    for(var k in contructionList){
+        if(contructionList[k].name == 'TOW_1'){
+            currentLevelTownHall = contructionList[k].level;
+        }
+    }
+
+    gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
+    gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
+    gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
+};
+
+var updateBuilderNumber = function(){
+    gv.user.allBuilder = checkBuilder();
+    var a = checkPendingBuilding();
+    gv.user.freeBuilder = gv.user.allBuilder - a;
+    cc.log("========================================== All Builder: " + gv.user.allBuilder);
+    cc.log("========================================== Busy Builder: " + a);
+    cc.log("========================================== Free Builder: " + gv.user.freeBuilder);
 };
 
 
@@ -155,7 +236,7 @@ var getCurrentClientTime = function(){
 
 //ms
 var getCurrentServerTime = function(){
-    return getCurrentClientTime() - DeltaTime;
+    return getCurrentClientTime() - DeltaTime - BONUS_TIME;
 };
 
 var timeToString = function(second) {
@@ -164,12 +245,20 @@ var timeToString = function(second) {
 
 //time: ms
 var timeToReadable = function(time){
-    var day = Math.floor(time/86400000);
-    var hour = Math.floor((time - 86400000*day)/3600000);
-    var minute = Math.floor((time - 86400000*day - 3600000*hour)/60000);
-    var second = Math.floor((time - 86400000*day - 3600000*hour - 60000*minute)/60000);
-    var milli = time - 86400000*day - 3600000*hour - 60000*minute - 60000*second;
-    var t = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'') + (milli ? (milli + 'ms'):'');
-    t = t ? t : '0ms';
+    time = Math.floor(time);
+    var day = Math.floor(time/86400);
+    var hour = Math.floor((time - 86400*day)/3600);
+    var minute = Math.floor((time - 86400*day - 3600*hour)/60);
+    var second = time - 86400*day - 36000*hour - 60*minute;
+    var t = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
+    t = t ? t : '0s';
     return t;
+};
+
+var objectSize = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
 };

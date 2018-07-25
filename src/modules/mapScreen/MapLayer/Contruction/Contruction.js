@@ -3,9 +3,12 @@ var Contruction = cc.Class.extend({
     ctor: function(info) {
         // this._super();
         this.info = info;
-        this._status = this.info.status;
+        this._status = info.status;
         this.buildTime = info.buildTime;
+        this.startTime = info.startTime;
         this._id = info._id;
+        this.name = info.name;
+        this.level = info.level;
         this.init();
     },
     init: function() {
@@ -21,11 +24,15 @@ var Contruction = cc.Class.extend({
         this.presentImg(); // chỉ có ở nhà chứa
     },
     setBuildingStatus: function() {
-        if (this._status === 'upgrade' || this._status === 'pending') {
-            var cur = 0;
-            var max = 10;
-            this.addTimeBar(cur, max);
-            fakeTimeFunction(this, cur, max);
+        if (this._status === 'upgrade' || this._status === 'pending' && this.startTime) {
+            var cur = (getCurrentServerTime() - this.startTime)/1000;
+            cc.log("============================start time: " +this.startTime);
+            var max = this.buildTime;
+            if(!this.timeBar){
+                this.addTimeBar(cur, max);
+                this.countDown(cur, max);
+            }
+
         };
     },
     onTarget: function() {
@@ -64,6 +71,7 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
+        this.onTargetSound();
         LOBBY.showObjectMenu(MAP._targetedObject);
     },
     removeTarget: function() {
@@ -160,6 +168,7 @@ var Contruction = cc.Class.extend({
         if (this.tempX !== this.info.posX && this.tempX !== this.info.posY) {
             var eff = ui.landingEffect();
             this.buildingImg.runAction(eff);
+            this.onPlaceSound();
         }
         this.info.posX = mapPos.x;
         this.info.posY = mapPos.y;
@@ -270,18 +279,14 @@ var Contruction = cc.Class.extend({
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
         return { x: newX, y: newY };
     },
-    remove: function() {
-        this.removeTarget();
-        MAP.removeChild(this.buildingImg);
-        MAP.removeChild(this.grass);
-        this.shadow && MAP.removeChild(this.shadow);
-    },
+
     build: function(cur, max) {
         this.setStatus('pending');
         this.addTimeBar(cur, max);
-        fakeBuildTimeFunction(this, cur, max);
+        this.countDown(cur, max);
     },
     buildComplete: function() {
+        NETWORK.sendFinishTimeConstruction(this._id);
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
@@ -294,30 +299,133 @@ var Contruction = cc.Class.extend({
         cc.log("================================> _id: " + this._id);
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
-                contructionList[item].status = 'complete';  
-                return;
+                contructionList[item].status = 'complete';
+                break;
             }
         }
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
     },
     upgrade: function() {
-        this.setStatus('upgrade');
-        var cur = 0;
-        var max = 10;
-        this.addTimeBar(cur, max);
-        fakeTimeFunction(this, cur, max);
+        var costBuilding = getResourcesNextLevel(this.name, this.level);
+        var gResources = checkUserResources(costBuilding);
+        if(gResources == 0){
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    var listener = {contentBuyG:"Please add more G to release a builder!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }else{
+                    _.extend(ReducedTempResources, costBuilding);
+                    var listener = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
+                    var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            }else{
+                _.extend(ReducedTempResources, costBuilding);
+                NETWORK.sendRequestUpgradeConstruction(this);
+            }
+        } else if(gResources > 0){
+            if(gv.user.coin < gResources){
+                var listener = {contentBuyG:"Please add more G to buy missing resources!"};
+                var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }else{
+                this.cost = costBuilding;
+                var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
+                var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        } else {
+            var listener = {contentBuyG:"Please add more G to buy this item!"};
+            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
+            cc.director.getRunningScene().addChild(popup, 2000000);
+        }
     },
+
     upgradeComplete: function() {
+        NETWORK.sendFinishTimeConstruction(this._id);
+        this.level = this.level + 1;
         this.info.level = this.info.level + 1;
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;
         this.addBuildingImg();
-        this.levelText.setString('cấp ' + this.info.level);
+        this.levelText.setString('cấp ' + this.level);
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
+
+        for(var item in contructionList){
+            if(contructionList[item]._id == this._id){
+                contructionList[item].status = 'complete';
+                break;
+            }
+        }
+
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
     },
+    cancel: function(){
+        if (this._status == 'upgrade') this.cancelUpgrade();
+        else if (this._status == 'pending') this.cancelBuild();
+    },
+    cancelUpgrade: function() {
+        //cc.log('cancel upgrade');
+
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.upgradeBarrier && this.buildingImg.removeChild(this.upgradeBarrier);
+        this.timeBar = null;
+        this.setStatus('complete');
+
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
+    },
+    cancelBuild: function() {
+        cc.log('cancel build');
+
+        var newContructionList = contructionList.filter(element => {
+            if (element._id === this._id) return false;
+            return true;
+        });
+
+        contructionList = newContructionList;
+        MAP.createLogicArray(contructionList, obstacleLists);
+
+        MAP._targetedObject = null;
+        this.remove();
+
+        updateBuilderNumber();
+        setUserResourcesCapacity();
+        LOBBY.update(gv.user);
+    },
+    remove:function() {
+        this.removeTarget();
+        MAP.removeChild(this.buildingImg);
+        MAP.removeChild(this.grass);
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+        this.shadow && MAP.removeChild(this.shadow);
+        this.setStatus('delete');
+    },
+    removeComplete:function(){
+        var newContructionList = contructionList.filter(element => {
+                if (element._id == this._id) return false;
+                return true;
+            });
+        contructionList = newContructionList;
+        this.removeImg();
+        MAP.createLogicArray(contructionList, obstacleLists);
+    },
+    removeImg:function(){
+
+    },
+
     addBuildingImg: function() {
         //
     },
@@ -351,7 +459,8 @@ var Contruction = cc.Class.extend({
 
         processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
-        var t = timeToString(max - cur);
+        //var t = timeToString(max - cur);
+        var t = timeToReadable(max - cur);
         var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
         this.timeText = timeText;
         timeText.attr({
@@ -363,7 +472,8 @@ var Contruction = cc.Class.extend({
     updateTimeBar: function(cur, max) {
         if (this.timeBar) {
             var ratio = cur / max;
-            var t = timeToString(max - cur);
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
             this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
             this.timeText.setString(t);
         }
@@ -387,41 +497,85 @@ var Contruction = cc.Class.extend({
     },
     addBuildingImg: function() {
         // để rỗng
-    }
+    },
+    countDown: function(cur, max){
+        var tick = () => {
+            setTimeout(() => {
+                //if(updateTimeFlag){
+                //    cc.log("--------------------------------------------------------updateTimeFlag == true");
+                //    cur = (getCurrentServerTime() - this.startTime)/1000;
+                //    updateTimeFlag = false;
+                //}
+                cur = (getCurrentServerTime() - this.startTime)/1000;
+                if (cur >= max) {
+                    if(this._status == 'pending'){
+                        this.buildComplete();
+                    }else if(this._status == 'upgrade'){
+                        this.upgradeComplete();
+                    }
+                    return;
+                } else {
+                    this.updateTimeBar(cur, max);
+                    if(this._status == 'pending' || this._status == 'upgrade'){
+                        tick();
+                    }
+                }
+                cur +=1;
+            }, 1000);
+        }
+        //Chay 1 lan
+        tick();
+    },
+    onTargetSound: function() {
+        if (SOUND) {
+            switch (this.info.name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_pickup);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_pickup);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_pickup);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_pickup);
+                    break;
+                default:
+                    break;
+            }
+        }
+    },
+    onPlaceSound: function() {
+        if (SOUND) {
+            switch (this.info.name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_place);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_place);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_place);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_place);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_place);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_place);
+                    break;
+                default:
+                    break;
+            }
+        }
+    },
 });
-
-var fakeTimeFunction = function(sender, cur, max) {
-    var tick = () => {
-        setTimeout(() => {
-            cur +=1;
-            if (cur >= max) {
-                sender.upgradeComplete();
-            } else {
-                tick();
-                sender.updateTimeBar(cur, max);
-            }
-        }, 1000);
-    }
-    tick();
-};
-
-var fakeBuildTimeFunction = function(sender, cur, max) {
-    var tick = () => {
-        setTimeout(() => {
-            if(updateTimeFlag){
-                cc.log("--------------------------------------------------------updateTimeFlag == true");
-                cur = (getCurrentServerTime() - sender.startTime)/1000;
-                updateTimeFlag = false;
-            }
-            if (cur >= max) {
-                sender.buildComplete();
-                return;
-            } else {
-                tick();
-                sender.updateTimeBar(cur, max);
-            }
-            cur +=1;
-        }, 1000);
-    }
-    tick();
-}

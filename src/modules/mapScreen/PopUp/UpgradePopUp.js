@@ -1,10 +1,5 @@
 var createUpgradePopUp = function() {
-    var titleText = new cc.LabelBMFont('Nâng cấp đi', 'res/Art/Fonts/soji_24.fnt');
-    titleText.attr({
-        x: 0,
-        y: 0,
-        scale: 1.5,
-    });
+    var info = MAP._targetedObject.info;
     var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
     acceptBtn.attr({
         x: 0,
@@ -12,7 +7,6 @@ var createUpgradePopUp = function() {
         scale: 1.5,
     });
     var content = [
-        titleText,
         acceptBtn,
     ];
     var req = {};
@@ -38,7 +32,30 @@ var createUpgradePopUp = function() {
         content.push(item);
         num += 1;
     }
+
+    var nextBuildingImg = showNextBuildingImg(info);
+    nextBuildingImg.attr({
+        x: -250,
+        y: 100,
+    });
+    content.push(nextBuildingImg);
+
+    var buildTimeText = showBuildTimeText(config.building[info.name][info.level + 1].buildTime);
+    buildTimeText.attr({
+        x: -250,
+        y: -15,
+    });
+    content.push(buildTimeText);
+
+    var nextBuildingInfo = showNextBuildingInfo(info);
+    nextBuildingInfo.attr({
+        x: -50,
+        y: 130,
+    });
+    content.push(nextBuildingInfo);
+
     var upgradePopUp = new ui.PopUp('Nâng cấp', content, acceptBtn);
+
     MAPSCENE.addChild(upgradePopUp, 1000);
     acceptBtn.addClickEventListener(() => {
         MAP._targetedObject && MAP._targetedObject.upgrade();
@@ -48,33 +65,237 @@ var createUpgradePopUp = function() {
 
 var createNewRequireItem = function(type, value, num) {
     var titleText;
+    var icon;
     switch (type) {
         case 'gold':
-            titleText = new cc.LabelBMFont('Vàng: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
+            icon = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/small/gold.png');
+            titleText = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_12.fnt');
             break;
         case 'elixir':
-            titleText = new cc.LabelBMFont('Dầu: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
+            icon = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/small/elixir.png');
+            titleText = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_12.fnt');
             break;
         case 'dark_elixir':
-            titleText = new cc.LabelBMFont('Dầu đen: ' + value, 'res/Art/Fonts/soji_12.fnt');
-            titleText.attr({
-                x: 0,
-                y: -215 - num * 30,
-                scale: 1.5,
-            });
+            icon = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/small/dElixir.png');
+            titleText = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_12.fnt');
             break;
         default:
             break;
     }
-    return titleText;
+    icon.attr({
+        x: 75,
+        y: -215 - num * 30,
+        scale: 1.5,
+    });
+    icon.addChild(titleText);
+    titleText.attr({ anchorX: 1, y: 10, x: 0 });
+    return icon;
+};
+
+var showNextBuildingImg = function(info) {
+    var nextLevel = info.level + 1;
+    var content = new cc.Sprite();
+    var grass = new cc.Sprite(res.map.grass[info.width]);
+    grass.attr({
+        scale: 2,
+    });
+    var buildingImg;
+    switch (info.name) {
+        case 'TOW_1':
+            buildingImg = new cc.Sprite(res.building.townhall[nextLevel]);
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'AMC_1':
+            buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
+            var buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2 + 3,
+                y: buildingImg.height / 2 + 38,
+            });
+            animSprite.runAction(buildingAnim.repeatForever());
+            break;
+        case 'BAR_1':
+            buildingImg = new cc.Sprite(res.building.barrack[nextLevel]);
+            if (nextLevel >= 4) {
+                var animsDir = nextLevel <= 8 ? 'BAR_1_' + nextLevel + '_effect_' : 'BAR_1_8_effect_';
+                var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
+                var animSprite = new cc.Sprite();
+                buildingImg.addChild(animSprite, 11);
+                animSprite.attr({
+                    x: buildingImg.width / 2,
+                    y: buildingImg.height / 2,
+                });
+                animSprite.runAction(buildingAnim.repeatForever());
+            }
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'RES_1':
+            buildingImg = new cc.Sprite(res.building.gold_mine[nextLevel]);
+
+            var goldmineAnim = ui.makeAnimation('RES_1_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2,
+                y: buildingImg.height / 2,
+            });
+            animSprite.runAction(goldmineAnim.repeatForever());
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'RES_2':
+            buildingImg = new cc.Sprite(res.building.elixir_collector[nextLevel]);
+
+            var elixirCollectorAnim = ui.makeAnimation('RES_2_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var animSprite = new cc.Sprite();
+            buildingImg.addChild(animSprite, 11);
+            animSprite.attr({
+                x: buildingImg.width / 2,
+                y: buildingImg.height / 2,
+            });
+            animSprite.runAction(elixirCollectorAnim.repeatForever());
+            
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'STO_1':
+            buildingImg = new cc.Sprite(res.building.gold_storage[nextLevel][3]);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        case 'STO_2':
+            buildingImg = new cc.Sprite(res.building.elixir_storage[nextLevel][3]);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+            shadow.attr({ scale: 2 });
+            content.addChild(shadow, 5);
+            break;
+        default:
+            buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
+            break;
+    }
+
+    content.addChild(grass, 4);
+    content.addChild(buildingImg, 6);
+    content.setScale(3.5 / info.width);
+    return content;
+};
+
+var showBuildTimeText = function(time) {
+    var text1 = new cc.LabelTTF("Thời gian nâng cấp", "Calibri", 30);
+    text1.attr({ color: new cc.color(142, 8, 8) });
+    var text2 = new cc.LabelBMFont(timeToReadable(time), 'res/Art/Fonts/soji_24.fnt');
+    text2.attr({ y: -20, x: text1.width / 2 });
+    text1.addChild(text2);
+    return text1;
+}
+
+var showNextBuildingInfo = function(info) {
+    var infoArea = new cc.Node();
+    var listInfo = [];
+    switch (info.name) {
+        case 'AMC_1':
+            listInfo.push('capacity');
+            listInfo.push('hitpoints');
+            break;
+        case 'BAR_1':
+            listInfo.push('hitpoints');
+            break;
+        case 'STO_1':
+        case 'STO_2':
+            listInfo.push('capacity');
+            listInfo.push('hitpoints');
+            break;
+        case 'RES_1':
+        case 'RES_2':
+            listInfo.push('productivity');
+            listInfo.push('capacity');
+            listInfo.push('hitpoints');
+            break;
+        case 'TOW_1':
+            listInfo.push('capacityGold');
+            listInfo.push('capacityElixir');
+            listInfo.push('capacityDarkElixir');
+            listInfo.push('hitpoints');
+            break;
+        default:
+        break;
+    }
+    listInfo.forEach((element, i) => {
+        var dirName = element == 'capacity' ? capacityforeachbuilding[info.name] : element;
+        var dirName = element == 'productivity' ? productforeachbuilding[info.name] : dirName;
+        var icon = new cc.Sprite(icons[dirName]);
+        icon.attr({ y: - i * 60 });
+        infoArea.addChild(icon);
+
+        var infoBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
+        infoBar.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoArea.addChild(infoBar, 0);
+
+        var infoBarNext = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        infoBarNext.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoArea.addChild(infoBarNext, 1);
+
+        var infoBarBG = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_BG.png');
+        infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoArea.addChild(infoBarBG, 2);
+
+        var buildingConfig = config.building[info.name];
+        var curValue = buildingConfig[info.level][element];
+        var nextValue = buildingConfig[info.level + 1][element];
+        var maxValue = buildingConfig[objectSize(buildingConfig)][element];
+        cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', objectSize(buildingConfig));
+
+        infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
+        infoBarNext.setTextureRect(cc.rect(0, 0, (nextValue/maxValue) * infoBar.width, infoBar.height));
+        
+        var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
+        textInfo.attr({ anchorX: 0, x: 35, y: - i * 60 })
+        infoArea.addChild(textInfo, 5);
+    });
+    return infoArea;
+};
+
+var icons = {
+    troop_capacity: 'res/Art/GUIs/upgrade_building_gui/small/TroopCapacity_Icon.png',
+    capacityGold: 'res/Art/GUIs/upgrade_building_gui/small/Gold_Capacity_Icon.png',
+    capacityElixir: 'res/Art/GUIs/upgrade_building_gui/small/Elixir_Capacity_Icon.png',
+    capacityDarkElixir: 'res/Art/GUIs/upgrade_building_gui/small/DarkElixir_Capacity_Icon.png',
+    hitpoints: 'res/Art/GUIs/upgrade_building_gui/small/Hitpoints_Icon.png',
+    gold_productivity: 'res/Art/GUIs/upgrade_building_gui/small/Gold_ProductionRate_Icon.png',
+    elixir_productivity: 'res/Art/GUIs/upgrade_building_gui/small/Elixir_ProductionRate_Icon.png',
+};
+
+var capacityforeachbuilding = {
+    AMC_1: 'troop_capacity',
+    STO_1: 'capacityGold',
+    STO_2: 'capacityElixir',
+    RES_1: 'capacityGold',
+    RES_2: 'capacityElixir',
+};
+
+var productforeachbuilding = {
+    RES_1: 'gold_productivity',
+    RES_2: 'elixir_productivity',
 };

@@ -78,12 +78,7 @@ cc.game.onStart = function () {
         gv.poolObjects = new PoolObject();
         testnetwork.connector = new testnetwork.Connector(gv.gameClient);
 
-         //fr.view(DuyTest);
-        //  fr.view(LoadingScreen);
-        //fr.view(MapLayer);
-        //  fr.view(LoadingScreen);
         fr.view(LoginScreen);
-        //fr.view(LoginScreen);
     }, this);
 };
 cc.game.run();
