@@ -199,11 +199,11 @@ var ItemInfo = TinyPopup.extend({
             var dirName = element == 'capacity' ? capacityforeachbuilding[itemName] : element;
             var dirName = element == 'productivity' ? productforeachbuilding[itemName] : dirName;
             var icon = new cc.Sprite(icons[dirName]);
-            icon.attr({ y: - i * 60 });
+            icon.attr({ y: - i * 40 });
             infoArea.addChild(icon);
 
             var infoBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
-            infoBar.attr({ anchorX: 0, x: 30, y: - i * 60 });
+            infoBar.attr({ anchorX: 0, x: 30, y: - i * 40 });
             infoArea.addChild(infoBar, 0);
 
             //var infoBarNext = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
@@ -211,7 +211,7 @@ var ItemInfo = TinyPopup.extend({
             //infoArea.addChild(infoBarNext, 1);
 
             var infoBarBG = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_BG.png');
-            infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 60 });
+            infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 40 });
             infoArea.addChild(infoBarBG, 2);
 
             var buildingConfig = config.building[itemName];
@@ -225,7 +225,7 @@ var ItemInfo = TinyPopup.extend({
 
             //var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
             var textInfo = cc.LabelBMFont(curValue, 'res/Art/Fonts/soji_12.fnt');
-            textInfo.attr({ anchorX: 0, x: 35, y: - i * 60 });
+            textInfo.attr({ anchorX: 0, x: 35, y: - i * 40 });
             infoArea.addChild(textInfo, 5);
         });
         return infoArea;

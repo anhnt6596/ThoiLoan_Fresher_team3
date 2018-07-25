@@ -17,6 +17,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(infoBtn);
         this.infoBtn = infoBtn;
         this.addChild(infoBtn);
+        infoBtn.addClickEventListener(this.onInfo.bind(this));
 
         var upgradeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/upgrade_icon.png', 'Upgrade');
         this._listBtn.push(upgradeBtn);
@@ -41,6 +42,13 @@ var ObjectMenu = cc.Node.extend({
         this.removeBtn = removeBtn;
         this.addChild(removeBtn);
         removeBtn.addClickEventListener(this.remove.bind(this));
+    },
+    onInfo: function() {
+        if(MAP._targetedObject){
+            var listener = {level: MAP._targetedObject.level, itemName:MAP._targetedObject.name};
+            var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[listener.itemName].en, true, listener);
+            cc.director.getRunningScene().addChild(popup, 200);
+        }
     },
     upgrade: function() {
         // MAP._targetedObject && MAP._targetedObject.upgrade();
