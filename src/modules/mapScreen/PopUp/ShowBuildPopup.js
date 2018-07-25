@@ -21,6 +21,7 @@ var ShowBuildPopup = TinyPopup.extend({
 
         if(this._listener.type == 'resources'){
             _.extend(ReducedTempResources, this._listener.building.cost);
+            ReducedTempResources.coin += this._listener.gResources;
             if(!checkIsFreeBuilder()){
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){

@@ -65,9 +65,11 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.ADD_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
+                    cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
                     cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
                     _.extend(LastReduceResources, ReducedTempResources);
                     MAP.updateMapWhenValidatedBuild(newBuildingAdd, buildingAdd);
+                    cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
                     reduceUserResources(ReducedTempResources);
                     logReducedUserResources();
                     resetReducedTempResources();
