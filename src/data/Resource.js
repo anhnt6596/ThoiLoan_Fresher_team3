@@ -1,18 +1,5 @@
 var res = res || {};
 
-// res.map = {
-//     map_tmx: mapDir + '42x42map.tmx',
-//     map_bl: mapDir + '1_0001_Layer-1.png',
-//     map_br: mapDir + '1_0003_Layer-2.png',
-//     map_tl: mapDir + '1_0000_Layer-3.png',
-//     map_tr: mapDir + '1_0002_Layer-4.png',
-//     builder_hut_png: mapDir + 'builder hut.png',
-// }
-
-/**
- * Created by linhrafa on 7/10/2018.
- */
-
 var res = {
     mg_armyicon : 'res/Art/GUIs/Main_Gui/army_icon.png',
     mg_attack : 'res/Art/GUIs/Main_Gui/attack.png',
@@ -526,5 +513,10 @@ var Z = {
     ARROW_MOVE: 999,
     TARGET: 1000, 
 }
+
+var MAPVALUE = {
+    UNUSED: -1,
+    MAPSIZE: 40,
+};
 
 var SOUND = true;
