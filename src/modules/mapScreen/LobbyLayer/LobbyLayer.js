@@ -70,11 +70,11 @@ var LobbyLayer = cc.Layer.extend({
     },
     onAttack: function() {
         //
-        gv.user.coin = parseInt(gv.user.coin) + 10;
+        gv.user.coin = parseInt(gv.user.coin) + 100;
         gv.user.gold = parseInt(gv.user.gold) + 1000;
         gv.user.elixir = parseInt(gv.user.elixir) + 1000;
         this.update(gv.user);
-        NETWORK.sendAddResource(1000, 1000, 0, 10);
+        NETWORK.sendAddResource(1000, 1000, 0, 100);
     },
 
 

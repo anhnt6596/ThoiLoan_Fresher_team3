@@ -548,6 +548,12 @@ var Contruction = cc.Class.extend({
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_pickup);
                     break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_pickup);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_pickup);
+                    break;
                 default:
                     break;
             }
@@ -573,6 +579,12 @@ var Contruction = cc.Class.extend({
                     break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_place);
+                    break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_place);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_place);
                     break;
                 default:
                     break;
