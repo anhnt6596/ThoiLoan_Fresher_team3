@@ -90,7 +90,6 @@ var ResourceBar = cc.Sprite.extend({
         switch (this.type) {
             case 'gold':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
-                cc.log('>>>>>>>>>>>>>dbnfdjsbgvjsdngj>', userInfo.maxCapacityGold);
                 textValue = formatNumber(userInfo.gold || 0);
                 ratio = userInfo.gold / userInfo.maxCapacityGold || 0;
                 break;
