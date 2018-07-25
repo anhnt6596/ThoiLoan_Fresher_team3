@@ -383,9 +383,11 @@ var MapLayer = cc.Layer.extend({
     _isBuilding: false,
     mapWidth: 4200,
     mapHeight: 3200,
-    ctor: function() {
+    ctor: function(userInfo) {
         this._super();
         MAP = this;
+        this.userInfo = userInfo;
+
         this.anchorX = 0;
         this.anchorY = 0;
 
@@ -694,7 +696,7 @@ var MapLayer = cc.Layer.extend({
         var newBuilding;
         switch (buildingInfo.name) {
             case 'TOW_1':
-                newBuilding = new TownHall(buildingInfo);
+                newBuilding = new TownHall(buildingInfo, this.userInfo);
                 break;
             case 'BDH_1':
                 newBuilding = new BuilderHut(buildingInfo);
@@ -706,10 +708,10 @@ var MapLayer = cc.Layer.extend({
                 newBuilding = new Barrack(buildingInfo);
                 break;
             case 'STO_1':
-                newBuilding = new GoldStorage(buildingInfo);
+                newBuilding = new GoldStorage(buildingInfo, this.userInfo);
                 break;
             case 'STO_2':
-                newBuilding = new ElixirStorage(buildingInfo);
+                newBuilding = new ElixirStorage(buildingInfo, this.userInfo);
                 break;
             case 'RES_1':
                 newBuilding = new GoldMine(buildingInfo);

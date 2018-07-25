@@ -157,11 +157,11 @@ var Contruction = cc.Class.extend({
         });
         this.nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
         });
         this.timeBar && this.timeBar.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 94,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
         });
     },
     updatePosition: function(mapPos) {
@@ -259,7 +259,7 @@ var Contruction = cc.Class.extend({
         var coor = this.xyOnMap(this.info.posX, this.info.posY);
         nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 50,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
             color: cc.color(255, 255, 0, 255),
             opacity: 0,
         });
@@ -267,10 +267,10 @@ var Contruction = cc.Class.extend({
         
         var levelText = new cc.LabelBMFont('cấp ' + this.info.level, 'res/Art/Fonts/soji_16.fnt');
         this.levelText = levelText;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
         levelText.attr({
             x: nameText.width / 2,
             y: -5,
+            opacity: this.info.name !== "BDH_1" ? 255 : 0,
         });
         nameText.addChild(levelText, 1000);
     },
@@ -441,9 +441,10 @@ var Contruction = cc.Class.extend({
 
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
+        var coor = this.xyOnMap(this.info.posX, this.info.posY);
         timeBar.attr({
-            x: this.buildingImg.x,
-            y: this.buildingImg.y + (this.info.height / 2) * TILE_HEIGHT + 94,
+            x: coor.x,
+            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
         });
         MAP.addChild(timeBar, 1100);
 
@@ -465,7 +466,7 @@ var Contruction = cc.Class.extend({
         this.timeText = timeText;
         timeText.attr({
             x: timeBar.width / 2,
-            y: 50,
+            y: 42,
         });
         timeBar.addChild(timeText);
     },
