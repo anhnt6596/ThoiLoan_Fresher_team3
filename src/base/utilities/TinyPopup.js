@@ -16,15 +16,19 @@ var TinyPopup = cc.Node.extend({
     init:function(width, height, title, type, listener){
         this._listener = listener;
         this.attr({
-            x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
+            anchorX: 0,
+            anchorY: 0,
+            x: 0,
+            y: 0,
             width: cc.winSize.width,
             height: cc.winSize.height,
-            color: cc.color(100, 100, 100, 100),
+            color: cc.color(100, 100, 100, 50),
         });
 
         var background = new ccui.Button('res/Art/GUIs/pop_up/bg_color.png', 'res/Art/GUIs/pop_up/bg_color.png');
         background.attr({
+            anchorX: 0,
+            anchorY: 0,
             x: 0,
             y: 0,
             scale: 100,
@@ -33,56 +37,64 @@ var TinyPopup = cc.Node.extend({
 
         this._frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
         this._frame.attr({
+            anchorX: 0,
+            anchorY: 0,
             scaleX: width/this._frame.width,
             scaleY: height/this._frame.height,
-            x: 0,
-            y: 0,
+            x: (cc.winSize.width - width)/2,
+            y: (cc.winSize.height - height)/2,
         });
         this.addChild(this._frame, 1);
 
 
         var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
         closeBtn.attr({
-            x: this._frame.width - 30,
-            y: this._frame.height - 25,
-            scale: 1,
+            anchorX: 0,
+            anchorY: 0,
+            scale: 1.2,
+            x: this._frame.x+width - closeBtn.width*closeBtn.scaleX - 30,
+            y: this._frame.y+height - closeBtn.height*closeBtn.scaleY - 25,
         });
-        this._frame.addChild(closeBtn, 2);
+        this.addChild(closeBtn, 2);
         closeBtn.addClickEventListener(this.close.bind(this));
 
 
         if(!type){
             var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
             acceptBtn.attr({
-                x: this._frame.x + 200,
+                anchorX: 0,
+                anchorY: 0,
+                x: (cc.winSize.width - acceptBtn.width)/2,
                 y: this._frame.y + 40,
                 scale: 1,
             });
-            this._frame.addChild(acceptBtn, 200);
+            this.addChild(acceptBtn, 200);
             acceptBtn.addClickEventListener(this.ok.bind(this));
 
-            var btnText = new cc.LabelBMFont("Confirm", 'res/Art/Fonts/soji_12.fnt');
+            var btnText = new cc.LabelBMFont("Confirm", 'res/Art/Fonts/soji_20.fnt');
             btnText.attr({
-                x: this._frame.x + 200,
-                y: this._frame.y + 40,
+                x: acceptBtn.x + btnText.width/2 + 10,
+                y: acceptBtn.y + acceptBtn.height/2,
                 scale: 1,
             });
-            this._frame.addChild(btnText, 202);
+            this.addChild(btnText, 202);
         }
 
-        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_12.fnt');
+        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
         titleText.attr({
-            x: this._frame.width / 2,
-            y: 245,
+            anchorX: 0,
+            anchorY: 0,
+            x: (cc.winSize.width - titleText.width)/2,
+            y: this._frame.y + height - titleText.height - 30,
             scale: 1,
         });
-        this._frame.addChild(titleText, 2);
+        this.addChild(titleText, 2);
 
         this.openAction();
     },
 
     showContent:function(listener){
-        if(!listener.contentBuyG){
+        if(!listener.contentBuyG && !listener.level){
             var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
                 x: this._frame.width / 2,
