@@ -37,6 +37,7 @@ var res = {
     mg_shop: 'res/Art/GUIs/Main_Gui/shop.png',
     mg_trophy: 'res/Art/GUIs/Main_Gui/trophy.png',
     mg_trophy_bg_bar: 'res/Art/GUIs/Main_Gui/trophy_bg_bar.png',
+    login_bg: 'res/Art/GUIs/Main_Gui/login/background.jpg',
 
 
 

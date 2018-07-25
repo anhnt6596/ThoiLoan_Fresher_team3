@@ -12,6 +12,21 @@ var LoginScreen = cc.Layer.extend({
         var size = cc.winSize;
         var yBtn = size.height/3;
 
+        var size = cc.director.getVisibleSize();
+
+        var height = 480;
+        var width = 800;
+        var background = new cc.Sprite("res/Art/GUIs/Main_Gui/login/background.jpg");
+        background.attr({
+            x: size.width/2,
+            y: size.height/2,
+            scale: 1.5
+
+        });
+
+        this.addChild(background);
+        //
+        //
         this.tfId = gv.TextField("Id","linhrafa",size.width/4,5*size.height/9);
         this.tfId.setMaxLengthEnabled(true);
         this.tfId.setMaxLength(12);

@@ -13,6 +13,12 @@ var ScreenNetwork = cc.Layer.extend({
     ctor:function() {
         this._super();
         var size = cc.director.getVisibleSize();
+
+        var height = 480;
+        var width = 800;
+        var background = new cc.Sprite(res.login_bg);
+        this.addChild(background);
+
         //text field id login -linhrafa
         this.tfId = gv.TextField("Id","linhrafa",size.width/4,5*size.height/9);
         this.tfId.setMaxLengthEnabled(true);

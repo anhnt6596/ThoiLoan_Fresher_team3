@@ -80,11 +80,12 @@ gv.TextField = function(text,placeholder, x ,y){
     _tf.setTouchEnabled(true);
     _tf.fontName = text;
     _tf._placeHolder = placeholder;
+    _tf.setPlaceHolderColor(new cc.color(255,255,255)); //set mau chu trong place holder
     _tf.attr({
         x: x,
         y: y
     });
-    _tf.setColor(cc.color(220,220,220,255));
+    //_tf.setColor(new cc.color(0,0,0));
     return _tf;
 }
 
