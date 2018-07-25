@@ -285,8 +285,10 @@ var Contruction = cc.Class.extend({
         this.addTimeBar(cur, max);
         this.countDown(cur, max);
     },
-    buildComplete: function() {
-        NETWORK.sendFinishTimeConstruction(this._id);
+    buildComplete: function(isQuickFinish) {
+        if(!isQuickFinish){
+            NETWORK.sendFinishTimeConstruction(this._id);
+        }
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
@@ -345,8 +347,10 @@ var Contruction = cc.Class.extend({
         }
     },
 
-    upgradeComplete: function() {
-        NETWORK.sendFinishTimeConstruction(this._id);
+    upgradeComplete: function(isQuickFinish) {
+        if(!isQuickFinish){
+            NETWORK.sendFinishTimeConstruction(this._id);
+        }
         this.level = this.level + 1;
         this.info.level = this.info.level + 1;
         this.buildingImg && MAP.removeChild(this.buildingImg);
@@ -509,9 +513,9 @@ var Contruction = cc.Class.extend({
                 cur = (getCurrentServerTime() - this.startTime)/1000;
                 if (cur >= max) {
                     if(this._status == 'pending'){
-                        this.buildComplete();
+                        this.buildComplete(false);
                     }else if(this._status == 'upgrade'){
-                        this.upgradeComplete();
+                        this.upgradeComplete(false);
                     }
                     return;
                 } else {

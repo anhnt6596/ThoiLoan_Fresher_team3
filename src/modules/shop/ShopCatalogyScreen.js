@@ -264,7 +264,16 @@ var ShopCatalogyScreen = Popup.extend({
         this._item.addChild(numLabel, 4, 4);
 
 
-        var condition = (num == maxBuilding || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired));
+        var missImage = false;
+        for(var d in listBuildingMissImage){
+            if(listBuildingMissImage[d] == itemName){
+                missImage = true;
+                cc.log("==============================HERE");
+                break;
+            }
+        }
+        var condition = (num == maxBuilding || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired)) || missImage;
+
         //Required TownHall Level and Amount
         if(condition){
             this._item.setColor(cc.color(128, 128, 128, 255));
@@ -278,7 +287,6 @@ var ShopCatalogyScreen = Popup.extend({
             }
         }
 
-
         //Tinh toa do suggest
         var width = catalogy[itemName].width;
         var height = catalogy[itemName].height;
@@ -287,7 +295,7 @@ var ShopCatalogyScreen = Popup.extend({
         var costBuilding = {gold:gold, elixir:elixir, darkElixir:darkElixir, coin:coin};
 
         var self = this;
-        if(!condition){
+        if(!condition && !missImage){
             var listener = cc.EventListener.create({
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
                 onTouchBegan: function(touch, event){return true;},
@@ -331,7 +339,8 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5/6, name.building[itemName].en, true, null);
+        var listener = {level: 1, itemName:itemName};
+        var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[itemName].en, true, listener);
         cc.director.getRunningScene().addChild(popup, 200);
     },
 
