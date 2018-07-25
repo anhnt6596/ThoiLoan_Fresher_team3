@@ -1,8 +1,8 @@
 var ElixirStorage = StorageBuilding.extend({
     img_x: -40,
     img_y: -72,
-    ctor: function(info) {
-        this._super(info);
+    ctor: function(info, userInfo) {
+        this._super(info, userInfo);
         // this.addBuildingImg();
         // this.presentImg();
     },
