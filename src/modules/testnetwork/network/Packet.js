@@ -299,6 +299,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.n = this.getInt();
+            gv.user.largestId = this.n;
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
@@ -316,7 +317,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this.startTime = this.getLong();
                 cc.log("Start Time: " + this.startTime);
 
-                if (config.building[this.name]) {
+                if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
                        _id: this._id,
                        name: this.name,
