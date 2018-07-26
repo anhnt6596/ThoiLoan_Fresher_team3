@@ -565,7 +565,7 @@ var Contruction = cc.Class.extend({
                         tick();
                     }
                 }
-                cur +=1;
+                //cur +=1;
             }, 1000);
         }
         //Chay 1 lan

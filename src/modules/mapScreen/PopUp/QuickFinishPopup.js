@@ -10,10 +10,6 @@ var QuickFinishPopup = TinyPopup.extend({
         resetReducedTempResources();
     },
 
-    openAction: function() {
-        this.runAction(ui.BounceEff());
-    },
-
     ok: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));

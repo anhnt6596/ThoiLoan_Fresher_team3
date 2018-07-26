@@ -1,5 +1,5 @@
 var createCancelPopUp = function() {
-    var titleText = new cc.LabelBMFont('If cancel, you will lose half the resources you spent', 'res/Art/Fonts/soji_20.fnt');
+    var titleText = new cc.LabelBMFont('If cancel, you will lose half the resources you spent', 'res/Art/Fonts/soji_12.fnt');
     titleText.attr({
         x: 0,
         y: 0,
