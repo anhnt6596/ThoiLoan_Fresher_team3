@@ -159,9 +159,24 @@ var getResourcesNextLevel = function(name, level){
 
 //Tang tai nguyen cua user
 var increaseUserResources = function(resources){
-    gv.user.gold += resources.gold;
-    gv.user.elixir += resources.elixir;
-    gv.user.darkElixir += resources.darkElixir;
+    if(gv.user.gold + resources.gold > gv.user.maxCapacityGold){
+        gv.user.gold = gv.user.maxCapacityGold;
+    }else{
+        gv.user.gold += resources.gold;
+    }
+
+    if(gv.user.elixir + resources.elixir > gv.user.maxCapacityElixir){
+        gv.user.elixir = gv.user.maxCapacityElixir;
+    }else{
+        gv.user.elixir += resources.elixir;
+    }
+
+    if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
+        gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
+    }else{
+        gv.user.darkElixir += resources.darkElixir;
+    }
+
     gv.user.coin += resources.coin;
 
     LOBBY.update(gv.user);

@@ -308,9 +308,9 @@ var ShopCatalogyScreen = Popup.extend({
 
                     if (cc.rectContainsPoint(rect, locationInNode)) {
                         if(!self._moving){
-                            //var id = (length < 10) ? ("_0" + length) : ("_" + length);
-                            var last = contructionList[contructionList.length-1];
-                            var id = last._id + 1;                      //Sua lai neu lam them chuc nang Cancel
+                            //var last = contructionList[contructionList.length-1];
+                            //var id = last._id + 1;
+                            var id = lastIndexContructionList;
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {

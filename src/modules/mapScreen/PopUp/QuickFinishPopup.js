@@ -10,17 +10,23 @@ var QuickFinishPopup = TinyPopup.extend({
         resetReducedTempResources();
     },
 
+    openAction: function() {
+        this.runAction(ui.BounceEff());
+    },
+
     ok: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
         this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
-        NETWORK.sendQuickFinish(this._listener.building._id);
         ReducedTempResources.coin = this._listener.gResources;
-        reduceUserResources(ReducedTempResources);
-        logReducedUserResources();
-        if(this._listener.building._status == 'pending'){
-            this._listener.building.buildComplete(true);
-        }else if(this._listener.building._status == 'upgrade'){
-            this._listener.building.upgradeComplete(true);
-        }
+        buildingQuickFinish = this._listener.building;
+        NETWORK.sendQuickFinish(this._listener.building._id);
+
+        //reduceUserResources(ReducedTempResources);
+        //logReducedUserResources();
+        //if(this._listener.building._status == 'pending'){
+        //    this._listener.building.buildComplete(true);
+        //}else if(this._listener.building._status == 'upgrade'){
+        //    this._listener.building.upgradeComplete(true);
+        //}
     }
 });
