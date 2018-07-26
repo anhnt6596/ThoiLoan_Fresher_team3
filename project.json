@@ -9,7 +9,8 @@
     "modules": [
         "cocos2d",
         "extensions",
-        "external"
+        "external",
+        "editbox"
     ],
     "jsListOrder": [
         "src/data/**/*.js",

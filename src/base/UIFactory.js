@@ -75,12 +75,12 @@ gv.commonText = function(text, x, y){
         return _lb;
 };
 //linhrafa
-gv.TextField = function(text,placeholder, x ,y){
-    var _tf = new ccui.TextField();
+gv.EditBox = function(text,placeholder, x ,y){
+    var _tf = new cc.EditBox;
     _tf.setTouchEnabled(true);
     _tf.fontName = text;
-    _tf._placeHolder = placeholder;
-    _tf.setPlaceHolderColor(new cc.color(255,255,255)); //set mau chu trong place holder
+    _tf.placeHolder = placeholder;
+    _tf.placeHolderColor = new cc.color(255,255,255); //set mau chu trong place holder
     _tf.attr({
         x: x,
         y: y

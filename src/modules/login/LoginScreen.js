@@ -27,9 +27,9 @@ var LoginScreen = cc.Layer.extend({
         this.addChild(background);
         //
         //
-        this.tfId = gv.TextField("Id","linhrafa",size.width/4,5*size.height/9);
-        this.tfId.setMaxLengthEnabled(true);
-        this.tfId.setMaxLength(12);
+        this.tfId = gv.EditBox("Id","linhrafa",size.width/4,5*size.height/9);
+        //this.tfId.setMaxLengthEnabled(true);
+        this.tfId.maxLength = 12;
         this.addChild(this.tfId);
 
 
