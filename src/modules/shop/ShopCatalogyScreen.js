@@ -310,7 +310,8 @@ var ShopCatalogyScreen = Popup.extend({
                         if(!self._moving){
                             //var last = contructionList[contructionList.length-1];
                             //var id = last._id + 1;
-                            var id = lastIndexContructionList;
+                            var id = gv.user.largestId;
+                            gv.user.largestId += 1;
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {
