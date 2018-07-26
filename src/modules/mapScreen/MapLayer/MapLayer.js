@@ -393,6 +393,7 @@ var MapLayer = cc.Layer.extend({
 
         this.init();
         this.addTouchListener();
+        this.addMultiTouch();
         this.addKeyboardListener();
         this.updateTimeStamp();
     },
@@ -883,8 +884,48 @@ var MapLayer = cc.Layer.extend({
             this.y = curPos.y;
         }
     },
-    zoomMap: function() {
-
+    addMultiTouch: function() {
+        var self = this;
+        if (self == null) return;
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+            onTouchesBegan: function(touches, event) {
+                return true;
+            },
+            onTouchesMoved: this.onTouchesMoved.bind(this),
+            //onTouchesEnded: this.onTouchEnded.bind(this),
+        }, this);
+    },
+    onTouchesMoved: function(touches, event) {
+        var calculateDistance = function(a, b) {
+            return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+        }
+        if (touches.length < 2) return true;
+        var p1 = touches[0];
+        var p2 = touches[1];
+        var rootP1 = cc.pSub(p1.getLocation() - p1.getDelta());
+        var rootP2 = cc.pSub(p2.getLocation() - p2.getDelta());
+        this._zoomPoint = new cc.p((rootP1.x + rootP2.x)/2, (rootP1.y + rootP2.y)/2);
+        var oriDistance = calculateDistance(rootP1, rootP2);
+        var newDistance = calculateDistance(p1, p2);
+        var scaleRate = newDistance/oriDistance;
+        this.zoomMap(scaleRate);
+    },
+    zoomMap: function(scaleRate) {
+        var curPos = {
+            x: self.x,
+            y: self.y,
+        };
+        var newPos = {
+            x: curPos.x + this._zoomPoint.x * (scaleRate - 1) * this.scale,
+            y: curPos.y + this._zoomPoint.y * (scaleRate - 1) * this.scale,
+        }
+        newPos = self.limitMoveMap(newPos);
+        this.attr({
+            x: newPos.x,
+            y: newPos.y,
+            scale: this.scale * scaleRate
+        });
     },
     limitMoveMap: function(pos) {
         var size = cc.winSize;
