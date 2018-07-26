@@ -26,6 +26,7 @@ gv.commonButton = function(w, h, x, y, text){
     btn.setScale9Enabled(true);
     btn.setUnifySizeEnabled(false);
     btn.ignoreContentAdaptWithSize(false);
+    btn.loadTextures("res/Art/GUIs/Main_Gui/login/buttonLogin.png","res/Art/GUIs/Main_Gui/login/buttonLogin.png","res/Art/GUIs/Main_Gui/login/buttonLogin.png");
     var capInsets = cc.rect(15,15, 15, 15);
     btn.setCapInsets(capInsets);
     btn.setContentSize(cc.size(w,h));

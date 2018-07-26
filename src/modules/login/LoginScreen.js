@@ -27,19 +27,41 @@ var LoginScreen = cc.Layer.extend({
         this.addChild(background);
         //
         //
-        this.tfId = gv.TextField("Id","linhrafa",size.width/4,5*size.height/9);
-        this.tfId.setMaxLengthEnabled(true);
-        this.tfId.setMaxLength(12);
-        this.addChild(this.tfId);
+        //this.tfId = gv.TextField("Id","linhrafa",size.width/4,5*size.height/9);
+        //this.tfId.setMaxLengthEnabled(true);
+        //this.tfId.setMaxLength(12);
+        //this.addChild(this.tfId);
+        this.uuidEb = cc.EditBox.create(cc.size(size.width/3,size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        this.uuidEb.setPlaceHolder("  uuid");
+        this.uuidEb.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: size.width/2,
+            y: size.height/3,
+            fontSize: 25
 
+        });
+        this.addChild(this.uuidEb);
 
-        var btnLogin = gv.commonButton(200, 64, size.width/2, yBtn,"Login");
+        var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");
+
+        this.loginText = new cc.LabelBMFont("Login", 'res/Art/Fonts/soji_12.fnt');
+        this.loginText.attr({
+            anchorX: 0.5,
+            anchorY: 0.5,
+            x: btnLogin.getContentSize().width/2,
+            y: btnLogin.getContentSize().height/2,
+            scale: 2
+        })
+        btnLogin.addChild(this.loginText);
+
         this.addChild(btnLogin);
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
         // btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
 
-        this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
-        this.addChild(this.lblLog);
+
+        //this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
+        //this.addChild(this.lblLog);
 
     },
 
@@ -51,7 +73,7 @@ var LoginScreen = cc.Layer.extend({
     {
         //this.lblLog.setString("Start Connect!");
 
-        gv.user.uuid = this.tfId.getString()
+        gv.user.uuid = this.uuidEb.getString()
         cc.log("uuid "+  gv.user.uuid  );
         gv.gameClient.connect();
     },
