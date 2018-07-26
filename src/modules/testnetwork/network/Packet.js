@@ -12,6 +12,7 @@ gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
 gv.CMD.UPGRADE_CONSTRUCTION = 2004;
+gv.CMD.CANCLE_CONSTRUCTION = 2005;
 
 gv.CMD.GET_SERVER_TIME = 2100;
 gv.CMD.FINISH_TIME_CONSTRUCTION = 2101;
@@ -189,6 +190,24 @@ CmdSendQuickFinish = fr.OutPacket.extend(
 );
 
 
+CmdSendCancelConstruction = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.CANCLE_CONSTRUCTION);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
+
+
 CmdGetServerTime = fr.OutPacket.extend(
     {
         ctor:function()
@@ -280,6 +299,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.n = this.getInt();
+            gv.user.largestId = this.n;
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
@@ -297,7 +317,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this.startTime = this.getLong();
                 cc.log("Start Time: " + this.startTime);
 
-                if (config.building[this.name]) {
+                if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
                        _id: this._id,
                        name: this.name,
@@ -402,6 +422,31 @@ testnetwork.packetMap[gv.CMD.ADD_CONSTRUCTION] = fr.InPacket.extend(
 );
 
 testnetwork.packetMap[gv.CMD.UPGRADE_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+
+testnetwork.packetMap[gv.CMD.CANCLE_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
         {

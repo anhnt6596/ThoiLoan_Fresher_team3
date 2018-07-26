@@ -80,7 +80,7 @@ var TinyPopup = cc.Node.extend({
             this.addChild(btnText, 202);
         }
 
-        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
+        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
         titleText.attr({
             anchorX: 0,
             anchorY: 0,

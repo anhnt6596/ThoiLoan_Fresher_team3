@@ -20,8 +20,8 @@ var LobbyLayer = cc.Layer.extend({
 
         var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'TẤN CÔNG');
         this.addChild(btnAttack);
-        //btnAttack.addClickEventListener(this.onAttack.bind(this));
-        btnAttack.addClickEventListener( () => NETWORK.sendAddConstruction("BDH_1",11,17));
+        btnAttack.addClickEventListener(this.onAttack.bind(this));
+        //btnAttack.addClickEventListener( () => NETWORK.sendAddConstruction("BDH_1",11,17));
 
 
     },

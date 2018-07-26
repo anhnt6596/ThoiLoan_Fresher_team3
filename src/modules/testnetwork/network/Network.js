@@ -14,6 +14,12 @@ var newBuildingAdd = null;
 //Upgrade Construction
 var buildingUpgrade = null;
 
+//Quick Finish Construction
+var buildingQuickFinish = null;
+
+//Cancel Construction
+var buildingCancel = null;
+
 
 var NETWORK = NETWORK || null;
 
@@ -79,12 +85,14 @@ testnetwork.Connector = cc.Class.extend({
                     newBuildingAdd = null;
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
-                    var listener = {contentBuyG:"Please check your connection to server!"};
+                    //var listener = {contentBuyG:"Please check your connection to server!"};
+                    var listener = {contentBuyG:"Please try again later!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to build this construction", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                     //reset
                     buildingAdd = null;
                     newBuildingAdd = null;
+                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.UPGRADE_CONSTRUCTION:
@@ -120,11 +128,53 @@ testnetwork.Connector = cc.Class.extend({
                     buildingUpgrade = null;
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
-                    var listener = {contentBuyG:"Please check your connection to server!"};
+                    var listener = {contentBuyG:"Please try again later!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to upgrade this construction", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                     //reset
                     buildingUpgrade = null;
+                    resetReducedTempResources();
+                }
+                break;
+            case gv.CMD.QUICK_FINISH:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN QUICK FINISH tu SERVER=======================================");
+                    reduceUserResources(ReducedTempResources);
+                    logReducedUserResources();
+                    if(buildingQuickFinish._status == 'pending'){
+                        buildingQuickFinish.buildComplete(true);
+                    }else if(buildingQuickFinish._status == 'upgrade'){
+                        buildingQuickFinish.upgradeComplete(true);
+                    }
+                    //reset
+                    buildingQuickFinish = null;
+                    resetReducedTempResources();
+                }else {
+                    cc.log("=======================================SERVER TU CHOI QUICK FINISH=======================================");
+                    var listener = {contentBuyG:"Please try again later!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to quick finish this construction", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    //reset
+                    buildingQuickFinish = null;
+                    resetReducedTempResources();
+                }
+                break;
+            case gv.CMD.CANCLE_CONSTRUCTION:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN CANCEL tu SERVER=======================================");
+                    if (buildingCancel._status == 'upgrade') buildingCancel.cancelUpgrade();
+                    else if (buildingCancel._status == 'pending') buildingCancel.cancelBuild();
+                    //reset
+                    buildingCancel = null;
+                    resetReducedTempResources();
+                }else {
+                    cc.log("=======================================SERVER TU CHOI CANCEL=======================================");
+                    var listener = {contentBuyG:"Please try again later!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to cancel this construction", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    //reset
+                    buildingCancel = null;
+                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
@@ -199,6 +249,7 @@ testnetwork.Connector = cc.Class.extend({
         buildingUpgrade = building;
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
     },
+
     //Finish build or Finish upgrade
     sendFinishTimeConstruction:function(id){
         cc.log("sendTimeFinishConstruction: " +id);
@@ -215,6 +266,15 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log("=======================================SEND QUICK FINISH=======================================");
     },
+
+    //Cancel
+    sendCancel:function(id){
+        var pk = this.gameClient.getOutPacket(CmdSendCancelConstruction);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND CANCEL CONSTRUCTION=======================================");
+    },
+
     sendGetServerTime:function(){
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();

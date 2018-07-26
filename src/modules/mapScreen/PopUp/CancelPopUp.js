@@ -1,5 +1,5 @@
 var createCancelPopUp = function() {
-    var titleText = new cc.LabelBMFont('Neu huy, ban se mat mot nua tai nguyen', 'res/Art/Fonts/soji_20.fnt');
+    var titleText = new cc.LabelBMFont('If cancel, you will lose half the resources you spent', 'res/Art/Fonts/soji_12.fnt');
     titleText.attr({
         x: 0,
         y: 0,
@@ -34,7 +34,7 @@ var createCancelPopUp = function() {
     var cancelPopUp = new ui.PopUp('Cancel', content, acceptBtn);
     MAPSCENE.addChild(cancelPopUp, 1000);
     acceptBtn.addClickEventListener(() => {
-        MAP._targetedObject && MAP._targetedObject.cancel();
+        MAP._targetedObject && MAP._targetedObject.cancel(MAP._targetedObject);
         cancelPopUp.close();
     });
 };

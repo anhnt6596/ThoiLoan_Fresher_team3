@@ -4,12 +4,18 @@ var Contruction = cc.Class.extend({
         // this._super();
         this.info = info;
         this._status = info.status;
-        this.buildTime = info.buildTime;
-        this.startTime = info.startTime;
         this._id = info._id;
         this.name = info.name;
         this.level = info.level;
+        if(this._status == 'pending'){
+            this.buildTime = info.buildTime;
+        }else if(this._status == 'upgrade'){
+            this.buildTime = config.building[this.name][this.level+1].buildTime;
+        }
+        this.startTime = info.startTime;
+
         this.init();
+        lastIndexContructionList++;
     },
     init: function() {
         this.tempX = this.info.posX;
@@ -386,25 +392,38 @@ var Contruction = cc.Class.extend({
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
-    cancel: function(){
-        if (this._status == 'upgrade') this.cancelUpgrade();
-        else if (this._status == 'pending') this.cancelBuild();
+    cancel: function(building){
+        buildingCancel = building;
+        NETWORK.sendCancel(building._id);
+        //if (this._status == 'upgrade') this.cancelUpgrade();
+        //else if (this._status == 'pending') this.cancelBuild();
     },
     cancelUpgrade: function() {
-        //cc.log('cancel upgrade');
-
         this.timeBar && MAP.removeChild(this.timeBar);
         this.upgradeBarrier && this.buildingImg.removeChild(this.upgradeBarrier);
         this.timeBar = null;
         this.setStatus('complete');
+        for(var item in contructionList){
+            if(contructionList[item]._id == this._id){
+                contructionList[item].status = 'complete';
+                break;
+            }
+        }
+
+        //Refund
+        var data = config.building[this.name][this.level+1];
+        var gold = data.gold || 0;
+        var elixir = data.elixir || 0;
+        var darkElixir = data.darkElixir || 0;
+        var coin = data.coin || 0;
+        var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
+        increaseUserResources(refundResources);
 
         updateBuilderNumber();
         setUserResourcesCapacity();
         LOBBY.update(gv.user);
     },
     cancelBuild: function() {
-        cc.log('cancel build');
-
         var newContructionList = contructionList.filter(element => {
             if (element._id === this._id) return false;
             return true;
@@ -415,6 +434,15 @@ var Contruction = cc.Class.extend({
 
         MAP._targetedObject = null;
         this.remove();
+
+        //Refund
+        var data = config.building[this.name][1];
+        var gold = data.gold || 0;
+        var elixir = data.elixir || 0;
+        var darkElixir = data.darkElixir || 0;
+        var coin = data.coin || 0;
+        var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
+        increaseUserResources(refundResources);
 
         updateBuilderNumber();
         setUserResourcesCapacity();
@@ -537,7 +565,7 @@ var Contruction = cc.Class.extend({
                         tick();
                     }
                 }
-                cur +=1;
+                //cur +=1;
             }, 1000);
         }
         //Chay 1 lan
