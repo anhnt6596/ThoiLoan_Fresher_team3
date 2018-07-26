@@ -824,12 +824,12 @@ var MapLayer = cc.Layer.extend({
         this.cancelBtn.attr({
             x: -1000,
             y: -1000,
-            opacity: 0,
+            opacity: 0
         });
         this.acceptBtn.attr({
             x: -1000,
             y: -1000,
-            opacity: 0,
+            opacity: 0
         });
 
         if(buildingInfo.buildTime > 0){
@@ -866,12 +866,12 @@ var MapLayer = cc.Layer.extend({
         this.cancelBtn.attr({
             x: coor.x - TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
-            opacity: 255,
+            opacity: 255
         });
         this.acceptBtn.attr({
             x: coor.x + TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
-            opacity: 255,
+            opacity: 255
         });
     },
     moveMap: function(touch) {
@@ -927,14 +927,14 @@ var MapLayer = cc.Layer.extend({
                 var x = (size.width / 2 - self.x) / self.scale;
                 var y = (size.height / 2 - self.y) / self.scale;
                 var tp = { // cái này là tâm điểm của zoom
-                    x,
-                    y,
+                    x:x,
+                    y:y
                 };
                 var scaleNumber = 1.1;
                 if(key == 73 && self.scale < 2) { // zoomIn
                     var curPos = {
                         x: self.x,
-                        y: self.y,
+                        y: self.y
                     };
                     var newPos = {
                         x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
@@ -942,7 +942,7 @@ var MapLayer = cc.Layer.extend({
                     }
                     self.attr({
                         x: newPos.x,
-                        y: newPos.y,
+                        y: newPos.y
                     });
                     self.scale *= scaleNumber;
                 }
@@ -951,7 +951,7 @@ var MapLayer = cc.Layer.extend({
                     self.scale /= scaleNumber;
                     var curPos = {
                         x: self.x,
-                        y: self.y,
+                        y: self.y
                     };
                     var newPos = {
                         x: curPos.x + tp.x * (scaleNumber - 1) * self.scale,
@@ -960,7 +960,7 @@ var MapLayer = cc.Layer.extend({
                     newPos = self.limitMoveMap(newPos);
                     self.attr({
                         x: newPos.x,
-                        y: newPos.y,
+                        y: newPos.y
                     });
                 }
             },
