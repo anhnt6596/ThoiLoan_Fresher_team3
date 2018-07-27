@@ -650,7 +650,9 @@ var MapLayer = cc.Layer.extend({
                 this._targetedObject.updatePosition(mapPos);
                 this.updateContructionList(this._targetedObject.info);
                 this.createLogicArray(contructionList, obstacleLists);
-                LOBBY.showLobby();
+                if (this._targetedObject._status !== 'setting') {
+                    LOBBY.showLobby();
+                }
             } else {
                 // this._targetedObject.returnLastPosition();
             }
@@ -770,6 +772,7 @@ var MapLayer = cc.Layer.extend({
                 opacity: 0,
             });
             LOBBY.showLobby();
+            LOBBY.hideObjectMenu();
             this.cancelBtn.addClickEventListener(doNothing);
             this.acceptBtn.addClickEventListener(doNothing);
         }.bind(this));

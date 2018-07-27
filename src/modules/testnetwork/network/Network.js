@@ -269,7 +269,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================CLIENT GUI XAC NHAN FINISH CONSTRUCTION=======================================");
+        cc.log("=======================================SEND REQUEST FINISH TIME CONSTRUCTION=======================================");
     },
 
     //Quick Finish
@@ -277,7 +277,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendQuickFinish);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND QUICK FINISH=======================================");
+        cc.log("=======================================SEND REQUEST QUICK FINISH=======================================");
     },
 
     //Cancel
