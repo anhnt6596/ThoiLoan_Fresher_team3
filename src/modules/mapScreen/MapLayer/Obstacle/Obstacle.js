@@ -8,7 +8,7 @@ var Obstacle = cc.Class.extend({
         grass.attr({
             x: coor.x,
             y: coor.y,
-            scale: 2,
+            scale: 2
         });
         MAP.addChild(grass, Z.BACKGROUND);
 
@@ -17,7 +17,7 @@ var Obstacle = cc.Class.extend({
         objImg.attr({
             x: coor.x,
             y: coor.y,
-            scale: 1,
+            scale: 1
         });
         MAP.addChild(objImg, this.caluclateZOrder());
     },
@@ -43,11 +43,15 @@ var Obstacle = cc.Class.extend({
         LOBBY.hideObjectMenu(MAP._targetedObject);
     },
     remove: function(obstacle) {
+
         this.removeComplete();
     },
     removeComplete: function() {
-        var newObstacleList = obstacleLists.filter(element => {
-            if (element._id == this.info._id) return false;
+        var self = this;
+        var newObstacleList = obstacleLists.filter(function(element) {
+            if (element._id == self.info._id){
+                return false;
+            }
             return true;
         });
         obstacleLists = newObstacleList;

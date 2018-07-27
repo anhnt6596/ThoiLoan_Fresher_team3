@@ -6,7 +6,10 @@ var ShowBuildPopup = TinyPopup.extend({
 
     close: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
-        this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
         if(this._listener.type == 'resources'){
             MAP.buildNewContruction(this._listener.building);
         }else if(this._listener.type == 'builder'){
@@ -17,7 +20,10 @@ var ShowBuildPopup = TinyPopup.extend({
 
     ok: function() {
         var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
-        this.runAction(new cc.Sequence(act1, cc.CallFunc(() => this.getParent().removeChild(this), this)));
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
 
         if(this._listener.type == 'resources'){
             _.extend(ReducedTempResources, this._listener.building.cost);
