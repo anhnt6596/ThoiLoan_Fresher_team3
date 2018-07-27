@@ -658,6 +658,7 @@ var MapLayer = cc.Layer.extend({
             // this._isMovingObject = false;
         }
         this._startTouch = null;
+        this._zoomPoint = null;
     },
     updateContructionList: function(info) {
         var newContructionList = contructionList.map(function(contruction) {
@@ -895,41 +896,54 @@ var MapLayer = cc.Layer.extend({
                 return true;
             },
             onTouchesMoved: this.onTouchesMoved.bind(this),
-            //onTouchesEnded: this.onTouchEnded.bind(this),
+            onTouchesEnded: function(touches, event) {
+                this._zoomPoint = null;
+            },
         }, this);
     },
     onTouchesMoved: function(touches, event) {
         var calculateDistance = function(a, b) {
             return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
         }
-        if (touches.length < 2) return true;
-        var p1 = touches[0];
-        var p2 = touches[1];
-        var rootP1 = cc.pSub(p1.getLocation() - p1.getDelta());
-        var rootP2 = cc.pSub(p2.getLocation() - p2.getDelta());
-        this._zoomPoint = new cc.p((rootP1.x + rootP2.x)/2, (rootP1.y + rootP2.y)/2);
-        var oriDistance = calculateDistance(rootP1, rootP2);
-        var newDistance = calculateDistance(p1, p2);
-        var scaleRate = newDistance/oriDistance;
-        this.zoomMap(scaleRate);
+        if (touches.length >= 2) {
+            var size = cc.winSize;
+            
+            var p1 = touches[0];
+            var p2 = touches[1];
+            var rootP1 = cc.pSub(p1.getLocation(), p1.getDelta());
+            var rootP2 = cc.pSub(p2.getLocation(), p2.getDelta());
+            var rootP1OnMap = this.calculateCoor(rootP1);
+            var rootP2OnMap = this.calculateCoor(rootP2);
+            var rootZoomPoint = { x: (rootP1OnMap.x + rootP2OnMap.x)/2, y: (rootP1OnMap.y + rootP2OnMap.y)/2 }; // cái này là trung tâm điểm zoom ở trên màn hình
+            this._zoomPoint = this._zoomPoint || rootZoomPoint;
+            // this._zoomPoint = tp;
+            var oriDistance = calculateDistance(rootP1, rootP2);
+            var newDistance = calculateDistance(p1.getLocation(), p2.getLocation());
+            var scaleRate = newDistance/oriDistance;
+
+            this.zoomMap(scaleRate);
+        };
     },
     zoomMap: function(scaleRate) {
-        var curPos = {
-            x: self.x,
-            y: self.y,
-        };
-        var newPos = {
-            x: curPos.x + this._zoomPoint.x * (scaleRate - 1) * this.scale,
-            y: curPos.y + this._zoomPoint.y * (scaleRate - 1) * this.scale,
+        var self = this;
+        if (scaleRate < 1 && self.scale > ZOOM_SCALE.MIN || scaleRate > 1 && self.scale < ZOOM_SCALE.MAX) {
+            var curPos = {
+                x: self.x,
+                y: self.y
+            };
+            var newPos = {
+                x: curPos.x - self._zoomPoint.x * (scaleRate - 1) * self.scale,
+                y: curPos.y - self._zoomPoint.y * (scaleRate - 1) * self.scale,
+            }
+            self.scale *= scaleRate;
+            newPos = self.limitMoveMap(newPos);
+            self.attr({
+                x: newPos.x,
+                y: newPos.y
+            });
         }
-        newPos = self.limitMoveMap(newPos);
-        this.attr({
-            x: newPos.x,
-            y: newPos.y,
-            scale: this.scale * scaleRate
-        });
     },
-    limitMoveMap: function(pos) {
+    limitMoveMap: function(pos) { // di chuyển để map ko bị ra ngoài giới hạn
         var size = cc.winSize;
         var curPos = pos;
         if (curPos.x > 0) curPos.x = 0;
@@ -938,7 +952,7 @@ var MapLayer = cc.Layer.extend({
         if (curPos.y < - this.mapHeight * this.scale + size.height) curPos.y = -this.mapHeight * this.scale + size.height;
         return curPos;
     },
-    calculatePos: function(coorInMap) {
+    calculatePos: function(coorInMap) { // tính từ tọa độ trên map thành index trên mảng MapLogicArray
         var coor = { x: 0, y: 0 };
         var x = coorInMap.x - rootMapPos.x;
         var y = coorInMap.y - rootMapPos.y;
@@ -946,7 +960,7 @@ var MapLayer = cc.Layer.extend({
         coor.y = parseInt(((x / (TILE_WIDTH/2) + y / (TILE_HEIGHT/2)) / 2).toFixed(0));
         return coor;
     },
-    calculateCoor: function(tp) {
+    calculateCoor: function(tp) { // tính tọa độ từ điểm trên màn hình thành tọa độ trên map
         var result = { x: 0, y: 0 };
         result.x = (tp.x - this.x) / this.scale;
         result.y = (tp.y - this.y) / this.scale;
@@ -981,28 +995,33 @@ var MapLayer = cc.Layer.extend({
                         x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
                         y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
                     }
+                    self.scale *= scaleNumber;
                     self.attr({
                         x: newPos.x,
                         y: newPos.y
                     });
-                    self.scale *= scaleNumber;
-                }
-
-                if(key == 79 && self.scale > 0.4) { // zoomOut
-                    self.scale /= scaleNumber;
+                } else if(key == 79 && self.scale > 0.4) { // zoomOut
+                    var scaleNumber = 1 / scaleNumber;
                     var curPos = {
                         x: self.x,
                         y: self.y
                     };
                     var newPos = {
-                        x: curPos.x + tp.x * (scaleNumber - 1) * self.scale,
-                        y: curPos.y + tp.y * (scaleNumber - 1) * self.scale,
+                        x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
+                        y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
                     }
+                    self.scale *= scaleNumber;
                     newPos = self.limitMoveMap(newPos);
                     self.attr({
                         x: newPos.x,
                         y: newPos.y
                     });
+                } else if(key == 65) {
+                    self._zoomPoint = tp;
+                    self.zoomMap(1.1);
+                } else if(key == 83) {
+                    self._zoomPoint = tp;
+                    self.zoomMap(0.9);
                 }
             },
             onKeyReleased: function(key, event) {

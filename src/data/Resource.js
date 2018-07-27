@@ -544,3 +544,8 @@ var MAPVALUE = {
 };
 
 var SOUND = true;
+
+var ZOOM_SCALE = {
+    MAX: 2,
+    MIN: 0.4,
+};
