@@ -262,9 +262,6 @@ var getCurrentServerTime = function(){
     return getCurrentClientTime() - DeltaTime - BONUS_TIME;
 };
 
-var timeToString = function(second) {
-    return second + 's';
-};
 
 //time: ms
 var timeToReadable = function(time){

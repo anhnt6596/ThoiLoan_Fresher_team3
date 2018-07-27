@@ -12,196 +12,196 @@ var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 var LastReduceResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 
 var contructionList = [
-//     {
-//         _id: '_01',
-//         name: 'BDH_1',
-//         level: 1,
-//         posX: 10,
-//         posY: 10,
-//         width: 2,
-//         height: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_02',
-//         name: 'TOW_1',
-//         posX: 19,
-//         posY: 19,
-//         width: 4,
-//         height: 4,
-//         level: 5,
-//         status: 'upgrade',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_03',
-//         name: 'AMC_1',
-//         posX: 0,
-//         posY: 0,
-//         width: 5,
-//         height: 5,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_04',
-//         name: 'BAR_1',
-//         posX: 10,
-//         posY: 5,
-//         width: 3,
-//         height: 3,
-//         level: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//        _id: '_05',
-//        name: 'BDH_1',
-//        posX: 5,
-//        posY: 5,
-//        width: 2,
-//        height: 2,
-//        level: 1,
-//        status: 'complete',
-//        startTime: 0
-//     },
-//     {
-//         _id: '_06',
-//         name: 'STO_1',
-//         posX: 5,
-//         posY: 10,
-//         width: 3,
-//         height: 3,
-//         level: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_07',
-//         name: 'STO_1',
-//         posX: 5,
-//         posY: 15,
-//         width: 3,
-//         height: 3,
-//         level: 4,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_08',
-//         name: 'STO_2',
-//         posX: 5,
-//         posY: 20,
-//         width: 3,
-//         height: 3,
-//         level: 5,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_09',
-//         name: 'STO_2',
-//         posX: 5,
-//         posY: 25,
-//         width: 3,
-//         height: 3,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_10',
-//         name: 'RES_1',
-//         posX: 5,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 11,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_11',
-//         name: 'RES_1',
-//         posX: 10,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 4,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_12',
-//         name: 'RES_2',
-//         posX: 15,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 11,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_13',
-//         name: 'DEF_1',
-//         posX: 35,
-//         posY: 35,
-//         width: 3,
-//         height: 3,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_14',
-//         name: 'DEF_1',
-//         posX: 35,
-//         posY: 32,
-//         width: 3,
-//         height: 3,
-//         level: 3,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_15',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 35,
-//         width: 3,
-//         height: 3,
-//         level: 5,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_16',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 32,
-//         width: 3,
-//         height: 3,
-//         level: 7,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_17',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 29,
-//         width: 3,
-//         height: 3,
-//         level: 9,
-//         status: 'complete',
-//         startTime: 0
-//     },
+     {
+         _id: '_01',
+         name: 'BDH_1',
+         level: 1,
+         posX: 10,
+         posY: 10,
+         width: 2,
+         height: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_02',
+         name: 'TOW_1',
+         posX: 19,
+         posY: 19,
+         width: 4,
+         height: 4,
+         level: 5,
+         status: 'upgrade',
+         startTime: 0
+     },
+     {
+         _id: '_03',
+         name: 'AMC_1',
+         posX: 0,
+         posY: 0,
+         width: 5,
+         height: 5,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_04',
+         name: 'BAR_1',
+         posX: 10,
+         posY: 5,
+         width: 3,
+         height: 3,
+         level: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+        _id: '_05',
+        name: 'BDH_1',
+        posX: 5,
+        posY: 5,
+        width: 2,
+        height: 2,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+     },
+     {
+         _id: '_06',
+         name: 'STO_1',
+         posX: 5,
+         posY: 10,
+         width: 3,
+         height: 3,
+         level: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_07',
+         name: 'STO_1',
+         posX: 5,
+         posY: 15,
+         width: 3,
+         height: 3,
+         level: 4,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_08',
+         name: 'STO_2',
+         posX: 5,
+         posY: 20,
+         width: 3,
+         height: 3,
+         level: 5,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_09',
+         name: 'STO_2',
+         posX: 5,
+         posY: 25,
+         width: 3,
+         height: 3,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_10',
+         name: 'RES_1',
+         posX: 5,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 11,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_11',
+         name: 'RES_1',
+         posX: 10,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 4,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_12',
+         name: 'RES_2',
+         posX: 15,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 11,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_13',
+         name: 'DEF_1',
+         posX: 35,
+         posY: 35,
+         width: 3,
+         height: 3,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_14',
+         name: 'DEF_1',
+         posX: 35,
+         posY: 32,
+         width: 3,
+         height: 3,
+         level: 3,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_15',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 35,
+         width: 3,
+         height: 3,
+         level: 5,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_16',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 32,
+         width: 3,
+         height: 3,
+         level: 7,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_17',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 29,
+         width: 3,
+         height: 3,
+         level: 9,
+         status: 'complete',
+         startTime: 0
+     },
 ];
 
-var obstacleLists1 = [
+var obstacleLists = [
     {
         _id: '5000',
         name: 'OBS_1',
@@ -376,7 +376,7 @@ var obstacleLists1 = [
 
 var rootMapPos = {
     x: 2100,
-    y: 560,
+    y: 560
 };
 
 var MapLayer = cc.Layer.extend({
@@ -775,7 +775,6 @@ var MapLayer = cc.Layer.extend({
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
-            var listener = {};
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 var gResources = checkUserResources(buildingInfo.cost);
                 if(gResources == 0){

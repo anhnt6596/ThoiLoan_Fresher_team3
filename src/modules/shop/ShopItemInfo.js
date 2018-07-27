@@ -6,48 +6,21 @@ var ItemInfo = TinyPopup.extend({
     },
 
     showInfoItem:function(width, height, itemName, level){
-        //Tren chiem 1/2 chieu cao ben trong cua popup
-        //Trai co hinh anh
-        //var img = new cc.Sprite(this.getImagePath(itemName, level));
-        //img.scaleX = width / 3 / img.width;
-        //img.scaleY = height*2 / 5.5 / img.height;
-        //img.setAnchorPoint(0, 0);
-        //img.setPosition(this._frame.x + 30, this._frame.y + width/2 - img.height*img.scaleY/2);
-        ////img.setPosition(this._frame.x + 30, this._frame.y + width/2);
-        //this.addChild(img, 100);
-        //
-        //var grass = new cc.Sprite(res.map.grass[config.building[itemName][1].width]);
-        //grass.setAnchorPoint(0, 0);
-        //grass.setPosition(img.x, img.y);
-        //grass.scaleX = img.width*img.scaleX / grass.width;
-        //grass.scaleY = img.height*img.scaleY / grass.height;
-        //this.addChild(grass, 99);
-
         var image = this.showImage(itemName, level);
-        image.setAnchorPoint(0, 0);
-        image.setPosition(this._frame.x + image.width*image.scaleX + 200, this._frame.y + height*2/3);
+        image.setPosition(-1*this._frame.width/3.5 * this._frame.scaleX, this._frame.height/7 * this._frame.scaleY);
         this.addChild(image, 10);
 
         var buildingInfo = this.showbuildingInfo(itemName, level);
-        buildingInfo.setAnchorPoint(0, 0);
-        buildingInfo.setPosition(image.x + image.width*image.scaleX + 250, this._frame.y + height*3/4);
+        buildingInfo.setPosition(0, this._frame.height/5 * this._frame.scaleY);
         this.addChild(buildingInfo, 10);
-
-
-
-        //Phai co tu 1 toi 4 thanh:
-        var listBars = [];
-        //Neu la nha nao thi push cac thanh cua nha do vao mang
 
 
         //Duoi co nen trang chua intro, 1 so nha co hinh anh cua cac loai item dc mo khoa
         var bgUnder = new cc.Sprite('res/Art/GUIs/Main_Gui/login/bg.png');
         bgUnder.scaleX = (this._frame.width*this._frame.scaleX - 20) / bgUnder.width;
         bgUnder.scaleY = this._frame.height*this._frame.scaleY/2 / bgUnder.height;
-        bgUnder.setAnchorPoint(0, 0);
-        bgUnder.setPosition(this._frame.x + 10, this._frame.y + 15);
+        bgUnder.setPosition(0, -1*this._frame.height/4 * this._frame.scaleY);
         this.addChild(bgUnder, 10);
-
     },
 
 
@@ -56,7 +29,7 @@ var ItemInfo = TinyPopup.extend({
         var content = new cc.Sprite();
         var grass = new cc.Sprite(res.map.grass[widthBuilding]);
         grass.attr({
-            scale: 2,
+            scale: 2
         });
         var buildingImg;
 
@@ -88,7 +61,7 @@ var ItemInfo = TinyPopup.extend({
                     buildingImg.addChild(animSprite, 11);
                     animSprite.attr({
                         x: buildingImg.width / 2,
-                        y: buildingImg.height / 2,
+                        y: buildingImg.height / 2
                     });
                     animSprite.runAction(buildingAnim.repeatForever());
                 }
@@ -105,7 +78,7 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2,
-                    y: buildingImg.height / 2,
+                    y: buildingImg.height / 2
                 });
                 animSprite.runAction(goldmineAnim.repeatForever());
 
@@ -121,7 +94,7 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2,
-                    y: buildingImg.height / 2,
+                    y: buildingImg.height / 2
                 });
                 animSprite.runAction(elixirCollectorAnim.repeatForever());
 
@@ -154,7 +127,6 @@ var ItemInfo = TinyPopup.extend({
             default:
                 buildingImg = new cc.Sprite(res.building.army_camp[level]);
                 break;
-
         }
 
         content.addChild(grass, 4);
@@ -195,7 +167,7 @@ var ItemInfo = TinyPopup.extend({
             default:
                 break;
         }
-        listInfo.forEach((element, i) => {
+        listInfo.forEach(function(element, i) {
             var dirName = element == 'capacity' ? capacityforeachbuilding[itemName] : element;
             var dirName = element == 'productivity' ? productforeachbuilding[itemName] : dirName;
             var icon = new cc.Sprite(icons[dirName]);
@@ -206,78 +178,21 @@ var ItemInfo = TinyPopup.extend({
             infoBar.attr({ anchorX: 0, x: 30, y: - i * 40 });
             infoArea.addChild(infoBar, 0);
 
-            //var infoBarNext = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
-            //infoBarNext.attr({ anchorX: 0, x: 30, y: - i * 60 });
-            //infoArea.addChild(infoBarNext, 1);
-
             var infoBarBG = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_BG.png');
             infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 40 });
             infoArea.addChild(infoBarBG, 2);
 
             var buildingConfig = config.building[itemName];
             var curValue = buildingConfig[level][element];
-            //var nextValue = buildingConfig[level + 1][element];
             var maxValue = buildingConfig[objectSize(buildingConfig)][element];
             cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', objectSize(buildingConfig));
 
             infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
-            //infoBarNext.setTextureRect(cc.rect(0, 0, (nextValue/maxValue) * infoBar.width, infoBar.height));
 
-            //var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
             var textInfo = cc.LabelBMFont(curValue, 'res/Art/Fonts/soji_12.fnt');
             textInfo.attr({ anchorX: 0, x: 35, y: - i * 40 });
             infoArea.addChild(textInfo, 5);
         });
         return infoArea;
-    },
-
-
-    getImagePath:function(itemName, level){
-        var root = 'res/Art/Buildings/';
-        switch (itemName) {
-            case 'TOW_1':
-                return root + 'townhall/TOW_1_' + level + '/idle/image0000.png';
-                break;
-            case 'RES_1':
-                return root + 'gold mine/RES_1_' + level + '/idle/image0000.png';
-                break;
-            case 'RES_2':
-                return root + 'elixir collector/RES_2_' + level + '/idle/image0000.png';
-                break;
-            case 'RES_3':
-
-                break;
-            case 'STO_1':
-                return root + 'gold storage/STO_1_' + level + '/idle/image0000.png';
-                break;
-            case 'STO_2':
-                return root + 'elixir storage/STO_2_' + level + '/idle/image0000.png';
-                break;
-            case 'STO_3':
-
-                break;
-            case 'BDH_1':
-                return root + 'builder hut/BDH_1_' + level + '/idle/image0000.png';
-                break;
-            case 'AMC_1':
-                return root + 'army camp/AMC_1_' + level + '/idle/image0000.png';
-                break;
-            case 'BAR_1':
-                return root + 'barrack/BAR_1_' + level + '/idle/image0000.png';
-                break;
-            case 'DEF_1':
-                return root + 'cannon/cannon_' + level + '/idle/image0000.png';
-                break;
-            default:
-                return null;
-                break;
-        }
-    },
-    
-
-
-    //ghi de ham trong popup
-    onCloseCallback:function () {
-        cc.director.popToRootScene();
     }
 });
