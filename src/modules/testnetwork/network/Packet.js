@@ -95,7 +95,7 @@ CmdSendLogin = fr.OutPacket.extend(
 
             this.packHeader();
             this.putString(sessionKey);
-            this.putString(uuid);
+            this.putInt(uuid);
             this.updateSize();
         }
     }
