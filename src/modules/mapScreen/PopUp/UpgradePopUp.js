@@ -4,10 +4,10 @@ var createUpgradePopUp = function() {
     acceptBtn.attr({
         x: 0,
         y: -230,
-        scale: 1.5,
+        scale: 1.5
     });
     var content = [
-        acceptBtn,
+        acceptBtn
     ];
     var req = {};
     if (MAP._targetedObject) {
@@ -15,7 +15,7 @@ var createUpgradePopUp = function() {
         req.goldReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].gold || 0;
         req.elixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].elixir || 0;
         req.darkElixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].darkElixir || 0;
-    };
+    }
     var num = 0;
     if (req.goldReq > 0) {
         var item = createNewRequireItem('gold', req.goldReq, num);
@@ -36,28 +36,28 @@ var createUpgradePopUp = function() {
     var nextBuildingImg = showNextBuildingImg(info);
     nextBuildingImg.attr({
         x: -250,
-        y: 100,
+        y: 100
     });
     content.push(nextBuildingImg);
 
     var buildTimeText = showBuildTimeText(config.building[info.name][info.level + 1].buildTime);
     buildTimeText.attr({
         x: -250,
-        y: -15,
+        y: -15
     });
     content.push(buildTimeText);
 
     var nextBuildingInfo = showNextBuildingInfo(info);
     nextBuildingInfo.attr({
         x: -50,
-        y: 130,
+        y: 130
     });
     content.push(nextBuildingInfo);
 
-    var upgradePopUp = new ui.PopUp('Nâng cấp', content, acceptBtn);
+    var upgradePopUp = new ui.PopUp('Upgrade', content, acceptBtn);
 
     MAPSCENE.addChild(upgradePopUp, 1000);
-    acceptBtn.addClickEventListener(() => {
+    acceptBtn.addClickEventListener(function() {
         MAP._targetedObject && MAP._targetedObject.upgrade();
         upgradePopUp.close();
     });
@@ -85,7 +85,7 @@ var createNewRequireItem = function(type, value, num) {
     icon.attr({
         x: 75,
         y: -215 - num * 30,
-        scale: 1.5,
+        scale: 1.5
     });
     icon.addChild(titleText);
     titleText.attr({ anchorX: 1, y: 10, x: 0 });
@@ -97,7 +97,7 @@ var showNextBuildingImg = function(info) {
     var content = new cc.Sprite();
     var grass = new cc.Sprite(res.map.grass[info.width]);
     grass.attr({
-        scale: 2,
+        scale: 2
     });
     var buildingImg;
     switch (info.name) {
@@ -115,7 +115,7 @@ var showNextBuildingImg = function(info) {
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({
                 x: buildingImg.width / 2 + 3,
-                y: buildingImg.height / 2 + 38,
+                y: buildingImg.height / 2 + 38
             });
             animSprite.runAction(buildingAnim.repeatForever());
             break;
@@ -128,7 +128,7 @@ var showNextBuildingImg = function(info) {
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2,
-                    y: buildingImg.height / 2,
+                    y: buildingImg.height / 2
                 });
                 animSprite.runAction(buildingAnim.repeatForever());
             }
@@ -145,7 +145,7 @@ var showNextBuildingImg = function(info) {
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({
                 x: buildingImg.width / 2,
-                y: buildingImg.height / 2,
+                y: buildingImg.height / 2
             });
             animSprite.runAction(goldmineAnim.repeatForever());
 
@@ -161,7 +161,7 @@ var showNextBuildingImg = function(info) {
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({
                 x: buildingImg.width / 2,
-                y: buildingImg.height / 2,
+                y: buildingImg.height / 2
             });
             animSprite.runAction(elixirCollectorAnim.repeatForever());
             
@@ -204,12 +204,12 @@ var showNextBuildingImg = function(info) {
 
 var showBuildTimeText = function(time) {
     var text1 = new cc.LabelTTF("Thời gian nâng cấp", "Calibri", 30);
-    text1.attr({ color: new cc.color(142, 8, 8) });
+    text1.attr({ color: new cc.color(142, 8, 8, 255) });
     var text2 = new cc.LabelBMFont(timeToReadable(time), 'res/Art/Fonts/soji_24.fnt');
     text2.attr({ y: -20, x: text1.width / 2 });
     text1.addChild(text2);
     return text1;
-}
+};
 
 var showNextBuildingInfo = function(info) {
     var infoArea = new cc.Node();
@@ -242,7 +242,7 @@ var showNextBuildingInfo = function(info) {
         default:
         break;
     }
-    listInfo.forEach((element, i) => {
+    listInfo.forEach(function(element, i) {
         var dirName = element == 'capacity' ? capacityforeachbuilding[info.name] : element;
         var dirName = element == 'productivity' ? productforeachbuilding[info.name] : dirName;
         var icon = new cc.Sprite(icons[dirName]);
@@ -271,7 +271,7 @@ var showNextBuildingInfo = function(info) {
         infoBarNext.setTextureRect(cc.rect(0, 0, (nextValue/maxValue) * infoBar.width, infoBar.height));
         
         var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
-        textInfo.attr({ anchorX: 0, x: 35, y: - i * 60 })
+        textInfo.attr({ anchorX: 0, x: 35, y: - i * 60 });
         infoArea.addChild(textInfo, 5);
     });
     return infoArea;
@@ -292,10 +292,10 @@ var capacityforeachbuilding = {
     STO_1: 'capacityGold',
     STO_2: 'capacityElixir',
     RES_1: 'capacityGold',
-    RES_2: 'capacityElixir',
+    RES_2: 'capacityElixir'
 };
 
 var productforeachbuilding = {
     RES_1: 'gold_productivity',
-    RES_2: 'elixir_productivity',
+    RES_2: 'elixir_productivity'
 };

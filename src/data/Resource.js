@@ -427,75 +427,99 @@ var name = name || {};
 name.building = {
     TOW_1: {
         vi: 'Nhà chính',
-        en: 'Tower',
+        en: 'Tower'
     },
     BDH_1: {
         vi: 'Nhà thợ xây',
-        en: 'Builder Hut',
+        en: 'Builder Hut'
     },
     AMC_1: {
         vi: 'Doanh Trại',
-        en: 'Army Camp',
+        en: 'Army Camp'
     },
     BAR_1: {
         vi: 'Nhà lính',
-        en: 'Barrack',
+        en: 'Barrack'
     },
     STO_1: {
         vi: 'Kho vàng',
-        en: 'Gold Storage',
+        en: 'Gold Storage'
     },
     STO_2: {
         vi: 'Kho dầu',
-        en: 'Elixir Storage',
+        en: 'Elixir Storage'
     },
     STO_3: {
         vi: 'Kho dầu đen',
-        en: 'Dark Elixir Storage',
+        en: 'Dark Elixir Storage'
     },
     RES_1: {
         vi: 'Mỏ vàng',
-        en: 'Gold Mine',
+        en: 'Gold Mine'
     },
     RES_2: {
         vi: 'Mỏ dầu',
-        en: 'Elixir Mine',
+        en: 'Elixir Mine'
     },
     RES_3: {
         vi: 'Mỏ dầu đen',
-        en: 'Dark Elixir Mine',
+        en: 'Dark Elixir Mine'
     },
     LAB_1: {
         vi: '',
-        en: 'Laboratory',
+        en: 'Laboratory'
     },
     SPF_1: {
         vi: '',
-        en: 'Spell Factory',
+        en: 'Spell Factory'
     },
     KQB_1: {
         vi: '',
-        en: 'King',
+        en: 'King'
     },
     KQB_2: {
         vi: '',
-        en: 'Queen',
+        en: 'Queen'
     },
     KQB_3: {
         vi: '',
-        en: 'Temple',
+        en: 'Temple'
     },
     BAR_2: {
         vi: '',
-        en: 'X-men House',
+        en: 'X-men House'
     },
     KQB_4: {
         vi: '',
-        en: 'KQB_4',
+        en: 'KQB_4'
     },
     DEF_1: {
         vi: 'Thần công',
-        en: 'Cannon',
+        en: 'Cannon'
+    },
+    DEF_2: {
+        vi: '',
+        en: 'Archer Tower'
+    },
+    DEF_3: {
+        vi: '',
+        en: 'Trebuchet'
+    },
+    DEF_4: {
+        vi: '',
+        en: 'Wizard Tower'
+    },
+    DEF_5: {
+        vi: '',
+        en: 'A.A Gun'
+    },
+    DEF_7: {
+        vi: '',
+        en: 'Bow Machine'
+    },
+    DEF_8: {
+        vi: '',
+        en: 'Lightning Tower'
     }
 };
 
@@ -520,3 +544,8 @@ var MAPVALUE = {
 };
 
 var SOUND = true;
+
+var ZOOM_SCALE = {
+    MAX: 2,
+    MIN: 0.4,
+};

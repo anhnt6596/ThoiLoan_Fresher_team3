@@ -13,7 +13,7 @@ var Popup = cc.Layer.extend({
         this._super();
         this._data = data;
 
-        var bakeLayer = cc.LayerColor.create(cc.color(100, 128, 128), width, height);
+        var bakeLayer = cc.LayerColor.create(cc.color(100, 128, 128, 255), width, height);
         bakeLayer.setAnchorPoint(0, 0);
         bakeLayer.setPosition(0, 0);
         bakeLayer.scaleX = width/bakeLayer.width;

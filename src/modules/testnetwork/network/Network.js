@@ -177,6 +177,16 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }
                 break;
+            case gv.CMD.REMOVE_OBSTACLE:
+                if(packet.validate) {
+
+                }else {
+                    cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
+                    var listener = {contentBuyG:"Please try again later!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to remove this obstacle", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+                break;
             case gv.CMD.GET_SERVER_TIME:
                 requestedServerTime++;
                 DeltaTime = getCurrentClientTime() - packet.currentServerTime;

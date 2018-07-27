@@ -12,196 +12,196 @@ var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 var LastReduceResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 
 var contructionList = [
-//     {
-//         _id: '_01',
-//         name: 'BDH_1',
-//         level: 1,
-//         posX: 10,
-//         posY: 10,
-//         width: 2,
-//         height: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_02',
-//         name: 'TOW_1',
-//         posX: 19,
-//         posY: 19,
-//         width: 4,
-//         height: 4,
-//         level: 5,
-//         status: 'upgrade',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_03',
-//         name: 'AMC_1',
-//         posX: 0,
-//         posY: 0,
-//         width: 5,
-//         height: 5,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_04',
-//         name: 'BAR_1',
-//         posX: 10,
-//         posY: 5,
-//         width: 3,
-//         height: 3,
-//         level: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//        _id: '_05',
-//        name: 'BDH_1',
-//        posX: 5,
-//        posY: 5,
-//        width: 2,
-//        height: 2,
-//        level: 1,
-//        status: 'complete',
-//        startTime: 0
-//     },
-//     {
-//         _id: '_06',
-//         name: 'STO_1',
-//         posX: 5,
-//         posY: 10,
-//         width: 3,
-//         height: 3,
-//         level: 2,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_07',
-//         name: 'STO_1',
-//         posX: 5,
-//         posY: 15,
-//         width: 3,
-//         height: 3,
-//         level: 4,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_08',
-//         name: 'STO_2',
-//         posX: 5,
-//         posY: 20,
-//         width: 3,
-//         height: 3,
-//         level: 5,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_09',
-//         name: 'STO_2',
-//         posX: 5,
-//         posY: 25,
-//         width: 3,
-//         height: 3,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_10',
-//         name: 'RES_1',
-//         posX: 5,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 11,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_11',
-//         name: 'RES_1',
-//         posX: 10,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 4,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_12',
-//         name: 'RES_2',
-//         posX: 15,
-//         posY: 30,
-//         width: 3,
-//         height: 3,
-//         level: 11,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_13',
-//         name: 'DEF_1',
-//         posX: 35,
-//         posY: 35,
-//         width: 3,
-//         height: 3,
-//         level: 1,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_14',
-//         name: 'DEF_1',
-//         posX: 35,
-//         posY: 32,
-//         width: 3,
-//         height: 3,
-//         level: 3,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_15',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 35,
-//         width: 3,
-//         height: 3,
-//         level: 5,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_16',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 32,
-//         width: 3,
-//         height: 3,
-//         level: 7,
-//         status: 'complete',
-//         startTime: 0
-//     },
-//     {
-//         _id: '_17',
-//         name: 'DEF_1',
-//         posX: 32,
-//         posY: 29,
-//         width: 3,
-//         height: 3,
-//         level: 9,
-//         status: 'complete',
-//         startTime: 0
-//     },
+     {
+         _id: '_01',
+         name: 'BDH_1',
+         level: 1,
+         posX: 10,
+         posY: 10,
+         width: 2,
+         height: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_02',
+         name: 'TOW_1',
+         posX: 19,
+         posY: 19,
+         width: 4,
+         height: 4,
+         level: 5,
+         status: 'upgrade',
+         startTime: 0
+     },
+     {
+         _id: '_03',
+         name: 'AMC_1',
+         posX: 0,
+         posY: 0,
+         width: 5,
+         height: 5,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_04',
+         name: 'BAR_1',
+         posX: 10,
+         posY: 5,
+         width: 3,
+         height: 3,
+         level: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+        _id: '_05',
+        name: 'BDH_1',
+        posX: 5,
+        posY: 5,
+        width: 2,
+        height: 2,
+        level: 1,
+        status: 'complete',
+        startTime: 0
+     },
+     {
+         _id: '_06',
+         name: 'STO_1',
+         posX: 5,
+         posY: 10,
+         width: 3,
+         height: 3,
+         level: 2,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_07',
+         name: 'STO_1',
+         posX: 5,
+         posY: 15,
+         width: 3,
+         height: 3,
+         level: 4,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_08',
+         name: 'STO_2',
+         posX: 5,
+         posY: 20,
+         width: 3,
+         height: 3,
+         level: 5,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_09',
+         name: 'STO_2',
+         posX: 5,
+         posY: 25,
+         width: 3,
+         height: 3,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_10',
+         name: 'RES_1',
+         posX: 5,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 11,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_11',
+         name: 'RES_1',
+         posX: 10,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 4,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_12',
+         name: 'RES_2',
+         posX: 15,
+         posY: 30,
+         width: 3,
+         height: 3,
+         level: 11,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_13',
+         name: 'DEF_1',
+         posX: 35,
+         posY: 35,
+         width: 3,
+         height: 3,
+         level: 1,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_14',
+         name: 'DEF_1',
+         posX: 35,
+         posY: 32,
+         width: 3,
+         height: 3,
+         level: 3,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_15',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 35,
+         width: 3,
+         height: 3,
+         level: 5,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_16',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 32,
+         width: 3,
+         height: 3,
+         level: 7,
+         status: 'complete',
+         startTime: 0
+     },
+     {
+         _id: '_17',
+         name: 'DEF_1',
+         posX: 32,
+         posY: 29,
+         width: 3,
+         height: 3,
+         level: 9,
+         status: 'complete',
+         startTime: 0
+     },
 ];
 
-var obstacleLists1 = [
+var obstacleLists = [
     {
         _id: '5000',
         name: 'OBS_1',
@@ -376,7 +376,7 @@ var obstacleLists1 = [
 
 var rootMapPos = {
     x: 2100,
-    y: 560,
+    y: 560
 };
 
 var MapLayer = cc.Layer.extend({
@@ -658,6 +658,7 @@ var MapLayer = cc.Layer.extend({
             // this._isMovingObject = false;
         }
         this._startTouch = null;
+        this._zoomPoint = null;
     },
     updateContructionList: function(info) {
         var newContructionList = contructionList.map(function(contruction) {
@@ -775,7 +776,6 @@ var MapLayer = cc.Layer.extend({
         }.bind(this));
 
         this.acceptBtn.addClickEventListener(function() {
-            var listener = {};
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 var gResources = checkUserResources(buildingInfo.cost);
                 if(gResources == 0){
@@ -825,12 +825,12 @@ var MapLayer = cc.Layer.extend({
         this.cancelBtn.attr({
             x: -1000,
             y: -1000,
-            opacity: 0,
+            opacity: 0
         });
         this.acceptBtn.attr({
             x: -1000,
             y: -1000,
-            opacity: 0,
+            opacity: 0
         });
 
         if(buildingInfo.buildTime > 0){
@@ -867,12 +867,12 @@ var MapLayer = cc.Layer.extend({
         this.cancelBtn.attr({
             x: coor.x - TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
-            opacity: 255,
+            opacity: 255
         });
         this.acceptBtn.attr({
             x: coor.x + TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,
-            opacity: 255,
+            opacity: 255
         });
     },
     moveMap: function(touch) {
@@ -895,41 +895,54 @@ var MapLayer = cc.Layer.extend({
                 return true;
             },
             onTouchesMoved: this.onTouchesMoved.bind(this),
-            //onTouchesEnded: this.onTouchEnded.bind(this),
+            onTouchesEnded: function(touches, event) {
+                this._zoomPoint = null;
+            },
         }, this);
     },
     onTouchesMoved: function(touches, event) {
         var calculateDistance = function(a, b) {
             return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
         }
-        if (touches.length < 2) return true;
-        var p1 = touches[0];
-        var p2 = touches[1];
-        var rootP1 = cc.pSub(p1.getLocation() - p1.getDelta());
-        var rootP2 = cc.pSub(p2.getLocation() - p2.getDelta());
-        this._zoomPoint = new cc.p((rootP1.x + rootP2.x)/2, (rootP1.y + rootP2.y)/2);
-        var oriDistance = calculateDistance(rootP1, rootP2);
-        var newDistance = calculateDistance(p1, p2);
-        var scaleRate = newDistance/oriDistance;
-        this.zoomMap(scaleRate);
+        if (touches.length >= 2) {
+            var size = cc.winSize;
+            
+            var p1 = touches[0];
+            var p2 = touches[1];
+            var rootP1 = cc.pSub(p1.getLocation(), p1.getDelta());
+            var rootP2 = cc.pSub(p2.getLocation(), p2.getDelta());
+            var rootP1OnMap = this.calculateCoor(rootP1);
+            var rootP2OnMap = this.calculateCoor(rootP2);
+            var rootZoomPoint = { x: (rootP1OnMap.x + rootP2OnMap.x)/2, y: (rootP1OnMap.y + rootP2OnMap.y)/2 }; // cái này là trung tâm điểm zoom ở trên màn hình
+            this._zoomPoint = this._zoomPoint || rootZoomPoint;
+            // this._zoomPoint = tp;
+            var oriDistance = calculateDistance(rootP1, rootP2);
+            var newDistance = calculateDistance(p1.getLocation(), p2.getLocation());
+            var scaleRate = newDistance/oriDistance;
+
+            this.zoomMap(scaleRate);
+        };
     },
     zoomMap: function(scaleRate) {
-        var curPos = {
-            x: self.x,
-            y: self.y,
-        };
-        var newPos = {
-            x: curPos.x + this._zoomPoint.x * (scaleRate - 1) * this.scale,
-            y: curPos.y + this._zoomPoint.y * (scaleRate - 1) * this.scale,
+        var self = this;
+        if (scaleRate < 1 && self.scale > ZOOM_SCALE.MIN || scaleRate > 1 && self.scale < ZOOM_SCALE.MAX) {
+            var curPos = {
+                x: self.x,
+                y: self.y
+            };
+            var newPos = {
+                x: curPos.x - self._zoomPoint.x * (scaleRate - 1) * self.scale,
+                y: curPos.y - self._zoomPoint.y * (scaleRate - 1) * self.scale,
+            }
+            self.scale *= scaleRate;
+            newPos = self.limitMoveMap(newPos);
+            self.attr({
+                x: newPos.x,
+                y: newPos.y
+            });
         }
-        newPos = self.limitMoveMap(newPos);
-        this.attr({
-            x: newPos.x,
-            y: newPos.y,
-            scale: this.scale * scaleRate
-        });
     },
-    limitMoveMap: function(pos) {
+    limitMoveMap: function(pos) { // di chuyển để map ko bị ra ngoài giới hạn
         var size = cc.winSize;
         var curPos = pos;
         if (curPos.x > 0) curPos.x = 0;
@@ -938,7 +951,7 @@ var MapLayer = cc.Layer.extend({
         if (curPos.y < - this.mapHeight * this.scale + size.height) curPos.y = -this.mapHeight * this.scale + size.height;
         return curPos;
     },
-    calculatePos: function(coorInMap) {
+    calculatePos: function(coorInMap) { // tính từ tọa độ trên map thành index trên mảng MapLogicArray
         var coor = { x: 0, y: 0 };
         var x = coorInMap.x - rootMapPos.x;
         var y = coorInMap.y - rootMapPos.y;
@@ -946,7 +959,7 @@ var MapLayer = cc.Layer.extend({
         coor.y = parseInt(((x / (TILE_WIDTH/2) + y / (TILE_HEIGHT/2)) / 2).toFixed(0));
         return coor;
     },
-    calculateCoor: function(tp) {
+    calculateCoor: function(tp) { // tính tọa độ từ điểm trên màn hình thành tọa độ trên map
         var result = { x: 0, y: 0 };
         result.x = (tp.x - this.x) / this.scale;
         result.y = (tp.y - this.y) / this.scale;
@@ -968,41 +981,46 @@ var MapLayer = cc.Layer.extend({
                 var x = (size.width / 2 - self.x) / self.scale;
                 var y = (size.height / 2 - self.y) / self.scale;
                 var tp = { // cái này là tâm điểm của zoom
-                    x,
-                    y,
+                    x:x,
+                    y:y
                 };
                 var scaleNumber = 1.1;
                 if(key == 73 && self.scale < 2) { // zoomIn
                     var curPos = {
                         x: self.x,
-                        y: self.y,
+                        y: self.y
                     };
                     var newPos = {
                         x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
                         y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
                     }
+                    self.scale *= scaleNumber;
                     self.attr({
                         x: newPos.x,
-                        y: newPos.y,
+                        y: newPos.y
                     });
-                    self.scale *= scaleNumber;
-                }
-
-                if(key == 79 && self.scale > 0.4) { // zoomOut
-                    self.scale /= scaleNumber;
+                } else if(key == 79 && self.scale > 0.4) { // zoomOut
+                    var scaleNumber = 1 / scaleNumber;
                     var curPos = {
                         x: self.x,
-                        y: self.y,
+                        y: self.y
                     };
                     var newPos = {
-                        x: curPos.x + tp.x * (scaleNumber - 1) * self.scale,
-                        y: curPos.y + tp.y * (scaleNumber - 1) * self.scale,
+                        x: curPos.x - tp.x * (scaleNumber - 1) * self.scale,
+                        y: curPos.y - tp.y * (scaleNumber - 1) * self.scale,
                     }
+                    self.scale *= scaleNumber;
                     newPos = self.limitMoveMap(newPos);
                     self.attr({
                         x: newPos.x,
-                        y: newPos.y,
+                        y: newPos.y
                     });
+                } else if(key == 65) {
+                    self._zoomPoint = tp;
+                    self.zoomMap(1.1);
+                } else if(key == 83) {
+                    self._zoomPoint = tp;
+                    self.zoomMap(0.9);
                 }
             },
             onKeyReleased: function(key, event) {
