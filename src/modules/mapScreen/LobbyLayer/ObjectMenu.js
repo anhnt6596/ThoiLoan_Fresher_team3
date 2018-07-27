@@ -41,7 +41,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(removeBtn);
         this.removeBtn = removeBtn;
         this.addChild(removeBtn);
-        removeBtn.addClickEventListener(this.remove.bind(this));
+        //removeBtn.addClickEventListener(this.remove.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -95,17 +95,17 @@ var ObjectMenu = cc.Node.extend({
         var len = this._listValidBtn.length;
         var isOdd = false;
         if (len % 2 == 1) isOdd = true;
-        this._listValidBtn.forEach((element, i) => {
+        this._listValidBtn.forEach(function(element, i) {
             element.attr({
                 x: size.width / 2 + 120 * (i - len / 2 + 0.5),
-                y: 55,
+                y: 55
             });
         });
     },
     hideAll: function() {
-        this._listBtn.forEach(element => {
+        this._listBtn.forEach(function(element) {
             element.attr({
-                y: -55,
+                y: -55
             });
         });
     }

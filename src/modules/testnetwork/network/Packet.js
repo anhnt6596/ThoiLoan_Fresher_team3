@@ -13,6 +13,7 @@ gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
 gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 gv.CMD.CANCLE_CONSTRUCTION = 2005;
+gv.CMD.REMOVE_OBSTACLE = 2006;
 
 gv.CMD.GET_SERVER_TIME = 2100;
 gv.CMD.FINISH_TIME_CONSTRUCTION = 2101;
@@ -206,6 +207,21 @@ CmdSendCancelConstruction = fr.OutPacket.extend(
     }
 );
 
+CmdSendRemoveObstacle = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.REMOVE_OBSTACLE);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
 
 
 CmdGetServerTime = fr.OutPacket.extend(
@@ -356,7 +372,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                     posY: this.posYObs,
                     width: config.obtacle[this.typeObs][1].width,
                     height: config.obtacle[this.typeObs][1].height,
-                }
+                };
                 obstacleLists.push(obstacle);
             }
 
@@ -447,6 +463,18 @@ testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
 
 
 testnetwork.packetMap[gv.CMD.CANCLE_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.REMOVE_OBSTACLE] = fr.InPacket.extend(
     {
         ctor:function()
         {
