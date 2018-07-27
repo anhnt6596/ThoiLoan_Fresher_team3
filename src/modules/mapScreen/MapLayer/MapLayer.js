@@ -638,10 +638,9 @@ var MapLayer = cc.Layer.extend({
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
         if (this._startTouch
-            // && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
-            // && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
-            && Math.abs(this._startTouch.x - tp.x) === 0
-            && Math.abs(this._startTouch.y - tp.y) === 0
+            && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
+            && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
+            && !this._isMovingObject
             && !this._isBuilding
         ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);

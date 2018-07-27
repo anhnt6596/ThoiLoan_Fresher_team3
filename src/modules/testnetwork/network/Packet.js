@@ -416,12 +416,7 @@ testnetwork.packetMap[gv.CMD.MOVE_CONSTRUCTION] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            var validate  = this.getShort();
-            if (validate) {
-                temp.lastMoveBuilding && temp.lastMoveBuilding.acceptSendMoveFromServer();
-            } else {
-                temp.lastMoveBuilding && temp.lastMoveBuilding.sendMoveIsDenined();
-            }
+            this.validate  = this.getShort();
         }
     }
 );

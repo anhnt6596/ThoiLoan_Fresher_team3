@@ -39,9 +39,10 @@ var LoginScreen = cc.Layer.extend({
             x: size.width/2,
             y: size.height/3,
             fontSize: 25,
-            placeHolderFontColor: cc.color(255,255,255,200)
+            //placeHolderFontColor: cc.color(255,255,255,200)
 
         });
+        this.uuidEb.setFontColor(new cc.Color(150,150,150,255));
         this.addChild(this.uuidEb);
 
         var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");

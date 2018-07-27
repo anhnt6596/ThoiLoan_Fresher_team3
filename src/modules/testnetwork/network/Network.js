@@ -61,11 +61,14 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
-                    cc.log("VI TRI DA DC CAP NHAT");
-
+                    cc.log("================================= SERVER XAC NHAN MOVE CONSTRUCTION============================");
+                    temp.lastMoveBuilding && temp.lastMoveBuilding.acceptSendMoveFromServer();
+                    temp.lastMoveBuilding = null;
                 }
                 else {
-                    cc.log("VI TRI DA CO NHA O");
+                    cc.log("================================= SERVER TU CHOI MOVE CONSTRUCTION============================");
+                    temp.lastMoveBuilding && temp.lastMoveBuilding.sendMoveIsDenined();
+                    temp.lastMoveBuilding = null;
                 }
                 break;
             case gv.CMD.ADD_CONSTRUCTION:
