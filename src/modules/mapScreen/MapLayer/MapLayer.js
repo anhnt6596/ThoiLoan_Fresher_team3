@@ -638,10 +638,11 @@ var MapLayer = cc.Layer.extend({
         var coorInMap = this.calculateCoor(tp);
         var mapPos = this.calculatePos(coorInMap);
         if (this._startTouch
-            // && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
-            // && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
-            && Math.abs(this._startTouch.x - tp.x) === 0
-            && Math.abs(this._startTouch.y - tp.y) === 0
+            && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
+            && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
+            && !this._isMovingObject
+            // && Math.abs(this._startTouch.x - tp.x) === 0
+            // && Math.abs(this._startTouch.y - tp.y) === 0
             && !this._isBuilding
         ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
@@ -649,9 +650,11 @@ var MapLayer = cc.Layer.extend({
         if (this._isMovingObject) {
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
                 this._targetedObject.updatePosition(mapPos);
-                this.updateContructionList(this._targetedObject.info);
-                this.createLogicArray(contructionList, obstacleLists);
-                LOBBY.showLobby();
+                if (this._targetedObject._status !== 'setting') {
+                    this.updateContructionList(this._targetedObject.info);
+                    this.createLogicArray(contructionList, obstacleLists);
+                    LOBBY.showLobby();
+                }
             } else {
                 // this._targetedObject.returnLastPosition();
             }
@@ -771,6 +774,7 @@ var MapLayer = cc.Layer.extend({
                 opacity: 0,
             });
             LOBBY.showLobby();
+            LOBBY.hideObjectMenu();
             this.cancelBtn.addClickEventListener(doNothing);
             this.acceptBtn.addClickEventListener(doNothing);
         }.bind(this));
