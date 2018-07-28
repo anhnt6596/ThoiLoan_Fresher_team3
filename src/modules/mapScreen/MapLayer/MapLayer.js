@@ -413,7 +413,7 @@ var MapLayer = cc.Layer.extend({
         
         this.scale = 0.5;
         for (var i = 0; i < objectRefs.length; i++) {
-            if(objectRefs[i].info.name === 'TOW_1') {
+            if(objectRefs[i]._name === 'TOW_1') {
                 var town = objectRefs[i];
                 this.setMapPositionToObject(town);
                 break;
@@ -423,9 +423,9 @@ var MapLayer = cc.Layer.extend({
     setMapPositionToObject: function(town) {
         var size = cc.winSize;
         var mapPosition;
-        var xy = town.xyOnMap(town.info.posX, town.info.posY);
+        var xy = town.xyOnMap(town._posX, town._posY);
         mapPosition = this.reverseMapCoor(xy);
-        cc.log('town.info.pos + ' + town.info.posX + '/' + town.info.posY);
+        cc.log('town.info.pos + ' + town._posX + '/' + town._posY);
         cc.log('mapPosition + ' + mapPosition.x + '/' + mapPosition.y);
         
         var p = {x: 0, y: 0};
@@ -617,7 +617,7 @@ var MapLayer = cc.Layer.extend({
         if (this._targetedObject == null) return false;
         var tempX = this._targetedObject.tempX;
         var tempY = this._targetedObject.tempY;
-        var size = this._targetedObject.info.width;
+        var size = this._targetedObject._width;
         var isOnObject = mapPos.x >= tempX && mapPos.x <= tempX + size && mapPos.y >= tempY && mapPos.y <= tempY + size;
         return isOnObject;
     },
@@ -641,8 +641,6 @@ var MapLayer = cc.Layer.extend({
             && Math.abs(this._startTouch.x - tp.x) < TILE_WIDTH / 2
             && Math.abs(this._startTouch.y - tp.y) < TILE_HEIGHT / 2
             && !this._isMovingObject
-            // && Math.abs(this._startTouch.x - tp.x) === 0
-            // && Math.abs(this._startTouch.y - tp.y) === 0
             && !this._isBuilding
         ) { // nếu touch mà ko di chuyển
             this.targetObject(mapPos);
@@ -650,9 +648,9 @@ var MapLayer = cc.Layer.extend({
         if (this._isMovingObject) {
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
                 this._targetedObject.updatePosition(mapPos);
+                this.updateContructionList(this._targetedObject);
+                this.createLogicArray(contructionList, obstacleLists);
                 if (this._targetedObject._status !== 'setting') {
-                    this.updateContructionList(this._targetedObject.info);
-                    this.createLogicArray(contructionList, obstacleLists);
                     LOBBY.showLobby();
                 }
             } else {
@@ -663,12 +661,12 @@ var MapLayer = cc.Layer.extend({
         this._startTouch = null;
         this._zoomPoint = null;
     },
-    updateContructionList: function(info) {
+    updateContructionList: function(targetedObject) {
         var newContructionList = contructionList.map(function(contruction) {
             var newContruction = contruction;
-            if (newContruction._id == info._id) {
-                newContruction.posX = info.posX;
-                newContruction.posY = info.posY;
+            if (newContruction._id == targetedObject._id) {
+                newContruction.posX = targetedObject._posX;
+                newContruction.posY = targetedObject._posY;
             }
             return newContruction;
         });
@@ -867,7 +865,7 @@ var MapLayer = cc.Layer.extend({
         obstacle.remove();
     },
     setVXbtn: function(targetedObject) {
-        var coor = targetedObject.xyOnMap(targetedObject.info.posX, targetedObject.info.posY);
+        var coor = targetedObject.xyOnMap(targetedObject._posX, targetedObject._posY);
         this.cancelBtn.attr({
             x: coor.x - TILE_WIDTH,
             y: coor.y + 2 * TILE_HEIGHT,

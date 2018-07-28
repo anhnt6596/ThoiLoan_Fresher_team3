@@ -6,17 +6,17 @@ var GoldStorage = StorageBuilding.extend({
         var buildingImg = new cc.Node();
         buildingImg.setCascadeColorEnabled(true); 
         this.buildingImg = buildingImg;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         buildingImg.attr({
             x: coor.x,
             y: coor.y,
         });
-        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
+        var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
 
         var buildingImage = [];
         for (var i = 0; i < 4; i++) {
-            buildingImage[i] = new cc.Sprite(res.building.gold_storage[this.info.level][i]);
+            buildingImage[i] = new cc.Sprite(res.building.gold_storage[this._level][i]);
             buildingImage[i].attr({
                 opacity: 0,
             });

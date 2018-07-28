@@ -18,9 +18,9 @@ var createCancelPopUp = function() {
     var req = {};
     if (MAP._targetedObject) {
         var _targetedObject = MAP._targetedObject;
-        req.goldReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].gold || 0;
-        req.elixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].elixir || 0;
-        req.darkElixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].darkElixir || 0;
+        req.goldReq = config.building[_targetedObject._name][_targetedObject._level + 1].gold || 0;
+        req.elixirReq = config.building[_targetedObject._name][_targetedObject._level + 1].elixir || 0;
+        req.darkElixirReq = config.building[_targetedObject._name][_targetedObject._level + 1].darkElixir || 0;
     };
     var num = 0;
     titleText = new cc.LabelBMFont('Confirm', 'res/Art/Fonts/soji_20.fnt');

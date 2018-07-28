@@ -10,11 +10,12 @@ var ShowBuildPopup = TinyPopup.extend({
         this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
             self.getParent().removeChild(self);
         }, this)));
-        if(this._listener.type == 'resources'){
-            MAP.buildNewContruction(this._listener.building);
-        }else if(this._listener.type == 'builder'){
-            MAP.buildNewContruction(this._listener.building);
-        }
+        //if(this._listener.type == 'resources'){
+        //    MAP.buildNewContruction(this._listener.building);
+        //}else if(this._listener.type == 'builder'){
+        //    MAP.buildNewContruction(this._listener.building);
+        //}
+
         resetReducedTempResources();
     },
 

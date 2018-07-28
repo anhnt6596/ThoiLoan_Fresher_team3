@@ -38,11 +38,14 @@ var ShopCatalogyScreen = Popup.extend({
         this.initItems(text);
 
         this.listener = cc.EventListener.create({
-            event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            onTouchBegan: function(touch, event){
+            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+            onTouchesBegan: function(touches, event){
+                if (!touches || touches.length == 0)
+                    return;
                 return true;
             },
-            onTouchMoved: function(touch, event){
+            onTouchesMoved: function(touches, event){
+                var touch = touches[0];
                 if(self._itemList.length > 0){
                     var dx = touch.getDelta().x;
                     for(var i = 0; i < self._itemList.length; i++){
@@ -59,7 +62,7 @@ var ShopCatalogyScreen = Popup.extend({
                     self._moving = true;
                 }
             },
-            onTouchEnded: function(touch, event){
+            onTouchesEnded: function(touches, event){
                 if(self._itemList.length > 0){
                     if(self._direction){
                         if(self._itemList[0].x > gap_x){
@@ -298,7 +301,9 @@ var ShopCatalogyScreen = Popup.extend({
         if(!condition && !missImage){
             var listener = cc.EventListener.create({
                 event: cc.EventListener.TOUCH_ONE_BY_ONE,
-                onTouchBegan: function(touch, event){return true;},
+                onTouchBegan: function(touch, event){
+                    return true;
+                },
                 onTouchMoved: function(touch, event){},
                 onTouchEnded: function(touch, event){
                     var target = event.getCurrentTarget();

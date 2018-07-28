@@ -61,11 +61,14 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
                 if (packet.validate) {
-                    cc.log("VI TRI DA DC CAP NHAT");
-
+                    cc.log("================================= SERVER XAC NHAN MOVE CONSTRUCTION============================");
+                    temp.lastMoveBuilding && temp.lastMoveBuilding.acceptSendMoveFromServer();
+                    temp.lastMoveBuilding = null;
                 }
                 else {
-                    cc.log("VI TRI DA CO NHA O");
+                    cc.log("================================= SERVER TU CHOI MOVE CONSTRUCTION============================");
+                    temp.lastMoveBuilding && temp.lastMoveBuilding.sendMoveIsDenined();
+                    temp.lastMoveBuilding = null;
                 }
                 break;
             case gv.CMD.ADD_CONSTRUCTION:
@@ -105,7 +108,7 @@ testnetwork.Connector = cc.Class.extend({
                     buildingUpgrade.startTime = getCurrentServerTime();
                     cc.log(buildingUpgrade.startTime);
                     var cur = (getCurrentServerTime() - buildingUpgrade.startTime)/1000;
-                    var max = config.building[buildingUpgrade.name][buildingUpgrade.level+1].buildTime;
+                    var max = config.building[buildingUpgrade._name][buildingUpgrade._level+1].buildTime;
                     buildingUpgrade.addTimeBar(cur, max);
                     buildingUpgrade.countDown(cur, max);
                     buildingUpgrade.buildTime = max;
@@ -266,7 +269,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================CLIENT GUI XAC NHAN FINISH CONSTRUCTION=======================================");
+        cc.log("=======================================SEND REQUEST FINISH TIME CONSTRUCTION=======================================");
     },
 
     //Quick Finish
@@ -274,7 +277,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendQuickFinish);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND QUICK FINISH=======================================");
+        cc.log("=======================================SEND REQUEST QUICK FINISH=======================================");
     },
 
     //Cancel

@@ -6,16 +6,16 @@ var ElixirCollector = CollectorBuilding.extend({
         // this.addBuildingImg();
     },
     addBuildingImg: function() {
-        var buildingImg = new cc.Sprite(res.building.elixir_collector[this.info.level]);
+        var buildingImg = new cc.Sprite(res.building.elixir_collector[this._level]);
         this.buildingImg = buildingImg;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         buildingImg.attr({
             x: coor.x,
             y: coor.y,
         });
-        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
+        var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
-        var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this.info.level + '_effect_', 0, 9, 0.2);
+        var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this._level + '_effect_', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
         animSprite.attr({
