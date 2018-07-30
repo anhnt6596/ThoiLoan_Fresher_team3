@@ -95,13 +95,17 @@ var LobbyLayer = cc.Layer.extend({
         var showAct = cc.moveTo(0.2, cc.p(0, 0));
         var fadeInAct = cc.FadeIn(0.2);
         this.objectMenu.stopAllActions();
+        this.objectMenu.attr({
+            y: -200,
+            opacity: 0
+        });
         this.objectMenu.runAction(showAct);
         this.objectMenu.runAction(fadeInAct);
     },
     hideObjectMenu: function(object) {
         var hideAct = cc.moveTo(0.2, cc.p(0, -200));
         var fadeOutAct = cc.FadeOut(0.2);
-        this.objectMenu.stopAllActions();
+        // this.objectMenu.stopAllActions();
         this.objectMenu.runAction(hideAct);
         this.objectMenu.runAction(fadeOutAct);
     },
