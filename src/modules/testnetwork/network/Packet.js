@@ -494,6 +494,18 @@ testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
     }
 );
 
+testnetwork.packetMap[gv.CMD.ADD_RESOURCE] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
 testnetwork.packetMap[gv.CMD.TEST] = fr.InPacket.extend(
     {
         ctor:function()

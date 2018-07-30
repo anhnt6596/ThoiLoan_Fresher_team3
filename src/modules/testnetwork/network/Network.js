@@ -196,6 +196,19 @@ testnetwork.Connector = cc.Class.extend({
                 //updateTimeFlag = true;
                 cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
                 break;
+            case gv.CMD.ADD_RESOURCE:
+                if(packet.validate) {
+                    cc.log("=======================================XAC NHAN ADD RESOURCE tu SERVER=======================================");
+                    increaseUserResources(ReducedTempResources, true);
+                    resetReducedTempResources();
+                }else {
+                    cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
+                    var listener = {contentBuyG:"Please try again later!"};
+                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to add resources", true, listener);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    resetReducedTempResources();
+                }
+                break;
         }
     },
     sendGetUserInfo:function()
