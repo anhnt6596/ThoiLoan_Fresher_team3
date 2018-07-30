@@ -285,19 +285,20 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendCancelConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND CANCEL CONSTRUCTION=======================================");
+        cc.log("=======================================SEND REQUEST CANCEL CONSTRUCTION=======================================");
     },
 
     sendGetServerTime:function(){
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================CLIENT GUI YEU CAU GET SERVER TIME=======================================");
+        cc.log("=======================================SEND REQUEST GET SERVER TIME=======================================");
     },
     sendAddResource: function(gold, elixir, darkElixir, coin) {
         cc.log('Add Resource');
         var pk = this.gameClient.getOutPacket(CmdSendAddResource);
         pk.pack(gold, elixir, darkElixir, coin);
         this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND REQUEST ADD RESOURCE=======================================");
     }
 });
