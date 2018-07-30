@@ -158,27 +158,32 @@ var getResourcesNextLevel = function(name, level){
 };
 
 //Tang tai nguyen cua user
-var increaseUserResources = function(resources){
-    if(gv.user.gold + resources.gold > gv.user.maxCapacityGold){
-        gv.user.gold = gv.user.maxCapacityGold;
-    }else{
+var increaseUserResources = function(resources, isHack){
+    if(isHack){
         gv.user.gold += resources.gold;
-    }
-
-    if(gv.user.elixir + resources.elixir > gv.user.maxCapacityElixir){
-        gv.user.elixir = gv.user.maxCapacityElixir;
-    }else{
         gv.user.elixir += resources.elixir;
-    }
-
-    if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
-        gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
-    }else{
         gv.user.darkElixir += resources.darkElixir;
+    }else{
+        if(gv.user.gold + resources.gold > gv.user.maxCapacityGold){
+            gv.user.gold = gv.user.maxCapacityGold;
+        }else{
+            gv.user.gold += resources.gold;
+        }
+
+        if(gv.user.elixir + resources.elixir > gv.user.maxCapacityElixir){
+            gv.user.elixir = gv.user.maxCapacityElixir;
+        }else{
+            gv.user.elixir += resources.elixir;
+        }
+
+        if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
+            gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
+        }else{
+            gv.user.darkElixir += resources.darkElixir;
+        }
     }
 
     gv.user.coin += resources.coin;
-
     LOBBY.update(gv.user);
 };
 
@@ -263,15 +268,32 @@ var getCurrentServerTime = function(){
 };
 
 
-//time: ms
+//time: s
 var timeToReadable = function(time){
-    time = Math.floor(time);
-    var day = Math.floor(time/86400);
-    var hour = Math.floor((time - 86400*day)/3600);
-    var minute = Math.floor((time - 86400*day - 3600*hour)/60);
-    var second = time - 86400*day - 36000*hour - 60*minute;
-    var t = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
-    t = t ? t : '0s';
+    var count = 0;
+    var timeString = '';
+    var buildTime = Math.ceil(time);
+    var day = Math.floor(buildTime/86400);
+    if(day != 0 && count < 2){
+        count++;
+        timeString += (day + 'd');
+    }
+    var hour = Math.floor((buildTime - 86400*day)/3600);
+    if(hour != 0 && count < 2){
+        count++;
+        timeString += (hour + 'h');
+    }
+    var minute = Math.floor((buildTime - 86400*day - 3600*hour)/60);
+    if(minute != 0 && count < 2){
+        count++;
+        timeString += (minute + 'm');
+    }
+    var second = buildTime - 86400*day - 3600*hour - minute*60;
+    if(second != 0 && count < 2){
+        count++;
+        timeString += (second + 's');
+    }
+    var t = timeString ? timeString : '0s';
     return t;
 };
 

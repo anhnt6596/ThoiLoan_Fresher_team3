@@ -169,14 +169,12 @@ var ShopCatalogyScreen = Popup.extend({
         this._item.addChild(clock, 4, 4);
 
         var catalogy = this._obj[catalogyName];
-
-        var day = Math.floor(catalogy[itemName].buildTime/86400);
-        var hour = Math.floor((catalogy[itemName].buildTime - 86400*day)/3600);
-        var minute = Math.floor((catalogy[itemName].buildTime - 86400*day - 3600*hour)/60);
-        var second = catalogy[itemName].buildTime - 86400*day - 3600*hour - minute*60;
-        var time = (day ? (day + 'd'):'') + (hour ? (hour + 'h'):'') + (minute ? (minute + 'm'):'')  + (second ? (second + 's'):'');
-        time = time ? time : '0s';
-
+        var time;
+        if(!catalogy[itemName].buildTime){
+            time = '0s';
+        }else{
+            time = timeToReadable(catalogy[itemName].buildTime);
+        }
         var timeLabel = new cc.LabelBMFont(time, 'res/Art/Fonts/soji_20.fnt');
         timeLabel.setAnchorPoint(0, 0);
         timeLabel.setPosition(clock.x + clock.width + 5, clock.y + 5);
@@ -345,7 +343,7 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var listener = {level: 1, itemName:itemName};
+        var listener = {_level: 1, itemName:itemName};
         var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[itemName].en, true, listener);
         cc.director.getRunningScene().addChild(popup, 200);
     },

@@ -69,12 +69,9 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        //
-        gv.user.coin = parseInt(gv.user.coin) + 100;
-        gv.user.gold = parseInt(gv.user.gold) + 1000;
-        gv.user.elixir = parseInt(gv.user.elixir) + 1000;
-        this.update(gv.user);
-        NETWORK.sendAddResource(1000, 1000, 0, 100);
+        var resource = {gold:5000, elixir:5000, darkElixir:0, coin:1000};
+        _.extend(ReducedTempResources, resource);
+        NETWORK.sendAddResource(5000, 5000, 0, 1000);
     },
 
 
@@ -95,10 +92,7 @@ var LobbyLayer = cc.Layer.extend({
         var showAct = cc.moveTo(0.2, cc.p(0, 0));
         var fadeInAct = cc.FadeIn(0.2);
         this.objectMenu.stopAllActions();
-        this.objectMenu.attr({
-            y: -200,
-            opacity: 0
-        });
+        this.objectMenu.attr({ y: -200, opacity: 0 });
         this.objectMenu.runAction(showAct);
         this.objectMenu.runAction(fadeInAct);
     },

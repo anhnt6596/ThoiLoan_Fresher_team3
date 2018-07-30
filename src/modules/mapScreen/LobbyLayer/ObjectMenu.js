@@ -45,7 +45,7 @@ var ObjectMenu = cc.Node.extend({
     },
     onInfo: function() {
         if(MAP._targetedObject){
-            var listener = {level: MAP._targetedObject._level, itemName:MAP._targetedObject._name};
+            var listener = {_level: MAP._targetedObject._level, itemName:MAP._targetedObject._name};
             var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[listener.itemName].en, true, listener);
             cc.director.getRunningScene().addChild(popup, 200);
         }

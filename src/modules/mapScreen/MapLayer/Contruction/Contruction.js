@@ -175,18 +175,18 @@ var Contruction = cc.Class.extend({
         });
     },
     updatePosition: function(mapPos) {
-        if (this.tempX !== this._posX && this.tempX !== this._posY) {
-            var eff = ui.landingEffect();
-            this.buildingImg.runAction(eff);
-            this.onPlaceSound();
-        }
+        //if (this.tempX !== this._posX && this.tempX !== this._posY) {
+        var eff = ui.landingEffect();
+        this.buildingImg.runAction(eff);
+        this.onPlaceSound();
+        //}
         this._posX = mapPos.x;
         this._posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
             temp.lastMoveBuilding = this;
-            if(this._status !== 'setting' && this._oldX !== this._posX && this._oldY !== this._posY) {
+            if(this._status !== 'setting' && (this._oldX !== this._posX || this._oldY !== this._posY)) {
                 cc.log('sendMove>>>>>>>>>>>>>>>before');
                 cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
                 cc.log('sendMove>>>>>>>>>>>>>>>mapPos.x' + mapPos.x);
@@ -387,12 +387,15 @@ var Contruction = cc.Class.extend({
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
                 contructionList[item].level = this._level;
+                cc.log("============================= Level hien tai construction list: " + contructionList[item].level);
                 break;
             }
         }
 
         updateBuilderNumber();
         setUserResourcesCapacity();
+        cc.log("============================= Level hien tai building: " + this._level);
+
         LOBBY.update(gv.user);
     },
     cancel: function(building){
@@ -420,7 +423,7 @@ var Contruction = cc.Class.extend({
         var darkElixir = data.darkElixir || 0;
         var coin = data.coin || 0;
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
-        increaseUserResources(refundResources);
+        increaseUserResources(refundResources, false);
 
         updateBuilderNumber();
         setUserResourcesCapacity();
@@ -445,7 +448,7 @@ var Contruction = cc.Class.extend({
         var darkElixir = data.darkElixir || 0;
         var coin = data.coin || 0;
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
-        increaseUserResources(refundResources);
+        increaseUserResources(refundResources, false);
 
         updateBuilderNumber();
         setUserResourcesCapacity();

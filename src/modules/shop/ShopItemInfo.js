@@ -2,7 +2,7 @@ var ItemInfo = TinyPopup.extend({
 
     ctor:function(width, height, title, type, listener) {
         this._super(width, height, title, type, listener);
-        this.showInfoItem(width, height, listener.itemName, listener.level);
+        this.showInfoItem(width, height, listener.itemName, listener._level);
     },
 
     showInfoItem:function(width, height, itemName, level){
