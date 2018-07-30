@@ -1,5 +1,5 @@
 var createUpgradePopUp = function() {
-    var info = MAP._targetedObject.info;
+    var info = MAP._targetedObject;
     var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
     acceptBtn.attr({
         x: 0,
@@ -12,9 +12,9 @@ var createUpgradePopUp = function() {
     var req = {};
     if (MAP._targetedObject) {
         var _targetedObject = MAP._targetedObject;
-        req.goldReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].gold || 0;
-        req.elixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].elixir || 0;
-        req.darkElixirReq = config.building[_targetedObject.info.name][_targetedObject.info.level + 1].darkElixir || 0;
+        req.goldReq = config.building[_targetedObject._name][_targetedObject._level + 1].gold || 0;
+        req.elixirReq = config.building[_targetedObject._name][_targetedObject._level + 1].elixir || 0;
+        req.darkElixirReq = config.building[_targetedObject._name][_targetedObject._level + 1].darkElixir || 0;
     }
     var num = 0;
     if (req.goldReq > 0) {
@@ -40,7 +40,7 @@ var createUpgradePopUp = function() {
     });
     content.push(nextBuildingImg);
 
-    var buildTimeText = showBuildTimeText(config.building[info.name][info.level + 1].buildTime);
+    var buildTimeText = showBuildTimeText(config.building[info._name][info._level + 1].buildTime);
     buildTimeText.attr({
         x: -250,
         y: -15
@@ -93,18 +93,18 @@ var createNewRequireItem = function(type, value, num) {
 };
 
 var showNextBuildingImg = function(info) {
-    var nextLevel = info.level + 1;
+    var nextLevel = info._level + 1;
     var content = new cc.Sprite();
-    var grass = new cc.Sprite(res.map.grass[info.width]);
+    var grass = new cc.Sprite(res.map.grass[info._width]);
     grass.attr({
         scale: 2
     });
     var buildingImg;
-    switch (info.name) {
+    switch (info._name) {
         case 'TOW_1':
             buildingImg = new cc.Sprite(res.building.townhall[nextLevel]);
             
-            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
             break;
@@ -133,7 +133,7 @@ var showNextBuildingImg = function(info) {
                 animSprite.runAction(buildingAnim.repeatForever());
             }
             
-            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
             break;
@@ -149,7 +149,7 @@ var showNextBuildingImg = function(info) {
             });
             animSprite.runAction(goldmineAnim.repeatForever());
 
-            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
             break;
@@ -172,7 +172,7 @@ var showNextBuildingImg = function(info) {
         case 'STO_1':
             buildingImg = new cc.Sprite(res.building.gold_storage[nextLevel][3]);
 
-            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
 
@@ -183,7 +183,7 @@ var showNextBuildingImg = function(info) {
         case 'STO_2':
             buildingImg = new cc.Sprite(res.building.elixir_storage[nextLevel][3]);
 
-            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info.width +'_Shadow.png');
+            var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
 
@@ -198,7 +198,7 @@ var showNextBuildingImg = function(info) {
 
     content.addChild(grass, 4);
     content.addChild(buildingImg, 6);
-    content.setScale(3.5 / info.width);
+    content.setScale(3.5 / info._width);
     return content;
 };
 
@@ -214,7 +214,7 @@ var showBuildTimeText = function(time) {
 var showNextBuildingInfo = function(info) {
     var infoArea = new cc.Node();
     var listInfo = [];
-    switch (info.name) {
+    switch (info._name) {
         case 'AMC_1':
             listInfo.push('capacity');
             listInfo.push('hitpoints');
@@ -243,8 +243,8 @@ var showNextBuildingInfo = function(info) {
         break;
     }
     listInfo.forEach(function(element, i) {
-        var dirName = element == 'capacity' ? capacityforeachbuilding[info.name] : element;
-        var dirName = element == 'productivity' ? productforeachbuilding[info.name] : dirName;
+        var dirName = element == 'capacity' ? capacityforeachbuilding[info._name] : element;
+        var dirName = element == 'productivity' ? productforeachbuilding[info._name] : dirName;
         var icon = new cc.Sprite(icons[dirName]);
         icon.attr({ y: - i * 60 });
         infoArea.addChild(icon);
@@ -261,9 +261,9 @@ var showNextBuildingInfo = function(info) {
         infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 60 });
         infoArea.addChild(infoBarBG, 2);
 
-        var buildingConfig = config.building[info.name];
-        var curValue = buildingConfig[info.level][element];
-        var nextValue = buildingConfig[info.level + 1][element];
+        var buildingConfig = config.building[info._name];
+        var curValue = buildingConfig[info._level][element];
+        var nextValue = buildingConfig[info._level + 1][element];
         var maxValue = buildingConfig[objectSize(buildingConfig)][element];
         cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', objectSize(buildingConfig));
 

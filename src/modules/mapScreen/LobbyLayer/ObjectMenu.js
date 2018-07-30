@@ -45,7 +45,7 @@ var ObjectMenu = cc.Node.extend({
     },
     onInfo: function() {
         if(MAP._targetedObject){
-            var listener = {level: MAP._targetedObject.level, itemName:MAP._targetedObject.name};
+            var listener = {level: MAP._targetedObject._level, itemName:MAP._targetedObject._name};
             var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[listener.itemName].en, true, listener);
             cc.director.getRunningScene().addChild(popup, 200);
         }
@@ -82,7 +82,7 @@ var ObjectMenu = cc.Node.extend({
         this._listValidBtn = [];
         if (object instanceof Contruction) {
             this._listValidBtn.push(this.infoBtn);              // info đầu tiên
-            if (object._status == 'complete' && object.info.name !== 'BDH_1') {
+            if (object._status == 'complete' && object._name !== 'BDH_1') {
                 this._listValidBtn.push(this.upgradeBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo

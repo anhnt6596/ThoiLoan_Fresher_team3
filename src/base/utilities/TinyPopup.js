@@ -82,7 +82,7 @@ var TinyPopup = cc.Node.extend({
     },
 
     showContent:function(listener){
-        if(!listener.contentBuyG && !listener.level){
+        if(!listener.contentBuyG && !listener._level){
             var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
             contentText.attr({
                 x: -10,

@@ -8,7 +8,7 @@ var BuilderHut = Building.extend({
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.builder_hut);
         this.buildingImg = buildingImg;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         // buildingImg.attr({
         //     anchorX: 0,
         //     anchorY: 0,
@@ -19,7 +19,7 @@ var BuilderHut = Building.extend({
             x: coor.x,
             y: coor.y,
         });
-        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
+        var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
     },
     upgrade: function() {

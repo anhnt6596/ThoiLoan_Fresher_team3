@@ -5,12 +5,16 @@ var Contruction = cc.Class.extend({
         this.info = info;
         this._status = info.status;
         this._id = info._id;
-        this.name = info.name;
-        this.level = info.level;
+        this._name = info.name;
+        this._level = info.level;
+        this._posX = info.posX;
+        this._posY = info.posY;
+        this._width = info.width;
+        this._height = info.height;
         if(this._status == 'pending'){
             this.buildTime = info.buildTime;
         }else if(this._status == 'upgrade'){
-            this.buildTime = config.building[this.name][this.level+1].buildTime;
+            this.buildTime = config.building[this._name][this._level+1].buildTime;
         }
         this.startTime = info.startTime;
 
@@ -18,10 +22,10 @@ var Contruction = cc.Class.extend({
         lastIndexContructionList++;
     },
     init: function() {
-        this.tempX = this.info.posX;
-        this.tempY = this.info.posY;
-        this._oldX = this.info.posX;
-        this._oldY = this.info.posY;
+        this.tempX = this._posX;
+        this.tempY = this._posY;
+        this._oldX = this._posX;
+        this._oldY = this._posY;
 
         this.addShadow();
         this.addNameText();
@@ -42,34 +46,34 @@ var Contruction = cc.Class.extend({
         };
     },
     onTarget: function() {
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
-        cc.log('targeted pos' + this.info.posX + '/' + this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
+        cc.log('targeted pos' + this._posX + '/' + this._posY);
         var act = new cc.FadeIn(0.2);
-        MAP.arrows[this.info.width].attr({
+        MAP.arrows[this._width].attr({
             x: coor.x,
             y: coor.y,
         });
-        MAP.arrows[this.info.width].runAction(act);
+        MAP.arrows[this._width].runAction(act);
         //if (this.grass) this.grass.opacity = 0;
         this.nameText.opacity = 255;
-        if (this.checkNewPosition({ x: this.info.posX, y: this.info.posY })) {
-            MAP.greenBGs[this.info.width].attr({
+        if (this.checkNewPosition({ x: this._posX, y: this._posY })) {
+            MAP.greenBGs[this._width].attr({
                 opacity: 230,
                 x: coor.x,
                 y: coor.y,
             });
-            MAP.redBGs[this.info.width].attr({
+            MAP.redBGs[this._width].attr({
                 opacity: 0,
                 x: coor.x,
                 y: coor.y,
             });
         } else {
-            MAP.greenBGs[this.info.width].attr({
+            MAP.greenBGs[this._width].attr({
                 opacity: 0,
                 x: coor.x,
                 y: coor.y,
             });
-            MAP.redBGs[this.info.width].attr({
+            MAP.redBGs[this._width].attr({
                 opacity: 230,
                 x: coor.x,
                 y: coor.y,
@@ -82,20 +86,20 @@ var Contruction = cc.Class.extend({
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
-        MAP.arrows[this.info.width].runAction(act);
+        MAP.arrows[this._width].runAction(act);
         //if (this.grass) this.grass.opacity = 255;
         this.nameText.opacity = 0;
-        MAP.greenBGs[this.info.width].attr({
+        MAP.greenBGs[this._width].attr({
             opacity: 0,
         });
-        MAP.redBGs[this.info.width].attr({
+        MAP.redBGs[this._width].attr({
             opacity: 0,
         });
 
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         this.setImgCoor(coor);
-        this.tempX = this.info.posX;
-        this.tempY = this.info.posY;
+        this.tempX = this._posX;
+        this.tempY = this._posY;
         this.buildingImg.stopAllActions();
         this.buildingImg.runAction(ui.backToDefaultColor());
         LOBBY.hideObjectMenu();
@@ -110,30 +114,30 @@ var Contruction = cc.Class.extend({
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
-            MAP.greenBGs[this.info.width].attr({
+            MAP.greenBGs[this._width].attr({
                 opacity: 230,
                 x: coor.x,
                 y: coor.y,
             });
-            MAP.redBGs[this.info.width].attr({
+            MAP.redBGs[this._width].attr({
                 opacity: 0,
                 x: coor.x,
                 y: coor.y,
             });
         } else {
-            MAP.greenBGs[this.info.width].attr({
+            MAP.greenBGs[this._width].attr({
                 opacity: 0,
                 x: coor.x,
                 y: coor.y,
             });
-            MAP.redBGs[this.info.width].attr({
+            MAP.redBGs[this._width].attr({
                 opacity: 230,
                 x: coor.x,
                 y: coor.y,
             });
         }
         
-        MAP.arrows[this.info.width].attr({
+        MAP.arrows[this._width].attr({
             x: coor.x,
             y: coor.y,
         });
@@ -163,26 +167,26 @@ var Contruction = cc.Class.extend({
         });
         this.nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 30,
         });
         this.timeBar && this.timeBar.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60,
         });
     },
     updatePosition: function(mapPos) {
-        if (this.tempX !== this.info.posX && this.tempX !== this.info.posY) {
+        if (this.tempX !== this._posX && this.tempX !== this._posY) {
             var eff = ui.landingEffect();
             this.buildingImg.runAction(eff);
             this.onPlaceSound();
         }
-        this.info.posX = mapPos.x;
-        this.info.posY = mapPos.y;
+        this._posX = mapPos.x;
+        this._posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         try {
             temp.lastMoveBuilding = this;
-            if(this._status !== 'setting' && this._oldX !== this.info.posX && this._oldY !== this.info.posY) {
+            if(this._status !== 'setting' && this._oldX !== this._posX && this._oldY !== this._posY) {
                 cc.log('sendMove>>>>>>>>>>>>>>>before');
                 cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
                 cc.log('sendMove>>>>>>>>>>>>>>>mapPos.x' + mapPos.x);
@@ -193,23 +197,22 @@ var Contruction = cc.Class.extend({
         } catch (error) {
             cc.log('network error!');
         }
-
     },
     acceptSendMoveFromServer: function() {
-        this._oldX = this.info.posX;
-        this._oldY = this.info.posY;
+        this._oldX = this._posX;
+        this._oldY = this._posY;
     },
     sendMoveIsDenined: function() {
         this.moving({ x: this._oldX, y: this._oldY });
-        this.info.posX = this._oldX;
-        this.info.posY = this._oldY;
+        this._posX = this._oldX;
+        this._posY = this._oldY;
         MAP.updateContructionList(this.info);
         MAP.createLogicArray(contructionList, obstacleLists);
     },
     checkNewPosition: function(mapPos) {
-        if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this.info.width || mapPos.y > MAPVALUE.MAPSIZE - this.info.height) return false;
-        for (var i = 0; i < this.info.width; i++) {
-            for (var j = 0; j < this.info.height; j++) {
+        if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;
+        for (var i = 0; i < this._width; i++) {
+            for (var j = 0; j < this._height; j++) {
                 if (mapLogicArray[mapPos.x + i][mapPos.y + j] !== MAPVALUE.UNUSED && mapLogicArray[mapPos.x + i][mapPos.y + j] !== this.info._id) {
                     return false;
                 }
@@ -222,11 +225,11 @@ var Contruction = cc.Class.extend({
         LOBBY.showObjectMenu(MAP._targetedObject);
     },
     caluclateZOrder: function(mapPos) {
-        var newZ = 1000 - (mapPos.x + mapPos.y + (this.info.height - 3) / 2) * 10 + 1;
+        var newZ = 1000 - (mapPos.x + mapPos.y + (this._height - 3) / 2) * 10 + 1;
         return newZ;
     },
     addShadow: function() {
-        switch (this.info.name) {
+        switch (this._name) {
             case 'BDH_1':
                 this.squareShadow(2);
                 break;
@@ -250,7 +253,7 @@ var Contruction = cc.Class.extend({
         var resShadow = 'res/Art/Map/map_obj_bg/GRASS_'+ size +'_Shadow.png';
         var shadow = new cc.Sprite(resShadow);
         this.shadow = shadow;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         shadow.attr({
             scale: 2,
             x: coor.x,
@@ -262,7 +265,7 @@ var Contruction = cc.Class.extend({
         var resShadow = 'res/Art/Map/map_obj_bg/GRASS_5_Shadow.png';
         var shadow = new cc.Sprite(resShadow);
         this.shadow = shadow;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         shadow.attr({
             scale: 2,
             x: coor.x,
@@ -271,30 +274,30 @@ var Contruction = cc.Class.extend({
         MAP.addChild(shadow, Z.BUILDING_SHADOW);
     },
     addNameText: function() {
-        var bd_name = name.building[this.info.name] ? name.building[this.info.name].vi : 'unknown';
+        var bd_name = name.building[this._name] ? name.building[this._name].vi : 'unknown';
         var nameText = new cc.LabelBMFont(bd_name, 'res/Art/Fonts/soji_24.fnt');
         this.nameText = nameText;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         nameText.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 30,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 30,
             color: cc.color(255, 255, 0, 255),
             opacity: 0,
         });
         MAP.addChild(nameText, 1000);
         
-        var levelText = new cc.LabelBMFont('cấp ' + this.info.level, 'res/Art/Fonts/soji_16.fnt');
+        var levelText = new cc.LabelBMFont('cấp ' + this._level, 'res/Art/Fonts/soji_16.fnt');
         this.levelText = levelText;
         levelText.attr({
             x: nameText.width / 2,
             y: -5,
-            opacity: this.info.name !== "BDH_1" ? 255 : 0,
+            opacity: this._name !== "BDH_1" ? 255 : 0,
         });
         nameText.addChild(levelText, 1000);
     },
     xyOnMap: function(posX, posY) {
         var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2;
-        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
+        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this._height - 1) * 0.5;
         return { x: newX, y: newY };
     },
 
@@ -312,7 +315,7 @@ var Contruction = cc.Class.extend({
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;
         this.addBuildingImg();
-        this.levelText.setString('Level: ' + this.info.level);
+        this.levelText.setString('Level: ' + this._level);
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
@@ -328,7 +331,7 @@ var Contruction = cc.Class.extend({
         LOBBY.update(gv.user);
     },
     upgrade: function() {
-        var costBuilding = getResourcesNextLevel(this.name, this.level);
+        var costBuilding = getResourcesNextLevel(this._name, this._level);
         var gResources = checkUserResources(costBuilding);
         if(gResources == 0){
             if(!checkIsFreeBuilder()){
@@ -369,14 +372,13 @@ var Contruction = cc.Class.extend({
         if(!isQuickFinish){
             NETWORK.sendFinishTimeConstruction(this._id);
         }
-        this.level = this.level + 1;
-        this.info.level = this.info.level + 1;
+        this._level = this._level + 1;
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;
         this.addBuildingImg();
-        this.levelText.setString('cấp ' + this.level);
+        this.levelText.setString('cấp ' + this._level);
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
@@ -384,6 +386,7 @@ var Contruction = cc.Class.extend({
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
+                contructionList[item].level = this._level;
                 break;
             }
         }
@@ -411,7 +414,7 @@ var Contruction = cc.Class.extend({
         }
 
         //Refund
-        var data = config.building[this.name][this.level+1];
+        var data = config.building[this._name][this._level+1];
         var gold = data.gold || 0;
         var elixir = data.elixir || 0;
         var darkElixir = data.darkElixir || 0;
@@ -436,7 +439,7 @@ var Contruction = cc.Class.extend({
         this.remove();
 
         //Refund
-        var data = config.building[this.name][1];
+        var data = config.building[this._name][1];
         var gold = data.gold || 0;
         var elixir = data.elixir || 0;
         var darkElixir = data.darkElixir || 0;
@@ -479,16 +482,16 @@ var Contruction = cc.Class.extend({
         upgradeBarrier.attr({
             x: this.buildingImg.width / 2,
             y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
-            scale: this.info.width * 3 / 4,
+            scale: this._width * 3 / 4,
         });
         this.buildingImg.addChild(upgradeBarrier, 1000);
 
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         timeBar.attr({
             x: coor.x,
-            y: coor.y + (this.info.height / 2) * TILE_HEIGHT + 60,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60,
         });
         MAP.addChild(timeBar, 1100);
 
@@ -529,8 +532,8 @@ var Contruction = cc.Class.extend({
         MAP.addChild(lvUpEffSprite, 1100);
         lvUpEffSprite.attr({
             x: this.buildingImg.x -TILE_WIDTH / 8,
-            y: this.buildingImg.y + TILE_HEIGHT * (this.info.height + 1) / 2,
-            scale: this.info.width,
+            y: this.buildingImg.y + TILE_HEIGHT * (this._height + 1) / 2,
+            scale: this._width,
         });
         var act2 = cc.callFunc(function() {
             MAP.removeChild(lvUpEffSprite);
@@ -573,7 +576,7 @@ var Contruction = cc.Class.extend({
     },
     onTargetSound: function() {
         if (SOUND) {
-            switch (this.info.name) {
+            switch (this._name) {
                 case 'TOW_1':
                     cc.audioEngine.playEffect(sRes.townhall_pickup);
                     break;
@@ -605,7 +608,7 @@ var Contruction = cc.Class.extend({
     },
     onPlaceSound: function() {
         if (SOUND) {
-            switch (this.info.name) {
+            switch (this._name) {
                 case 'TOW_1':
                     cc.audioEngine.playEffect(sRes.townhall_place);
                     break;

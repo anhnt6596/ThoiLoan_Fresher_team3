@@ -4,12 +4,12 @@ var Cannon = DefenseBuilding.extend({
         // this.addBuildingImg();
     },
     addBuildingImg: function() {
-        var level = this.info.level || 1;
+        var level = this._level || 1;
         var dir = res.building.canon_base[level];
         var buildingImg = new cc.Sprite(dir);
         buildingImg.setCascadeColorEnabled(true); 
         this.buildingImg = buildingImg;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         buildingImg.attr({
             anchorX: 0.55,
             x: coor.x,
@@ -24,7 +24,7 @@ var Cannon = DefenseBuilding.extend({
 
         buildingImg.addChild(cannonImg);
 
-        var zOrder = this.caluclateZOrder({ x: this.info.posX, y: this.info.posY });
+        var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
     }
 });

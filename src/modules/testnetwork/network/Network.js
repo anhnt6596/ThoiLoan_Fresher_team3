@@ -108,7 +108,7 @@ testnetwork.Connector = cc.Class.extend({
                     buildingUpgrade.startTime = getCurrentServerTime();
                     cc.log(buildingUpgrade.startTime);
                     var cur = (getCurrentServerTime() - buildingUpgrade.startTime)/1000;
-                    var max = config.building[buildingUpgrade.name][buildingUpgrade.level+1].buildTime;
+                    var max = config.building[buildingUpgrade._name][buildingUpgrade._level+1].buildTime;
                     buildingUpgrade.addTimeBar(cur, max);
                     buildingUpgrade.countDown(cur, max);
                     buildingUpgrade.buildTime = max;

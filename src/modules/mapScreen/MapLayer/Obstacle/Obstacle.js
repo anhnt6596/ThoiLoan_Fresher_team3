@@ -1,10 +1,16 @@
 var Obstacle = cc.Class.extend({
     ctor: function(info) {
         this.info = info;
-        // this._super('res/Art/Buildings/obstacle/' + this.info.name + '/idle/image0000.png');
-        var grass = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_0_' + this.info.width + '_OBS.png');
+        this._id = info._id;
+        this._name = info.name;
+        this._posX = info.posX;
+        this._posY = info.posY;
+        this._width = info.width;
+        this._height = info.height;
+        // this._super('res/Art/Buildings/obstacle/' + this._name + '/idle/image0000.png');
+        var grass = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_0_' + this._width + '_OBS.png');
         this.grass = grass;
-        var coor = this.xyOnMap(this.info.posX, this.info.posY);
+        var coor = this.xyOnMap(this._posX, this._posY);
         grass.attr({
             x: coor.x,
             y: coor.y,
@@ -12,7 +18,7 @@ var Obstacle = cc.Class.extend({
         });
         MAP.addChild(grass, Z.BACKGROUND);
 
-        var objImg = new cc.Sprite('res/Art/Buildings/obstacle/' + this.info.name + '/idle/image0000.png');
+        var objImg = new cc.Sprite('res/Art/Buildings/obstacle/' + this._name + '/idle/image0000.png');
         this.objImg = objImg;
         objImg.attr({
             x: coor.x,
@@ -23,13 +29,13 @@ var Obstacle = cc.Class.extend({
     },
     xyOnMap: function(posX, posY) {
         var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2;
-        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this.info.height - 1) * 0.5;
+        var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this._height - 1) * 0.5;
         return { x: newX, y: newY };
     },
     caluclateZOrder: function() {
-        var _x = this.info.posX;
-        var _y = this.info.posY;
-        var newZ = 1000 - (_x + _y + (this.info.height - 3) / 2) * 10 + 1;
+        var _x = this._posX;
+        var _y = this._posY;
+        var newZ = 1000 - (_x + _y + (this._height - 3) / 2) * 10 + 1;
         return newZ;
     },
     onTarget: function() {
@@ -49,7 +55,7 @@ var Obstacle = cc.Class.extend({
     removeComplete: function() {
         var self = this;
         var newObstacleList = obstacleLists.filter(function(element) {
-            if (element._id == self.info._id){
+            if (element._id == self._id){
                 return false;
             }
             return true;
