@@ -383,6 +383,19 @@ res.building = {
             buildingsDir + 'cannon/canon_10/idle/image0003.png',
             buildingsDir + 'cannon/canon_10/idle/image0004.png',
         ],
+    ],
+    labratory: [
+        buildingsDir + 'labratory/LAB_1_1/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0001.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0002.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0003.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0004.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0005.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0006.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0007.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0008.png',
+        buildingsDir + 'labratory/LAB_1_1/idle/image0009.png'
     ]
 };
 

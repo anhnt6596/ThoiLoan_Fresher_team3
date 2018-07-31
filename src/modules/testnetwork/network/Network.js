@@ -259,7 +259,7 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
     },
     sendRequestAddConstruction: function(newBuilding, building){
-        this.sendAddConstruction(building.name, building.posX, building.posY);
+        this.sendAddConstruction(building.name, newBuilding._posX, newBuilding._posY);
         cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================");
         buildingAdd = building;
         newBuildingAdd = newBuilding;

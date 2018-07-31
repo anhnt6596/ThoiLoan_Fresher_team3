@@ -305,4 +305,4 @@ var objectSize = function(obj) {
     return size;
 };
 
-var listBuildingMissImage = ['RES_3', 'STO_3', 'LAB_1', 'SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
+var listBuildingMissImage = ['RES_3', 'STO_3', 'SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
