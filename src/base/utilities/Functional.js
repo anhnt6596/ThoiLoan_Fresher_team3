@@ -264,7 +264,7 @@ var getCurrentClientTime = function(){
 
 //ms
 var getCurrentServerTime = function(){
-    return getCurrentClientTime() - DeltaTime - BONUS_TIME;
+    return getCurrentClientTime() - time.DeltaTime - time.BONUS_TIME;
 };
 
 
@@ -305,8 +305,6 @@ var objectSize = function(obj) {
     return size;
 };
 
-var listBuildingMissImage = ['RES_3', 'STO_3', 'SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
-
 var getTotalCapacity = function(){
     var total = 0;
     for(var k in contructionList){
@@ -317,3 +315,4 @@ var getTotalCapacity = function(){
     }
     return total;
 };
+var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
