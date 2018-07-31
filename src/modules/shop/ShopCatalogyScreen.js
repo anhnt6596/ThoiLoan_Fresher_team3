@@ -170,7 +170,7 @@ var ShopCatalogyScreen = Popup.extend({
 
         var catalogy = this._obj[catalogyName];
         var time;
-        if(!catalogy[itemName].buildTime){
+        if(!catalogy[itemName].buildTime){          //truong hop khong co buildtime trong config
             time = '0s';
         }else{
             time = timeToReadable(catalogy[itemName].buildTime);
