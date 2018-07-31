@@ -67,6 +67,7 @@
         "src/modules/mapScreen/MapLayer/Contruction/CollectorBuilding.js",
         "src/modules/mapScreen/MapLayer/Contruction/GoldMine.js",
         "src/modules/mapScreen/MapLayer/Contruction/ElixirCollector.js",
+        "src/modules/mapScreen/MapLayer/Contruction/Labratory.js",
         "src/modules/mapScreen/MapLayer/Contruction/DefenseBuilding.js",
         "src/modules/mapScreen/MapLayer/Contruction/Cannon.js",
         "src/modules/mapScreen/MapLayer/Obstacle/Obstacle.js",

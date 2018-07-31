@@ -724,6 +724,9 @@ var MapLayer = cc.Layer.extend({
             case 'RES_2':
                 newBuilding = new ElixirCollector(buildingInfo);
                 break;
+            case 'LAB_1':
+                newBuilding = new Labratory(buildingInfo);
+                break;
             case 'DEF_1':
                 newBuilding = new Cannon(buildingInfo);
                 break;
@@ -845,6 +848,9 @@ var MapLayer = cc.Layer.extend({
             buildingInfo.startTime = 0;
             newBuilding.startTime = 0;
         }
+        buildingInfo.posX = newBuilding._posX;
+        buildingInfo.posY = newBuilding._posY;
+        
         contructionList.push(buildingInfo);
         
         if(buildingInfo.buildTime){
