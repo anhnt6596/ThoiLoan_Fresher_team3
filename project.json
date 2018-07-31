@@ -84,6 +84,7 @@
         "src/modules/mapScreen/PopUp/ShowBuildPopup.js",
         "src/modules/mapScreen/PopUp/ShowUpgradePopup.js",
         "src/modules/mapScreen/PopUp/QuickFinishPopup.js",
+        "src/modules/mapScreen/PopUp/ResearchPopup.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js",
         "src/modules/shop/ShopItemInfo.js",

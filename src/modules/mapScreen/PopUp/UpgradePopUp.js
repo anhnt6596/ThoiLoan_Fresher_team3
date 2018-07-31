@@ -54,7 +54,7 @@ var createUpgradePopUp = function() {
     });
     content.push(nextBuildingInfo);
 
-    var upgradePopUp = new ui.PopUp('Upgrade', content, acceptBtn);
+    var upgradePopUp = new ui.PopUp('Upgrade', content);
 
     MAPSCENE.addChild(upgradePopUp, 1000);
     acceptBtn.addClickEventListener(function() {

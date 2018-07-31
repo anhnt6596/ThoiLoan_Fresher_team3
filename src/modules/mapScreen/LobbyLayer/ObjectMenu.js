@@ -87,6 +87,7 @@ var ObjectMenu = cc.Node.extend({
     },
     research: function() {
         cc.log('===========> RESEARCH');
+        createResearchPopup();
     },
     collect: function() {
         cc.log('===========> COLLECT');
