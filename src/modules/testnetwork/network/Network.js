@@ -7,20 +7,6 @@ var testnetwork = testnetwork||{};
 count =0;
 var requestedServerTime = 0;
 
-//Add Construction
-var buildingAdd = null;
-var newBuildingAdd = null;
-
-//Upgrade Construction
-var buildingUpgrade = null;
-
-//Quick Finish Construction
-var buildingQuickFinish = null;
-
-//Cancel Construction
-var buildingCancel = null;
-
-
 var NETWORK = NETWORK || null;
 
 testnetwork.Connector = cc.Class.extend({
@@ -192,9 +178,9 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_SERVER_TIME:
                 requestedServerTime++;
-                DeltaTime = getCurrentClientTime() - packet.currentServerTime;
+                time.DeltaTime = getCurrentClientTime() - packet.currentServerTime;
                 //updateTimeFlag = true;
-                cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + DeltaTime + " ms");
+                cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + time.DeltaTime + " ms");
                 break;
             case gv.CMD.ADD_RESOURCE:
                 if(packet.validate) {
@@ -232,8 +218,8 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
     },
     setUserInfomation:function(packet){
-        DeltaTime = getCurrentClientTime() - packet.serverTime;
-        cc.log("DeltaTime ban dau nhan tu SERVER: " + DeltaTime + " ms");
+        time.DeltaTime = getCurrentClientTime() - packet.serverTime;
+        cc.log("DeltaTime ban dau nhan tu SERVER: " + time.DeltaTime + " ms");
         gv.user.id = packet.id;
         gv.user.name = packet.name;
         gv.user.exp = packet.exp;

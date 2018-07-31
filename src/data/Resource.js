@@ -396,6 +396,55 @@ res.building = {
         buildingsDir + 'labratory/LAB_1_1/idle/image0007.png',
         buildingsDir + 'labratory/LAB_1_1/idle/image0008.png',
         buildingsDir + 'labratory/LAB_1_1/idle/image0009.png'
+    ],
+    dark_elixir_collector: [
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0001.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0002.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0003.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0004.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0005.png',
+        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0006.png',
+    ],
+    dark_elixir_storage: [
+        [],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_1/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_1/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_1/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_1/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_2/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_2/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_2/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_2/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_3/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_3/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_3/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_3/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_4/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_4/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_4/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_4/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_5/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_5/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_5/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_5/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'dark elixir storage/STO_3_6/idle/image0000.png',
+            buildingsDir + 'dark elixir storage/STO_3_6/idle/image0001.png',
+            buildingsDir + 'dark elixir storage/STO_3_6/idle/image0002.png',
+            buildingsDir + 'dark elixir storage/STO_3_6/idle/image0003.png',
+        ],
     ]
 };
 
@@ -562,3 +611,8 @@ var ZOOM_SCALE = {
     MAX: 2,
     MIN: 0.4,
 };
+           
+var time = {
+    BONUS_TIME: 2,
+    DeltaTime: 0,   //Client - Server
+} 

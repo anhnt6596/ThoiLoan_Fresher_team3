@@ -12,8 +12,6 @@ var StorageBuilding = Building.extend({
             present = 0;
         } else if (present >= 4) {
             present = 3;
-        } else {
-            present = 0;
         }
         this.buildingImage.forEach(function(item, i) {
             if (i == present) self.buildingImage[i].opacity = 255;
@@ -23,7 +21,7 @@ var StorageBuilding = Building.extend({
     calculateStorage: function(info, userInfo) {
         if (info.status === 'complete' || info.status === 'upgrade') {
             this._capacity = config.building[info.name][info.level].capacity;
-            this._curStorage = userInfo.gold * this._capacity / userInfo.maxCapacityGold;
+            this._curStorage = userInfo[typeOfResource[this._name]] * this._capacity / userInfo[typeOfCapacity[this._name]];
         } else {
             this._capacity = 0;
             this._curStorage = 0;
@@ -31,3 +29,15 @@ var StorageBuilding = Building.extend({
         this.presentImg();
     },
 });
+
+var typeOfResource = {
+    'STO_1': 'gold',
+    'STO_2': 'elixir',
+    'STO_3': 'darkElixir',
+};
+
+var typeOfCapacity = {
+    'STO_1': 'maxCapacityGold',
+    'STO_2': 'maxCapacityElixir',
+    'STO_3': 'maxCapacityDarkElixir',
+};

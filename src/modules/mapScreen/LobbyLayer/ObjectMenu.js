@@ -42,6 +42,30 @@ var ObjectMenu = cc.Node.extend({
         this.removeBtn = removeBtn;
         this.addChild(removeBtn);
         //removeBtn.addClickEventListener(this.remove.bind(this));
+
+        var researchBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/research_icon.png', 'Research');
+        this._listBtn.push(researchBtn);
+        this.researchBtn = researchBtn;
+        this.addChild(researchBtn);
+        researchBtn.addClickEventListener(this.research.bind(this));
+
+        var collectGoldBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_gold.png', 'Collect');
+        this._listBtn.push(collectGoldBtn);
+        this.collectGoldBtn = collectGoldBtn;
+        this.addChild(collectGoldBtn);
+        collectGoldBtn.addClickEventListener(this.collect.bind(this));
+
+        var collectElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_elixir.png', 'Collect');
+        this._listBtn.push(collectElixirBtn);
+        this.collectElixirBtn = collectElixirBtn;
+        this.addChild(collectElixirBtn);
+        collectElixirBtn.addClickEventListener(this.collect.bind(this));
+
+        var collectDarkElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_elixir.png', 'Collect');
+        this._listBtn.push(collectDarkElixirBtn);
+        this.collectDarkElixirBtn = collectDarkElixirBtn;
+        this.addChild(collectDarkElixirBtn);
+        collectDarkElixirBtn.addClickEventListener(this.collect.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -60,6 +84,12 @@ var ObjectMenu = cc.Node.extend({
     cancel: function() {
         //Neu MAP._targetedObject != undefine, null, 0 thi ve phai moi chay
         MAP._targetedObject && createCancelPopUp();
+    },
+    research: function() {
+        cc.log('===========> RESEARCH');
+    },
+    collect: function() {
+        cc.log('===========> COLLECT');
     },
     quickFinish: function(){
         if(MAP._targetedObject){
@@ -82,8 +112,12 @@ var ObjectMenu = cc.Node.extend({
         this._listValidBtn = [];
         if (object instanceof Contruction) {
             this._listValidBtn.push(this.infoBtn);              // info đầu tiên
-            if (object._status == 'complete' && object._name !== 'BDH_1') {
+            if (object._status == 'complete' && object._name !== 'BDH_1') { // nếu trang thái hoàn thành thì thêm nút upgrade và các nút khác tùy tên
                 this._listValidBtn.push(this.upgradeBtn);
+                if (object._name == "LAB_1")  this._listValidBtn.push(this.researchBtn);
+                if (object._name == "RES_1")  this._listValidBtn.push(this.collectGoldBtn);
+                if (object._name == "RES_2")  this._listValidBtn.push(this.collectElixirBtn);
+                if (object._name == "RES_3")  this._listValidBtn.push(this.collectDarkElixirBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish
