@@ -88,7 +88,7 @@ gv.TextField = function(text,placeholder, x ,y){
     });
     //_tf.setColor(new cc.color(0,0,0));
     return _tf;
-}
+};
 
 gv.user = {
     // uuid: "",
@@ -105,4 +105,5 @@ gv.user = {
     // maxCapacityGold: 0,
     // maxCapacityElixir: 0,
     // maxCapacityDarkElixir: 0,
-}
+    // troopLevel : {ARM_1:1, ARM_2:1, ARM_3:1, ARM_4:1}
+};

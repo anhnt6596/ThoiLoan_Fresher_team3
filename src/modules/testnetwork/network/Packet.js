@@ -376,6 +376,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 obstacleLists.push(obstacle);
             }
 
+
         }
     }
 );
@@ -405,6 +406,19 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             //cc.log("builderNumber = "+this.builderNumber);
             this.serverTime = this.getLong();
             //cc.log("server time: " + this.serverTime);
+
+
+            //get level troop
+            //gv.user.troopLevel = {};
+            //gv.user.troopLevel.ARM_1 = this.getShort();
+            //gv.user.troopLevel.ARM_2 = this.getShort();
+            //gv.user.troopLevel.ARM_3 = this.getShort();
+            //gv.user.troopLevel.ARM_4 = this.getShort();
+            //
+            //cc.log("===================================================TROOP LEVEL: ARM_1: " + gv.user.troopLevel.ARM_1);
+            //cc.log("===================================================TROOP LEVEL: ARM_2: " + gv.user.troopLevel.ARM_2);
+            //cc.log("===================================================TROOP LEVEL: ARM_3: " + gv.user.troopLevel.ARM_3);
+            //cc.log("===================================================TROOP LEVEL: ARM_4: " + gv.user.troopLevel.ARM_4);
         }
     }
 );

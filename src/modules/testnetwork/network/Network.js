@@ -62,7 +62,6 @@ testnetwork.Connector = cc.Class.extend({
                 if (packet.validate) {
                     cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
                     cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
-                    _.extend(LastReduceResources, ReducedTempResources);
                     MAP.updateMapWhenValidatedBuild(newBuildingAdd, buildingAdd);
                     cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
                     reduceUserResources(ReducedTempResources);
@@ -87,7 +86,6 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.UPGRADE_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN UPGRADE tu SERVER=======================================");
-                    _.extend(LastReduceResources, ReducedTempResources);
 
                     buildingUpgrade.setStatus('upgrade');
                     cc.log(buildingUpgrade._status);

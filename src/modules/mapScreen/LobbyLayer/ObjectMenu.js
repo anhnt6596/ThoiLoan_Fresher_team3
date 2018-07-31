@@ -61,11 +61,17 @@ var ObjectMenu = cc.Node.extend({
         this.addChild(collectElixirBtn);
         collectElixirBtn.addClickEventListener(this.collect.bind(this));
 
-        var collectDarkElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_elixir.png', 'Collect');
+        var collectDarkElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_dark_elixir.png', 'Collect');
         this._listBtn.push(collectDarkElixirBtn);
         this.collectDarkElixirBtn = collectDarkElixirBtn;
         this.addChild(collectDarkElixirBtn);
         collectDarkElixirBtn.addClickEventListener(this.collect.bind(this));
+
+        var trainBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/train_icon.png', 'Train');
+        this._listBtn.push(trainBtn);
+        this.trainBtn = trainBtn;
+        this.addChild(trainBtn);
+        trainBtn.addClickEventListener(this.train.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -91,6 +97,12 @@ var ObjectMenu = cc.Node.extend({
     },
     collect: function() {
         cc.log('===========> COLLECT');
+    },
+    train: function() {
+        cc.log('===========> TRAIN');
+        var listener = {};
+        var popup = new TinyPopup(cc.winSize.width*9/10, cc.winSize.height*5.7/6, "Barrack", true, listener);
+        cc.director.getRunningScene().addChild(popup, 200);
     },
     quickFinish: function(){
         if(MAP._targetedObject){
@@ -119,6 +131,7 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "RES_1")  this._listValidBtn.push(this.collectGoldBtn);
                 if (object._name == "RES_2")  this._listValidBtn.push(this.collectElixirBtn);
                 if (object._name == "RES_3")  this._listValidBtn.push(this.collectDarkElixirBtn);
+                if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish

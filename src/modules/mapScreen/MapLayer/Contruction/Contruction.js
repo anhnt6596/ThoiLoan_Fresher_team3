@@ -43,7 +43,7 @@ var Contruction = cc.Class.extend({
                 this.countDown(cur, max);
             }
 
-        };
+        }
     },
     onTarget: function() {
         var coor = this.xyOnMap(this._posX, this._posY);
