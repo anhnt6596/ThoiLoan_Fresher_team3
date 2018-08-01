@@ -39,7 +39,7 @@ var MapLayer = cc.Layer.extend({
         this.createLogicArray(contructionList, obstacleLists);
         
         this.scale = 0.5;
-        for (var i = 0; i < objectRefs.length; i++) {
+        for (var i = 0; i < objectRefs.length; i++) { // màn hình hướng đến nhà chính
             if(objectRefs[i]._name === 'TOW_1') {
                 var town = objectRefs[i];
                 this.setMapPositionToObject(town);

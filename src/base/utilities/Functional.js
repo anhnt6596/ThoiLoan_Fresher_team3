@@ -305,4 +305,14 @@ var objectSize = function(obj) {
     return size;
 };
 
+var getTotalCapacity = function(){
+    var total = 0;
+    for(var k in contructionList){
+        var build = contructionList[k];
+        if((build.status == 'complete' || build.status == 'upgrade') && (build.name == 'AMC_1')){
+            total += config.building['AMC_1'][build.level].capacity;
+        }
+    }
+    return total;
+};
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];

@@ -1,7 +1,7 @@
 var ui = ui || {};
 
 ui.PopUp = cc.Node.extend({
-    ctor: function(title, content) {
+    ctor: function(title, content, frameDir = 'res/Art/GUIs/research troop/nen 1.png') {
         this._super();
         var size = cc.winSize;
         this.attr({
@@ -21,9 +21,9 @@ ui.PopUp = cc.Node.extend({
             scale: 100
         });
         this.addChild(background, 0);
-        var frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
+        var frame = new cc.Sprite(frameDir);
         frame.attr({
-            scale: 2.3,
+            scale: 1.3,
             x: 0,
             y: 0
         });
@@ -31,8 +31,8 @@ ui.PopUp = cc.Node.extend({
 
         var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
         closeBtn.attr({
-            x: frame.width - 30,
-            y: frame.height - 25,
+            x: frame.width - 33,
+            y: frame.height - 28,
             scale: 1
         });
         frame.addChild(closeBtn, 2);
@@ -41,7 +41,7 @@ ui.PopUp = cc.Node.extend({
         var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
         titleText.attr({
             x: frame.width / 2,
-            y: 245,
+            y: frame.height - 30,
             scale: 1
         });
         frame.addChild(titleText, 2);

@@ -9,7 +9,7 @@ var ArmyCamp = Building.extend({
         var coor = this.xyOnMap(this._posX, this._posY);
         buildingImg.attr({
             x: coor.x,
-            y: coor.y,
+            y: coor.y
         });
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
@@ -18,7 +18,7 @@ var ArmyCamp = Building.extend({
         buildingImg.addChild(animSprite, 11);
         animSprite.attr({
             x: buildingImg.width / 2,
-            y: buildingImg.height / 2 + 35,
+            y: buildingImg.height / 2 + 35
         });
         animSprite.runAction(buildingAnim.repeatForever());
     }
