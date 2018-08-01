@@ -31,7 +31,7 @@ var createCancelPopUp = function() {
     });
     content.push(titleText);
     num += 1;
-    var cancelPopUp = new ui.PopUp('Cancel', content, acceptBtn);
+    var cancelPopUp = new ui.PopUp('Cancel', content);
     MAPSCENE.addChild(cancelPopUp, 1000);
     acceptBtn.addClickEventListener(() => {
         MAP._targetedObject && MAP._targetedObject.cancel(MAP._targetedObject);

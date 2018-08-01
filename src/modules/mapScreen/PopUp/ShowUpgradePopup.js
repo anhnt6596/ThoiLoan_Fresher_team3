@@ -1,7 +1,6 @@
 var ShowUpgradePopup = TinyPopup.extend({
     ctor:function(width, height, title, type, listener) {
         this._super(width, height, title, type, listener);
-        this.showContent(listener);
     },
 
     close: function() {

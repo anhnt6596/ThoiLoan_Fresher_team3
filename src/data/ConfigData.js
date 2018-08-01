@@ -33,4 +33,8 @@ cc.loader.loadJson('res/Config json/Obstacle.json', function(error, data){
     config.obtacle = data;
 });
 
+cc.loader.loadJson('res/Config json/Troop.json', function(error, data){
+    config.troop = data;
+});
+
 //cc.log('>>>>>obstacle>>>>>>>>', config.obtacle.OBS_1[1].width);

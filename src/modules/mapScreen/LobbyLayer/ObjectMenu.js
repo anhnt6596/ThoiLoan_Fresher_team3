@@ -100,8 +100,8 @@ var ObjectMenu = cc.Node.extend({
     },
     train: function() {
         cc.log('===========> TRAIN');
-        var listener = {};
-        var popup = new TinyPopup(cc.winSize.width*9/10, cc.winSize.height*5.7/6, "Barrack", true, listener);
+        var listener = {train: true, barrack: MAP._targetedObject};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + listener.barrack._id, true, listener);
         cc.director.getRunningScene().addChild(popup, 200);
     },
     quickFinish: function(){
