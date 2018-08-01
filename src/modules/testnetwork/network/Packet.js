@@ -22,6 +22,9 @@ gv.CMD.ADD_RESOURCE = 1500;
 
 gv.CMD.TEST = 3001;
 
+gv.CMD.GET_TROOP_INFO = 4001;
+gv.CMD.RESEARCH_TROOP = 4002;
+
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
 
@@ -269,6 +272,31 @@ CmdSendAddResource = fr.OutPacket.extend({
         this.putInt(elixir);
         this.putInt(darkElixir);
         this.putInt(coin);
+        this.updateSize();
+    }
+});
+
+CmdSendGetTroopInfo = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.GET_TROOP_INFO);
+    },
+    pack: function() {
+        this.packHeader();
+        this.updateSize();
+    }
+});
+
+CmdSendResearchTroop = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.RESEARCH_TROOP);
+    },
+    pack: function(type) {
+        this.packHeader();
+        this.putString(type);
         this.updateSize();
     }
 });
@@ -532,6 +560,48 @@ testnetwork.packetMap[gv.CMD.TEST] = fr.InPacket.extend(
     }
 );
 
+var troopInfo = troopInfo || [];
 
+testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData: function() {
+        cc.log('receive TROOP_INFO');
+        var size = this.getInt();
+        for (var i = 1; i <= size; i ++) {
+            var type = this.getString();
+            var isUnlock = this.getShort();
+            var level = this.getShort();
+            var population = this.getShort();
+            var status = this.getString();
+            var timeStart = this.getLong();
+            var numberOnQueue = this.getShort();
+            troopInfo[type] = {
+                type: type,
+                isUnlock: isUnlock,
+                level: level,
+                population: population,
+                status: status,
+                timeStart: timeStart,
+                numberOnQueue: numberOnQueue
+            };
+        }
+        cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
+        cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
+        cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
+        cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
+        cc.log('troopInfo.ARM_1.timeStart', troopInfo.ARM_1.timeStart)
+        cc.log('troopInfo.ARM_1.numberOnQueue', troopInfo.ARM_1.numberOnQueue)
+    }
+});
 
-
+testnetwork.packetMap[gv.CMD.RESEARCH_TROOP] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData:function(){
+        var validate = this.getShort();
+        cc.log('======================> ', validate);
+    }
+});
