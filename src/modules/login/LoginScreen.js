@@ -59,7 +59,7 @@ var LoginScreen = cc.Layer.extend({
 
         this.addChild(btnLogin);
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
-        // btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
+        //btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
 
 
         this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);

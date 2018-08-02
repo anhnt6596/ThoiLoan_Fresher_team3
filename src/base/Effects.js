@@ -11,9 +11,9 @@ ui.makeAnimation = function(name, s, e, fps){
     return cc.animate(animation);
 };
 
-ui.BounceEff = function() {
-    var act1 = new cc.ScaleTo(0.15, 1.1, 1.1);
-    var act2 = new cc.ScaleTo(0.05, 1, 1);
+ui.BounceEff = function(scale = 1) {
+    var act1 = new cc.ScaleTo(0.15, 1.1 * scale, 1.1 * scale);
+    var act2 = new cc.ScaleTo(0.05, scale, scale);
     return new cc.Sequence(act1, act2);
 };
 

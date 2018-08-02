@@ -3,7 +3,7 @@ var createUpgradePopUp = function() {
     var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
     acceptBtn.attr({
         x: 0,
-        y: -230,
+        y: -180,
         scale: 1.5
     });
     var content = [
@@ -30,26 +30,26 @@ var createUpgradePopUp = function() {
     if (req.darkElixirReq > 0) {
         var item = createNewRequireItem('dark_elixir', req.darkElixirReq, num);
         content.push(item);
-        num += 1;
+        // num += 1;
     }
 
     var nextBuildingImg = showNextBuildingImg(info);
     nextBuildingImg.attr({
-        x: -250,
+        x: -230,
         y: 100
     });
     content.push(nextBuildingImg);
 
     var buildTimeText = showBuildTimeText(config.building[info._name][info._level + 1].buildTime);
     buildTimeText.attr({
-        x: -250,
-        y: -15
+        x: -230,
+        y: -10
     });
     content.push(buildTimeText);
 
     var nextBuildingInfo = showNextBuildingInfo(info);
     nextBuildingInfo.attr({
-        x: -50,
+        x: -40,
         y: 130
     });
     content.push(nextBuildingInfo);
@@ -84,7 +84,7 @@ var createNewRequireItem = function(type, value, num) {
     }
     icon.attr({
         x: 75,
-        y: -215 - num * 30,
+        y: -165 - num * 30,
         scale: 1.5
     });
     icon.addChild(titleText);
@@ -198,7 +198,7 @@ var showNextBuildingImg = function(info) {
 
     content.addChild(grass, 4);
     content.addChild(buildingImg, 6);
-    content.setScale(3.5 / info._width);
+    content.setScale(3 / info._width);
     return content;
 };
 
