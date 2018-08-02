@@ -6,6 +6,20 @@ var ItemInfo = TinyPopup.extend({
     },
 
     showInfoItem:function(width, height, itemName, level){
+        var missImage = false;
+        for(var d in listBuildingMissImage){
+            if(listBuildingMissImage[d] == itemName){
+                missImage = true;
+                cc.log("==============================HERE");
+                break;
+            }
+        }
+        if(missImage){
+            var note = cc.LabelBMFont('This building has no image' , 'res/Art/Fonts/soji_24.fnt');
+            note.setPosition(0, 0);
+            this.addChild(note, 10);
+            return;
+        }
         var image = this.showImage(itemName, level);
         image.setPosition(-1*this._frame.width/3.5 * this._frame.scaleX, this._frame.height/7 * this._frame.scaleY);
         this.addChild(image, 10);
@@ -123,6 +137,30 @@ var ItemInfo = TinyPopup.extend({
                 var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
+                break;
+            case 'RES_3':
+                buildingImg = new cc.Sprite(res.building.dark_elixir_collector[level]);
+                break;
+            case 'STO_3':
+                buildingImg = new cc.Sprite(res.building.dark_elixir_storage[level][3]);
+                break;
+            case 'BDH_1':
+                buildingImg = new cc.Sprite(res.building.builder_hut);
+                break;
+            case 'LAB_1':
+                buildingImg = new cc.Sprite(res.building.labratory[level]);
+                break;
+            case 'DEF_1':
+                var dir = res.building.canon_base[level];
+                buildingImg = new cc.Sprite(dir);
+                buildingImg.setCascadeColorEnabled(true);
+                var cannonImg = new cc.Sprite(res.building.canon[level][3]);
+                cannonImg.attr({
+                    x: buildingImg.width / 2 + 7,
+                    y: buildingImg.height / 2
+                });
+                buildingImg.addChild(cannonImg);
+
                 break;
             default:
                 buildingImg = new cc.Sprite(res.building.army_camp[level]);

@@ -99,6 +99,17 @@ var getIdBuildingMinRemainTime = function(){
     return id;
 };
 
+
+//Kiem tra dieu kien upgrad
+var checkConditionUpgrade = function(building){
+    var currentLevelTownHall = getCurrentLevelTownHall();
+    var nextLevel = building._level + 1;
+    if(config.building[building._name][nextLevel].townHallLevelRequired > currentLevelTownHall){
+        return false;
+    }
+    return true;
+};
+
 //Tru tai nguyen cua user
 var reduceUserResources = function(costBuilding){
     if(gv.user.gold >= costBuilding.gold){
@@ -158,30 +169,25 @@ var getResourcesNextLevel = function(name, level){
 };
 
 //Tang tai nguyen cua user
-var increaseUserResources = function(resources, isHack){
-    if(isHack){
-        gv.user.gold += resources.gold;
-        gv.user.elixir += resources.elixir;
-        gv.user.darkElixir += resources.darkElixir;
+var increaseUserResources = function(resources){
+
+    if(gv.user.gold + resources.gold > gv.user.maxCapacityGold){
+        gv.user.gold = gv.user.maxCapacityGold;
     }else{
-        if(gv.user.gold + resources.gold > gv.user.maxCapacityGold){
-            gv.user.gold = gv.user.maxCapacityGold;
-        }else{
-            gv.user.gold += resources.gold;
-        }
-
-        if(gv.user.elixir + resources.elixir > gv.user.maxCapacityElixir){
-            gv.user.elixir = gv.user.maxCapacityElixir;
-        }else{
-            gv.user.elixir += resources.elixir;
-        }
-
-        if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
-            gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
-        }else{
-            gv.user.darkElixir += resources.darkElixir;
-        }
+        gv.user.gold += resources.gold;
     }
+
+    if(gv.user.elixir + resources.elixir > gv.user.maxCapacityElixir){
+        gv.user.elixir = gv.user.maxCapacityElixir;
+    }else{
+        gv.user.elixir += resources.elixir;
+    }
+
+    //if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
+    //    gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
+    //}else{
+        gv.user.darkElixir += resources.darkElixir;
+    //}
 
     gv.user.coin += resources.coin;
     LOBBY.update(gv.user);
@@ -191,7 +197,7 @@ var setUserResourcesCapacity = function(){
     var goldCapacity = 0;
     var elixirCapacity = 0;
     var darkElixirCapacity = 0;
-    var currentLevelTownHall = 1;
+    var currentLevelTownHall = getCurrentLevelTownHall();
 
     for(var k in contructionList){
         var build = contructionList[k];
@@ -206,15 +212,19 @@ var setUserResourcesCapacity = function(){
         }
     }
 
-    for(var k in contructionList){
-        if(contructionList[k].name == 'TOW_1'){
-            currentLevelTownHall = contructionList[k].level;
-        }
-    }
-
     gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
     gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
     gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
+};
+
+
+//get level TOW_1 hien tai
+var getCurrentLevelTownHall = function(){
+    for(var k in contructionList){
+        if(contructionList[k].name == 'TOW_1'){
+            return contructionList[k].level;
+        }
+    }
 };
 
 var updateBuilderNumber = function(){

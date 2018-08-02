@@ -183,7 +183,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.ADD_RESOURCE:
                 if(packet.validate) {
                     cc.log("=======================================XAC NHAN ADD RESOURCE tu SERVER=======================================");
-                    increaseUserResources(ReducedTempResources, true);
+                    increaseUserResources(ReducedTempResources);
                     resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
@@ -227,6 +227,10 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
+        cc.log("========================================== Gold: " + gv.user.gold);
+        cc.log("========================================== Elixir: " + gv.user.elixir);
+        cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
+        cc.log("========================================== Coin: " + gv.user.coin);
         gv.user.allBuilder = packet.builderNumber;
         gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
         cc.log("========================================== All Builder: " + gv.user.allBuilder);

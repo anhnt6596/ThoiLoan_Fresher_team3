@@ -53,7 +53,6 @@ var createUpgradePopUp = function() {
         y: 130
     });
     content.push(nextBuildingInfo);
-
     var upgradePopUp = new ui.PopUp('Upgrade', content);
 
     MAPSCENE.addChild(upgradePopUp, 1000);
@@ -169,6 +168,9 @@ var showNextBuildingImg = function(info) {
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
             break;
+        case 'RES_3':
+            buildingImg = new cc.Sprite(res.building.dark_elixir_collector[nextLevel]);
+            break;
         case 'STO_1':
             buildingImg = new cc.Sprite(res.building.gold_storage[nextLevel][3]);
 
@@ -190,6 +192,18 @@ var showNextBuildingImg = function(info) {
             var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
+            break;
+        case 'STO_3':
+            buildingImg = new cc.Sprite(res.building.dark_elixir_storage[nextLevel][3]);
+            break;
+        case 'BDH_1':
+            buildingImg = new cc.Sprite(res.building.builder_hut[nextLevel]);
+            break;
+        case 'LAB_1':
+            buildingImg = new cc.Sprite(res.building.labratory[nextLevel]);
+            break;
+        case 'DEF_1':
+            buildingImg = new cc.Sprite(res.building.canon_base[nextLevel]);
             break;
         default:
             buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
