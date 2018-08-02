@@ -314,6 +314,7 @@ var ShopCatalogyScreen = Popup.extend({
                             //var last = contructionList[contructionList.length-1];
                             //var id = last._id + 1;
                             var id = gv.user.largestId;
+                            cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {

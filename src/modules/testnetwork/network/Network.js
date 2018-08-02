@@ -250,20 +250,20 @@ testnetwork.Connector = cc.Class.extend({
     },
     sendRequestAddConstruction: function(newBuilding, building){
         this.sendAddConstruction(building.name, newBuilding._posX, newBuilding._posY);
-        cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================");
         buildingAdd = building;
         newBuildingAdd = newBuilding;
+        cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================" + building._id);
     },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
     },
     sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);
         buildingUpgrade = building;
-        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
     },
 
     //Finish build or Finish upgrade
@@ -280,7 +280,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendQuickFinish);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND REQUEST QUICK FINISH=======================================");
+        cc.log("=======================================SEND REQUEST QUICK FINISH======================================= " + id);
     },
 
     //Cancel
@@ -288,7 +288,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendCancelConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND REQUEST CANCEL CONSTRUCTION=======================================");
+        cc.log("=======================================SEND REQUEST CANCEL CONSTRUCTION=======================================" +id);
     },
 
     sendGetServerTime:function(){

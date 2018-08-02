@@ -407,6 +407,7 @@ var MapLayer = cc.Layer.extend({
                 y: -1000,
                 opacity: 0,
             });
+            gv.user.largestId--;
             LOBBY.showLobby();
             LOBBY.hideObjectMenu();
             this.cancelBtn.addClickEventListener(doNothing);
@@ -420,7 +421,7 @@ var MapLayer = cc.Layer.extend({
                     if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
                         var gBuilder = getGToReleaseBuilder();
                         if(gv.user.coin < gBuilder){
-                            var listener = {contentBuyG:"Please add more G to release a builder!"};
+                            var listener = {contentBuyG:"Add more G to release a builder!"};
                             var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
                             cc.director.getRunningScene().addChild(popup, 2000000);
                         }else{
@@ -435,7 +436,7 @@ var MapLayer = cc.Layer.extend({
                     }
                 } else if(gResources > 0){
                     if(gv.user.coin < gResources){
-                        var listener = {contentBuyG:"Please add more G to buy missing resources!"};
+                        var listener = {contentBuyG:"Add more G to buy missing resources!"};
                         var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }else{
@@ -444,7 +445,7 @@ var MapLayer = cc.Layer.extend({
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }
                 } else {
-                    var listener = {contentBuyG:"Please add more G to buy this item!"};
+                    var listener = {contentBuyG:"Add more G to buy this item!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }

@@ -38,7 +38,7 @@ var LoginScreen = cc.Layer.extend({
             anchorY: 0.5,
             x: size.width/2,
             y: size.height/3,
-            fontSize: 25,
+            fontSize: 25
             //placeHolderFontColor: cc.color(255,255,255,200)
 
         });
@@ -54,7 +54,7 @@ var LoginScreen = cc.Layer.extend({
             x: btnLogin.getContentSize().width/2,
             y: btnLogin.getContentSize().height/2,
             scale: 2
-        })
+        });
         btnLogin.addChild(this.loginText);
 
         this.addChild(btnLogin);
@@ -75,9 +75,10 @@ var LoginScreen = cc.Layer.extend({
     {
         //this.lblLog.setString("Start Connect!");
 
-        gv.user.uuid = this.uuidEb.getString()
+        gv.user.uuid = this.uuidEb.getString();
         cc.log("uuid "+  gv.user.uuid  );
-        gv.gameClient.connect();
+        var test = gv.gameClient.connect();
+        cc.log('=================================CONNECT====================='+test);
     },
     onConnectSuccess:function()
     {
@@ -90,5 +91,5 @@ var LoginScreen = cc.Layer.extend({
     onFinishGameInfo:function(){
         setUserResourcesCapacity();
         cc.director.runScene(createMapScene());
-    },
+    }
 });

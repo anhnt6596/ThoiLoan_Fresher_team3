@@ -110,7 +110,7 @@ var ObjectMenu = cc.Node.extend({
             var gFinish = timeToG(remainTime);
             cc.log("==========================================THOI GIAN: " + remainTime);
             if(gv.user.coin < gFinish){
-                var listener = {contentBuyG:"Please add more G to quick finish this building!"};
+                var listener = {contentBuyG:"Add more G to quick finish this building!"};
                 var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to quick finish this building", true, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{

@@ -203,7 +203,15 @@ var showNextBuildingImg = function(info) {
             buildingImg = new cc.Sprite(res.building.labratory[nextLevel]);
             break;
         case 'DEF_1':
-            buildingImg = new cc.Sprite(res.building.canon_base[nextLevel]);
+            var dir = res.building.canon_base[nextLevel];
+            buildingImg = new cc.Sprite(dir);
+            buildingImg.setCascadeColorEnabled(true);
+            var cannonImg = new cc.Sprite(res.building.canon[nextLevel][3]);
+            cannonImg.attr({
+                x: buildingImg.width / 2 + 7,
+                y: buildingImg.height / 2
+            });
+            buildingImg.addChild(cannonImg);
             break;
         default:
             buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);

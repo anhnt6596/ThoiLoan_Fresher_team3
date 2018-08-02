@@ -487,7 +487,7 @@ var name = name || {};
 name.building = {
     TOW_1: {
         vi: 'Nhà chính',
-        en: 'Tower'
+        en: 'TownHall'
     },
     BDH_1: {
         vi: 'Nhà thợ xây',
