@@ -69,9 +69,9 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        var resource = {gold:0, elixir:0, darkElixir:0, coin:1000};
+        var resource = {gold:0, elixir:0, darkElixir:0, coin:10000};
         _.extend(ReducedTempResources, resource);
-        NETWORK.sendAddResource(0, 0, 0, 1000);
+        NETWORK.sendAddResource(0, 0, 0, 10000);
         // NETWORK.sendGetTroopInfo();
         // setTimeout(() => {
         //     NETWORK.sendResearchTroopInfo("ARM_1");
