@@ -314,7 +314,6 @@ var ShopCatalogyScreen = Popup.extend({
                             //var last = contructionList[contructionList.length-1];
                             //var id = last._id + 1;
                             var id = gv.user.largestId;
-                            gv.user.largestId += 1;
                             var _level = 1;
                             cc.log("Click Item " + itemName);
                             var buildingInfo = {
@@ -329,6 +328,7 @@ var ShopCatalogyScreen = Popup.extend({
                                 status: 'pending',
                                 cost: costBuilding
                             };
+                            gv.user.largestId += 1;
                             MAP.buildNewContruction(buildingInfo);
                             cc.director.popToRootScene();
                         }
