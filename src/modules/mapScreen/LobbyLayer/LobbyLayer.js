@@ -22,7 +22,6 @@ var LobbyLayer = cc.Layer.extend({
 
         this.addChild(btnAttack);
         btnAttack.addClickEventListener(this.onAttack.bind(this));
-        //btnAttack.addClickEventListener( () => NETWORK.sendAddConstruction("BDH_1",11,17));
 
 
     },
@@ -70,9 +69,13 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        var resource = {gold:5000, elixir:5000, darkElixir:0, coin:1000};
+        var resource = {gold:10000, elixir:10000, darkElixir:0, coin:1000};
         _.extend(ReducedTempResources, resource);
         NETWORK.sendAddResource(5000, 5000, 0, 1000);
+        // NETWORK.sendGetTroopInfo();
+        // setTimeout(() => {
+        //     NETWORK.sendResearchTroopInfo("ARM_1");
+        // }, 3000);
     },
 
 

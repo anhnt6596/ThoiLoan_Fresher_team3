@@ -135,7 +135,6 @@ var ItemInfo = TinyPopup.extend({
         return content;
     },
 
-
     showbuildingInfo:function(itemName, level) {
         var infoArea = new cc.Node();
         var listInfo = [];

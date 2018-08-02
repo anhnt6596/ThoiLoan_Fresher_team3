@@ -193,6 +193,8 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }
                 break;
+            case gv.CMD.GET_TROOP_INFO: 
+                cc.log('================>', packet.message);
         }
     },
     sendGetUserInfo:function()
@@ -297,5 +299,17 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(gold, elixir, darkElixir, coin);
         this.gameClient.sendPacket(pk);
         cc.log("=======================================SEND REQUEST ADD RESOURCE=======================================");
-    }
+    },
+    sendGetTroopInfo: function() {
+        var pk = this.gameClient.getOutPacket(CmdSendGetTroopInfo);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GET TROOP INFO==========================================');
+    },
+    sendResearchTroopInfo: function(type) {
+        var pk = this.gameClient.getOutPacket(CmdSendResearchTroop);
+        pk.pack(type);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND RESEARCH TROOP==========================================');
+    },
 });

@@ -1,6 +1,7 @@
 var TinyPopup = cc.Node.extend({
     _frame:null,
     _listener:null,
+    _titleText:null,
 
     //type = true (X)
     //type = false (X + functinal Btn)
@@ -25,13 +26,12 @@ var TinyPopup = cc.Node.extend({
         background.scale = 100;
         this.addChild(background, 0);
 
-        this._frame = new cc.Sprite('res/Art/GUIs/train_troop_gui/background.png');
+        this._frame = new cc.Sprite('res/Art/GUIs/shop_gui/bg.png');
         this._frame.setScale(width/this._frame.width, height/this._frame.height);
         this.addChild(this._frame, 1);
 
         var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
-        closeBtn.setPosition(this._frame.width/2 * this._frame.scaleX - closeBtn.width * closeBtn.scaleX/2 - 20, this._frame.height/2 * this._frame.scaleY - closeBtn.height * closeBtn.scaleY/2 - 15);
-        closeBtn.scale = 1.2;
+        closeBtn.setPosition(this._frame.width/2 * this._frame.scaleX - closeBtn.width * closeBtn.scaleX/2 - 10, this._frame.height/2 * this._frame.scaleY - closeBtn.height * closeBtn.scaleY/2 - 7);
         this.addChild(closeBtn, 2);
         closeBtn.addClickEventListener(this.close.bind(this));
 
@@ -47,15 +47,15 @@ var TinyPopup = cc.Node.extend({
             this.addChild(btnText, 202);
         }
 
-        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
-        titleText.setPosition(0, this._frame.height*this._frame.scaleY/2 - titleText.height/2 - 20);
-        this.addChild(titleText, 2);
+        this._titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
+        this._titleText.setPosition(0, this._frame.height*this._frame.scaleY/2 - this._titleText.height/2 - 15);
+        this.addChild(this._titleText, 2);
 
         this.openAction();
     },
 
     showContent:function(listener){
-        if(!listener.contentBuyG && !listener._level){
+        if(!listener.contentBuyG && !listener._level && !listener.train){
             var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
             contentText.setPosition(-10, 0);
             contentText.color = cc.color(0, 255, 0, 255);
