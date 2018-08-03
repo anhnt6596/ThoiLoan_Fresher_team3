@@ -37,4 +37,8 @@ cc.loader.loadJson('res/Config json/Troop.json', function(error, data){
     config.troop = data;
 });
 
+cc.loader.loadJson('res/Config json/TroopBase.json', function(error, data){
+    config.troopBase = data;
+});
+
 //cc.log('>>>>>obstacle>>>>>>>>', config.obtacle.OBS_1[1].width);
