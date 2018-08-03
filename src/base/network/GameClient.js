@@ -70,6 +70,9 @@ var GameClient = cc.Class.extend(
         onDisconnected:function()
         {
             cc.log("onDisconnected");
+            //Ket noi lai
+            gv.gameClient.connect();
+
         },
         _onReceived:function(cmd, pkg)
         {

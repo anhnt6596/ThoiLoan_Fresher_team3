@@ -344,6 +344,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         readData:function(){
             this.n = this.getInt();
             gv.user.largestId = this.n;
+            cc.log("================================= LARGEST ID: "+ gv.user.largestId);
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
@@ -384,15 +385,15 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             console.log("Co tat ca "+this.n_obs+" obs");
             for ( var j=0;j<this.n_obs;j++) {
                 this.idObs = this.getInt();
-                cc.log("obs so: " + this.idObs);
+                //cc.log("obs so: " + this.idObs);
                 this.typeObs = this.getString();
-                cc.log(", type: " + this.typeObs);
+                //cc.log(", type: " + this.typeObs);
                 this.posXObs = this.getInt();
-                cc.log(", posX: " + this.posXObs);
+                //cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
-                cc.log(", posY: " + this.posYObs);
+                //cc.log(", posY: " + this.posYObs);
 
-                console.log("/n");
+                //console.log("/n");
                 var obstacle = {
                     _id: this.idObs,
                     name: this.typeObs,

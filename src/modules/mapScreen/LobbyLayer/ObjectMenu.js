@@ -76,7 +76,7 @@ var ObjectMenu = cc.Node.extend({
     onInfo: function() {
         if(MAP._targetedObject){
             var listener = {_level: MAP._targetedObject._level, itemName:MAP._targetedObject._name};
-            var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[listener.itemName].en, true, listener);
+            var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[listener.itemName].en + ' level ' + listener._level, true, listener);
             cc.director.getRunningScene().addChild(popup, 200);
         }
     },
@@ -100,8 +100,8 @@ var ObjectMenu = cc.Node.extend({
     },
     train: function() {
         cc.log('===========> TRAIN');
-        var listener = {};
-        var popup = new TinyPopup(cc.winSize.width*9/10, cc.winSize.height*5.7/6, "Barrack", true, listener);
+        var listener = {train: true, barrack: MAP._targetedObject};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + listener.barrack._id, true, listener);
         cc.director.getRunningScene().addChild(popup, 200);
     },
     quickFinish: function(){
@@ -110,7 +110,7 @@ var ObjectMenu = cc.Node.extend({
             var gFinish = timeToG(remainTime);
             cc.log("==========================================THOI GIAN: " + remainTime);
             if(gv.user.coin < gFinish){
-                var listener = {contentBuyG:"Please add more G to quick finish this building!"};
+                var listener = {contentBuyG:"Add more G to quick finish this building!"};
                 var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to quick finish this building", true, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{

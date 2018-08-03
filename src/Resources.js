@@ -39,7 +39,7 @@ var res = {
     mg_trophy_bg_bar: 'res/Art/GUIs/Main_Gui/trophy_bg_bar.png',
     login_bg: 'res/Art/GUIs/Main_Gui/login/background.jpg',
 
-
+    rs_mieng_trang: 'res/Art/GUIs/research troop/mieng_trang.png',
 
     textureTransparentPack_png : 'res/textureTransparentPack.png'
 };
