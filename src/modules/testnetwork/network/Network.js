@@ -306,7 +306,7 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GET TROOP INFO==========================================');
     },
-    sendResearchTroopInfo: function(type) {
+    sendResearchTroop: function(type) {
         var pk = this.gameClient.getOutPacket(CmdSendResearchTroop);
         pk.pack(type);
         this.gameClient.sendPacket(pk);

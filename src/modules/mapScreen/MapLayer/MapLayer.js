@@ -6,6 +6,8 @@ var rootMapPos = {
     y: 560
 };
 
+var listTroopRefs = listTroopRefs || [];
+
 var MapLayer = cc.Layer.extend({
     _targetedObject: null,
     _isMovingBuilding: false,
@@ -32,6 +34,7 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/effects_1.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_1_1_anims.plist');
         this.initBackGround();
         this.initMovingTool();
         this.initContructions(contructionList);

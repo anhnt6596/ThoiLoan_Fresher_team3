@@ -111,6 +111,7 @@ var Contruction = cc.Class.extend({
         this.setImgCoor(coor); // đặt lại vị trí
         // setzOrder
         var newZ = this.caluclateZOrder(mapPos);
+        cc.log("NewZ: " + newZ);
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {

@@ -574,25 +574,16 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var isUnlock = this.getShort();
             var level = this.getShort();
             var population = this.getShort();
-            var status = this.getString();
-            var timeStart = this.getLong();
-            var numberOnQueue = this.getShort();
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
                 level: level,
-                population: population,
-                status: status,
-                timeStart: timeStart,
-                numberOnQueue: numberOnQueue
+                population: population
             };
         }
         cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
         cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
         cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
-        cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
-        cc.log('troopInfo.ARM_1.timeStart', troopInfo.ARM_1.timeStart)
-        cc.log('troopInfo.ARM_1.numberOnQueue', troopInfo.ARM_1.numberOnQueue)
     }
 });
 
@@ -602,6 +593,6 @@ testnetwork.packetMap[gv.CMD.RESEARCH_TROOP] = fr.InPacket.extend({
     },
     readData:function(){
         var validate = this.getShort();
-        cc.log('======================> ', validate);
+        cc.log('===================RESEARCH===> ', validate);
     }
 });

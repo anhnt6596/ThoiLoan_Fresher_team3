@@ -316,3 +316,7 @@ var getTotalCapacity = function(){
     return total;
 };
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
+
+var calculateDistance = function(a, b) {
+    return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+}
