@@ -505,7 +505,7 @@ var Contruction = cc.Class.extend({
         });
         MAP.addChild(timeBar, 1100);
 
-        processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
         this.processBar = processBar;
         processBar.attr({
             anchorX: 0,
