@@ -1,7 +1,7 @@
 var ui = ui || {};
 
 ui.PopUp = cc.Sprite.extend({
-    ctor: function(title, content, frameDir = 'res/Art/GUIs/research troop/nen 1.png') {
+    ctor: function(title = "", content = [], frameDir = 'res/Art/GUIs/research troop/nen 1.png') {
         this._super();
         var size = cc.winSize;
         this.attr({

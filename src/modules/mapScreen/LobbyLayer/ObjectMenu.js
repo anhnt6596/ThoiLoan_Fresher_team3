@@ -93,7 +93,9 @@ var ObjectMenu = cc.Node.extend({
     },
     research: function() {
         cc.log('===========> RESEARCH');
-        createResearchPopup();
+        //createResearchPopup();
+        var researchPopUp = new ResearchPopUp();
+        MAPSCENE.addChild(researchPopUp, 1000);
     },
     collect: function() {
         cc.log('===========> COLLECT');

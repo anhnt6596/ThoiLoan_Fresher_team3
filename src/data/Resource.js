@@ -613,4 +613,12 @@ var ZOOM_SCALE = {
 var time = {
     BONUS_TIME: 2,
     DeltaTime: 0,   //Client - Server
-} 
+}
+
+
+var time_text_dir = 'res/Art/Fonts/soji_20.fnt';
+var research_dir = "res/Art/GUIs/research troop/";
+var img_troop_dir = "res/Art/GUIs/upgrade_troop/small_icon/";
+var nameTroop_font_dir = 'res/Art/Fonts/soji_20.fnt';
+var description_dir = 'res/Art/Fonts/fista_20_non.fnt';
+var imgG_dir = "res/Art/GUIs/shop_gui/g.png";
