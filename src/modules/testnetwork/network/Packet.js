@@ -24,6 +24,7 @@ gv.CMD.TEST = 3001;
 
 gv.CMD.GET_TROOP_INFO = 4001;
 gv.CMD.RESEARCH_TROOP = 4002;
+gv.CMD.RESEARCH_TROOP_COMPLETE = 4003;
 
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
@@ -293,6 +294,19 @@ CmdSendResearchTroop = fr.OutPacket.extend({
         this._super();
         this.initData(100);
         this.setCmdId(gv.CMD.RESEARCH_TROOP);
+    },
+    pack: function(type) {
+        this.packHeader();
+        this.putString(type);
+        this.updateSize();
+    }
+});
+
+CmdSendResearchTroopComplete = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.RESEARCH_TROOP_COMPLETE);
     },
     pack: function(type) {
         this.packHeader();
@@ -575,16 +589,22 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var isUnlock = this.getShort();
             var level = this.getShort();
             var population = this.getShort();
+            var startTime = this.getLong();
+            var status = this.getString();
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
                 level: level,
-                population: population
+                population: population,
+                startTime: startTime,
+                status: status
             };
         }
         cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
         cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
         cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
+        cc.log('troopInfo.ARM_1.startTime', troopInfo.ARM_1.startTime)
+        cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
     }
 });
 
@@ -595,5 +615,15 @@ testnetwork.packetMap[gv.CMD.RESEARCH_TROOP] = fr.InPacket.extend({
     readData:function(){
         var validate = this.getShort();
         cc.log('===================RESEARCH===> ', validate);
+    }
+});
+
+testnetwork.packetMap[gv.CMD.RESEARCH_TROOP_COMPLETE] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData:function(){
+        var validate = this.getShort();
+        cc.log('===================RESEARCH COMPLETE===> ', validate);
     }
 });
