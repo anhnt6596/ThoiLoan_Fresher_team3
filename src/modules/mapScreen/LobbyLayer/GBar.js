@@ -7,7 +7,7 @@ var GBar = cc.Sprite.extend({
         var resIcon = 'res/Art/GUIs/Main_Gui/g_icon.png';
         var ratio = 0.5;
 
-        var valueText = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_16.fnt');
+        var valueText = new cc.LabelBMFont(formatNumber(value), 'res/Art/Fonts/soji_16.fnt');
         this.valueText = valueText;
         valueText.attr({
             anchorX: 1,

@@ -19,11 +19,16 @@ var LobbyLayer = cc.Layer.extend({
         btnShop.addClickEventListener(this.onOpenShop.bind(this));
 
         var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'TẤN CÔNG');
-
         this.addChild(btnAttack);
         btnAttack.addClickEventListener(this.onAttack.bind(this));
 
+        var btnSetting = ui.iconButton(60, size.width - 35, 135, 'res/Art/GUIs/Main_Gui/setting.png', '');
+        this.addChild(btnSetting);
+        btnSetting.addClickEventListener(this.onSetting.bind(this));
 
+        var btnTreasure = ui.iconButton(60, size.width - 35, 195, 'res/Art/GUIs/Main_Gui/kho.png', '');
+        this.addChild(btnTreasure);
+        btnTreasure.addClickEventListener(this.onTreasure.bind(this));
     },
     initBar: function() {
         var size = cc.winSize;
@@ -69,16 +74,24 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        var resource = {gold:10000, elixir:10000, darkElixir:0, coin:1000};
+        var resource = { gold:0, elixir:0, darkElixir:0, coin:1000000 };
         _.extend(ReducedTempResources, resource);
-        NETWORK.sendAddResource(5000, 5000, 0, 1000);
+        NETWORK.sendAddResource(0, 0, 0, 1000000);
         // NETWORK.sendGetTroopInfo();
-        // setTimeout(() => {
-        //     NETWORK.sendResearchTroopInfo("ARM_1");
-        // }, 3000);
     },
-
-
+    onSetting: function () {
+        if (MAP._targetedObject) {
+            var warrior = new Warrior(MAP._targetedObject);
+            listTroopRefs.push(warrior);
+        }
+        // NETWORK.sendResearchTroop("ARM_1");
+    },
+    onTreasure: function() {
+        listTroopRefs.forEach(element => {
+            element.moveTo(objectRefs[0]);
+        });
+        // NETWORK.sendResearchComplete("ARM_1");
+    },
     hideLobby: function() {
         this.attr({
             x: - 100000,

@@ -111,6 +111,7 @@ var Contruction = cc.Class.extend({
         this.setImgCoor(coor); // đặt lại vị trí
         // setzOrder
         var newZ = this.caluclateZOrder(mapPos);
+        cc.log("NewZ: " + newZ);
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
@@ -274,7 +275,7 @@ var Contruction = cc.Class.extend({
         MAP.addChild(shadow, Z.BUILDING_SHADOW);
     },
     addNameText: function() {
-        var bd_name = name.building[this._name] ? name.building[this._name].vi : 'unknown';
+        var bd_name = name.building[this._name] ? name.building[this._name].en : 'unknown';
         var nameText = new cc.LabelBMFont(bd_name, 'res/Art/Fonts/soji_24.fnt');
         this.nameText = nameText;
         var coor = this.xyOnMap(this._posX, this._posY);
@@ -331,13 +332,19 @@ var Contruction = cc.Class.extend({
         LOBBY.update(gv.user);
     },
     upgrade: function() {
+        if(!checkConditionUpgrade(this)){
+            var listener = {contentBuyG:"Upgrade TownHall to upgrade this building!"};
+            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough level of TownHall", true, listener);
+            cc.director.getRunningScene().addChild(popup, 2000000);
+            return;
+        }
         var costBuilding = getResourcesNextLevel(this._name, this._level);
         var gResources = checkUserResources(costBuilding);
         if(gResources == 0){
             if(!checkIsFreeBuilder()){
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
-                    var listener = {contentBuyG:"Please add more G to release a builder!"};
+                    var listener = {contentBuyG:"Add more G to release a builder!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{
@@ -352,7 +359,7 @@ var Contruction = cc.Class.extend({
             }
         } else if(gResources > 0){
             if(gv.user.coin < gResources){
-                var listener = {contentBuyG:"Please add more G to buy missing resources!"};
+                var listener = {contentBuyG:"Add more G to buy missing resources!"};
                 var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }else{
@@ -362,7 +369,7 @@ var Contruction = cc.Class.extend({
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
         } else {
-            var listener = {contentBuyG:"Please add more G to buy this item!"};
+            var listener = {contentBuyG:"Add more G to buy this item!"};
             var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
             cc.director.getRunningScene().addChild(popup, 2000000);
         }
@@ -423,7 +430,7 @@ var Contruction = cc.Class.extend({
         var darkElixir = data.darkElixir || 0;
         var coin = data.coin || 0;
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
-        increaseUserResources(refundResources, false);
+        increaseUserResources(refundResources);
 
         updateBuilderNumber();
         setUserResourcesCapacity();
@@ -448,7 +455,7 @@ var Contruction = cc.Class.extend({
         var darkElixir = data.darkElixir || 0;
         var coin = data.coin || 0;
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
-        increaseUserResources(refundResources, false);
+        increaseUserResources(refundResources);
 
         updateBuilderNumber();
         setUserResourcesCapacity();
@@ -498,7 +505,7 @@ var Contruction = cc.Class.extend({
         });
         MAP.addChild(timeBar, 1100);
 
-        processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
         this.processBar = processBar;
         processBar.attr({
             anchorX: 0,

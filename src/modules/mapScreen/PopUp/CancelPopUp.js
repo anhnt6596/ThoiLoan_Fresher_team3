@@ -8,7 +8,7 @@ var createCancelPopUp = function() {
     var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
     acceptBtn.attr({
         x: 0,
-        y: -230,
+        y: -180,
         scale: 1.5,
     });
     var content = [
@@ -26,7 +26,7 @@ var createCancelPopUp = function() {
     titleText = new cc.LabelBMFont('Confirm', 'res/Art/Fonts/soji_20.fnt');
     titleText.attr({
         x: 0,
-        y: -230 - num * 30,
+        y: -180 - num * 30,
         scale: 1.5,
     });
     content.push(titleText);

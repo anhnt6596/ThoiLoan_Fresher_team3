@@ -24,6 +24,7 @@ gv.CMD.TEST = 3001;
 
 gv.CMD.GET_TROOP_INFO = 4001;
 gv.CMD.RESEARCH_TROOP = 4002;
+gv.CMD.RESEARCH_TROOP_COMPLETE = 4003;
 
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
@@ -301,6 +302,19 @@ CmdSendResearchTroop = fr.OutPacket.extend({
     }
 });
 
+CmdSendResearchTroopComplete = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.RESEARCH_TROOP_COMPLETE);
+    },
+    pack: function(type) {
+        this.packHeader();
+        this.putString(type);
+        this.updateSize();
+    }
+});
+
 /**
  * InPacket
  */
@@ -344,6 +358,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
         readData:function(){
             this.n = this.getInt();
             gv.user.largestId = this.n;
+            cc.log("================================= LARGEST ID: "+ gv.user.largestId);
             for (var i=0;i<this.n;i++){
                 this._id = this.getInt();
                 this.name = this.getString();
@@ -384,15 +399,15 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
             console.log("Co tat ca "+this.n_obs+" obs");
             for ( var j=0;j<this.n_obs;j++) {
                 this.idObs = this.getInt();
-                cc.log("obs so: " + this.idObs);
+                //cc.log("obs so: " + this.idObs);
                 this.typeObs = this.getString();
-                cc.log(", type: " + this.typeObs);
+                //cc.log(", type: " + this.typeObs);
                 this.posXObs = this.getInt();
-                cc.log(", posX: " + this.posXObs);
+                //cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
-                cc.log(", posY: " + this.posYObs);
+                //cc.log(", posY: " + this.posYObs);
 
-                console.log("/n");
+                //console.log("/n");
                 var obstacle = {
                     _id: this.idObs,
                     name: this.typeObs,
@@ -574,25 +589,22 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var isUnlock = this.getShort();
             var level = this.getShort();
             var population = this.getShort();
+            var startTime = this.getLong();
             var status = this.getString();
-            var timeStart = this.getLong();
-            var numberOnQueue = this.getShort();
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
-                status: status,
-                timeStart: timeStart,
-                numberOnQueue: numberOnQueue
+                startTime: startTime,
+                status: status
             };
         }
         cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
         cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
         cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
+        cc.log('troopInfo.ARM_1.startTime', troopInfo.ARM_1.startTime)
         cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
-        cc.log('troopInfo.ARM_1.timeStart', troopInfo.ARM_1.timeStart)
-        cc.log('troopInfo.ARM_1.numberOnQueue', troopInfo.ARM_1.numberOnQueue)
     }
 });
 
@@ -602,6 +614,16 @@ testnetwork.packetMap[gv.CMD.RESEARCH_TROOP] = fr.InPacket.extend({
     },
     readData:function(){
         var validate = this.getShort();
-        cc.log('======================> ', validate);
+        cc.log('===================RESEARCH===> ', validate);
+    }
+});
+
+testnetwork.packetMap[gv.CMD.RESEARCH_TROOP_COMPLETE] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData:function(){
+        var validate = this.getShort();
+        cc.log('===================RESEARCH COMPLETE===> ', validate);
     }
 });

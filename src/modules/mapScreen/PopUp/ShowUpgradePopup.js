@@ -20,7 +20,7 @@ var ShowUpgradePopup = TinyPopup.extend({
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
                     //Show popup khong du G va thoat
-                    var listener1 = {contentBuyG:"Please add more G to release a builder!"};
+                    var listener1 = {contentBuyG:"Add more G to release a builder!"};
                     var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener1);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }else{

@@ -183,7 +183,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.ADD_RESOURCE:
                 if(packet.validate) {
                     cc.log("=======================================XAC NHAN ADD RESOURCE tu SERVER=======================================");
-                    increaseUserResources(ReducedTempResources, true);
+                    increaseUserResources(ReducedTempResources);
                     resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
@@ -227,6 +227,10 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
+        cc.log("========================================== Gold: " + gv.user.gold);
+        cc.log("========================================== Elixir: " + gv.user.elixir);
+        cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
+        cc.log("========================================== Coin: " + gv.user.coin);
         gv.user.allBuilder = packet.builderNumber;
         gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
         cc.log("========================================== All Builder: " + gv.user.allBuilder);
@@ -246,20 +250,20 @@ testnetwork.Connector = cc.Class.extend({
     },
     sendRequestAddConstruction: function(newBuilding, building){
         this.sendAddConstruction(building.name, newBuilding._posX, newBuilding._posY);
-        cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================");
         buildingAdd = building;
         newBuildingAdd = newBuilding;
+        cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================" + building._id);
     },
     sendUpgradeConstruction:function(id){
         cc.log("sendUpgradeConstruction" +id);
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
     },
     sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);
         buildingUpgrade = building;
-        cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================");
     },
 
     //Finish build or Finish upgrade
@@ -276,7 +280,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendQuickFinish);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND REQUEST QUICK FINISH=======================================");
+        cc.log("=======================================SEND REQUEST QUICK FINISH======================================= " + id);
     },
 
     //Cancel
@@ -284,7 +288,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendCancelConstruction);
         pk.pack(id);
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND REQUEST CANCEL CONSTRUCTION=======================================");
+        cc.log("=======================================SEND REQUEST CANCEL CONSTRUCTION=======================================" +id);
     },
 
     sendGetServerTime:function(){
@@ -306,10 +310,16 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GET TROOP INFO==========================================');
     },
-    sendResearchTroopInfo: function(type) {
+    sendResearchTroop: function(type) {
         var pk = this.gameClient.getOutPacket(CmdSendResearchTroop);
         pk.pack(type);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND RESEARCH TROOP==========================================');
+    },
+    sendResearchComplete: function(type) {
+        var pk = this.gameClient.getOutPacket(CmdSendResearchTroopComplete);
+        pk.pack(type);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND RESEARCH TROOP COMPLETE====================================');
     },
 });

@@ -387,25 +387,23 @@ res.building = {
     labratory: [
         buildingsDir + 'labratory/LAB_1_1/idle/image0000.png',
         buildingsDir + 'labratory/LAB_1_1/idle/image0000.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0001.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0002.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0003.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0004.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0005.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0006.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0007.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0008.png',
-        buildingsDir + 'labratory/LAB_1_1/idle/image0009.png'
+        buildingsDir + 'labratory/LAB_1_2/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_3/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_4/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_5/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_6/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_7/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_8/idle/image0000.png',
+        buildingsDir + 'labratory/LAB_1_9/idle/image0000.png'
     ],
     dark_elixir_collector: [
         buildingsDir + 'dark elixir collector/RES_3_1/idle/image0000.png',
         buildingsDir + 'dark elixir collector/RES_3_1/idle/image0000.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0001.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0002.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0003.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0004.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0005.png',
-        buildingsDir + 'dark elixir collector/RES_3_1/idle/image0006.png',
+        buildingsDir + 'dark elixir collector/RES_3_2/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_3/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_4/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_5/idle/image0000.png',
+        buildingsDir + 'dark elixir collector/RES_3_6/idle/image0000.png',
     ],
     dark_elixir_storage: [
         [],
@@ -489,7 +487,7 @@ var name = name || {};
 name.building = {
     TOW_1: {
         vi: 'Nhà chính',
-        en: 'Tower'
+        en: 'TownHall'
     },
     BDH_1: {
         vi: 'Nhà thợ xây',
@@ -615,4 +613,12 @@ var ZOOM_SCALE = {
 var time = {
     BONUS_TIME: 2,
     DeltaTime: 0,   //Client - Server
-} 
+}
+
+
+var time_text_dir = 'res/Art/Fonts/soji_20.fnt';
+var research_dir = "res/Art/GUIs/research troop/";
+var img_troop_dir = "res/Art/GUIs/upgrade_troop/small_icon/";
+var nameTroop_font_dir = 'res/Art/Fonts/soji_20.fnt';
+var description_dir = 'res/Art/Fonts/fista_20_non.fnt';
+var imgG_dir = "res/Art/GUIs/shop_gui/g.png";
