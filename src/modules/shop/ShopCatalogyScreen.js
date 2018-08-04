@@ -138,23 +138,6 @@ var ShopCatalogyScreen = Popup.extend({
             this.onInfo(itemName);
         }).bind(this));
 
-        var listenerInfo = cc.EventListener.create({
-            event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            onTouchBegan: function(touch, event){return true;},
-            onTouchMoved: function(touch, event){},
-            onTouchEnded: function(touch, event){
-                var target = event.getCurrentTarget();
-                var locationInNode = target.convertToNodeSpace(touch.getLocation());
-                var s = target.getContentSize();
-                var rect = cc.rect(0, 0, s.width, s.height);
-
-                if (cc.rectContainsPoint(rect, locationInNode)) {
-                    cc.log("Info");
-                }
-            }
-        });
-        cc.eventManager.addListener(listenerInfo, this._info);
-
 
         var nameLabel = name.building[itemName].en;
         nameLabel = new cc.LabelBMFont(nameLabel, 'res/Art/Fonts/soji_20.fnt');
