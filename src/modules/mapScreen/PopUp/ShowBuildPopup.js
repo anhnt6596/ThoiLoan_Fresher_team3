@@ -1,6 +1,36 @@
 var ShowBuildPopup = TinyPopup.extend({
-    ctor:function(width, height, title, type, listener) {
-        this._super(width, height, title, type, listener);
+    ctor:function(width, height, title, type, data) {
+        this._super(width, height, title, type, data);
+        this.showContent(data)
+    },
+
+    ok: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        if(this._data.type != 'builder'){
+            _.extend(ReducedTempResources, this._data.building.cost);
+            ReducedTempResources.coin += this._data.g;
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    showPopupNotEnoughG('release_builder');
+                }else{
+                    var data2 = {type:'builder', building:this._data.building, newBuilding:this._data.newBuilding, g:gBuilder};
+                    var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data2);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            }else{
+                NETWORK.sendRequestAddConstruction(this._data.newBuilding, this._data.building);
+            }
+        }else if(this._data.type == 'builder'){
+            ReducedTempResources.coin += this._data.g;
+            finishSmallestRemainingTimeBuilding();
+            NETWORK.sendRequestAddConstruction(this._data.newBuilding, this._data.building);
+        }
     },
 
     close: function() {
@@ -12,36 +42,4 @@ var ShowBuildPopup = TinyPopup.extend({
 
         resetReducedTempResources();
     },
-
-    ok: function() {
-        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
-        var self = this;
-        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
-            self.getParent().removeChild(self);
-        }, this)));
-
-        if(this._listener.type == 'resources'){
-            _.extend(ReducedTempResources, this._listener.building.cost);
-            ReducedTempResources.coin += this._listener.gResources;
-            if(!checkIsFreeBuilder()){
-                var gBuilder = getGToReleaseBuilder();
-                if(gv.user.coin < gBuilder){
-                    var listener1 = {contentBuyG:"Add more G to release a builder!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener1);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
-                }else{
-                    var listener2 = {type:'builder', building:this._listener.building, newBuilding:this._listener.newBuilding, gBuilder:gBuilder};
-                    var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener2);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
-                }
-            }else{
-                NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building);
-            }
-        }else if(this._listener.type == 'builder'){
-            ReducedTempResources.coin += this._listener.gBuilder;
-            //Neu ok, Chuyen trang thai nha dc release sang 'complete'
-            finishSmallestRemainingTimeBuilding();
-            NETWORK.sendRequestAddConstruction(this._listener.newBuilding, this._listener.building);
-        }
-    }
 });

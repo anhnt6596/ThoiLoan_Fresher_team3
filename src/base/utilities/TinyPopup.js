@@ -1,28 +1,21 @@
 var TinyPopup = cc.Node.extend({
     _frame:null,
-    _listener:null,
+    _data:null,
     _titleText:null,
+    _btnText:null,
 
-    //type = true (X)
-    //type = false (X + functinal Btn)
-    //listener la 1 obj: listener.type = "resource" || "builder"; listener.building = building
-    ctor:function(width, height, title, type, listener) {
+    //type = true (X) || false (X + functinal Btn)
+    ctor:function(width, height, title, type, data) {
         this._super();
-        this.init(width, height, title, type, listener);
-        if(listener != null){
-            this.showContent(listener);
-        }
+        this.init(width, height, title, type, data);
     },
 
-    init:function(width, height, title, type, listener){
-        this._listener = listener;
-        this.attr({
-            x: cc.winSize.width/2,
-            y: cc.winSize.height/2,
-            color: cc.color(100, 100, 100, 50)
-        });
+    init:function(width, height, title, type, data){
+        this._data = data;
+        this.setPosition(cc.winSize.width/2, cc.winSize.height/2);
+        this.openAction();
 
-        var background = new ccui.Button('res/Art/GUIs/pop_up/bg_color.png', 'res/Art/GUIs/pop_up/bg_color.png');
+        var background = new ccui.Button('res/Art/GUIs/pop_up/bg_color.png');
         background.scale = 100;
         this.addChild(background, 0);
 
@@ -30,11 +23,14 @@ var TinyPopup = cc.Node.extend({
         this._frame.setScale(width/this._frame.width, height/this._frame.height);
         this.addChild(this._frame, 1);
 
-        var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png');
+        this._titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
+        this._titleText.setPosition(0, this._frame.height*this._frame.scaleY/2 - this._titleText.height/2 - 15);
+        this.addChild(this._titleText, 2);
+
+        var closeBtn = new ccui.Button('res/Art/GUIs/pop_up/close.png', 'res/Art/GUIs/pop_up/close.png');
         closeBtn.setPosition(this._frame.width/2 * this._frame.scaleX - closeBtn.width * closeBtn.scaleX/2 - 10, this._frame.height/2 * this._frame.scaleY - closeBtn.height * closeBtn.scaleY/2 - 7);
         this.addChild(closeBtn, 2);
         closeBtn.addClickEventListener(this.close.bind(this));
-
 
         if(!type){
             var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
@@ -42,34 +38,45 @@ var TinyPopup = cc.Node.extend({
             this.addChild(acceptBtn, 200);
             acceptBtn.addClickEventListener(this.ok.bind(this));
 
-            var btnText = new cc.LabelBMFont("Confirm", 'res/Art/Fonts/soji_20.fnt');
-            btnText.setPosition(acceptBtn.x, acceptBtn.y);
-            this.addChild(btnText, 202);
+            this._btnText = new cc.LabelBMFont("20", 'res/Art/Fonts/soji_20.fnt');
+            this._btnText.setPosition(acceptBtn.x - 10, acceptBtn.y);
+            this.addChild(this._btnText, 202);
+
+            var unitG = new cc.Sprite('res/Art/GUIs/pop_up/G.png');
+            unitG.setPosition(this._btnText.x + this._btnText.width/2 + 20, this._btnText.y);
+            this.unitG = unitG;
+            this.addChild(unitG, 202);
         }
-
-        this._titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
-        this._titleText.setPosition(0, this._frame.height*this._frame.scaleY/2 - this._titleText.height/2 - 15);
-        this.addChild(this._titleText, 2);
-
-        this.openAction();
     },
 
-    showContent:function(listener){
-        if(!listener.contentBuyG && !listener._level && !listener.train){
-            var contentText = new cc.LabelBMFont('Use ' + (listener.gBuilder ? listener.gBuilder : listener.gResources), 'res/Art/Fonts/soji_20.fnt');
-            contentText.setPosition(-10, 0);
-            contentText.color = cc.color(0, 255, 0, 255);
-            this.addChild(contentText, 2);
-
-            var unit = new cc.Sprite('res/Art/GUIs/pop_up/G.png');
-            unit.setPosition(contentText.x + contentText.width - 25, 0);
-            this.addChild(unit, 2);
+    showContent: function(data) {
+        var contentText;
+        if(data.type == 'builder'){
+            contentText = new cc.LabelBMFont('Do you want to release a builder?', 'res/Art/Fonts/soji_20.fnt');
         }else{
-            var contentText = new cc.LabelBMFont(listener.contentBuyG, 'res/Art/Fonts/soji_20.fnt');
-            contentText.setPosition(-10, 0);
-            contentText.color = cc.color(0, 255, 0, 255);
-            this.addChild(contentText, 2);
+            contentText = new cc.LabelBMFont('Do you want to by lacking resources?', 'res/Art/Fonts/soji_20.fnt');
+            var stt = 0;
+            for(var i in data.type){
+                if(data.type[i] > 0){
+                    stt++;
+                    var res = new cc.LabelBMFont(formatNumber(data.type[i]), 'res/Art/Fonts/soji_20.fnt');
+                    res.setPosition(contentText.x, contentText.y - 30*stt);
+                    this.addChild(res, 2);
+
+                    var unit = new cc.Sprite('res/Art/GUIs/Main_Gui/'+ i +'_icon.png');
+                    unit.setPosition(res.x + res.width/2 + 20, res.y);
+                    this.addChild(unit, 2);
+                }
+            }
         }
+        contentText.setPosition(0, 50);
+        contentText.color = cc.color(0, 255, 0, 255);
+        this.addChild(contentText, 2);
+
+
+        //set Text button
+        this._btnText.setString(formatNumber(data.g));
+        this.unitG.setPosition(this._btnText.x + this._btnText.width/2 + 15, this._btnText.y);
     },
 
     openAction: function() {

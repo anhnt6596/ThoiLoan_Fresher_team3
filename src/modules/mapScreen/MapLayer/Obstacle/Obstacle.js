@@ -68,11 +68,11 @@ var Obstacle = cc.Class.extend({
         this.removeTarget();
         this.grass.attr({
             x: -1000000,
-            y: -1000000,
+            y: -1000000
         });
         this.objImg.attr({
             x: -1000000,
-            y: -1000000,
+            y: -1000000
         });
-    },
+    }
 });

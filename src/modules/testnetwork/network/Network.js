@@ -73,10 +73,7 @@ testnetwork.Connector = cc.Class.extend({
                     newBuildingAdd = null;
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
-                    //var listener = {contentBuyG:"Please check your connection to server!"};
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to build this construction", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_build');
                     //reset
                     buildingAdd = null;
                     newBuildingAdd = null;
@@ -108,16 +105,13 @@ testnetwork.Connector = cc.Class.extend({
 
                     updateBuilderNumber();
                     reduceUserResources(ReducedTempResources);
-                    logReducedUserResources();
                     resetReducedTempResources();
 
                     //reset
                     buildingUpgrade = null;
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to upgrade this construction", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_upgrade');
                     //reset
                     buildingUpgrade = null;
                     resetReducedTempResources();
@@ -138,15 +132,13 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI QUICK FINISH=======================================");
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to quick finish this construction", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_quick_finish');
                     //reset
                     buildingQuickFinish = null;
                     resetReducedTempResources();
                 }
                 break;
-            case gv.CMD.CANCLE_CONSTRUCTION:
+            case gv.CMD.CANCEL_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN CANCEL tu SERVER=======================================");
                     if (buildingCancel._status == 'upgrade') buildingCancel.cancelUpgrade();
@@ -156,9 +148,7 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL=======================================");
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to cancel this construction", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_cancel');
                     //reset
                     buildingCancel = null;
                     resetReducedTempResources();
@@ -169,16 +159,14 @@ testnetwork.Connector = cc.Class.extend({
 
                 }else {
                     cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to remove this obstacle", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_remove_obstacle');
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
                 requestedServerTime++;
                 time.DeltaTime = getCurrentClientTime() - packet.currentServerTime;
                 //updateTimeFlag = true;
-                cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + time.DeltaTime + " ms");
+                //cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + time.DeltaTime + " ms");
                 break;
             case gv.CMD.ADD_RESOURCE:
                 if(packet.validate) {
@@ -187,9 +175,7 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
-                    var listener = {contentBuyG:"Please try again later!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Server denied to add resources", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('server_denied_add_resources');
                     resetReducedTempResources();
                 }
                 break;

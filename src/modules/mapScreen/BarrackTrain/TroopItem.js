@@ -2,31 +2,42 @@ var TROOP_ITEM = TROOP_ITEM || null;
 
 var TroopItem = ccui.Button.extend({
     _name:null,
+    _disable:false,
 
-    ctor: function (troopName) {
+    ctor: function (troopName, barrackLevel) {
         TROOP_ITEM = this;
         this._super('res/Art/GUIs/train_troop_gui/slot.png');
         this._name = troopName;
-        this.initItem(troopName);
+        this.initItem(troopName, barrackLevel);
     },
 
-    initItem:function(troopName){
+    initItem:function(troopName, barrackLevel){
         var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 
-        var this_cost = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_cost.png');
-        this_cost.setPosition(this.width/2, this_cost.height/2+10);
-        this.addChild(this_cost, 101);
+        var requireLevelBarrack = config.troopBase[troopName].barracksLevelRequired;
+        if(barrackLevel < requireLevelBarrack){
+            this._disable = true;
+            var requiredLabel = new cc.LabelBMFont("     Require\nBarrack level\n           " + requireLevelBarrack, 'res/Art/Fonts/soji_12.fnt');
+            requiredLabel.setColor(cc.color(255, 0, 0, 255));
+            requiredLabel.setPosition(this.width/2, this.height/2);
+            this.addChild(requiredLabel, 10000);
+            this.setColor(cc.color(128, 128, 128, 255));
+        }else{
+            var cost = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_cost.png');
+            cost.setPosition(this.width/2, cost.height/2+10);
+            this.addChild(cost, 101);
 
-        var currentLevelTroop = 1;
+            var currentLevelTroop = 1;
 
-        var cost_label = new cc.LabelBMFont(config.troop[troopName][currentLevelTroop].trainingElixir, 'res/Art/Fonts/soji_12.fnt');
-        cost_label.setPosition(this.width/2, this_cost.y);
-        this.addChild(cost_label, 101);
+            var cost_label = new cc.LabelBMFont(config.troop[troopName][currentLevelTroop].trainingElixir, 'res/Art/Fonts/soji_12.fnt');
+            cost_label.setPosition(this.width/2, cost.y);
+            this.addChild(cost_label, 101);
 
-        var costUnit = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon_elixir.png');
-        costUnit.setPosition(this.width - costUnit.width, this_cost.y);
-        this.addChild(costUnit, 101);
+            var costUnit = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon_elixir.png');
+            costUnit.setPosition(this.width - costUnit.width, cost.y);
+            this.addChild(costUnit, 101);
+        }
     }
 });

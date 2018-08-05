@@ -63,6 +63,15 @@ var checkUserResources = function(costBuilding){
     return g;
 };
 
+//Get loại tài nguyên bị thiếu
+var getLackingResources = function(cost){
+    var lackingResource = {gold:0, elixir:0, darkElixir:0};
+    if(gv.user.gold < cost.gold) lackingResource.gold = cost.gold - gv.user.gold;
+    if(gv.user.elixir < cost.elixir) lackingResource.elixir = cost.elixir - gv.user.elixir;
+    if(gv.user.darkElixir < cost.darkElixir) lackingResource.darkElixir = cost.darkElixir - gv.user.darkElixir;
+    return lackingResource;
+};
+
 
 //Get G de release Building dang xay (hoac dang upgrade) co thoi gian pending con lai la it nhat
 //Truoc khi dung ham nay nen dung ham checkIsFreeBuilder()
@@ -99,8 +108,7 @@ var getIdBuildingMinRemainTime = function(){
     return id;
 };
 
-
-//Kiem tra dieu kien upgrad
+//Kiem tra dieu kien upgrade
 var checkConditionUpgrade = function(building){
     var currentLevelTownHall = getCurrentLevelTownHall();
     var nextLevel = building._level + 1;
@@ -217,7 +225,6 @@ var setUserResourcesCapacity = function(){
     gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
 };
 
-
 //get level TOW_1 hien tai
 var getCurrentLevelTownHall = function(){
     for(var k in contructionList){
@@ -234,6 +241,13 @@ var updateBuilderNumber = function(){
     cc.log("========================================== All Builder: " + gv.user.allBuilder);
     cc.log("========================================== Busy Builder: " + a);
     cc.log("========================================== Free Builder: " + gv.user.freeBuilder);
+};
+
+//Hien thi lai giao dien
+var updateGUI = function() {
+    updateBuilderNumber();
+    setUserResourcesCapacity();
+    LOBBY.update(gv.user);
 };
 
 
@@ -253,7 +267,6 @@ var darkElixirToG = function(darkElixir){
 var timeToG = function(time){
     return Math.ceil(time/60);
 };
-
 
 //Format Number
 var formatNumber = function(number){
@@ -276,7 +289,6 @@ var getCurrentClientTime = function(){
 var getCurrentServerTime = function(){
     return getCurrentClientTime() - time.DeltaTime - time.BONUS_TIME;
 };
-
 
 //time: s
 var timeToReadable = function(time){
@@ -315,7 +327,7 @@ var objectSize = function(obj) {
     return size;
 };
 
-var getTotalCapacity = function(){
+var getTotalTroopCapacity = function(){
     var total = 0;
     for(var k in contructionList){
         var build = contructionList[k];
@@ -325,8 +337,9 @@ var getTotalCapacity = function(){
     }
     return total;
 };
+
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
 
 var calculateDistance = function(a, b) {
     return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
-}
+};

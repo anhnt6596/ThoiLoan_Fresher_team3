@@ -256,14 +256,16 @@ var ShopCatalogyScreen = Popup.extend({
                 break;
             }
         }
-        var condition = (num == maxBuilding || (currentLevelTownHall < catalogy[itemName].townHallLevelRequired)) || missImage;
+
+        var requireLevelTownHall = catalogy[itemName].townHallLevelRequired;
+        var condition = (num == maxBuilding || (currentLevelTownHall < requireLevelTownHall)) || missImage;
 
         //Required TownHall Level and Amount
         if(condition){
             this._item.setColor(cc.color(128, 128, 128, 255));
             this._item.removeChild(bg);
-            if(currentLevelTownHall < catalogy[itemName].townHallLevelRequired){
-                var requiredLabel = new cc.LabelBMFont("Require TownHall level " + catalogy[itemName].townHallLevelRequired, 'res/Art/Fonts/soji_12.fnt');
+            if(currentLevelTownHall < requireLevelTownHall){
+                var requiredLabel = new cc.LabelBMFont("Require TownHall level " + requireLevelTownHall, 'res/Art/Fonts/soji_12.fnt');
                 requiredLabel.setAnchorPoint(0, 0);
                 requiredLabel.setPosition(this._item.x + (this._item.width - requiredLabel.width)/2, clock.y + clock.height + 10);
                 requiredLabel.setColor(cc.color(255, 0, 0, 255));
@@ -294,8 +296,6 @@ var ShopCatalogyScreen = Popup.extend({
 
                     if (cc.rectContainsPoint(rect, locationInNode)) {
                         if(!self._moving){
-                            //var last = contructionList[contructionList.length-1];
-                            //var id = last._id + 1;
                             var id = gv.user.largestId;
                             cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
                             var _level = 1;
@@ -327,8 +327,8 @@ var ShopCatalogyScreen = Popup.extend({
     },
 
     onInfo:function(itemName){
-        var listener = {_level: 1, itemName:itemName};
-        var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[itemName].en, true, listener);
+        var data = {_level: 1, itemName:itemName};
+        var popup = new ItemInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.building[itemName].en, true, data);
         cc.director.getRunningScene().addChild(popup, 200);
     },
 
