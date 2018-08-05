@@ -1,11 +1,8 @@
-var TROOP_ITEM = TROOP_ITEM || null;
-
 var TroopItem = ccui.Button.extend({
     _name:null,
     _disable:false,
 
     ctor: function (troopName, barrackLevel) {
-        TROOP_ITEM = this;
         this._super('res/Art/GUIs/train_troop_gui/slot.png');
         this._name = troopName;
         this.initItem(troopName, barrackLevel);

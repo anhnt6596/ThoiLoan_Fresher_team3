@@ -3,6 +3,7 @@ var barrackQueueList = barrackQueueList || [];
 var TRAIN_POPUP;
 
 var TrainPopup = TinyPopup.extend({
+    _id:null,
     _barrack:null,
     _queueLength:0,
     _amountItemInQueue:0,                   //So loai item dang co trong queue
@@ -24,7 +25,10 @@ var TrainPopup = TinyPopup.extend({
         this._width = width;
         this._height = height;
         this._barrack = data.barrack;
+        this._id = this._barrack._id;
         this._super(width, height, title, type, data);
+
+        barrackQueueList[this._id] = this;
 
         this.initQueue();
         this.init4PositionsInQueue();
@@ -45,6 +49,7 @@ var TrainPopup = TinyPopup.extend({
         }
 
         this.showTextTotalTroop();
+        this.showQuickFinish();
     },
 
 
@@ -83,7 +88,7 @@ var TrainPopup = TinyPopup.extend({
             if(gv.user.coin < gResources){
                 showPopupNotEnoughG('train_troop');
             }else{
-                data = {g:gResources};
+                var data = {g:gResources};
                 var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
@@ -220,7 +225,7 @@ var TrainPopup = TinyPopup.extend({
 
     //4 vi tri tren queue
     init4PositionsInQueue: function() {
-        this._positionsInQueue[0] = cc.p(this._queue.x + this._queue.width * this._queue.scaleX /2 + this._edgeItem*1.2, this._queue.y);
+        this._positionsInQueue[0] = cc.p(this._queue.x + this._queue.width * this._queue.scaleX /2 + this._edgeItem, this._queue.y);
         this._positionsInQueue[1] = cc.p(this._queue.x + this._queue.width * this._queue.scaleX /2 - this._edgeItem*1.5, this._queue.y);
         this._positionsInQueue[2] = cc.pSub(this._positionsInQueue[1], cc.p(this._edgeItem*1.2, 0));
         this._positionsInQueue[3] = cc.pSub(this._positionsInQueue[2], cc.p(this._edgeItem*1.2, 0));
@@ -241,6 +246,12 @@ var TrainPopup = TinyPopup.extend({
         var totalCapacity = getTotalTroopCapacity();
         var str = new cc.LabelBMFont('Total troops after training: xx/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');
         str.setPosition(-1*this._width/4, this._height*this._frame.scaleY/9);
+        this.addChild(str, 2);
+    },
+
+    showQuickFinish: function() {
+        var str = new cc.LabelBMFont('Total time', 'res/Art/Fonts/soji_20.fnt');
+        str.setPosition(this._positionsInQueue[0].x + this._edgeItem*1.5, this._positionsInQueue[0].y + 50);
         this.addChild(str, 2);
     },
 
