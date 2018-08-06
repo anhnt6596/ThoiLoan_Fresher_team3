@@ -261,6 +261,11 @@ var TrainPopup = TinyPopup.extend({
         this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
             self.getParent().removeChild(self);
         }, this)));
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
         resetReducedTempResources();
 
 

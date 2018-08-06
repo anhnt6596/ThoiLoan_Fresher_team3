@@ -39,6 +39,7 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
+                this.sendGetTroopInfo();
                 this.sendGetMapInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
@@ -181,8 +182,17 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
+                break;
+            case gv.CMD.GET_BARRACK_QUEUE_INFO:
+                this.readBarrackQueueInfo();
+                break;
         }
     },
+
+    readBarrackQueueInfo: function() {
+
+    },
+
     sendGetUserInfo:function()
     {
         cc.log("sendGetUserInfo");
@@ -308,4 +318,11 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND RESEARCH TROOP COMPLETE====================================');
     },
+
+    sendGetBarrackQueueInfo: function() {
+        var pk = this.gameClient.getOutPacket(CmdSendGetBarrackQueueInfo);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GET BARRACK QUEUE INFO==========================================');
+    }
 });

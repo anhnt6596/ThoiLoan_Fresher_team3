@@ -533,7 +533,6 @@ testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
     }
 );
 
-
 testnetwork.packetMap[gv.CMD.CANCEL_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
@@ -658,7 +657,34 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
 
         },
         readData:function(){
+            this.n = this.getInt();
+            cc.log("================================= SO LUONG BARRACK QUEUE INFO: " + this.n);
+            for (var i=0; i < this.n; i++){
+                cc.log("================================= BARRACK thu : " + (i+1));
+                this.idBarrack = this.getInt();
+                cc.log("================================= Id Barrack: " + this.idBarrack);
+                this.barrackLevel = this.getInt();
+                cc.log("================================= Level Barrack: " + this.barrackLevel);
+                this.amountItemInQueue = this.getInt();
+                cc.log("================================= Amount Item in Barrack: " + this.amountItemInQueue);
+                this.startTime = this.getLong();
+                cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
+                this.m = this.getInt();
+                cc.log("================================= SO LUONG TROOP: " + this.m);
+                cc.log("================================= TROOP LIST: ");
+                for (var j=0; j < this.m; j++){
+                    cc.log("================================= Troop thu : " + (j+1));
+                    this.troopType = this.getString();
+                    cc.log("================================= Troop Type: " + this.troopType);
+                    this.amount = this.getInt();
+                    cc.log("================================= Troop amount: " + this.amount);
+                    this.isInQueue = this.getBool();
+                    cc.log("================================= Troop is in queue: " + this.isInQueue);
+                    this.currentPosition = this.getInt();
+                    cc.log("================================= Troop current position: " + this.currentPosition);
+                }
+            }
         }
     }
 );
