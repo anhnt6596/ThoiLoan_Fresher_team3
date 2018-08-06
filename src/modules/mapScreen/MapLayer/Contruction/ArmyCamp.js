@@ -21,5 +21,9 @@ var ArmyCamp = Building.extend({
             y: buildingImg.height / 2 + 35
         });
         animSprite.runAction(buildingAnim.repeatForever());
-    }
+    },
+    caluclateZOrder: function(mapPos) {
+        var newZ = 1000 - (mapPos.x + mapPos.y + (this._height - 3) / 2) * 10 + 1;
+        return newZ - 200;
+    },
 });
