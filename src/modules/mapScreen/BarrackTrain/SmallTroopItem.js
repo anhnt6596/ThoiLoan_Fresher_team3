@@ -30,6 +30,7 @@ var SmallTroopItem = ccui.Button.extend({
     touchEventSmall: function() {
         //if(TRAIN_POPUP._troopList[this._name]._amount > 0){
             TRAIN_POPUP._troopList[this._name]._amount--;
+            TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[this._name]._housingSpace;
             if(TRAIN_POPUP._troopList[this._name]._amount == 0){
                 TRAIN_POPUP._troopList[this._name]._isInQueue = false;
                 TRAIN_POPUP._amountItemInQueue--;
@@ -44,8 +45,10 @@ var SmallTroopItem = ccui.Button.extend({
                 TRAIN_POPUP._troopList[this._name]._currentPosition = -1;
             }
             this.updateAmountSmall();
+            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+            TRAIN_POPUP.enableItemDisplay();
 
-            //Refund
+        //Refund
         //}
     },
 

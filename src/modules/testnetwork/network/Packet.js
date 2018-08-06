@@ -30,6 +30,7 @@ gv.CMD.GET_BARRACK_QUEUE_INFO = 7001;
 gv.CMD.TRAIN_TROOP = 7002;
 gv.CMD.CANCEL_TRAIN_TROOP = 7003;
 gv.CMD.QUICK_FINISH_TRAIN_TROOP = 7004;
+gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
 
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
@@ -321,14 +322,82 @@ CmdSendResearchTroopComplete = fr.OutPacket.extend({
 });
 
 CmdSendGetBarrackQueueInfo = fr.OutPacket.extend({
+    ctor:function()
+    {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.GET_BARRACK_QUEUE_INFO);
+    },
+    pack:function(){
+        this.packHeader();
+        this.updateSize();
+    }
+});
+
+CmdSendTrainTroop = fr.OutPacket.extend(
+    {
         ctor:function()
         {
             this._super();
             this.initData(100);
-            this.setCmdId(gv.CMD.GET_BARRACK_QUEUE_INFO);
+            this.setCmdId(gv.CMD.TRAIN_TROOP);
         },
-        pack:function(){
+        pack:function(idBarrack, typeTroop){
             this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendCancelTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.CANCEL_TRAIN_TROOP);
+        },
+        pack:function(idBarrack, typeTroop){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendQuickFinishTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.QUICK_FINISH_TRAIN_TROOP);
+        },
+        pack:function(idBarrack){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendFinishTimeTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.FINISH_TIME_TRAIN_TROOP);
+        },
+        pack:function(idBarrack, typeTroop, remainTroop){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            //So luong cua troop do con lai trong hang doi
+            this.putInt(remainTroop);
             this.updateSize();
         }
     }
@@ -562,10 +631,10 @@ testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
-            cc.log("SERVER da phan hoi Current Server Time");
         },
         readData:function(){
             this.currentServerTime  = this.getLong();
+            cc.log("SERVER da phan hoi Current Server Time: " + this.currentServerTime);
         }
     }
 );
@@ -704,6 +773,55 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     cc.log("================================= Troop current position: " + this.currentPosition);
                 }
             }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.CANCEL_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.QUICK_FINISH_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.FINISH_TIME_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+            //Neu server tra ve false thi phai gui lai get BarrackQueueInfo
         }
     }
 );

@@ -186,11 +186,18 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 //this.initBarrackQueueInfo(packet);
 
-
-
                 var data = {train: true, barrack: MAP._targetedObject};
                 var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
                 cc.director.getRunningScene().addChild(popup, 200);
+                break;
+            case gv.CMD.TRAIN_TROOP:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN TRAIN TROOP tu SERVER=======================================");
+
+                }else {
+                    cc.log("=======================================SERVER TU CHOI TRAIN TROOP=======================================");
+
+                }
                 break;
         }
     },
@@ -330,5 +337,12 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack();
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GET BARRACK QUEUE INFO==========================================');
+    },
+
+    sendTrainTroop: function(idBarrack, typeTroop) {
+        var pk = this.gameClient.getOutPacket(CmdSendTrainTroop);
+        pk.pack(idBarrack, typeTroop);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND TRAIN TROOP==========================================');
     }
 });

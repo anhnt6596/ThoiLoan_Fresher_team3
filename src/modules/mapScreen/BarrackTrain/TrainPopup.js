@@ -31,6 +31,7 @@ var TrainPopup = TinyPopup.extend({
         this._level = data.barrack._level;
         this._super(width, height, title, type, data);
 
+
         //Show du lieu da co
         this._queueLength = config.building['BAR_1'][this._level].queueLength;
         this._amountItemInQueue = barrackQueueList[this._id].amountItemInQueue;
@@ -56,7 +57,6 @@ var TrainPopup = TinyPopup.extend({
             cc.log("============================== _trainingElixir: " + this._troopList[k]._trainingElixir);
         }
 
-
         this.initQueue();
         this.init4PositionsInQueue();
 
@@ -78,26 +78,33 @@ var TrainPopup = TinyPopup.extend({
 
         this.showTextTotalTroop();
         this.showQuickFinish();
+        this._titleText.setString("Barrack id: " + this._id + "   (" + this._totalTroopCapacity+"/"+this._queueLength + ")");
     },
 
 
     touchEvent: function() {
+        NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
+
+
         //Check capacity va tai nguyen trc khi ++
         var costItem = TRAIN_POPUP._troopList[this._name].getCost();
         var gResources = checkUserResources(costItem);
         //Check capacity
-        if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
-            cc.log("Vuot qua queue lenght");
-            for(var i in TRAIN_POPUP._itemDisplay){
-                TRAIN_POPUP._itemDisplay[i].setBright(false);
-                TRAIN_POPUP._itemDisplay[i].setEnabled(false);
-            }
-        }
+        //if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
+        //    cc.log("Vuot qua queue lenght");
+        //    for(var i in TRAIN_POPUP._itemDisplay){
+        //        TRAIN_POPUP._itemDisplay[i].setBright(false);
+        //        TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+        //    }
+        //    return;
+        //}
         //Du tai nguyen
-        if(gResources == 0){
+        //if(gResources == 0){
             TRAIN_POPUP._troopList[this._name]._amount++;
             TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[this._name]._housingSpace;
-            if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
+        TRAIN_POPUP.disableItemDisplay();
+
+        if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
                 TRAIN_POPUP._troopList[this._name]._isInQueue = true;
                 TRAIN_POPUP._amountItemInQueue++;
                 TRAIN_POPUP._troopList[this._name]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
@@ -121,15 +128,17 @@ var TrainPopup = TinyPopup.extend({
                 TRAIN_POPUP._itemInQueue[this._name].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[this._name]._currentPosition]);
             }
             TRAIN_POPUP.updateAmount(this);
-        } else{ //Thieu tai nguyen
-            if(gv.user.coin < gResources){
-                showPopupNotEnoughG('train_troop');
-            }else{
-                var data = {g:gResources};
-                var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
-                cc.director.getRunningScene().addChild(popup, 2000000);
-            }
-        }
+            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+
+        //} else{ //Thieu tai nguyen
+        //    if(gv.user.coin < gResources){
+        //        showPopupNotEnoughG('train_troop');
+        //    }else{
+        //        var data = {g:gResources};
+        //        var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
+        //        cc.director.getRunningScene().addChild(popup, 2000000);
+        //    }
+        //}
     },
 
     updateAmount: function(item) {
@@ -151,6 +160,40 @@ var TrainPopup = TinyPopup.extend({
             }
         }
     },
+
+    disableItemDisplay: function() {
+        for(var i in TRAIN_POPUP._troopList){
+            //if(!TRAIN_POPUP._troopList[i]){
+            //    cc.log("===================== KHONG CO TROOP NAY TRONG TROOP LIST===================");
+            //    TRAIN_POPUP._itemDisplay[i].setBright(false);
+            //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            //    continue;
+            //}
+            if(TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace > TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[i].setBright(false);
+                TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+                cc.log("===================== CO TROOP SE BI DISABLE===================");
+            }
+        }
+    },
+
+
+    enableItemDisplay: function() {
+        for(var i in TRAIN_POPUP._troopList){
+            //if(!TRAIN_POPUP._troopList[i]){
+            //    cc.log("===================== KHONG CO TROOP NAY TRONG TROOP LIST===================");
+            //    TRAIN_POPUP._itemDisplay[i].setBright(false);
+            //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            //    continue;
+            //}
+            if(!TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace <= TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[i].setBright(true);
+                TRAIN_POPUP._itemDisplay[i].setEnabled(true);
+                cc.log("===================== CO TROOP DUOC ENABLE===================");
+            }
+        }
+    },
+
 
     showTimeBar: function(){
         this.addTimeBarFirstItem();
@@ -202,6 +245,9 @@ var TrainPopup = TinyPopup.extend({
 
                         //if(TRAIN_POPUP._troopList[name]._amount > 0){
                             TRAIN_POPUP._troopList[name]._amount--;
+                            TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[name]._housingSpace;
+                            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+                            TRAIN_POPUP.enableItemDisplay();
                             //Het icon trong item
                             if(TRAIN_POPUP._troopList[name]._amount == 0){
                                 TRAIN_POPUP._amountItemInQueue--;
@@ -238,15 +284,12 @@ var TrainPopup = TinyPopup.extend({
         tick();
     },
 
-
     updateTimeBar: function(cur, max) {
         var ratio = cur / max;
         var t = timeToReadable(max - cur);
         this.processBar.setTextureRect(cc.rect(0, 0, this._timeBar.width * ratio, this._timeBar.height));
         this._timeText.setString(t);
     },
-
-
 
     getFirstItemInQueue: function() {
         var first = null;
@@ -258,7 +301,6 @@ var TrainPopup = TinyPopup.extend({
         }
         return first;
     },
-
 
     //4 vi tri tren queue
     init4PositionsInQueue: function() {
@@ -283,6 +325,7 @@ var TrainPopup = TinyPopup.extend({
         var totalCapacity = getTotalTroopCapacity();
         var str = new cc.LabelBMFont('Total troops after training: xx/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');
         str.setPosition(-1*this._width/4, this._height*this._frame.scaleY/9);
+        this.str = str;
         this.addChild(str, 2);
     },
 
