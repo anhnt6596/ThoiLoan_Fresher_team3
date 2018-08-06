@@ -583,6 +583,51 @@ name.building = {
     }
 };
 
+name.troop = {
+    ARM_1: {
+        vi: 'Chiến binh',
+        en: 'Warrior'
+    },
+    ARM_2: {
+        vi: 'Cô gái nhà bên',
+        en: 'The girl next door'
+    },
+    ARM_3: {
+        vi: 'Đạo sĩ',
+        en: ''
+    },
+    ARM_4: {
+        vi: 'Quái thú',
+        en: 'Monster'
+    },
+    ARM_5: {
+        vi: 'Xác ướp',
+        en: ''
+    },
+    ARM_6: {
+        vi: 'Kẻ đào tẩu',
+        en: ''
+    },
+    ARM_7: {
+        vi: 'Nhà tiên tri',
+        en: ''
+    },
+    ARM_8: {
+        vi: 'Thiên tộc',
+        en: ''
+    },
+    ARM_9: {
+        vi: 'Rồng vàng',
+        en: ''
+    },
+    ARM_10: {
+        vi: 'Chú tể bóng tối',
+        en: ''
+    },
+
+
+}
+
 var TILE_WIDTH = 76;
 var TILE_HEIGHT = 57;
 
@@ -616,9 +661,16 @@ var time = {
 }
 
 
-var time_text_dir = 'res/Art/Fonts/soji_20.fnt';
-var research_dir = "res/Art/GUIs/research troop/";
-var img_troop_dir = "res/Art/GUIs/upgrade_troop/small_icon/";
-var nameTroop_font_dir = 'res/Art/Fonts/soji_20.fnt';
-var description_dir = 'res/Art/Fonts/fista_20_non.fnt';
-var imgG_dir = "res/Art/GUIs/shop_gui/g.png";
+var research_constant = {
+    time_text_dir : 'res/Art/Fonts/soji_20.fnt',
+    research_dir : "res/Art/GUIs/research troop/",
+    img_troop_dir : "res/Art/GUIs/upgrade_troop/small_icon/",
+    nameTroop_font_dir : 'res/Art/Fonts/soji_20.fnt',
+    description_dir : 'res/Art/Fonts/fista_20_non.fnt',
+    imgG_dir : "res/Art/GUIs/shop_gui/g.png",
+    status: {
+        free: "free",
+        busy: "busy",
+    }
+};
+
