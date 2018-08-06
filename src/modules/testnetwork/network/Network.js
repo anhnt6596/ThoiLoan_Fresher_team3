@@ -184,12 +184,18 @@ testnetwork.Connector = cc.Class.extend({
                 cc.log('================>', packet.message);
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
-                this.readBarrackQueueInfo();
+                //this.initBarrackQueueInfo(packet);
+
+
+
+                var data = {train: true, barrack: MAP._targetedObject};
+                var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+                cc.director.getRunningScene().addChild(popup, 200);
                 break;
         }
     },
 
-    readBarrackQueueInfo: function() {
+    initBarrackQueueInfo: function() {
 
     },
 

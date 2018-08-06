@@ -15,12 +15,11 @@ var TroopItem = ccui.Button.extend({
 
         var requireLevelBarrack = config.troopBase[troopName].barracksLevelRequired;
         if(barrackLevel < requireLevelBarrack){
-            this._disable = true;
+            this.setDisable();
             var requiredLabel = new cc.LabelBMFont("     Require\nBarrack level\n           " + requireLevelBarrack, 'res/Art/Fonts/soji_12.fnt');
             requiredLabel.setColor(cc.color(255, 0, 0, 255));
             requiredLabel.setPosition(this.width/2, this.height/2);
             this.addChild(requiredLabel, 10000);
-            this.setColor(cc.color(128, 128, 128, 255));
         }else{
             var cost = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_cost.png');
             cost.setPosition(this.width/2, cost.height/2+10);
@@ -36,5 +35,15 @@ var TroopItem = ccui.Button.extend({
             costUnit.setPosition(this.width - costUnit.width, cost.y);
             this.addChild(costUnit, 101);
         }
+    },
+
+    setDisable: function() {
+        this._disable = true;
+        this.setColor(cc.color(128, 128, 128, 255));
+    },
+
+    setEnable: function() {
+        this._disable = false;
+        this.setColor(cc.color(255, 255, 255, 255));
     }
 });

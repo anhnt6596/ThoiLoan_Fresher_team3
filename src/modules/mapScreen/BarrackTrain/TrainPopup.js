@@ -4,9 +4,11 @@ var TRAIN_POPUP;
 
 var TrainPopup = TinyPopup.extend({
     _id:null,
+    _level:1,
     _barrack:null,
     _queueLength:0,
     _amountItemInQueue:0,                   //So loai item dang co trong queue
+    _totalTroopCapacity:0,                  //Tong so capacity hien tai cua barrack <= queuelength
     _startTime:0,
     _troopList:{},
 
@@ -17,6 +19,7 @@ var TrainPopup = TinyPopup.extend({
     _timeText:null,
     _isShowTimeBar:false,
     _itemInQueue:{},
+    _itemDisplay:{},
     _positionsInQueue:[],
 
 
@@ -24,11 +27,35 @@ var TrainPopup = TinyPopup.extend({
         TRAIN_POPUP = this;
         this._width = width;
         this._height = height;
-        this._barrack = data.barrack;
-        this._id = this._barrack._id;
+        this._id = data.barrack._id;
+        this._level = data.barrack._level;
         this._super(width, height, title, type, data);
 
-        barrackQueueList[this._id] = this;
+        //Show du lieu da co
+        this._queueLength = config.building['BAR_1'][this._level].queueLength;
+        this._amountItemInQueue = barrackQueueList[this._id].amountItemInQueue;
+        this._totalTroopCapacity = barrackQueueList[this._id].totalTroopCapacity;
+        this._startTime = barrackQueueList[this._id].startTime;
+        this._troopList = {};
+        //_.extend(this._troopList, barrackQueueList[this._id].troopList);
+        for(var i in barrackQueueList[this._id].troopList){
+            var def = barrackQueueList[this._id].troopList;
+            this._troopList[i] = new TroopInBarrack(i, def[i]._amount, def[i]._isInQueue, def[i]._currentPosition);
+        }
+
+        for(var k in this._troopList){
+            cc.log("============================== TROOP: " + k);
+            cc.log("============================== name: " + this._troopList[k]._name);
+            cc.log("============================== amount: " + this._troopList[k]._amount);
+            cc.log("============================== isInQueue: " + this._troopList[k]._isInQueue);
+            cc.log("============================== currentPosition: " + this._troopList[k]._currentPosition);
+            cc.log("============================== _housingSpace: " + this._troopList[k]._housingSpace);
+            cc.log("============================== _trainingTime: " + this._troopList[k]._trainingTime);
+            cc.log("============================== _level: " + this._troopList[k]._level);
+            cc.log("============================== _trainingDarkElixir: " + this._troopList[k]._trainingDarkElixir);
+            cc.log("============================== _trainingElixir: " + this._troopList[k]._trainingElixir);
+        }
+
 
         this.initQueue();
         this.init4PositionsInQueue();
@@ -36,16 +63,17 @@ var TrainPopup = TinyPopup.extend({
         for (var i = 0; i < 4; i++) {
             var a = i + 1;
             var name = 'ARM_' + a;
-            var item = new TroopItem(name, this._barrack._level);
-            if(!item._disable){
-                item.addClickEventListener(this.touchEvent.bind(item));
+            this._itemDisplay[name] = new TroopItem(name, this._level);
+            //var item = new TroopItem(name, this._level);
+            if(!this._itemDisplay[name]._disable){
+                this._itemDisplay[name].addClickEventListener(this.touchEvent.bind(this._itemDisplay[name]));
                 this._itemInQueue[name] = new SmallTroopItem(name);
                 this.addChild(this._itemInQueue[name], 100);
                 this._itemInQueue[name].setPosition(-1000, -1000);
-                this._troopList[name] = new TroopInBarrack(name, 1);
+                //this._troopList[name] = new TroopInBarrack(name, 1);
             }
-            item.setPosition(-1* this._width/2 + (item.width+10)*i + item.width/2 + 30, 0);
-            this.addChild(item, 10);
+            this._itemDisplay[name].setPosition(-1* this._width/2 + (this._itemDisplay[name].width+10)*i + this._itemDisplay[name].width/2 + 30, 0);
+            this.addChild(this._itemDisplay[name], 10);
         }
 
         this.showTextTotalTroop();
@@ -57,9 +85,15 @@ var TrainPopup = TinyPopup.extend({
         //Check capacity va tai nguyen trc khi ++
         var costItem = TRAIN_POPUP._troopList[this._name].getCost();
         var gResources = checkUserResources(costItem);
+        //Check capacity
+        if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
+            cc.log("Vuot qua queue lenght");
+            TRAIN_POPUP._itemDisplay[this._name].setBright(false);
+        }
         //Du tai nguyen
         if(gResources == 0){
             TRAIN_POPUP._troopList[this._name]._amount++;
+            TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[this._name]._housingSpace;
             if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
                 TRAIN_POPUP._troopList[this._name]._isInQueue = true;
                 TRAIN_POPUP._amountItemInQueue++;
@@ -232,8 +266,8 @@ var TrainPopup = TinyPopup.extend({
     },
 
     initQueue: function() {
-        this._queueLength = config.building['BAR_1'][this._barrack._level].queueLength;
-        this._titleText.setString('Barrack id ' + this._barrack._id + '(' + this._queueLength + ')');
+        this._queueLength = config.building['BAR_1'][this._level].queueLength;
+        this._titleText.setString('Barrack id ' + this._id + '(' + this._queueLength + ')');
         this._titleText.setScale(1.5);
 
         this._queue = new cc.Sprite('res/Art/GUIs/train_troop_gui/queue.png');
