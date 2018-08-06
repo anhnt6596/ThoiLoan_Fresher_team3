@@ -81,7 +81,7 @@ var LobbyLayer = cc.Layer.extend({
     },
     onSetting: function () {
         if (MAP._targetedObject) {
-            var warrior = new Warrior(MAP._targetedObject);
+            var warrior = new Warrior(MAP._targetedObject, 4);
             listTroopRefs.push(warrior);
         }
         // NETWORK.sendResearchTroop("ARM_1");

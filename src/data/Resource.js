@@ -666,6 +666,13 @@ var MAPVALUE = {
     MAPSIZE: 40,
 };
 
+var SOLID_MAP_VALUE = {
+    SIZE: 80,
+    GROUND: 0,
+    SOLID_1: 1,
+    SOLID_2: 2,
+};
+
 var SOUND = true;
 
 var ZOOM_SCALE = {

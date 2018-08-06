@@ -1,7 +1,6 @@
 var Warrior = Troop.extend({
-    ctor: function(building) {
-        this._buildingContain = building;
-        this._super("res/Art/Map/map_obj_bg/1x1_bong.png");
+    ctor: function(building, level = 1) {
+        this._super(building, level, "res/Art/Map/map_obj_bg/1x1_bong.png");
     },
     init: function() {
         MAP.addChild(this, 1100);
@@ -55,7 +54,7 @@ var Warrior = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var standingAnims = ui.makeAnimation('ARM_1_1_idle_', startFrame, endFrame, 0.1);
+        var standingAnims = ui.makeAnimation('ARM_1_' + this._level + '/idle/image00', startFrame, endFrame, 0.1);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(standingAnims.repeatForever());
     },
@@ -90,7 +89,7 @@ var Warrior = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var runningAnims = ui.makeAnimation('ARM_1_1_run_', startFrame, endFrame, 0.10);
+        var runningAnims = ui.makeAnimation('ARM_1_' + this._level + '/run/image00', startFrame, endFrame, 0.10);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(runningAnims.repeatForever());
     },

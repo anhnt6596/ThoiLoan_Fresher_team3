@@ -88,7 +88,10 @@ var TrainPopup = TinyPopup.extend({
         //Check capacity
         if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
             cc.log("Vuot qua queue lenght");
-            TRAIN_POPUP._itemDisplay[this._name].setBright(false);
+            for(var i in TRAIN_POPUP._itemDisplay){
+                TRAIN_POPUP._itemDisplay[i].setBright(false);
+                TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            }
         }
         //Du tai nguyen
         if(gResources == 0){
