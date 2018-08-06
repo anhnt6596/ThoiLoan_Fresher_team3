@@ -1,8 +1,8 @@
 var ItemInfo = TinyPopup.extend({
 
-    ctor:function(width, height, title, type, listener) {
-        this._super(width, height, title, type, listener);
-        this.showInfoItem(width, height, listener.itemName, listener._level);
+    ctor:function(width, height, title, type, data) {
+        this._super(width, height, title, type, data);
+        this.showInfoItem(width, height, data.itemName, data._level);
     },
 
     showInfoItem:function(width, height, itemName, level){
@@ -45,20 +45,23 @@ var ItemInfo = TinyPopup.extend({
         grass.attr({
             scale: 2
         });
-        var buildingImg;
 
+        var buildingImg;
+        var shadow;
+        var buildingAnim;
+        var animSprite
         switch (itemName) {
             case 'TOW_1':
                 buildingImg = new cc.Sprite(res.building.townhall[level]);
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;
             case 'AMC_1':
                 buildingImg = new cc.Sprite(res.building.army_camp[level]);
-                var buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
-                var animSprite = new cc.Sprite();
+                buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+                animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2 + 3,
@@ -70,8 +73,8 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg = new cc.Sprite(res.building.barrack[level]);
                 if (level >= 4) {
                     var animsDir = level <= 8 ? 'BAR_1_' + level + '_effect_' : 'BAR_1_8_effect_';
-                    var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
-                    var animSprite = new cc.Sprite();
+                    buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
+                    animSprite = new cc.Sprite();
                     buildingImg.addChild(animSprite, 11);
                     animSprite.attr({
                         x: buildingImg.width / 2,
@@ -80,7 +83,7 @@ var ItemInfo = TinyPopup.extend({
                     animSprite.runAction(buildingAnim.repeatForever());
                 }
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;
@@ -88,7 +91,7 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg = new cc.Sprite(res.building.gold_mine[level]);
 
                 var goldmineAnim = ui.makeAnimation('RES_1_' + level + '_effect_', 0, 9, 0.2);
-                var animSprite = new cc.Sprite();
+                animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2,
@@ -96,7 +99,7 @@ var ItemInfo = TinyPopup.extend({
                 });
                 animSprite.runAction(goldmineAnim.repeatForever());
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;
@@ -104,7 +107,7 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg = new cc.Sprite(res.building.elixir_collector[level]);
 
                 var elixirCollectorAnim = ui.makeAnimation('RES_2_' + level + '_effect_', 0, 9, 0.2);
-                var animSprite = new cc.Sprite();
+                animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2,
@@ -112,29 +115,29 @@ var ItemInfo = TinyPopup.extend({
                 });
                 animSprite.runAction(elixirCollectorAnim.repeatForever());
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;
             case 'STO_1':
                 buildingImg = new cc.Sprite(res.building.gold_storage[level][3]);
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;
             case 'STO_2':
                 buildingImg = new cc.Sprite(res.building.elixir_storage[level][3]);
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ widthBuilding +'_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
 
-                var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
+                shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
                 shadow.attr({ scale: 2 });
                 content.addChild(shadow, 5);
                 break;

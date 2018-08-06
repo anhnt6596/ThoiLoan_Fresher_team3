@@ -12,7 +12,7 @@ gv.CMD.GET_MAP_INFO = 2001;
 gv.CMD.MOVE_CONSTRUCTION =2002;
 gv.CMD.ADD_CONSTRUCTION = 2003;
 gv.CMD.UPGRADE_CONSTRUCTION = 2004;
-gv.CMD.CANCLE_CONSTRUCTION = 2005;
+gv.CMD.CANCEL_CONSTRUCTION = 2005;
 gv.CMD.REMOVE_OBSTACLE = 2006;
 
 gv.CMD.GET_SERVER_TIME = 2100;
@@ -25,6 +25,11 @@ gv.CMD.TEST = 3001;
 gv.CMD.GET_TROOP_INFO = 4001;
 gv.CMD.RESEARCH_TROOP = 4002;
 gv.CMD.RESEARCH_TROOP_COMPLETE = 4003;
+
+gv.CMD.GET_BARRACK_QUEUE_INFO = 7001;
+gv.CMD.TRAIN_TROOP = 7002;
+gv.CMD.CANCEL_TRAIN_TROOP = 7003;
+gv.CMD.QUICK_FINISH_TRAIN_TROOP = 7004;
 
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
@@ -201,7 +206,7 @@ CmdSendCancelConstruction = fr.OutPacket.extend(
         {
             this._super();
             this.initData(100);
-            this.setCmdId(gv.CMD.CANCLE_CONSTRUCTION);
+            this.setCmdId(gv.CMD.CANCEL_CONSTRUCTION);
         },
         pack:function(id){
             this.packHeader();
@@ -314,6 +319,21 @@ CmdSendResearchTroopComplete = fr.OutPacket.extend({
         this.updateSize();
     }
 });
+
+CmdSendGetBarrackQueueInfo = fr.OutPacket.extend({
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.GET_BARRACK_QUEUE_INFO);
+        },
+        pack:function(){
+            this.packHeader();
+            this.updateSize();
+        }
+    }
+);
+
 
 /**
  * InPacket
@@ -514,7 +534,7 @@ testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
 );
 
 
-testnetwork.packetMap[gv.CMD.CANCLE_CONSTRUCTION] = fr.InPacket.extend(
+testnetwork.packetMap[gv.CMD.CANCEL_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
         {
@@ -584,6 +604,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
     readData: function() {
         cc.log('receive TROOP_INFO');
         var size = this.getInt();
+        cc.log("so loai troop: "+size);
         for (var i = 1; i <= size; i ++) {
             var type = this.getString();
             var isUnlock = this.getShort();
@@ -591,20 +612,26 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var population = this.getShort();
             var startTime = this.getLong();
             var status = this.getString();
+            cc.log('type = '+type );
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
                 startTime: startTime,
-                status: status
+                status: status,
+                name: name.troop[type].vi,
             };
+
         }
-        cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
-        cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
-        cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
-        cc.log('troopInfo.ARM_1.startTime', troopInfo.ARM_1.startTime)
-        cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
+        for (item in troopInfo) {
+            var obj = troopInfo[item];
+            cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
+            cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
+            cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
+            cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
+            cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+        }
     }
 });
 
@@ -627,3 +654,18 @@ testnetwork.packetMap[gv.CMD.RESEARCH_TROOP_COMPLETE] = fr.InPacket.extend({
         cc.log('===================RESEARCH COMPLETE===> ', validate);
     }
 });
+
+
+barrackQueueList = [];
+testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+
+        },
+        readData:function(){
+
+        }
+    }
+);

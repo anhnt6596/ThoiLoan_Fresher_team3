@@ -624,8 +624,26 @@ name.troop = {
         vi: 'Chú tể bóng tối',
         en: ''
     },
-
-
+    ARM_11:{  },
+    ARM_12:{  },
+    DAR_1:{  },
+    DAR_2:{  },
+    DAR_3:{  },
+    DAR_4:{  },
+    DAR_5:{  },
+    DAR_6:{  },
+    DAR_7:{  },
+    DAR_8:{  },
+    ARM_13:{  },
+    ARM_14:{  },
+    ARM_15:{  },
+    ARM_16:{  },
+    ARM_17:{  },
+    DAR_9:{  },
+    DAR_10:{  },
+    ARM_18:{  },
+    ARM_19:{  },
+    ARM_31:{  },
 }
 
 var TILE_WIDTH = 76;

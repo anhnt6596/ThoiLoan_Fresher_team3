@@ -1,13 +1,12 @@
-var Troop = cc.Class.extend({
+var TroopInBarrack = cc.Class.extend({
     _amount:0,
     _isInQueue:false,
     _name:null,
     _currentPosition:-1,
-    _positionsInQueue:[],
     _housingSpace:1,
     _trainingTime:0,
-    _barrackLevelRequired:1,
-    _level:1,                       //cost phu thuoc vao level
+    _barrackLevelRequired:1,        //Luc lay du lieu ve thi khong can cai nay
+    _level:1,
     _trainingDarkElixir:0,
     _trainingElixir:0,
 
@@ -23,6 +22,12 @@ var Troop = cc.Class.extend({
         this._barrackLevelRequired = config.troopBase[troopName].barracksLevelRequired;
         this._trainingDarkElixir = config.troop[troopName][level].trainingDarkElixir;
         this._trainingElixir = config.troop[troopName][level].trainingElixir;
+    },
+
+    getCost: function(){
+        var trainingElixir = this._trainingElixir;
+        var trainingDarkElixir = this._trainingDarkElixir;
+        return {gold:0, elixir:trainingElixir, darkElixir:trainingDarkElixir, coin:0};
     }
 
 });

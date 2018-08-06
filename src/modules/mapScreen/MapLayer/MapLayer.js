@@ -403,12 +403,12 @@ var MapLayer = cc.Layer.extend({
             this.cancelBtn.attr({
                 x: -1000,
                 y: -1000,
-                opacity: 0,
+                opacity: 0
             });
             this.acceptBtn.attr({
                 x: -1000,
                 y: -1000,
-                opacity: 0,
+                opacity: 0
             });
             gv.user.largestId--;
             LOBBY.showLobby();
@@ -420,17 +420,17 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(function() {
             if(newBuilding.checkNewPosition({ x: newBuilding.tempX, y: newBuilding.tempY })) {
                 var gResources = checkUserResources(buildingInfo.cost);
+                var data;
+                var popup;
                 if(gResources == 0){
                     if(buildingInfo.name != 'BDH_1' && !checkIsFreeBuilder()){
                         var gBuilder = getGToReleaseBuilder();
                         if(gv.user.coin < gBuilder){
-                            var listener = {contentBuyG:"Add more G to release a builder!"};
-                            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
-                            cc.director.getRunningScene().addChild(popup, 2000000);
+                            showPopupNotEnoughG('release_builder');
                         }else{
                             _.extend(ReducedTempResources, buildingInfo.cost);
-                            var listener = {type:'builder', building:buildingInfo, newBuilding:newBuilding, gBuilder:gBuilder};
-                            var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
+                            data = {type:'builder', building:buildingInfo, newBuilding:newBuilding, g:gBuilder};
+                            popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
                             cc.director.getRunningScene().addChild(popup, 2000000);
                         }
                     }else{
@@ -439,18 +439,14 @@ var MapLayer = cc.Layer.extend({
                     }
                 } else if(gResources > 0){
                     if(gv.user.coin < gResources){
-                        var listener = {contentBuyG:"Add more G to buy missing resources!"};
-                        var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
-                        cc.director.getRunningScene().addChild(popup, 2000000);
+                        showPopupNotEnoughG('build');
                     }else{
-                        var listener = {type:'resources', building:buildingInfo, newBuilding:newBuilding, gResources:gResources};
-                        var popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
+                        data = {type:getLackingResources(buildingInfo.cost), building:buildingInfo, newBuilding:newBuilding, g:gResources};
+                        popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
                         cc.director.getRunningScene().addChild(popup, 2000000);
                     }
                 } else {
-                    var listener = {contentBuyG:"Add more G to buy this item!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('build');
                 }
             }
         }.bind(this));

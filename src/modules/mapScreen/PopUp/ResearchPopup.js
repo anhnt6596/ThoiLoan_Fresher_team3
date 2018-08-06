@@ -1,50 +1,50 @@
+var troopInfo = troopInfo || [];
+
 var ResearchPopUp = ui.PopUp.extend({
     lab_level: 1,
     listTroop: {
         ARM_1: {
             name: "Đạo tặc",
-            level: 1,
+            level: 0,
         },
         ARM_2: {
             name: "Cô nương",
-            level: 1,
+            level: 0,
         },
         ARM_3: {
             name: "Công tước",
-            level: 1,
+            level: 0,
         },
         ARM_4: {
             name: "Quái thú",
-            level: 1,
+            level: 0,
         },
         ARM_5: {
             name: "Chiến binh",
-            level: 1,
+            level: 0,
         },
         ARM_6: {
             name: "Quân sư",
-            level: 1,
+            level: 0,
         },
         ARM_7: {
             name: "Pháp sư",
-            level: 1,
+            level: 0,
         },
         ARM_8: {
             name: "Chó trắng",
-            level: 1,
+            level: 0,
         },
         ARM_9: {
             name: "Ốc con công",
-            level: 1,
+            level: 0,
         },
         ARM_10: {
             name: "Cây xà quỳ",
-            level: 1,
+            level: 0,
         },
 
     },
-
-
     listBtn_troop : [],
     listImg_troop : {},
     status: research_constant.status.free,
@@ -64,27 +64,22 @@ var ResearchPopUp = ui.PopUp.extend({
         this.init();
     },
     init: function () {
+        this.lab_level = this.getConstructionList("LAB_1","level");
+        console.log("lab_level "+ this.lab_level);
         this.initInfoResearch();
         this.initScrollBar();
     },
+    getConstructionList: function(name, type){
+        for (buil in contructionList){
+            building = contructionList[buil];
+            if (building.name===name){
+                return building[type];
+            }
+        }
+    },
     initInfoResearch: function(){
-        troopInfo[type] = {
-            type: type,
-            isUnlock: isUnlock,
-            level: level,
-            population: population,
-            startTime: startTime,
-            status: status
-        };
-        self = this;
-        troopInfo.forEach(function(element) {
-            self.listTroop[element.type].name = name.troop[element.type];
-            self.listTroop[element.type].isUnlock = element.isUnlock;
-            self.listTroop[element.type].level = element.level
-            ;
-            self.listTroop[element.type].population = element.population;
-            self.listTroop[element.type].startTime = element.startTime;
-        })
+
+        this.listTroop = troopInfo;
         //*****************hien thi info*******************
         //dao tac cap 2
         var mieng_trang = new cc.Sprite("res/Art/GUIs/research troop/mieng_trang.png");
@@ -107,7 +102,7 @@ var ResearchPopUp = ui.PopUp.extend({
             img_troop.setVisible(false);
             this.listImg_troop["ARM_"+(i+1)] = img_troop;
         };
-        this.nameTroopText = new cc.LabelBMFont('ĐẠO TẶC CẤP 2', research_constant.nameTroop_font_dir );
+        this.nameTroopText = new cc.LabelBMFont('', research_constant.nameTroop_font_dir );
         this.nameTroopText.attr({
             x: mieng_trang.width/2,
             y: mieng_trang.height*4/5
@@ -195,7 +190,24 @@ var ResearchPopUp = ui.PopUp.extend({
 
         this.addChild(mieng_trang_nothing, 100);
         this.addChild(mieng_trang, 100);
-        mieng_trang.setVisible(false);
+//****************************************************************************
+        if (this.status===research_constant.status.busy){
+            var troop = this.getTroopResearching();
+            this.listImg_troop[type].setVisible(true);
+            this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
+            this.updateTimeCountDown(troop.type,troop.startTime,troop.level);
+        }
+        else if (this.status===research_constant.status.free){
+            mieng_trang.setVisible(false);
+        }
+    },
+    getTroopResearching: function(){
+        for (item in troopInfo) {
+            var obj = troopInfo[item];
+            if (obj.status==="researching"){
+                return obj;
+            }
+        }
     }
     ,
     initScrollBar: function() {
@@ -249,6 +261,7 @@ var ResearchPopUp = ui.PopUp.extend({
             )
             button.label_rq.text_rq2.setColor(new cc.Color(220,20,60));
 /**/
+            console.log("button name " + button.name);
             var level_btn = this.listTroop[button.name].level;
             console.log("level_btn ="+level_btn);
             var level_text_rq = config.troop[button.name][level_btn+1].laboratoryLevelRequired;
@@ -360,15 +373,18 @@ var ResearchPopUp = ui.PopUp.extend({
             try {
                 element.addClickEventListener(() => self.onSelectItem(element.name));
             } catch (e) {
-
             }
-
         });
         this.addChild(scrollView, 100);
+
+        if (this.status === research_constant.status.busy){
+            this.setEnableBtn(false);
+        }
     }
     ,
     onSelectItem:function(type)
     {
+        NETWORK.sendResearchTroop(type);
         this.timeStart = getCurrentServerTime();
         // new popUp info cua troop hien len
         this.mieng_trang_nothing.setVisible(false);
@@ -376,14 +392,17 @@ var ResearchPopUp = ui.PopUp.extend({
         console.log("Click vao item: "+type);
         //troop = this.listTroop[name];
         this.status = research_constant.status.busy;
+        this.listTroop[type].status = research_constant.status.busy;
         //disable all button
         this.setEnableBtn(false);
 
-        this.name_troop = type;
+        //this.name_troop = type;
 
         this.listImg_troop[type].setVisible(true);
         this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
         this.updateTimeCountDown(type,this.timeStart, this.listTroop[type].level);
+
+
     },
     updateInfo: function(name,level){
         this.nameTroopText.setString(name+ " cấp "+level);
@@ -392,7 +411,7 @@ var ResearchPopUp = ui.PopUp.extend({
     updateTimeCountDown: function(type,timeStart,level){
         cc.log(name + "name");
         cc.log(level + "level");
-        var countDownDate = timeStart + config.troop[type][level].researchTime;
+        var countDownDate = timeStart + config.troop[type][level].researchTime*3600;
         var self = this;
         var x = setInterval(function() {
 
@@ -433,6 +452,7 @@ var ResearchPopUp = ui.PopUp.extend({
         this.mieng_trang.setVisible(false);
         this.mieng_trang_nothing.setVisible(true);
         //this.setEnableBtn(true);
+        NETWORK.sendResearchComplete(type);
     },
     setEnableBtn: function (status) {
         this.listBtn_troop.forEach(function(element) {

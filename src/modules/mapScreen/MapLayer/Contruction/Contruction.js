@@ -327,51 +327,43 @@ var Contruction = cc.Class.extend({
                 break;
             }
         }
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        LOBBY.update(gv.user);
+        updateGUI();
+
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
     },
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
-            var listener = {contentBuyG:"Upgrade TownHall to upgrade this building!"};
-            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough level of TownHall", true, listener);
-            cc.director.getRunningScene().addChild(popup, 2000000);
+            showPopupNotEnoughG('upgrade_require_townhall');
             return;
         }
         var costBuilding = getResourcesNextLevel(this._name, this._level);
         var gResources = checkUserResources(costBuilding);
+        var data;
+        var popup;
         if(gResources == 0){
             if(!checkIsFreeBuilder()){
                 var gBuilder = getGToReleaseBuilder();
                 if(gv.user.coin < gBuilder){
-                    var listener = {contentBuyG:"Add more G to release a builder!"};
-                    var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", true, listener);
-                    cc.director.getRunningScene().addChild(popup, 2000000);
+                    showPopupNotEnoughG('release_builder');
                 }else{
                     _.extend(ReducedTempResources, costBuilding);
-                    var listener = {type:'builderUpgrade', building:this, gBuilder:gBuilder};
-                    var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to release a builder", false, listener);
+                    data = {type:'builder', building:this, g:gBuilder};
+                    popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
                 _.extend(ReducedTempResources, costBuilding);
                 NETWORK.sendRequestUpgradeConstruction(this);
             }
-        } else if(gResources > 0){
+        } else{
             if(gv.user.coin < gResources){
-                var listener = {contentBuyG:"Add more G to buy missing resources!"};
-                var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough resources to build this building", true, listener);
-                cc.director.getRunningScene().addChild(popup, 2000000);
+                showPopupNotEnoughG('upgrade');
             }else{
                 this.cost = costBuilding;
-                var listener = {type:'resourcesUpgrade', building:this, gResources:gResources};
-                var popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, listener);
+                data = {type:getLackingResources(costBuilding), building:this, g:gResources};
+                popup = new ShowUpgradePopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy lacking resources", false, data);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
-        } else {
-            var listener = {contentBuyG:"Add more G to buy this item!"};
-            var popup = new TinyPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Not enough G to build this building", true, listener);
-            cc.director.getRunningScene().addChild(popup, 2000000);
         }
     },
 
@@ -398,12 +390,7 @@ var Contruction = cc.Class.extend({
                 break;
             }
         }
-
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        cc.log("============================= Level hien tai building: " + this._level);
-
-        LOBBY.update(gv.user);
+        updateGUI();
     },
     cancel: function(building){
         buildingCancel = building;
@@ -432,13 +419,12 @@ var Contruction = cc.Class.extend({
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
         increaseUserResources(refundResources);
 
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        LOBBY.update(gv.user);
+        updateGUI();
     },
     cancelBuild: function() {
-        var newContructionList = contructionList.filter(element => {
-            if (element._id === this._id) return false;
+        var self = this;
+        var newContructionList = contructionList.filter(function(element) {
+            if (element._id === self._id) return false;
             return true;
         });
 
@@ -471,8 +457,9 @@ var Contruction = cc.Class.extend({
         this.setStatus('delete');
     },
     removeComplete:function(){
-        var newContructionList = contructionList.filter(element => {
-                if (element._id == this._id) return false;
+        var self = this;
+        var newContructionList = contructionList.filter(function(element) {
+                if (element._id == self._id) return false;
                 return true;
             });
         contructionList = newContructionList;
@@ -483,16 +470,13 @@ var Contruction = cc.Class.extend({
 
     },
 
-    addBuildingImg: function() {
-        //
-    },
     addTimeBar: function(cur, max) {
         var upgradeBarrier = new cc.Sprite('res/Art/Map/map_obj_bg/upgrading.png');
         this.upgradeBarrier = upgradeBarrier;
         upgradeBarrier.attr({
             x: this.buildingImg.width / 2,
             y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
-            scale: this._width * 3 / 4,
+            scale: this._width * 3 / 4
         });
         this.buildingImg.addChild(upgradeBarrier, 1000);
 
@@ -501,7 +485,7 @@ var Contruction = cc.Class.extend({
         var coor = this.xyOnMap(this._posX, this._posY);
         timeBar.attr({
             x: coor.x,
-            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
         });
         MAP.addChild(timeBar, 1100);
 
@@ -509,7 +493,7 @@ var Contruction = cc.Class.extend({
         this.processBar = processBar;
         processBar.attr({
             anchorX: 0,
-            anchorY: 0,
+            anchorY: 0
         });
         timeBar.addChild(processBar);
 
@@ -523,7 +507,7 @@ var Contruction = cc.Class.extend({
         this.timeText = timeText;
         timeText.attr({
             x: timeBar.width / 2,
-            y: 42,
+            y: 42
         });
         timeBar.addChild(timeText);
     },
@@ -543,7 +527,7 @@ var Contruction = cc.Class.extend({
         lvUpEffSprite.attr({
             x: this.buildingImg.x -TILE_WIDTH / 8,
             y: this.buildingImg.y + TILE_HEIGHT * (this._height + 1) / 2,
-            scale: this._width,
+            scale: this._width
         });
         var act2 = cc.callFunc(function() {
             MAP.removeChild(lvUpEffSprite);

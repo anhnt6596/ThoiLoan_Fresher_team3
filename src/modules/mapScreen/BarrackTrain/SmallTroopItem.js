@@ -28,23 +28,25 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     touchEventSmall: function() {
-        if(TRAIN_POPUP._troopList[this._name]._amount > 0){
+        //if(TRAIN_POPUP._troopList[this._name]._amount > 0){
             TRAIN_POPUP._troopList[this._name]._amount--;
             if(TRAIN_POPUP._troopList[this._name]._amount == 0){
                 TRAIN_POPUP._troopList[this._name]._isInQueue = false;
                 TRAIN_POPUP._amountItemInQueue--;
                 if(TRAIN_POPUP._amountItemInQueue == 0){
                     TRAIN_POPUP._timeBar.visible = false;
+                    cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
                     TRAIN_POPUP._statusCountDown = false;
+                }else{
+                    TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[this._name]._currentPosition);
                 }
                 this.setPosition(-1000, -1000);
-                TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[this._name]._currentPosition);
                 TRAIN_POPUP._troopList[this._name]._currentPosition = -1;
             }
             this.updateAmountSmall();
 
             //Refund
-        }
+        //}
     },
 
     updateAmountSmall: function() {

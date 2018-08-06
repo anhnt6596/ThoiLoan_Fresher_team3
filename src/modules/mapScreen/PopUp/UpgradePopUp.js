@@ -18,17 +18,17 @@ var createUpgradePopUp = function() {
     }
     var num = 0;
     if (req.goldReq > 0) {
-        var item = createNewRequireItem('gold', req.goldReq, num);
+        var item = createNewRequireItem('gold', formatNumber(req.goldReq), num);
         content.push(item);
         num += 1;
     }
     if (req.elixirReq > 0) {
-        var item = createNewRequireItem('elixir', req.elixirReq, num);
+        var item = createNewRequireItem('elixir', formatNumber(req.elixirReq), num);
         content.push(item);
         num += 1;
     }
     if (req.darkElixirReq > 0) {
-        var item = createNewRequireItem('dark_elixir', req.darkElixirReq, num);
+        var item = createNewRequireItem('dark_elixir', formatNumber(req.darkElixirReq), num);
         content.push(item);
         // num += 1;
     }
