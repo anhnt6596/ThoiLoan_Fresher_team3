@@ -604,6 +604,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
     readData: function() {
         cc.log('receive TROOP_INFO');
         var size = this.getInt();
+        cc.log("so loai troop: "+size);
         for (var i = 1; i <= size; i ++) {
             var type = this.getString();
             var isUnlock = this.getShort();
@@ -611,20 +612,26 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var population = this.getShort();
             var startTime = this.getLong();
             var status = this.getString();
+            cc.log('type = '+type );
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
                 startTime: startTime,
-                status: status
+                status: status,
+                name: name.troop[type].vi,
             };
+
         }
-        cc.log('troopInfo.ARM_1.level', troopInfo.ARM_1.level)
-        cc.log('troopInfo.ARM_1.isUnlock', troopInfo.ARM_1.isUnlock)
-        cc.log('troopInfo.ARM_1.population', troopInfo.ARM_1.population)
-        cc.log('troopInfo.ARM_1.startTime', troopInfo.ARM_1.startTime)
-        cc.log('troopInfo.ARM_1.status', troopInfo.ARM_1.status)
+        for (item in troopInfo) {
+            var obj = troopInfo[item];
+            cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
+            cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
+            cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
+            cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
+            cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+        }
     }
 });
 
