@@ -101,11 +101,10 @@ var ObjectMenu = cc.Node.extend({
         cc.log('===========> COLLECT');
     },
     train: function() {
-        cc.log('===========> TRAIN');
-        NETWORK.sendGetBarrackQueueInfo();
-        //var data = {train: true, barrack: MAP._targetedObject};
-        //var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
-        //cc.director.getRunningScene().addChild(popup, 200);
+        //NETWORK.sendGetBarrackQueueInfo();
+        var data = {train: true, barrack: MAP._targetedObject};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+        cc.director.getRunningScene().addChild(popup, 200);
     },
     quickFinish: function(){
         if(MAP._targetedObject){
