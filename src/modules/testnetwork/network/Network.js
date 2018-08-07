@@ -42,6 +42,7 @@ testnetwork.Connector = cc.Class.extend({
                 this.sendGetTroopInfo();
                 this.sendGetMapInfo();
                 this.sendGetBarrackQueueInfo();
+                this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
@@ -480,7 +481,12 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND RESEARCH TROOP COMPLETE====================================');
     },
-
+    sendResearchQuickFinish: function(type) {
+        var pk = this.gameClient.getOutPacket(CmdSendResearchTroopQuickFinish);
+        pk.pack(type);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND RESEARCH TROOP QUICK FINISH====================================');
+    },
     sendGetBarrackQueueInfo: function() {
         var pk = this.gameClient.getOutPacket(CmdSendGetBarrackQueueInfo);
         pk.pack();

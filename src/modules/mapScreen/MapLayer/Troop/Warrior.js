@@ -1,18 +1,8 @@
 var Warrior = Troop.extend({
     ctor: function(building, level = 1) {
-        this._super(building, level, "res/Art/Map/map_obj_bg/1x1_bong.png");
-    },
-    init: function() {
-        MAP.addChild(this, 1100);
-        this.attr({
-            x: this._buildingContain.buildingImg.x,
-            y: this._buildingContain.buildingImg.y,
-        });
-        this.troopImg = this.createTroopImg();
         this._direction = randomInt(1, 8);
         this._moveSpeed = config.troopBase.ARM_1.moveSpeed || 16;
-        this.standingEff();
-        // this.runningEff();
+        this._super(building, level, "res/Art/Map/map_obj_bg/1x1_bong.png");
     },
     createTroopImg: function() {
         var troopImg = new cc.Sprite();

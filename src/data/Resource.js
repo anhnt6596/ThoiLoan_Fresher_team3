@@ -648,6 +648,7 @@ name.troop = {
 
 var TILE_WIDTH = 76;
 var TILE_HEIGHT = 57;
+var DIAGONAL = 95;
 
 var Z = {
     TILEMAP: 0,
@@ -694,8 +695,10 @@ var research_constant = {
     description_dir : 'res/Art/Fonts/fista_20_non.fnt',
     imgG_dir : "res/Art/GUIs/shop_gui/g.png",
     status: {
-        free: "free",
-        busy: "busy",
-    }
+        free: "completed",
+        busy: "researching",
+        now: "completed",
+    },
+    used_open : false
 };
 

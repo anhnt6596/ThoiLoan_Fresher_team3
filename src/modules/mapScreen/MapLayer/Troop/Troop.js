@@ -1,12 +1,23 @@
+// var directionCircle = {
+//     1: [2, 3, 5, 6],
+//     2: [1, 3, 4, 5],
+//     3: [1, 2, 4, 8],
+//     4: [2, 3, 7, 8],
+//     5: [1, 2, 6, 7],
+//     6: [1, 5, 7, 8],
+//     7: [4, 5, 6, 8],
+//     8: [3, 4, 6, 7],
+// };
+
 var directionCircle = {
-    1: [2, 3, 5, 6],
-    2: [1, 3, 4, 5],
-    3: [1, 2, 4, 8],
-    4: [2, 3, 7, 8],
-    5: [1, 2, 6, 7],
-    6: [1, 5, 7, 8],
-    7: [4, 5, 6, 8],
-    8: [3, 4, 6, 7],
+    1: [2, 5],
+    2: [4, 5],
+    3: [2, 4],
+    4: [2, 7],
+    5: [2, 7],
+    6: [5, 7],
+    7: [4, 5],
+    8: [4, 7],
 };
 
 var Troop = cc.Sprite.extend({
@@ -15,28 +26,43 @@ var Troop = cc.Sprite.extend({
     _status: "standing",
     _moveSpeed: 1,
     _stopFlag: 0,
-    solidMapArray: [],
+    
     ctor: function(building, level, img) {
-        // this._super(cc.spriteFrameCache.getSpriteFrame("ARM_1_1_idle_00.png"));
         this._super(img);
         this._level = level;
         this._buildingContain = building;
         this.init();
     },
     init: function() {
-        // Lop con nap chong
+        MAP.addChild(this, 1100);
+        var coor = this.calculateTroopCoorInArmyCamp();
+        this.attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        this.troopImg = this.createTroopImg();
+        this.standingEff();
     },
     moveTo: function(obj) {
         this._stopFlag = 0
-        this.createSolidMapArray();
-        var obj1 = MAP._targetedObject;
+        // createSolidMapArray();
+        // var obj1 = MAP._targetedObject;
+        var obj1 = this._buildingContain;
         if (obj1) {
+            var coor = this.calculateTroopCoorInArmyCamp();
             this._finalDestination = {
-                x: obj1.buildingImg.x,
-                y: obj1.buildingImg.y
+                x: coor.x,
+                y: coor.y,
             };
             this.runStep();
         }
+        // if (obj1) {
+        //     this._finalDestination = {
+        //         x: obj1.buildingImg.x,
+        //         y: obj1.buildingImg.y,
+        //     };
+        //     this.runStep();
+        // }
     },
     runStep: function() {
         if (
@@ -50,7 +76,7 @@ var Troop = cc.Sprite.extend({
 
             var coor = this.calculatePositionInSolidMapArray(nextSubDestination);
             // cc.log("GIA TRI VI TRI TIEP THEO SAP DI VAO TRUOC: " + this.solidMapArray[coor.x][coor.y]);
-            if (this.solidMapArray[coor.x][coor.y] !== 0) {
+            if (solidMapArray[coor.x][coor.y] !== 0) {
                 nextSubDestination = this.recalculateNextSubDestination(direction);
             }
             // cc.log("GIA TRI VI TRI TIEP THEO SAP DI VAO SAU: " + this.solidMapArray[coor.x][coor.y]);
@@ -58,7 +84,7 @@ var Troop = cc.Sprite.extend({
             var lastStatus = this._status;
             this._status = "running";
             this._direction = this.calculateDirection(nextSubDestination);
-            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 4;
+            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 8;
             var moveAction = new cc.MoveTo(moveTime, cc.p(nextSubDestination.x, nextSubDestination.y));
             var sequence = new cc.Sequence(moveAction, new cc.CallFunc(this.runStep, this));
             this.stopAllActions();
@@ -68,6 +94,7 @@ var Troop = cc.Sprite.extend({
                 this.runningEff();
             }
         } else {
+            this._lastDirection = 0;
             this._status = "standing";
             this.standingEff();
         }
@@ -119,13 +146,14 @@ var Troop = cc.Sprite.extend({
             default:
                 break;
         }
+        var distance = calculateDistance(this, this._finalDestination);
         if (
             Math.abs(this.x - this._finalDestination.x) < TILE_WIDTH / 2
-            && !recalc
+            && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.x = this._finalDestination.x;
         if (
             Math.abs(this.y - this._finalDestination.y) < TILE_HEIGHT / 2
-            && !recalc
+            && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.y = this._finalDestination.y;
         return nextSubDestination;
     },
@@ -134,11 +162,11 @@ var Troop = cc.Sprite.extend({
         var minDistance = Number.MAX_SAFE_INTEGER;
         var listNextDes = directionCircle[direction].map(function (dir) {
             var nextDes = self.calculateNextSubDestination(dir, true);
-            cc.log("nextDes: " + nextDes.x  + '/' + nextDes.y);
-            cc.log("this.pos: " + self.x  + '/' + self.y);
+            // cc.log("nextDes: " + nextDes.x  + '/' + nextDes.y);
+            // cc.log("this.pos: " + self.x  + '/' + self.y);
             var coor = self.calculatePositionInSolidMapArray(nextDes);
             var distance;
-            if (self.solidMapArray[coor.x][coor.y] !== 0) {
+            if (solidMapArray[coor.x][coor.y] !== 0) {
                 distance = Number.MAX_SAFE_INTEGER;
             } else {
                 distance = calculateDistance(nextDes, self._finalDestination);
@@ -150,13 +178,22 @@ var Troop = cc.Sprite.extend({
                 direction: dir,
             };
         });
-        // var nextSubDestination = listNextDes[0].des;
+        var nextSubDestination;
         for(var i = 0; i < listNextDes.length; i++) {
+            // cc.log(">>>>>>>>SUM>>>>>>>>>>>" + (listNextDes[i].direction + this._lastDirection));
             if(listNextDes[i].distance === minDistance) {
-                nextSubDestination = listNextDes[i].des;
-                cc.log('nextSubDestination direction: ' + listNextDes[i].direction);
+                if (listNextDes[i].direction + this._lastDirection === 9 && true) {
+                    var j = i === 0 ? 1 : 0;
+                    nextSubDestination = listNextDes[j].des;
+                    this._lastDirection = listNextDes[j].direction;
+                } else {
+                    nextSubDestination = listNextDes[i].des;
+                    this._lastDirection = listNextDes[i].direction;
+                }
+                // cc.log('nextSubDestination direction: ' + listNextDes[i].direction);
             }
         }
+
         return nextSubDestination;
     },
     standing: function() {
@@ -167,11 +204,11 @@ var Troop = cc.Sprite.extend({
     },
     setZOrder: function() {
         var mapPos = MAP.calculatePos(this);
-        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 40;
+        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 25;
         MAP.reorderChild(this, newZ);
     },
     createSolidMapArray: function() {
-        this.solidMapArray = [];
+        solidMapArray = [];
         var i = 0;
         var j = 0;
         for (i = 0; i < SOLID_MAP_VALUE.SIZE; i++) {
@@ -179,7 +216,7 @@ var Troop = cc.Sprite.extend({
             for(j = 0; j < SOLID_MAP_VALUE.SIZE; j++) {
                 row.push(SOLID_MAP_VALUE.GROUND);
             }
-            this.solidMapArray.push(row);
+            solidMapArray.push(row);
         }
         for (object in objectRefs) {
             var obj = objectRefs[object];
@@ -190,7 +227,7 @@ var Troop = cc.Sprite.extend({
                 for (var i = 1; i < _size - 1; i++) {
                     for (var j = 1; j < _size - 1; j++) {
                         if (_inRow + i < SOLID_MAP_VALUE.SIZE && _inColumn + j < SOLID_MAP_VALUE.SIZE)
-                        this.solidMapArray[_inRow + i][_inColumn + j] = SOLID_MAP_VALUE.SOLID_2;
+                        solidMapArray[_inRow + i][_inColumn + j] = SOLID_MAP_VALUE.SOLID_2;
                     }
                 }
             }
@@ -205,20 +242,37 @@ var Troop = cc.Sprite.extend({
         coor.y = parseInt(((x / (TILE_WIDTH/4) + y / (TILE_HEIGHT/4)) / 2).toFixed(0));
         // cc.log(coor.x + ' / ' + coor.y);
         return coor;
-    }
+    },
+    calculateTroopCoorInArmyCamp: function() {
+        var add1 = randomInt(0, 1);
+        var add2 = randomInt(0, 1);
+        var x = add1 
+        ? this._buildingContain.buildingImg.x + randomInt(2, 6) * TILE_WIDTH / 4
+        : this._buildingContain.buildingImg.x - randomInt(2, 6) * TILE_WIDTH / 4;
+
+        var y = add2
+        ? this._buildingContain.buildingImg.y + randomInt(2, 6) * TILE_HEIGHT / 4
+        : this._buildingContain.buildingImg.y - randomInt(2, 6) * TILE_HEIGHT / 4;
+
+        if (add1 && add2) {
+
+        } 
+        
+        return { x: x, y: y };
+    },
 });
 
-function indexOfMin(arr) {
-    if (arr.length === 0) {
-        return -1;
-    }
-    var min = arr[0];
-    var minIndex = 0;
-    for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < min) {
-            minIndex = i;
-            min = arr[i];
-        }
-    }
-    return minIndex;
-}
+// function indexOfMin(arr) {
+//     if (arr.length === 0) {
+//         return -1;
+//     }
+//     var min = arr[0];
+//     var minIndex = 0;
+//     for (var i = 1; i < arr.length; i++) {
+//         if (arr[i] < min) {
+//             minIndex = i;
+//             min = arr[i];
+//         }
+//     }
+//     return minIndex;
+// }
