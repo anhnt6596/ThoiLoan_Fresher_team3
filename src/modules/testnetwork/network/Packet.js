@@ -25,6 +25,7 @@ gv.CMD.TEST = 3001;
 gv.CMD.GET_TROOP_INFO = 4001;
 gv.CMD.RESEARCH_TROOP = 4002;
 gv.CMD.RESEARCH_TROOP_COMPLETE = 4003;
+gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE = 4004;
 
 gv.CMD.GET_BARRACK_QUEUE_INFO = 7001;
 gv.CMD.TRAIN_TROOP = 7002;
@@ -312,6 +313,18 @@ CmdSendResearchTroopComplete = fr.OutPacket.extend({
         this._super();
         this.initData(100);
         this.setCmdId(gv.CMD.RESEARCH_TROOP_COMPLETE);
+    },
+    pack: function(type) {
+        this.packHeader();
+        this.putString(type);
+        this.updateSize();
+    }
+});
+CmdSendResearchTroopQuickFinish = fr.OutPacket.extend({
+    ctor: function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE);
     },
     pack: function(type) {
         this.packHeader();
@@ -626,6 +639,10 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
         }
         for (item in troopInfo) {
             var obj = troopInfo[item];
+            if (obj.status===research_constant.status.busy){
+                research_constant.status.now = obj.status;
+                research_constant.troop = obj;
+            }
             cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
             cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
             cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)

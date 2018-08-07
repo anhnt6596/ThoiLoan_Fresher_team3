@@ -11,6 +11,7 @@ ui.PopUp = cc.Sprite.extend({
             anchorY: 0.5,
         });
         var background = new ccui.Button('res/Art/GUIs/pop_up/bg_color.png', 'res/Art/GUIs/pop_up/bg_color.png');
+        this.background = background;
         background.attr({
             x: 0,
             y: 0,
@@ -53,10 +54,11 @@ ui.PopUp = cc.Sprite.extend({
         this.runAction(ui.BounceEff(scale));
     },
     close: function() {
+        console.log("da an close");
         var act1 = new cc.ScaleTo(0.1, 1.4 * this.scale, 1.4 * this.scale);
         var self = this;
         this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
             self.getParent().removeChild(self);
         }, this)));
-    }
+    },
 });

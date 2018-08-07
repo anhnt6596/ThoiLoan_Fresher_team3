@@ -76,8 +76,8 @@ var LobbyLayer = cc.Layer.extend({
     onAttack: function() {
         var resource = { gold:0, elixir:0, darkElixir:0, coin:1000000 };
         _.extend(ReducedTempResources, resource);
-        //NETWORK.sendAddResource(0, 0, 0, 1000000);
-         NETWORK.sendGetTroopInfo();
+        NETWORK.sendAddResource(0, 0, 0, 1000000);
+
     },
     onSetting: function () {
         if (MAP._targetedObject) {

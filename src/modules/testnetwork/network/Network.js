@@ -40,6 +40,7 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
                 this.sendGetMapInfo();
+                this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
@@ -308,4 +309,10 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND RESEARCH TROOP COMPLETE====================================');
     },
+    sendResearchQuickFinish: function(type) {
+        var pk = this.gameClient.getOutPacket(CmdSendResearchTroopQuickFinish);
+        pk.pack(type);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND RESEARCH TROOP QUICK FINISH====================================');
+    }
 });
