@@ -31,6 +31,7 @@ gv.CMD.GET_BARRACK_QUEUE_INFO = 7001;
 gv.CMD.TRAIN_TROOP = 7002;
 gv.CMD.CANCEL_TRAIN_TROOP = 7003;
 gv.CMD.QUICK_FINISH_TRAIN_TROOP = 7004;
+gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
 
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
@@ -334,14 +335,82 @@ CmdSendResearchTroopQuickFinish = fr.OutPacket.extend({
 });
 
 CmdSendGetBarrackQueueInfo = fr.OutPacket.extend({
+    ctor:function()
+    {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.GET_BARRACK_QUEUE_INFO);
+    },
+    pack:function(){
+        this.packHeader();
+        this.updateSize();
+    }
+});
+
+CmdSendTrainTroop = fr.OutPacket.extend(
+    {
         ctor:function()
         {
             this._super();
             this.initData(100);
-            this.setCmdId(gv.CMD.GET_BARRACK_QUEUE_INFO);
+            this.setCmdId(gv.CMD.TRAIN_TROOP);
         },
-        pack:function(){
+        pack:function(idBarrack, typeTroop){
             this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendCancelTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.CANCEL_TRAIN_TROOP);
+        },
+        pack:function(idBarrack, typeTroop){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendQuickFinishTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.QUICK_FINISH_TRAIN_TROOP);
+        },
+        pack:function(idBarrack){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendFinishTimeTrainTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.FINISH_TIME_TRAIN_TROOP);
+        },
+        pack:function(idBarrack, typeTroop, remainTroop){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.putString(typeTroop);
+            //So luong cua troop do con lai trong hang doi
+            this.putInt(remainTroop);
             this.updateSize();
         }
     }
@@ -546,7 +615,6 @@ testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
     }
 );
 
-
 testnetwork.packetMap[gv.CMD.CANCEL_CONSTRUCTION] = fr.InPacket.extend(
     {
         ctor:function()
@@ -576,10 +644,10 @@ testnetwork.packetMap[gv.CMD.GET_SERVER_TIME] = fr.InPacket.extend(
         ctor:function()
         {
             this._super();
-            cc.log("SERVER da phan hoi Current Server Time");
         },
         readData:function(){
             this.currentServerTime  = this.getLong();
+            cc.log("SERVER da phan hoi Current Server Time: " + this.currentServerTime);
         }
     }
 );
@@ -637,7 +705,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             };
 
         }
-        for (item in troopInfo) {
+        for (var item in troopInfo) {
             var obj = troopInfo[item];
             if (obj.status===research_constant.status.busy){
                 research_constant.status.now = obj.status;
@@ -682,7 +750,95 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
 
         },
         readData:function(){
+            this.n = this.getInt();
+            cc.log("================================= SO LUONG BARRACK QUEUE INFO: " + this.n);
+            for (var i=0; i < this.n; i++){
+                cc.log("================================= BARRACK thu : " + (i+1));
+                this.idBarrack = this.getInt();
+                barrackQueueList[this.idBarrack] = {};
+                cc.log("================================= Id Barrack: " + this.idBarrack);
+                //this.barrackLevel = this.getInt();
+                //barrackQueueList[this.idBarrack].barrackLevel = this.barrackLevel;
+                //cc.log("================================= Level Barrack: " + this.barrackLevel);
+                this.amountItemInQueue = this.getInt();
+                barrackQueueList[this.idBarrack].amountItemInQueue = this.amountItemInQueue;
+                cc.log("================================= Amount Item in Barrack: " + this.amountItemInQueue);
+                this.totalTroopCapacity = this.getInt();
+                barrackQueueList[this.idBarrack].totalTroopCapacity = this.totalTroopCapacity;
+                cc.log("================================= Total Troop capcity in Barrack: " + this.totalTroopCapacity);
+                this.startTime = this.getLong();
+                barrackQueueList[this.idBarrack].startTime = this.startTime;
+                cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
+                this.m = this.getInt();
+                cc.log("================================= SO LUONG TROOP: " + this.m);
+                barrackQueueList[this.idBarrack].troopList = {};
+                cc.log("================================= TROOP LIST: ");
+                for (var j=0; j < this.m; j++){
+                    cc.log("================================= Troop thu : " + (j+1));
+                    this.troopType = this.getString();
+                    barrackQueueList[this.idBarrack].troopList[this.troopType] = {};
+                    cc.log("================================= Troop Type: " + this.troopType);
+                    this.amount = this.getInt();
+                    barrackQueueList[this.idBarrack].troopList[this.troopType]._amount = this.amount;
+                    cc.log("================================= Troop amount: " + this.amount);
+                    this.isInQueue = this.getBool();
+                    barrackQueueList[this.idBarrack].troopList[this.troopType]._isInQueue = this.isInQueue;
+                    cc.log("================================= Troop is in queue: " + this.isInQueue);
+                    this.currentPosition = this.getInt();
+                    barrackQueueList[this.idBarrack].troopList[this.troopType]._currentPosition = this.currentPosition;
+                    cc.log("================================= Troop current position: " + this.currentPosition);
+                }
+            }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.CANCEL_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.QUICK_FINISH_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.FINISH_TIME_TRAIN_TROOP] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+            //Neu server tra ve false thi phai gui lai get BarrackQueueInfo
         }
     }
 );

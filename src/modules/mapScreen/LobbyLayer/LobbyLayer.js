@@ -77,11 +77,11 @@ var LobbyLayer = cc.Layer.extend({
         var resource = { gold:0, elixir:0, darkElixir:0, coin:1000000 };
         _.extend(ReducedTempResources, resource);
         NETWORK.sendAddResource(0, 0, 0, 1000000);
-
+        // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
         if (MAP._targetedObject) {
-            var warrior = new Warrior(MAP._targetedObject);
+            var warrior = new Warrior(MAP._targetedObject, 4);
             listTroopRefs.push(warrior);
         }
         // NETWORK.sendResearchTroop("ARM_1");

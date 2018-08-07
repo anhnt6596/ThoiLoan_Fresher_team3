@@ -39,6 +39,7 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
+                this.sendGetTroopInfo();
                 this.sendGetMapInfo();
                 this.sendGetTroopInfo();
                 break;
@@ -182,8 +183,30 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
+                break;
+            case gv.CMD.GET_BARRACK_QUEUE_INFO:
+                //this.initBarrackQueueInfo(packet);
+
+                var data = {train: true, barrack: MAP._targetedObject};
+                var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+                cc.director.getRunningScene().addChild(popup, 200);
+                break;
+            case gv.CMD.TRAIN_TROOP:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN TRAIN TROOP tu SERVER=======================================");
+
+                }else {
+                    cc.log("=======================================SERVER TU CHOI TRAIN TROOP=======================================");
+
+                }
+                break;
         }
     },
+
+    initBarrackQueueInfo: function() {
+
+    },
+
     sendGetUserInfo:function()
     {
         cc.log("sendGetUserInfo");
@@ -314,5 +337,18 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(type);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND RESEARCH TROOP QUICK FINISH====================================');
+    },
+    sendGetBarrackQueueInfo: function() {
+        var pk = this.gameClient.getOutPacket(CmdSendGetBarrackQueueInfo);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GET BARRACK QUEUE INFO==========================================');
+    },
+
+    sendTrainTroop: function(idBarrack, typeTroop) {
+        var pk = this.gameClient.getOutPacket(CmdSendTrainTroop);
+        pk.pack(idBarrack, typeTroop);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND TRAIN TROOP==========================================');
     }
 });

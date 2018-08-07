@@ -4,9 +4,11 @@ var TRAIN_POPUP;
 
 var TrainPopup = TinyPopup.extend({
     _id:null,
+    _level:1,
     _barrack:null,
     _queueLength:0,
     _amountItemInQueue:0,                   //So loai item dang co trong queue
+    _totalTroopCapacity:0,                  //Tong so capacity hien tai cua barrack <= queuelength
     _startTime:0,
     _troopList:{},
 
@@ -17,6 +19,7 @@ var TrainPopup = TinyPopup.extend({
     _timeText:null,
     _isShowTimeBar:false,
     _itemInQueue:{},
+    _itemDisplay:{},
     _positionsInQueue:[],
 
 
@@ -24,11 +27,35 @@ var TrainPopup = TinyPopup.extend({
         TRAIN_POPUP = this;
         this._width = width;
         this._height = height;
-        this._barrack = data.barrack;
-        this._id = this._barrack._id;
+        this._id = data.barrack._id;
+        this._level = data.barrack._level;
         this._super(width, height, title, type, data);
 
-        barrackQueueList[this._id] = this;
+
+        //Show du lieu da co
+        this._queueLength = config.building['BAR_1'][this._level].queueLength;
+        this._amountItemInQueue = barrackQueueList[this._id].amountItemInQueue;
+        this._totalTroopCapacity = barrackQueueList[this._id].totalTroopCapacity;
+        this._startTime = barrackQueueList[this._id].startTime;
+        this._troopList = {};
+        //_.extend(this._troopList, barrackQueueList[this._id].troopList);
+        for(var i in barrackQueueList[this._id].troopList){
+            var def = barrackQueueList[this._id].troopList;
+            this._troopList[i] = new TroopInBarrack(i, def[i]._amount, def[i]._isInQueue, def[i]._currentPosition);
+        }
+
+        for(var k in this._troopList){
+            cc.log("============================== TROOP: " + k);
+            cc.log("============================== name: " + this._troopList[k]._name);
+            cc.log("============================== amount: " + this._troopList[k]._amount);
+            cc.log("============================== isInQueue: " + this._troopList[k]._isInQueue);
+            cc.log("============================== currentPosition: " + this._troopList[k]._currentPosition);
+            cc.log("============================== _housingSpace: " + this._troopList[k]._housingSpace);
+            cc.log("============================== _trainingTime: " + this._troopList[k]._trainingTime);
+            cc.log("============================== _level: " + this._troopList[k]._level);
+            cc.log("============================== _trainingDarkElixir: " + this._troopList[k]._trainingDarkElixir);
+            cc.log("============================== _trainingElixir: " + this._troopList[k]._trainingElixir);
+        }
 
         this.initQueue();
         this.init4PositionsInQueue();
@@ -36,31 +63,48 @@ var TrainPopup = TinyPopup.extend({
         for (var i = 0; i < 4; i++) {
             var a = i + 1;
             var name = 'ARM_' + a;
-            var item = new TroopItem(name, this._barrack._level);
-            if(!item._disable){
-                item.addClickEventListener(this.touchEvent.bind(item));
+            this._itemDisplay[name] = new TroopItem(name, this._level);
+            //var item = new TroopItem(name, this._level);
+            if(!this._itemDisplay[name]._disable){
+                this._itemDisplay[name].addClickEventListener(this.touchEvent.bind(this._itemDisplay[name]));
                 this._itemInQueue[name] = new SmallTroopItem(name);
                 this.addChild(this._itemInQueue[name], 100);
                 this._itemInQueue[name].setPosition(-1000, -1000);
-                this._troopList[name] = new TroopInBarrack(name, 1);
+                //this._troopList[name] = new TroopInBarrack(name, 1);
             }
-            item.setPosition(-1* this._width/2 + (item.width+10)*i + item.width/2 + 30, 0);
-            this.addChild(item, 10);
+            this._itemDisplay[name].setPosition(-1* this._width/2 + (this._itemDisplay[name].width+10)*i + this._itemDisplay[name].width/2 + 30, 0);
+            this.addChild(this._itemDisplay[name], 10);
         }
 
         this.showTextTotalTroop();
         this.showQuickFinish();
+        this._titleText.setString("Barrack id: " + this._id + "   (" + this._totalTroopCapacity+"/"+this._queueLength + ")");
     },
 
 
     touchEvent: function() {
+        NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
+
+
         //Check capacity va tai nguyen trc khi ++
         var costItem = TRAIN_POPUP._troopList[this._name].getCost();
         var gResources = checkUserResources(costItem);
+        //Check capacity
+        //if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
+        //    cc.log("Vuot qua queue lenght");
+        //    for(var i in TRAIN_POPUP._itemDisplay){
+        //        TRAIN_POPUP._itemDisplay[i].setBright(false);
+        //        TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+        //    }
+        //    return;
+        //}
         //Du tai nguyen
-        if(gResources == 0){
+        //if(gResources == 0){
             TRAIN_POPUP._troopList[this._name]._amount++;
-            if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
+            TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[this._name]._housingSpace;
+        TRAIN_POPUP.disableItemDisplay();
+
+        if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
                 TRAIN_POPUP._troopList[this._name]._isInQueue = true;
                 TRAIN_POPUP._amountItemInQueue++;
                 TRAIN_POPUP._troopList[this._name]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
@@ -84,15 +128,17 @@ var TrainPopup = TinyPopup.extend({
                 TRAIN_POPUP._itemInQueue[this._name].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[this._name]._currentPosition]);
             }
             TRAIN_POPUP.updateAmount(this);
-        } else{ //Thieu tai nguyen
-            if(gv.user.coin < gResources){
-                showPopupNotEnoughG('train_troop');
-            }else{
-                var data = {g:gResources};
-                var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
-                cc.director.getRunningScene().addChild(popup, 2000000);
-            }
-        }
+            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+
+        //} else{ //Thieu tai nguyen
+        //    if(gv.user.coin < gResources){
+        //        showPopupNotEnoughG('train_troop');
+        //    }else{
+        //        var data = {g:gResources};
+        //        var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
+        //        cc.director.getRunningScene().addChild(popup, 2000000);
+        //    }
+        //}
     },
 
     updateAmount: function(item) {
@@ -114,6 +160,40 @@ var TrainPopup = TinyPopup.extend({
             }
         }
     },
+
+    disableItemDisplay: function() {
+        for(var i in TRAIN_POPUP._troopList){
+            //if(!TRAIN_POPUP._troopList[i]){
+            //    cc.log("===================== KHONG CO TROOP NAY TRONG TROOP LIST===================");
+            //    TRAIN_POPUP._itemDisplay[i].setBright(false);
+            //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            //    continue;
+            //}
+            if(TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace > TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[i].setBright(false);
+                TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+                cc.log("===================== CO TROOP SE BI DISABLE===================");
+            }
+        }
+    },
+
+
+    enableItemDisplay: function() {
+        for(var i in TRAIN_POPUP._troopList){
+            //if(!TRAIN_POPUP._troopList[i]){
+            //    cc.log("===================== KHONG CO TROOP NAY TRONG TROOP LIST===================");
+            //    TRAIN_POPUP._itemDisplay[i].setBright(false);
+            //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            //    continue;
+            //}
+            if(!TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace <= TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[i].setBright(true);
+                TRAIN_POPUP._itemDisplay[i].setEnabled(true);
+                cc.log("===================== CO TROOP DUOC ENABLE===================");
+            }
+        }
+    },
+
 
     showTimeBar: function(){
         this.addTimeBarFirstItem();
@@ -165,6 +245,9 @@ var TrainPopup = TinyPopup.extend({
 
                         //if(TRAIN_POPUP._troopList[name]._amount > 0){
                             TRAIN_POPUP._troopList[name]._amount--;
+                            TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[name]._housingSpace;
+                            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+                            TRAIN_POPUP.enableItemDisplay();
                             //Het icon trong item
                             if(TRAIN_POPUP._troopList[name]._amount == 0){
                                 TRAIN_POPUP._amountItemInQueue--;
@@ -201,15 +284,12 @@ var TrainPopup = TinyPopup.extend({
         tick();
     },
 
-
     updateTimeBar: function(cur, max) {
         var ratio = cur / max;
         var t = timeToReadable(max - cur);
         this.processBar.setTextureRect(cc.rect(0, 0, this._timeBar.width * ratio, this._timeBar.height));
         this._timeText.setString(t);
     },
-
-
 
     getFirstItemInQueue: function() {
         var first = null;
@@ -222,7 +302,6 @@ var TrainPopup = TinyPopup.extend({
         return first;
     },
 
-
     //4 vi tri tren queue
     init4PositionsInQueue: function() {
         this._positionsInQueue[0] = cc.p(this._queue.x + this._queue.width * this._queue.scaleX /2 + this._edgeItem, this._queue.y);
@@ -232,8 +311,8 @@ var TrainPopup = TinyPopup.extend({
     },
 
     initQueue: function() {
-        this._queueLength = config.building['BAR_1'][this._barrack._level].queueLength;
-        this._titleText.setString('Barrack id ' + this._barrack._id + '(' + this._queueLength + ')');
+        this._queueLength = config.building['BAR_1'][this._level].queueLength;
+        this._titleText.setString('Barrack id ' + this._id + '(' + this._queueLength + ')');
         this._titleText.setScale(1.5);
 
         this._queue = new cc.Sprite('res/Art/GUIs/train_troop_gui/queue.png');
@@ -246,6 +325,7 @@ var TrainPopup = TinyPopup.extend({
         var totalCapacity = getTotalTroopCapacity();
         var str = new cc.LabelBMFont('Total troops after training: xx/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');
         str.setPosition(-1*this._width/4, this._height*this._frame.scaleY/9);
+        this.str = str;
         this.addChild(str, 2);
     },
 
@@ -261,6 +341,11 @@ var TrainPopup = TinyPopup.extend({
         this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
             self.getParent().removeChild(self);
         }, this)));
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
         resetReducedTempResources();
 
 
