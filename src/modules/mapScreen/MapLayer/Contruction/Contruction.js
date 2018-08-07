@@ -185,6 +185,7 @@ var Contruction = cc.Class.extend({
         this._posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
+        if (this._name === "AMC_1") this.armyRun();
         try {
             temp.lastMoveBuilding = this;
             if(this._status !== 'setting' && (this._oldX !== this._posX || this._oldY !== this._posY)) {
@@ -209,6 +210,7 @@ var Contruction = cc.Class.extend({
         this._posY = this._oldY;
         MAP.updateContructionList(this.info);
         MAP.createLogicArray(contructionList, obstacleLists);
+        if (this._name === "AMC_1") this.armyRun();
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;
@@ -538,6 +540,9 @@ var Contruction = cc.Class.extend({
         // để rỗng
     },
     addBuildingImg: function() {
+        // để rỗng
+    },
+    armyRun: function() {
         // để rỗng
     },
     countDown: function(cur, max){

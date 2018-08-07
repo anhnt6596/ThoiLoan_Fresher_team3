@@ -648,6 +648,7 @@ name.troop = {
 
 var TILE_WIDTH = 76;
 var TILE_HEIGHT = 57;
+var DIAGONAL = 95;
 
 var Z = {
     TILEMAP: 0,
