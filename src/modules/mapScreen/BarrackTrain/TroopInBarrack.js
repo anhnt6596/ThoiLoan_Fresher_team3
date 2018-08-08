@@ -1,6 +1,5 @@
 var TroopInBarrack = cc.Class.extend({
     _amount:0,
-    _isInQueue:false,
     _currentPosition:-1,
 
     _name:null,
@@ -11,17 +10,16 @@ var TroopInBarrack = cc.Class.extend({
     _trainingDarkElixir:0,
     _trainingElixir:0,
 
-    ctor: function (troopName, amount, isInQueue, currentPosition) {
-        this.initItem(troopName, amount, isInQueue, currentPosition);
+    ctor: function (troopName, amount, currentPosition) {
+        this.initItem(troopName, amount, currentPosition);
     },
 
-    initItem: function(troopName, amount, isInQueue, currentPosition) {
+    initItem: function(troopName, amount, currentPosition) {
         this._name = troopName;
         this._amount = amount;
-        this._isInQueue = isInQueue;
         this._currentPosition = currentPosition;
-        this._level = troopInfo[this._name].level;
-        //this._level = 1;
+        //this._level = troopInfo[this._name].level;
+        this._level = 1;
         this._housingSpace = config.troopBase[troopName].housingSpace;
         this._trainingTime = config.troopBase[troopName].trainingTime;
         //this._barrackLevelRequired = config.troopBase[troopName].barracksLevelRequired;

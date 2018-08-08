@@ -480,16 +480,16 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
 
                 if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
-                       _id: this._id,
-                       name: this.name,
-                       level: this.level,
-                       posX: this.posX,
-                       posY: this.posY,
+                        _id: this._id,
+                        name: this.name,
+                        level: this.level,
+                        posX: this.posX,
+                        posY: this.posY,
                         status: this.status,
                         startTime: this.startTime,
                         buildTime: config.building[this.name][this.level].buildTime,
-                       width: config.building[this.name][1].width,
-                       height: config.building[this.name][1].height,
+                        width: config.building[this.name][1].width,
+                        height: config.building[this.name][1].height,
                     };
                     contructionList.push(contruction);
                 }
@@ -777,12 +777,10 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     cc.log("================================= Troop Type: " + this.troopType);
                     this.amount = this.getInt();
                     cc.log("================================= Troop Amount: " + this.amount);
-                    this.isInQueue = this.getBool();
-                    cc.log("================================= is in queue: " + this.isInQueue);
 
                     this.currentPosition = this.getInt();
                     cc.log("================================= current position: " + this.currentPosition);
-                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.isInQueue, this.currentPosition);
+                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.currentPosition);
                 }
             }
         }

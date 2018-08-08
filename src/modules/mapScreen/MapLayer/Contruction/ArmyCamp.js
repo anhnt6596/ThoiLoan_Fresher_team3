@@ -3,6 +3,7 @@ var ArmyCamp = Building.extend({
     _capacity: 20,
     _curStorage: 0,
     ctor: function(info) {
+        this._listArmy = []; // chống trùng reference
         this._super(info);
         this.calculatePopulation();
         // this.addBuildingImg();
@@ -32,29 +33,30 @@ var ArmyCamp = Building.extend({
     },
     addArmy: function(troop) {
         this._listArmy.push(troop);
-        listTroopRefs.push(troop);
+        // listTroopRefs.push(troop);
+        // cc.log(">>>>>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>> length: " + armyCampRefs[0]._listArmy.length + ' & ' + armyCampRefs[1]._listArmy.length);
         this.calculatePopulation();
     },
     armyRun: function() {
         createSolidMapArray();
         this._listArmy.forEach(element => {
-            element.moveTo(objectRefs[0]);
+            element.moveTo();
+    });
+},
+calculatePopulation: function() {
+    if (this._status === 'complete' || this._status === 'upgrade') {
+        this._capacity = config.building[this._name][this._level].capacity;
+        // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._capacity: " + this._capacity);
+        this._curStorage = 0;
+        var self = this;
+        this._listArmy.forEach(function(troop) {
+            self._curStorage += troop._housingSpace;
         });
-    },
-    calculatePopulation: function() {
-        if (this._status === 'complete' || this._status === 'upgrade') {
-            this._capacity = config.building[this._name][this._level].capacity;
-            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._capacity: " + this._capacity);
-            this._curStorage = 0;
-            var self = this;
-            this._listArmy.forEach(function(troop) {
-                self._curStorage += troop._housingSpace;
-            });
-            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._curStorage: " + this._curStorage);
-        } else {
-            this._capacity = 0;
-            this._curStorage = 0;
-        }
-        this.presentImg();
-    },
+        // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._curStorage: " + this._curStorage);
+    } else {
+        this._capacity = 0;
+        this._curStorage = 0;
+    }
+    this.presentImg();
+},
 });

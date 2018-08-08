@@ -61,7 +61,7 @@ var ResearchPopUp = ui.PopUp.extend({
     nameTroopText: "",
     ctor: function() {
         ResearchPOPUP = this,
-        this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
+            this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
         this.init();
     },
     init: function () {
@@ -355,12 +355,11 @@ var ResearchPopUp = ui.PopUp.extend({
             button.label_rq.text_rq1.attr({
                     x: button.label_rq.width/2,
                     y: button.label_rq.height,
-
                 }
             )
             button.label_rq.text_rq1.setColor(new cc.Color(220,20,60));
 
-/**/
+            /**/
             button.label_rq.text_rq2 = new cc.LabelBMFont("nghiên cứu", research_constant.description_dir );
             button.label_rq.text_rq2.attr({
                     x: button.label_rq.width/2,
@@ -369,7 +368,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 }
             )
             button.label_rq.text_rq2.setColor(new cc.Color(220,20,60));
-/**/
+            /**/
             console.log("button name " + button.name);
             var level_btn = this.listTroop[button.name].level;
             console.log("level_btn ="+level_btn);
@@ -382,10 +381,66 @@ var ResearchPopUp = ui.PopUp.extend({
                 }
             )
             button.label_rq.text_rq3.setColor(new cc.Color(220,20,60));
-/**/
+
+            button.label_rq_ = new cc.Sprite(research_constant.research_dir+"nen trong.png");
+            button.label_rq.attr({
+                x: button.width/2+2,
+                y: button.label_rq.height/2+7,
+            })
+            /**/
             button.label_rq.addChild(button.label_rq.text_rq1);
             button.label_rq.addChild(button.label_rq.text_rq2);
             button.label_rq.addChild(button.label_rq.text_rq3);
+
+            var label_rq_resource = new cc.Sprite(research_constant.research_dir+"nen trong.png");
+            button.label_rq_resource = label_rq_resource;
+            button.label_rq_resource.attr({
+                x: button.width/2+2,
+                y: button.label_rq_resource.height/2+7,
+            });
+            var level = troopInfo[button.name].level;
+            console.log("level "+ level);
+            var researchElixir = config.troop[button.name][level+1].researchElixir;
+            var researchDarkElixir = config.troop[button.name][level+1].researchDarkElixir;
+            console.log(researchElixir + "researchElixir");
+            console.log(researchDarkElixir + "researchDarkElixir");
+
+            var researchElixir_txt = new cc.LabelBMFont(researchElixir, 'res/Art/Fonts/soji_12.fnt');
+            button.label_rq_resource.researchElixir_txt = researchElixir_txt;
+            researchElixir_txt.attr({
+                    x: button.label_rq_resource.width/2-10,
+                    y: button.label_rq_resource.height/5*4,
+                }
+            );
+            button.label_rq_resource.addChild(button.label_rq_resource.researchElixir_txt);
+
+            var researchDarkElixir_txt = new cc.LabelBMFont(researchDarkElixir.toString(), 'res/Art/Fonts/soji_12.fnt');
+            button.label_rq_resource.researchDarkElixir_txt = researchDarkElixir_txt;
+            researchDarkElixir_txt.attr({
+                    x: button.label_rq_resource.width/2-10,
+                    y: button.label_rq_resource.height/3,
+                }
+            );
+            button.label_rq_resource.addChild(button.label_rq_resource.researchDarkElixir_txt);
+
+            var img_icon_elixir = new cc.Sprite(research_constant.research_dir+ "dau tim.png");
+            img_icon_elixir.attr({
+                    x: button.label_rq_resource.width/2+30,
+                    y: button.label_rq_resource.height/5*4,
+                }
+            );
+            button.label_rq_resource.addChild(img_icon_elixir);
+
+            var img_icon_dark_elixir = new cc.Sprite(research_constant.research_dir+ "dau den.png");
+            img_icon_dark_elixir.attr({
+                    x: button.label_rq_resource.width/2+30,
+                    y: button.label_rq_resource.height/3,
+                }
+            );
+            button.label_rq_resource.addChild(img_icon_dark_elixir);
+
+
+
             /**/
             cc.log("button.name: " + button.name);
             //button.setTouchEnabled(true);
@@ -403,6 +458,7 @@ var ResearchPopUp = ui.PopUp.extend({
             //button.addClickEventListener(() => this.onSelectItem(button.name));
             button.addChild(img);
             button.addChild(button.label_rq);
+            button.addChild(button.label_rq_resource);
             button.addChild(button.level_txt);
             scrollView.addChild(button);
             this.listBtn_troop.push(button);
@@ -489,6 +545,12 @@ var ResearchPopUp = ui.PopUp.extend({
         this.addChild(scrollView, 100);
 
         if (this.status === research_constant.status.busy){
+            this.listBtn_troop.forEach(function(element) {
+                try {
+                    self.checkRequireBtn(element,self.listTroop[element.name].level);
+                } catch (e) {
+                }
+            });
             this.setEnableBtn(false);
         }
         else {
@@ -505,28 +567,39 @@ var ResearchPopUp = ui.PopUp.extend({
     ,
     onSelectItem:function(type)
     {
-        console.log("status cua quan linh truoc khi train la "+ this.listTroop[type].status);
-        NETWORK.sendResearchTroop(type);
-        this.timeStart = getCurrentServerTime();
-        // new popUp info cua troop hien len
-        this.mieng_trang_nothing.setVisible(false);
-        this.mieng_trang.setVisible(true);
-        console.log("Click vao item: "+type);
-        //troop = this.listTroop[name];
-        this.status = research_constant.status.busy;
-        this.listTroop[type].status = research_constant.status.busy;
-        this.listTroop[type].startTime = this.timeStart;
-        console.log("status cua quan linh dang train la "+ this.listTroop[type].status);
-        //disable all button
-        this.setEnableBtn(false);
+        var elixir_rq = this.getResourceRequire(type, troopInfo[type].level+1, "researchElixir");
+        var dark_elixir_rq = this.getResourceRequire(type, troopInfo[type].level+1, "researchDarkElixir");
 
-        //this.name_troop = type;
+        var g_chuyendoi = checkUserResourcesResearch(0,elixir_rq,dark_elixir_rq,0);
+        if (g_chuyendoi>gv.user.coin){
+            showPopupNotEnoughG('research');
+        }
+        else {
+            console.log("status cua quan linh truoc khi train la "+ this.listTroop[type].status);
+            NETWORK.sendResearchTroop(type);
+            this.timeStart = getCurrentServerTime();
+            reduceUserResourcesResearch(0,elixir_rq,dark_elixir_rq,g_chuyendoi);
+            // new popUp info cua troop hien len
+            this.mieng_trang_nothing.setVisible(false);
+            this.mieng_trang.setVisible(true);
+            console.log("Click vao item: "+type);
+            //troop = this.listTroop[name];
+            this.status = research_constant.status.busy;
+            this.listTroop[type].status = research_constant.status.busy;
+            this.listTroop[type].startTime = this.timeStart;
+            console.log("status cua quan linh dang train la "+ this.listTroop[type].status);
+            //disable all button
+            this.setEnableBtn(false);
 
-        this.listImg_troop[type].setVisible(true);
-        this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
-        this.updateTimeCountDown(type,this.timeStart, this.listTroop[type].level);
+            //this.name_troop = type;
 
-
+            this.listImg_troop[type].setVisible(true);
+            this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
+            this.updateTimeCountDown(type,this.timeStart, this.listTroop[type].level);
+        }
+    },
+    getResourceRequire: function(type,level,resource_type){
+        return config.troop[type][level][resource_type];
     },
     updateInfo: function(name,level){
         this.nameTroopText.setString(name+ " cấp "+(level+1));
@@ -613,12 +686,19 @@ var ResearchPopUp = ui.PopUp.extend({
         if (config.troop[btn.name][level_cur+1].laboratoryLevelRequired > this.lab_level ) {
             btn.setEnabled(false);
             btn.status = false;
+            btn.label_rq.setVisible(true);
+            btn.label_rq.text_rq1.setVisible(true);
+            btn.label_rq.text_rq2.setVisible(true);
+            btn.label_rq.text_rq2.setVisible(true);
+            btn.label_rq_resource.setVisible(false);
             //btn.img.setCascadeColorEnabled(!btn.status);
         }
         else {
+            btn.label_rq.setVisible(false);
             btn.label_rq.text_rq1.setVisible(false);
             btn.label_rq.text_rq2.setVisible(false);
-            btn.label_rq.text_rq3.setVisible(false);
+            btn.label_rq.text_rq2.setVisible(false);
+            btn.label_rq_resource.setVisible(true);
         }
 
     },

@@ -137,7 +137,7 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         }
-        
+
         MAP.arrows[this._width].attr({
             x: coor.x,
             y: coor.y,
@@ -241,11 +241,14 @@ var Contruction = cc.Class.extend({
                 break;
             case 'BAR_1':
             case 'RES_1':
+            case 'RES_3':
+            case 'LAB_1':
                 this.squareShadow(3);
                 break
             case 'STO_1':
             case 'STO_2':
             case 'RES_2':
+            case 'STO_3':
                 this.roundShadow();
                 break;
             default:
@@ -288,7 +291,7 @@ var Contruction = cc.Class.extend({
             opacity: 0,
         });
         MAP.addChild(nameText, 1000);
-        
+
         var levelText = new cc.LabelBMFont('cấp ' + this._level, 'res/Art/Fonts/soji_16.fnt');
         this.levelText = levelText;
         levelText.attr({
@@ -338,7 +341,7 @@ var Contruction = cc.Class.extend({
             barrackQueueList[this._id]._totalTroopCapacity = 0;
             barrackQueueList[this._id]._startTime = 0;
             barrackQueueList[this._id]._troopList = {};
-            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, false, -1);
+            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
         }
     },
     upgrade: function() {
@@ -405,7 +408,7 @@ var Contruction = cc.Class.extend({
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         if(this._name == "BAR_1"){
             var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, false, -1);
+            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
         }
     },
     cancel: function(building){
@@ -475,9 +478,9 @@ var Contruction = cc.Class.extend({
     removeComplete:function(){
         var self = this;
         var newContructionList = contructionList.filter(function(element) {
-                if (element._id == self._id) return false;
-                return true;
-            });
+            if (element._id == self._id) return false;
+            return true;
+        });
         contructionList = newContructionList;
         this.removeImg();
         MAP.createLogicArray(contructionList, obstacleLists);
@@ -572,87 +575,87 @@ var Contruction = cc.Class.extend({
                 //    updateTimeFlag = false;
                 //}
                 cur = (getCurrentServerTime() - this.startTime)/1000;
-                if (cur >= max) {
-                    if(this._status == 'pending'){
-                        this.buildComplete(false);
-                    }else if(this._status == 'upgrade'){
-                        this.upgradeComplete(false);
-                    }
-                    return;
-                } else {
-                    this.updateTimeBar(cur, max);
-                    if(this._status == 'pending' || this._status == 'upgrade'){
-                        tick();
-                    }
+            if (cur >= max) {
+                if(this._status == 'pending'){
+                    this.buildComplete(false);
+                }else if(this._status == 'upgrade'){
+                    this.upgradeComplete(false);
                 }
-                //cur +=1;
-            }, 1000);
-        }
-        //Chay 1 lan
-        tick();
-    },
-    onTargetSound: function() {
-        if (SOUND) {
-            switch (this._name) {
-                case 'TOW_1':
-                    cc.audioEngine.playEffect(sRes.townhall_pickup);
-                    break;
-                case 'RES_1':
-                    cc.audioEngine.playEffect(sRes.goldmine_pickup);
-                    break;
-                case 'STO_1':
-                    cc.audioEngine.playEffect(sRes.goldstorage_pickup);
-                    break;
-                case 'RES_2':
-                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
-                    break;
-                case 'STO_2':
-                    cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
-                    break;
-                case 'BDH_1':
-                    cc.audioEngine.playEffect(sRes.builderhut_pickup);
-                    break;
-                case 'AMC_1':
-                    cc.audioEngine.playEffect(sRes.camp_pickup);
-                    break;
-                case 'DEF_1':
-                    cc.audioEngine.playEffect(sRes.cannon_pickup);
-                    break;
-                default:
-                    break;
+                return;
+            } else {
+                this.updateTimeBar(cur, max);
+                if(this._status == 'pending' || this._status == 'upgrade'){
+                    tick();
+                }
             }
+            //cur +=1;
+        }, 1000);
+    }
+    //Chay 1 lan
+    tick();
+},
+onTargetSound: function() {
+    if (SOUND) {
+        switch (this._name) {
+            case 'TOW_1':
+                cc.audioEngine.playEffect(sRes.townhall_pickup);
+                break;
+            case 'RES_1':
+                cc.audioEngine.playEffect(sRes.goldmine_pickup);
+                break;
+            case 'STO_1':
+                cc.audioEngine.playEffect(sRes.goldstorage_pickup);
+                break;
+            case 'RES_2':
+                cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                break;
+            case 'STO_2':
+                cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
+                break;
+            case 'BDH_1':
+                cc.audioEngine.playEffect(sRes.builderhut_pickup);
+                break;
+            case 'AMC_1':
+                cc.audioEngine.playEffect(sRes.camp_pickup);
+                break;
+            case 'DEF_1':
+                cc.audioEngine.playEffect(sRes.cannon_pickup);
+                break;
+            default:
+                break;
         }
-    },
-    onPlaceSound: function() {
-        if (SOUND) {
-            switch (this._name) {
-                case 'TOW_1':
-                    cc.audioEngine.playEffect(sRes.townhall_place);
-                    break;
-                case 'RES_1':
-                    cc.audioEngine.playEffect(sRes.goldmine_place);
-                    break;
-                case 'STO_1':
-                    cc.audioEngine.playEffect(sRes.goldstorage_place);
-                    break;
-                case 'RES_2':
-                    cc.audioEngine.playEffect(sRes.elixirpump_place);
-                    break;
-                case 'STO_2':
-                    cc.audioEngine.playEffect(sRes.elixirstorage_place);
-                    break;
-                case 'BDH_1':
-                    cc.audioEngine.playEffect(sRes.builderhut_place);
-                    break;
-                case 'AMC_1':
-                    cc.audioEngine.playEffect(sRes.camp_place);
-                    break;
-                case 'DEF_1':
-                    cc.audioEngine.playEffect(sRes.cannon_place);
-                    break;
-                default:
-                    break;
-            }
+    }
+},
+onPlaceSound: function() {
+    if (SOUND) {
+        switch (this._name) {
+            case 'TOW_1':
+                cc.audioEngine.playEffect(sRes.townhall_place);
+                break;
+            case 'RES_1':
+                cc.audioEngine.playEffect(sRes.goldmine_place);
+                break;
+            case 'STO_1':
+                cc.audioEngine.playEffect(sRes.goldstorage_place);
+                break;
+            case 'RES_2':
+                cc.audioEngine.playEffect(sRes.elixirpump_place);
+                break;
+            case 'STO_2':
+                cc.audioEngine.playEffect(sRes.elixirstorage_place);
+                break;
+            case 'BDH_1':
+                cc.audioEngine.playEffect(sRes.builderhut_place);
+                break;
+            case 'AMC_1':
+                cc.audioEngine.playEffect(sRes.camp_place);
+                break;
+            case 'DEF_1':
+                cc.audioEngine.playEffect(sRes.cannon_place);
+                break;
+            default:
+                break;
         }
-    },
+    }
+},
 });

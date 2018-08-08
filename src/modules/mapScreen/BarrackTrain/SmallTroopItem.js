@@ -35,7 +35,6 @@ var SmallTroopItem = ccui.Button.extend({
         //    TRAIN_POPUP._troopList[this._name]._amount--;
         //    TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[this._name]._housingSpace;
         //    if(TRAIN_POPUP._troopList[this._name]._amount == 0){
-        //        TRAIN_POPUP._troopList[this._name]._isInQueue = false;
         //        TRAIN_POPUP._amountItemInQueue--;
         //        if(TRAIN_POPUP._amountItemInQueue == 0){
         //            TRAIN_POPUP._timeBar.visible = false;
