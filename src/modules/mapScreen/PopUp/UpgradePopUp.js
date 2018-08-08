@@ -36,21 +36,22 @@ var createUpgradePopUp = function() {
     var nextBuildingImg = showNextBuildingImg(info);
     nextBuildingImg.attr({
         x: -230,
-        y: 100
+        y: 110
     });
     content.push(nextBuildingImg);
 
     var buildTimeText = showBuildTimeText(config.building[info._name][info._level + 1].buildTime);
     buildTimeText.attr({
         x: -230,
-        y: -10
+        y: 23
     });
     content.push(buildTimeText);
 
     var nextBuildingInfo = showNextBuildingInfo(info);
     nextBuildingInfo.attr({
+        anchorY: 1,
         x: -40,
-        y: 130
+        y: 160
     });
     content.push(nextBuildingInfo);
     var upgradePopUp = new ui.PopUp('Upgrade', content);
@@ -228,7 +229,7 @@ var showBuildTimeText = function(time) {
     var text1 = new cc.LabelTTF("Thời gian nâng cấp", "Calibri", 30);
     text1.attr({ color: new cc.color(142, 8, 8, 255) });
     var text2 = new cc.LabelBMFont(timeToReadable(time), 'res/Art/Fonts/soji_24.fnt');
-    text2.attr({ y: -20, x: text1.width / 2 });
+    text2.attr({ y: -10, x: text1.width / 2 });
     text1.addChild(text2);
     return text1;
 };
@@ -242,15 +243,18 @@ var showNextBuildingInfo = function(info) {
             listInfo.push('hitpoints');
             break;
         case 'BAR_1':
+        case 'LAB_1':
             listInfo.push('hitpoints');
             break;
         case 'STO_1':
         case 'STO_2':
+        case 'STO_3':
             listInfo.push('capacity');
             listInfo.push('hitpoints');
             break;
         case 'RES_1':
         case 'RES_2':
+        case 'RES_3':
             listInfo.push('productivity');
             listInfo.push('capacity');
             listInfo.push('hitpoints');
@@ -264,23 +268,24 @@ var showNextBuildingInfo = function(info) {
         default:
         break;
     }
+    var distanceY = 45;
     listInfo.forEach(function(element, i) {
         var dirName = element == 'capacity' ? capacityforeachbuilding[info._name] : element;
         var dirName = element == 'productivity' ? productforeachbuilding[info._name] : dirName;
         var icon = new cc.Sprite(icons[dirName]);
-        icon.attr({ y: - i * 60 });
+        icon.attr({ y: - i * distanceY });
         infoArea.addChild(icon);
 
         var infoBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
-        infoBar.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoBar.attr({ anchorX: 0, x: 30, y: - i * distanceY });
         infoArea.addChild(infoBar, 0);
 
         var infoBarNext = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
-        infoBarNext.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoBarNext.attr({ anchorX: 0, x: 30, y: - i * distanceY });
         infoArea.addChild(infoBarNext, 1);
 
         var infoBarBG = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_BG.png');
-        infoBarBG.attr({ anchorX: 0, x: 30, y: - i * 60 });
+        infoBarBG.attr({ anchorX: 0, x: 30, y: - i * distanceY });
         infoArea.addChild(infoBarBG, 2);
 
         var buildingConfig = config.building[info._name];
@@ -293,7 +298,7 @@ var showNextBuildingInfo = function(info) {
         infoBarNext.setTextureRect(cc.rect(0, 0, (nextValue/maxValue) * infoBar.width, infoBar.height));
         
         var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
-        textInfo.attr({ anchorX: 0, x: 35, y: - i * 60 });
+        textInfo.attr({ anchorX: 0, x: 35, y: - i * distanceY });
         infoArea.addChild(textInfo, 5);
     });
     return infoArea;
@@ -307,17 +312,21 @@ var icons = {
     hitpoints: 'res/Art/GUIs/upgrade_building_gui/small/Hitpoints_Icon.png',
     gold_productivity: 'res/Art/GUIs/upgrade_building_gui/small/Gold_ProductionRate_Icon.png',
     elixir_productivity: 'res/Art/GUIs/upgrade_building_gui/small/Elixir_ProductionRate_Icon.png',
+    dark_elixir_productivity: 'res/Art/GUIs/upgrade_building_gui/small/DarkElixir_ProductionRate_Icon.png'
 };
 
 var capacityforeachbuilding = {
     AMC_1: 'troop_capacity',
     STO_1: 'capacityGold',
     STO_2: 'capacityElixir',
+    STO_3: 'capacityDarkElixir',
     RES_1: 'capacityGold',
-    RES_2: 'capacityElixir'
+    RES_2: 'capacityElixir',
+    RES_3: 'capacityDarkElixir',
 };
 
 var productforeachbuilding = {
     RES_1: 'gold_productivity',
-    RES_2: 'elixir_productivity'
+    RES_2: 'elixir_productivity',
+    RES_3: 'dark_elixir_productivity'
 };

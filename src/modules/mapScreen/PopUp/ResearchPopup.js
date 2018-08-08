@@ -545,6 +545,12 @@ var ResearchPopUp = ui.PopUp.extend({
         this.addChild(scrollView, 100);
 
         if (this.status === research_constant.status.busy){
+            this.listBtn_troop.forEach(function(element) {
+                try {
+                    self.checkRequireBtn(element,self.listTroop[element.name].level);
+                } catch (e) {
+                }
+            });
             this.setEnableBtn(false);
         }
         else {
@@ -680,10 +686,18 @@ var ResearchPopUp = ui.PopUp.extend({
         if (config.troop[btn.name][level_cur+1].laboratoryLevelRequired > this.lab_level ) {
             btn.setEnabled(false);
             btn.status = false;
+            btn.label_rq.setVisible(true);
+            btn.label_rq.text_rq1.setVisible(true);
+            btn.label_rq.text_rq2.setVisible(true);
+            btn.label_rq.text_rq2.setVisible(true);
+            btn.label_rq_resource.setVisible(false);
             //btn.img.setCascadeColorEnabled(!btn.status);
         }
         else {
             btn.label_rq.setVisible(false);
+            btn.label_rq.text_rq1.setVisible(false);
+            btn.label_rq.text_rq2.setVisible(false);
+            btn.label_rq.text_rq2.setVisible(false);
             btn.label_rq_resource.setVisible(true);
         }
 

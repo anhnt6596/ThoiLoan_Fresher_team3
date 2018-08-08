@@ -39,12 +39,12 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
-                this.sendGetTroopInfo();
                 this.sendGetMapInfo();
-                this.sendGetTroopInfo();
+                this.sendGetBarrackQueueInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
+                this.sendGetTroopInfo();
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
@@ -183,29 +183,219 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
+                this.divideTroopToArmyCamp();
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
-                //this.initBarrackQueueInfo(packet);
-
-                var data = {train: true, barrack: MAP._targetedObject};
-                var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
-                cc.director.getRunningScene().addChild(popup, 200);
+                cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
                 break;
             case gv.CMD.TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN TRAIN TROOP tu SERVER=======================================");
 
+
+                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
+                    this.trainTroopCompleted(trainedTroopType);
+
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
                 }else {
                     cc.log("=======================================SERVER TU CHOI TRAIN TROOP=======================================");
+                    showPopupNotEnoughG('server_denied_train_troop');
 
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
+                }
+                break;
+            case gv.CMD.CANCEL_TRAIN_TROOP:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN CANCEL TRAIN TROOP tu SERVER=======================================");
+
+
+                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
+                    this.canceledTrainTroop(trainedTroopType);
+
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
+                }else {
+                    cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
+                    showPopupNotEnoughG('server_denied_cancel_train_troop');
+
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
+                }
+                break;
+            case gv.CMD.FINISH_TIME_TRAIN_TROOP:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
+
+                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
+                    this.finishTimeTroopTrain(trainedTroopType);
+
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
+                }else {
+                    cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
+                    showPopupNotEnoughG('server_denied_finish_time_train_troop');
+
+                    //reset
+                    trainedBarrackId = null;
+                    trainedTroopType = null;
                 }
                 break;
         }
     },
 
-    initBarrackQueueInfo: function() {
-
+    divideTroopToArmyCamp: function() {
+        // cc.log(">>>>>>>>>>>>>>>>>: ", troopInfo.ARM_1.level + ' :<<<<<<<<<<<<<<<>>: ' + armyCampRefs[0]._name);
+        var numAMC = armyCampRefs.length;
+        var curAMCindex = 0;
+        var capacitys = armyCampRefs.map(function(amc) {
+            // cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ', config.building.AMC_1[amc._level].capacity);
+            return config.building.AMC_1[amc._level].capacity;
+        });
+        for(item in troopInfo) {
+            var troopType = troopInfo[item];
+            if (troopType.population > 0) {
+                for (var i = 0; i < troopType.population; i++) {
+                    this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
+                    
+                    curAMCindex += 1;
+                    if (curAMCindex >= numAMC) curAMCindex = 0;
+                }
+            }
+        }
     },
+
+    createNewTroop_1: function(type, armyCamp) {
+        switch (type) {
+            case "ARM_1":
+                var troop = new Warrior(armyCamp);
+                break;
+            case "ARM_2":
+                var troop = new Archer(armyCamp);
+                break;
+            case "ARM_3":
+                var troop = new Goblin(armyCamp);
+                break;
+            case "ARM_4":
+                var troop = new Giant(armyCamp);
+                break;
+            default:
+                break;
+        }
+        return troop;
+    },
+
+    finishTimeTroopTrain: function(troopType) {
+        var here = barrackQueueList[trainedBarrackId];
+
+        //if(TRAIN_POPUP._troopList[troopType]._amount > 0){
+        TRAIN_POPUP._troopList[troopType]._amount--;
+        TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[troopType]._housingSpace;
+        here._totalTroopCapacity -= TRAIN_POPUP._troopList[troopType]._housingSpace;
+        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+        TRAIN_POPUP.enableItemDisplay();
+        //Het icon trong item
+        if(TRAIN_POPUP._troopList[troopType]._amount == 0){
+            TRAIN_POPUP._amountItemInQueue--;
+            here._amountItemInQueue--;
+            TRAIN_POPUP._troopList[troopType]._isInQueue = false;
+            TRAIN_POPUP._itemInQueue[troopType].setPosition(-1000, -1000);
+            TRAIN_POPUP._troopList[troopType]._currentPosition = -1;
+            //Het item trong queue
+            if(TRAIN_POPUP._amountItemInQueue == 0){
+                TRAIN_POPUP._timeBar.visible = false;
+                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
+                TRAIN_POPUP._statusCountDown = false;
+                return;
+                //Con item trong queue
+            }else{
+                TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[troopType]._currentPosition);
+                TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
+            }
+            //Con icon trong item
+        }else{
+            TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
+            TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
+            TRAIN_POPUP._startTime = getCurrentServerTime();
+            TRAIN_POPUP.countDown();
+        }
+        //}
+    },
+
+
+    trainTroopCompleted: function(troopType) {
+        var here = barrackQueueList[trainedBarrackId];
+
+        TRAIN_POPUP._troopList[troopType]._amount++;
+            TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
+            here._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
+            TRAIN_POPUP.disableItemDisplay();
+
+        if(!TRAIN_POPUP._troopList[troopType]._isInQueue) {
+                TRAIN_POPUP._troopList[troopType]._isInQueue = true;
+                TRAIN_POPUP._amountItemInQueue++;
+                here._amountItemInQueue++;
+                TRAIN_POPUP._troopList[troopType]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
+
+                //item dau tien va icon dau tien trong item
+                if(TRAIN_POPUP._troopList[troopType]._currentPosition == 0 && TRAIN_POPUP._troopList[troopType]._amount == 1){
+                    TRAIN_POPUP._startTime = getCurrentServerTime();
+                    here._startTime = getCurrentServerTime();
+
+                    if(!TRAIN_POPUP._isShowTimeBar){
+                        TRAIN_POPUP.showTimeBar();
+                        TRAIN_POPUP._isShowTimeBar = true;
+                        TRAIN_POPUP._statusCountDown = true;
+                    }else{
+                        TRAIN_POPUP._statusCountDown = true;
+                        if(TRAIN_POPUP._isShowTimeBar){
+                            TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
+                            TRAIN_POPUP.countDown();
+                        }
+                    }
+                    TRAIN_POPUP._timeBar.visible = true;
+                }
+
+                TRAIN_POPUP._itemInQueue[troopType].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[troopType]._currentPosition]);
+            }
+            TRAIN_POPUP.updateAmount(TRAIN_POPUP._itemDisplay[troopType]);
+            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+    },
+
+
+    canceledTrainTroop: function(troopType) {
+        var here = barrackQueueList[trainedBarrackId];
+
+        TRAIN_POPUP._troopList[troopType]._amount--;
+        TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[troopType]._housingSpace;
+        here._totalTroopCapacity -= TRAIN_POPUP._troopList[troopType]._housingSpace;
+        if(TRAIN_POPUP._troopList[troopType]._amount == 0){
+            TRAIN_POPUP._troopList[troopType]._isInQueue = false;
+            TRAIN_POPUP._amountItemInQueue--;
+            here._amountItemInQueue--;
+            if(TRAIN_POPUP._amountItemInQueue == 0){
+                TRAIN_POPUP._isShowTimeBar = false;
+                if(TRAIN_POPUP._timeBar) TRAIN_POPUP._timeBar.visible = false;
+                TRAIN_POPUP._statusCountDown = false;
+
+                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
+            }else{
+                TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[troopType]._currentPosition);
+            }
+            TRAIN_POPUP._itemInQueue[troopType].setPosition(-1000, -1000);
+            TRAIN_POPUP._troopList[troopType]._currentPosition = -1;
+        }
+        TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
+        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+        TRAIN_POPUP.enableItemDisplay();
+    },
+
 
     sendGetUserInfo:function()
     {
@@ -305,7 +495,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdGetServerTime);
         pk.pack();
         this.gameClient.sendPacket(pk);
-        cc.log("=======================================SEND REQUEST GET SERVER TIME=======================================");
+        //cc.log("=======================================SEND REQUEST GET SERVER TIME=======================================");
     },
     sendAddResource: function(gold, elixir, darkElixir, coin) {
         cc.log('Add Resource');
@@ -350,5 +540,19 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(idBarrack, typeTroop);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND TRAIN TROOP==========================================');
+    },
+
+    sendCancelTrainTroop: function(idBarrack, typeTroop) {
+        var pk = this.gameClient.getOutPacket(CmdSendCancelTrainTroop);
+        pk.pack(idBarrack, typeTroop);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND CANCEL TRAIN TROOP==========================================');
+    },
+
+    sendFinishTimeTrainTroop: function(idBarrack, typeTroop, remainTroop) {
+        var pk = this.gameClient.getOutPacket(CmdSendFinishTimeTrainTroop);
+        pk.pack(idBarrack, typeTroop, remainTroop);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
     }
 });

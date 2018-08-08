@@ -241,11 +241,14 @@ var Contruction = cc.Class.extend({
                 break;
             case 'BAR_1':
             case 'RES_1':
+            case 'RES_3':
+            case 'LAB_1':
                 this.squareShadow(3);
                 break
             case 'STO_1':
             case 'STO_2':
             case 'RES_2':
+            case 'STO_3':
                 this.roundShadow();
                 break;
             default:
@@ -332,6 +335,14 @@ var Contruction = cc.Class.extend({
         updateGUI();
 
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        if(this._name == "BAR_1"){
+            barrackQueueList[this._id] = {};
+            barrackQueueList[this._id]._amountItemInQueue = 0;
+            barrackQueueList[this._id]._totalTroopCapacity = 0;
+            barrackQueueList[this._id]._startTime = 0;
+            barrackQueueList[this._id]._troopList = {};
+            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, false, -1);
+        }
     },
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
@@ -393,6 +404,12 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
+
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        if(this._name == "BAR_1"){
+            var troopType = config.building['BAR_1'][this._level].unlockedUnit;
+            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, false, -1);
+        }
     },
     cancel: function(building){
         buildingCancel = building;
@@ -544,6 +561,10 @@ var Contruction = cc.Class.extend({
     },
     armyRun: function() {
         // để rỗng
+    },
+    addArmy: function() {
+        // để rỗng
+        cc.log("Đây không phải nhà để chứa lính");
     },
     countDown: function(cur, max){
         var tick = () => {

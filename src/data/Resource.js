@@ -621,7 +621,7 @@ name.troop = {
         en: ''
     },
     ARM_10: {
-        vi: 'Chú tể bóng tối',
+        vi: 'Chúa tể bóng tối',
         en: ''
     },
     ARM_11:{  },

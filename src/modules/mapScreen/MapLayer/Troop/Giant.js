@@ -1,9 +1,9 @@
-var Warrior = Troop.extend({
+var Giant = Troop.extend({
     ctor: function(building) {
-        this._type = "ARM_1";
+        this._type = "ARM_4";
         this._direction = randomInt(1, 8);
-        this._moveSpeed = config.troopBase[this._type].moveSpeed || 16;
-        this._super(building, "res/Art/Map/map_obj_bg/1x1_bong.png");
+        this._moveSpeed = config.troopBase[this._type].moveSpeed || 12;
+        this._super(building, "res/Art/Map/map_obj_bg/big_shadow_troop.png");
     },
     createTroopImg: function() {
         var troopImg = new cc.Sprite();
@@ -57,23 +57,23 @@ var Warrior = Troop.extend({
         switch (this._direction) {
             case 1:
                 startFrame = 0;
-                endFrame = 13;
+                endFrame = 15;
                 break;
             case 2: case 5:
-                startFrame = 14;
-                endFrame = 27;
+                startFrame = 16;
+                endFrame = 31;
                 break;
             case 3: case 6:
-                startFrame = 28;
-                endFrame = 41;
+                startFrame = 31;
+                endFrame = 47;
                 break;
             case 4: case 7:
-                startFrame = 42;
-                endFrame = 55;
+                startFrame = 48;
+                endFrame = 63;
                 break;
             case 8:
-                startFrame = 56;
-                endFrame = 69;
+                startFrame = 63;
+                endFrame = 79;
                 break;
             default:
                 break;

@@ -15,6 +15,7 @@ var TrainPopup = TinyPopup.extend({
     _edgeItem:94,
     _queue:null,
     _timeBar:null,
+    _processBar:null,
     _statusCountDown:false,
     _timeText:null,
     _isShowTimeBar:false,
@@ -34,15 +35,11 @@ var TrainPopup = TinyPopup.extend({
 
         //Show du lieu da co
         this._queueLength = config.building['BAR_1'][this._level].queueLength;
-        this._amountItemInQueue = barrackQueueList[this._id].amountItemInQueue;
-        this._totalTroopCapacity = barrackQueueList[this._id].totalTroopCapacity;
-        this._startTime = barrackQueueList[this._id].startTime;
-        this._troopList = {};
-        //_.extend(this._troopList, barrackQueueList[this._id].troopList);
-        for(var i in barrackQueueList[this._id].troopList){
-            var def = barrackQueueList[this._id].troopList;
-            this._troopList[i] = new TroopInBarrack(i, def[i]._amount, def[i]._isInQueue, def[i]._currentPosition);
-        }
+        this._amountItemInQueue = barrackQueueList[this._id]._amountItemInQueue;
+        this._totalTroopCapacity = barrackQueueList[this._id]._totalTroopCapacity;
+        this._startTime = barrackQueueList[this._id]._startTime;
+        this._troopList = barrackQueueList[this._id]._troopList;
+
 
         for(var k in this._troopList){
             cc.log("============================== TROOP: " + k);
@@ -64,71 +61,47 @@ var TrainPopup = TinyPopup.extend({
             var a = i + 1;
             var name = 'ARM_' + a;
             this._itemDisplay[name] = new TroopItem(name, this._level);
-            //var item = new TroopItem(name, this._level);
             if(!this._itemDisplay[name]._disable){
                 this._itemDisplay[name].addClickEventListener(this.touchEvent.bind(this._itemDisplay[name]));
                 this._itemInQueue[name] = new SmallTroopItem(name);
                 this.addChild(this._itemInQueue[name], 100);
                 this._itemInQueue[name].setPosition(-1000, -1000);
-                //this._troopList[name] = new TroopInBarrack(name, 1);
             }
             this._itemDisplay[name].setPosition(-1* this._width/2 + (this._itemDisplay[name].width+10)*i + this._itemDisplay[name].width/2 + 30, 0);
             this.addChild(this._itemDisplay[name], 10);
         }
+
+        //Hien thi du lieu tren queue
+        this.showQueueData();
 
         this.showTextTotalTroop();
         this.showQuickFinish();
         this._titleText.setString("Barrack id: " + this._id + "   (" + this._totalTroopCapacity+"/"+this._queueLength + ")");
     },
 
+    showQueueData: function() {
+        var k = 0;
+        for(var i in this._troopList){
+            k++;
+            cc.log("======================= Linh thu: " + k);
+            if(this._troopList[i]._isInQueue){
+                this._itemInQueue[i].setPosition(this._positionsInQueue[this._troopList[i]._currentPosition]);
+                this._itemInQueue[i].updateAmountSmall();
+            }
+        }
+    },
+
 
     touchEvent: function() {
         NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
+        trainedBarrackId = TRAIN_POPUP._id;
+        trainedTroopType = this._name;
 
 
         //Check capacity va tai nguyen trc khi ++
-        var costItem = TRAIN_POPUP._troopList[this._name].getCost();
-        var gResources = checkUserResources(costItem);
-        //Check capacity
-        //if(TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[this._name]._housingSpace > TRAIN_POPUP._queueLength){
-        //    cc.log("Vuot qua queue lenght");
-        //    for(var i in TRAIN_POPUP._itemDisplay){
-        //        TRAIN_POPUP._itemDisplay[i].setBright(false);
-        //        TRAIN_POPUP._itemDisplay[i].setEnabled(false);
-        //    }
-        //    return;
-        //}
-        //Du tai nguyen
-        //if(gResources == 0){
-            TRAIN_POPUP._troopList[this._name]._amount++;
-            TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[this._name]._housingSpace;
-        TRAIN_POPUP.disableItemDisplay();
+        //var costItem = TRAIN_POPUP._troopList[this._name].getCost();
+        //var gResources = checkUserResources(costItem);
 
-        if(!TRAIN_POPUP._troopList[this._name]._isInQueue) {
-                TRAIN_POPUP._troopList[this._name]._isInQueue = true;
-                TRAIN_POPUP._amountItemInQueue++;
-                TRAIN_POPUP._troopList[this._name]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
-
-                //item dau tien va icon dau tien trong item
-                if(TRAIN_POPUP._troopList[this._name]._currentPosition == 0 && TRAIN_POPUP._troopList[this._name]._amount == 1){
-                    TRAIN_POPUP._startTime = getCurrentServerTime();
-
-                    if(!TRAIN_POPUP._isShowTimeBar){
-                        TRAIN_POPUP.showTimeBar();
-                        TRAIN_POPUP._isShowTimeBar = true;
-                        TRAIN_POPUP._statusCountDown = true;
-                    }else{
-                        TRAIN_POPUP._statusCountDown = true;
-                        TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
-                        TRAIN_POPUP.countDown();
-                    }
-                    TRAIN_POPUP._timeBar.visible = true;
-                }
-
-                TRAIN_POPUP._itemInQueue[this._name].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[this._name]._currentPosition]);
-            }
-            TRAIN_POPUP.updateAmount(this);
-            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
 
         //} else{ //Thieu tai nguyen
         //    if(gv.user.coin < gResources){
@@ -208,7 +181,7 @@ var TrainPopup = TinyPopup.extend({
         timeBar.setPosition(this._positionsInQueue[0].x, this._positionsInQueue[0].y - this._edgeItem/1.5);
 
         var processBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/train_bar.png');
-        this.processBar = processBar;
+        this._processBar = processBar;
         processBar.setAnchorPoint(0, 0);
         timeBar.addChild(processBar);
 
@@ -243,36 +216,9 @@ var TrainPopup = TinyPopup.extend({
                     if (max - cur < 0) {
                         var name = TRAIN_POPUP.getFirstItemInQueue()._name;
 
-                        //if(TRAIN_POPUP._troopList[name]._amount > 0){
-                            TRAIN_POPUP._troopList[name]._amount--;
-                            TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[name]._housingSpace;
-                            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
-                            TRAIN_POPUP.enableItemDisplay();
-                            //Het icon trong item
-                            if(TRAIN_POPUP._troopList[name]._amount == 0){
-                                TRAIN_POPUP._amountItemInQueue--;
-                                TRAIN_POPUP._troopList[name]._isInQueue = false;
-                                TRAIN_POPUP._itemInQueue[name].setPosition(-1000, -1000);
-                                TRAIN_POPUP._troopList[name]._currentPosition = -1;
-                                //Het item trong queue
-                                if(TRAIN_POPUP._amountItemInQueue == 0){
-                                    TRAIN_POPUP._timeBar.visible = false;
-                                    cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
-                                    TRAIN_POPUP._statusCountDown = false;
-                                    return;
-                                //Con item trong queue
-                                }else{
-                                    TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[name]._currentPosition);
-                                    TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
-                                }
-                            //Con icon trong item
-                            }else{
-                                TRAIN_POPUP._itemInQueue[name].updateAmountSmall();
-                                TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
-                                TRAIN_POPUP._startTime = getCurrentServerTime();
-                                TRAIN_POPUP.countDown();
-                            }
-                        //}
+                        NETWORK.sendFinishTimeTrainTroop(TRAIN_POPUP._id, name, TRAIN_POPUP._troopList[name]._amount - 1);
+                        trainedBarrackId = TRAIN_POPUP._id;
+                        trainedTroopType = name;
                     } else {
                         TRAIN_POPUP.updateTimeBar(cur, max);
                         if(TRAIN_POPUP._statusCountDown){
@@ -287,7 +233,9 @@ var TrainPopup = TinyPopup.extend({
     updateTimeBar: function(cur, max) {
         var ratio = cur / max;
         var t = timeToReadable(max - cur);
-        this.processBar.setTextureRect(cc.rect(0, 0, this._timeBar.width * ratio, this._timeBar.height));
+        if(this._processBar){
+            this._processBar.setTextureRect(cc.rect(0, 0, this._timeBar.width * ratio, this._timeBar.height));
+        }
         this._timeText.setString(t);
     },
 
@@ -346,7 +294,9 @@ var TrainPopup = TinyPopup.extend({
         for(var i in children){
             children[i].retain();
         }
-        resetReducedTempResources();
+
+        this._statusCountDown = false;
+        this._isShowTimeBar = false;
 
 
         //Luu lai trang thai cua queue

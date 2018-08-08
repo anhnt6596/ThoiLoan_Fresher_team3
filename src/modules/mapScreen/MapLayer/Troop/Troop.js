@@ -27,14 +27,17 @@ var Troop = cc.Sprite.extend({
     _moveSpeed: 1,
     _stopFlag: 0,
     
-    ctor: function(building, level, img) {
+    ctor: function(building, img) {
         this._super(img);
-        this._level = level;
+        this._level = troopInfo[this._type].level || 1;
+        this._housingSpace = config.troopBase[this._type].housingSpace;
         this._buildingContain = building;
+        this._buildingContain.addArmy(this);
         this.init();
     },
     init: function() {
-        MAP.addChild(this, 1100);
+        MAP.addChild(this);
+        this.setZOrder();
         var coor = this.calculateTroopCoorInArmyCamp();
         this.attr({
             x: coor.x,
@@ -42,6 +45,14 @@ var Troop = cc.Sprite.extend({
         });
         this.troopImg = this.createTroopImg();
         this.standingEff();
+    },
+    appear: function(building) {
+        var coor = this.calculateStartPosionInBarrack(building);
+        this.attr({
+            x: coor.x,
+            y: coor.y,
+        });
+        this.moveTo();
     },
     moveTo: function(obj) {
         this._stopFlag = 0
@@ -56,13 +67,6 @@ var Troop = cc.Sprite.extend({
             };
             this.runStep();
         }
-        // if (obj1) {
-        //     this._finalDestination = {
-        //         x: obj1.buildingImg.x,
-        //         y: obj1.buildingImg.y,
-        //     };
-        //     this.runStep();
-        // }
     },
     runStep: function() {
         if (
@@ -84,7 +88,7 @@ var Troop = cc.Sprite.extend({
             var lastStatus = this._status;
             this._status = "running";
             this._direction = this.calculateDirection(nextSubDestination);
-            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 8;
+            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 4;
             var moveAction = new cc.MoveTo(moveTime, cc.p(nextSubDestination.x, nextSubDestination.y));
             var sequence = new cc.Sequence(moveAction, new cc.CallFunc(this.runStep, this));
             this.stopAllActions();
@@ -96,6 +100,7 @@ var Troop = cc.Sprite.extend({
         } else {
             this._lastDirection = 0;
             this._status = "standing";
+            this.setZOrder();
             this.standingEff();
         }
     },
@@ -120,39 +125,39 @@ var Troop = cc.Sprite.extend({
         var y = this.y;
         switch (direction) {
             case 1:
-                nextSubDestination = { x: this.x, y: this.y - TILE_HEIGHT / 2 }
+                nextSubDestination = { x: this.x, y: this.y - TILE_HEIGHT / 4 }
                 break;
             case 2:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 2, y: this.y - TILE_HEIGHT / 2 }
+                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y - TILE_HEIGHT / 4 }
                 break;
             case 3:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 2, y: this.y }
+                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y }
                 break;
             case 4:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 2, y: this.y + TILE_HEIGHT / 2 }
+                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y + TILE_HEIGHT / 4 }
                 break;
             case 5:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 2, y: this.y - TILE_HEIGHT / 2 }
+                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y - TILE_HEIGHT / 4 }
                 break;
             case 6:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 2, y: this.y }
+                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y }
                 break;
             case 7:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 2, y: this.y + TILE_HEIGHT / 2 }
+                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y + TILE_HEIGHT / 4 }
                 break;
             case 8:
-                nextSubDestination = { x: this.x, y: this.y + TILE_HEIGHT / 2}
+                nextSubDestination = { x: this.x, y: this.y + TILE_HEIGHT / 4}
                 break;
             default:
                 break;
         }
         var distance = calculateDistance(this, this._finalDestination);
         if (
-            Math.abs(this.x - this._finalDestination.x) < TILE_WIDTH / 2
+            Math.abs(this.x - this._finalDestination.x) < TILE_WIDTH / 4
             && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.x = this._finalDestination.x;
         if (
-            Math.abs(this.y - this._finalDestination.y) < TILE_HEIGHT / 2
+            Math.abs(this.y - this._finalDestination.y) < TILE_HEIGHT / 4
             && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.y = this._finalDestination.y;
         return nextSubDestination;
@@ -204,7 +209,7 @@ var Troop = cc.Sprite.extend({
     },
     setZOrder: function() {
         var mapPos = MAP.calculatePos(this);
-        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 25;
+        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 28;
         MAP.reorderChild(this, newZ);
     },
     createSolidMapArray: function() {
@@ -253,11 +258,12 @@ var Troop = cc.Sprite.extend({
         var y = add2
         ? this._buildingContain.buildingImg.y + randomInt(2, 6) * TILE_HEIGHT / 4
         : this._buildingContain.buildingImg.y - randomInt(2, 6) * TILE_HEIGHT / 4;
-
-        if (add1 && add2) {
-
-        } 
         
+        return { x: x, y: y };
+    },
+    calculateStartPosionInBarrack: function(bar) {
+        var x = bar.buildingImg.x + bar._width * TILE_WIDTH / 4;
+        var y = bar.buildingImg.y - bar._height * TILE_HEIGHT / 4;
         return { x: x, y: y };
     },
 });

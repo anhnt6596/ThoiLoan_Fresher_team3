@@ -685,7 +685,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
     readData: function() {
         cc.log('receive TROOP_INFO');
         var size = this.getInt();
-        cc.log("so loai troop: "+size);
+        //cc.log("so loai troop: "+size);
         for (var i = 1; i <= size; i ++) {
             var type = this.getString();
             var isUnlock = this.getShort();
@@ -693,7 +693,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var population = this.getShort();
             var startTime = this.getLong();
             var status = this.getString();
-            cc.log('type = '+type );
+            //cc.log('type = '+type );
             troopInfo[type] = {
                 type: type,
                 isUnlock: isUnlock,
@@ -756,38 +756,33 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 cc.log("================================= BARRACK thu : " + (i+1));
                 this.idBarrack = this.getInt();
                 barrackQueueList[this.idBarrack] = {};
-                cc.log("================================= Id Barrack: " + this.idBarrack);
-                //this.barrackLevel = this.getInt();
-                //barrackQueueList[this.idBarrack].barrackLevel = this.barrackLevel;
-                //cc.log("================================= Level Barrack: " + this.barrackLevel);
                 this.amountItemInQueue = this.getInt();
-                barrackQueueList[this.idBarrack].amountItemInQueue = this.amountItemInQueue;
+                barrackQueueList[this.idBarrack]._amountItemInQueue = this.amountItemInQueue;
                 cc.log("================================= Amount Item in Barrack: " + this.amountItemInQueue);
                 this.totalTroopCapacity = this.getInt();
-                barrackQueueList[this.idBarrack].totalTroopCapacity = this.totalTroopCapacity;
+                barrackQueueList[this.idBarrack]._totalTroopCapacity = this.totalTroopCapacity;
                 cc.log("================================= Total Troop capcity in Barrack: " + this.totalTroopCapacity);
                 this.startTime = this.getLong();
-                barrackQueueList[this.idBarrack].startTime = this.startTime;
+                barrackQueueList[this.idBarrack]._startTime = this.startTime;
                 cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
                 this.m = this.getInt();
                 cc.log("================================= SO LUONG TROOP: " + this.m);
-                barrackQueueList[this.idBarrack].troopList = {};
+                barrackQueueList[this.idBarrack]._troopList = {};
                 cc.log("================================= TROOP LIST: ");
                 for (var j=0; j < this.m; j++){
                     cc.log("================================= Troop thu : " + (j+1));
                     this.troopType = this.getString();
-                    barrackQueueList[this.idBarrack].troopList[this.troopType] = {};
+                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = {};
                     cc.log("================================= Troop Type: " + this.troopType);
                     this.amount = this.getInt();
-                    barrackQueueList[this.idBarrack].troopList[this.troopType]._amount = this.amount;
-                    cc.log("================================= Troop amount: " + this.amount);
+                    cc.log("================================= Troop Amount: " + this.amount);
                     this.isInQueue = this.getBool();
-                    barrackQueueList[this.idBarrack].troopList[this.troopType]._isInQueue = this.isInQueue;
-                    cc.log("================================= Troop is in queue: " + this.isInQueue);
+                    cc.log("================================= is in queue: " + this.isInQueue);
+
                     this.currentPosition = this.getInt();
-                    barrackQueueList[this.idBarrack].troopList[this.troopType]._currentPosition = this.currentPosition;
-                    cc.log("================================= Troop current position: " + this.currentPosition);
+                    cc.log("================================= current position: " + this.currentPosition);
+                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.isInQueue, this.currentPosition);
                 }
             }
         }
