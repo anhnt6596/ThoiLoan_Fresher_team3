@@ -18,3 +18,7 @@ var buildingQuickFinish = null;
 
 //Cancel Construction
 var buildingCancel = null;
+
+//Train Troop
+var trainedBarrackId = null;
+var trainedTroopType = null;

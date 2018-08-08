@@ -1,6 +1,7 @@
 var troopInfo = troopInfo || [];
-
+var ResearchPOPUP = ResearchPOPUP || null;
 var ResearchPopUp = ui.PopUp.extend({
+
     lab_level: 1,
     listTroop: {
         ARM_1: {
@@ -48,7 +49,7 @@ var ResearchPopUp = ui.PopUp.extend({
     listBtn_troop : [],
     listImg_troop : {},
     status: research_constant.status.free,
-    name_troop : "",
+    troop : "",
     timeStart: 0,
     size : {
         width: 739,
@@ -56,30 +57,86 @@ var ResearchPopUp = ui.PopUp.extend({
     },
     count: 0,
     time_text: "",
+    numberG_Text: "",
     nameTroopText: "",
     ctor: function() {
-
-
+        ResearchPOPUP = this,
         this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
         this.init();
     },
     init: function () {
+        //console.log("khi open: ");
+        //console.log("lab_status : "+ research_constant.status.now);
+        //console.log("troop dang train neu co: "+ this.troop.toString());
+        //
+        //for (item in troopInfo) {
+        //    var obj = troopInfo[item];
+        //    cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
+        //    cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
+        //    cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
+        //    cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
+        //    cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+        //}
+        this.checkStatusTroop();
+
         this.lab_level = this.getConstructionList("LAB_1","level");
+        var troop = this.getTroopResearching();
+
+        if (troop===null) {
+            console.log("Khong co troop dang train");
+            this.status = research_constant.status.free;
+        }
+        else {
+            console.log("Troop dang upgrade la:" + troop.type);
+            this.status = research_constant.status.busy;
+            research_constant.status.now = this.status;
+            this.troop = troop;
+            this.timeStart = troop.startTime;
+        }
         console.log("lab_level "+ this.lab_level);
         this.initInfoResearch();
         this.initScrollBar();
     },
+    checkStatusTroop: function(){
+        console.log("vao check status");
+        for (item in troopInfo){
+            obj = troopInfo[item];
+            console.log(obj.type+" status: "+obj.status);
+            if (obj.status === research_constant.status.busy){
+
+                var countDownDate =config.troop[obj.type][obj.level+1].researchTime*1000;
+                var now = getCurrentServerTime();
+                console.log(obj.type+" startTime= "+obj.startTime+ "currentTime="+now);
+                var distance = countDownDate - (now - obj.startTime);
+                if (distance<=0){
+                    obj.level++;
+                    obj.status = research_constant.status.free;
+                }
+            }
+        }
+    },
+    //tim building dua theo ten
     getConstructionList: function(name, type){
         for (buil in contructionList){
             building = contructionList[buil];
             if (building.name===name){
+                //LAB_BUILDING = building;
                 return building[type];
             }
         }
     },
+    //tim troop dua theo type
+    getTroopList: function( type){
+        for (item in troopInfo){
+            var troop = troopInfo[item];
+            if (troop.type===type){
+                return troop;
+            }
+        }
+    },
     initInfoResearch: function(){
-
         this.listTroop = troopInfo;
+
         //*****************hien thi info*******************
         //dao tac cap 2
         var mieng_trang = new cc.Sprite("res/Art/GUIs/research troop/mieng_trang.png");
@@ -91,9 +148,10 @@ var ResearchPopUp = ui.PopUp.extend({
             y: 130,
         });
         //*****************add hinh anh quan linh dang nghien cuu *******************
-
+        var i = 0;
         for (i = 0;i<=10;i++){
-            var img_troop = new cc.Sprite(research_constant.img_troop_dir+"ARM_"+(i+1)+"_1.png");
+            var troop = this.getTroopList("ARM_"+(i+1));
+            var img_troop = new cc.Sprite(research_constant.img_troop_dir+"ARM_"+(i+1)+"_"+(troop.level+1)+".png");
             img_troop.attr({
                 x: mieng_trang.width/7,
                 y: mieng_trang.height/2
@@ -138,19 +196,24 @@ var ResearchPopUp = ui.PopUp.extend({
 
         //***************** hien thi button *******************
         //button
-        var quickFinishBtn = new ccui.Button(research_constant.research_dir+"button.png", research_constant.research_dir+"button.png","");
+        var quickFinishBtn = new ccui.Button(research_constant.research_dir+"button.png");
         quickFinishBtn.attr({
             x: mieng_trang.width-70,
             y: mui_ten.y,
         });
+
         mieng_trang.addChild(quickFinishBtn);
 
-        var numberG_Text = new cc.LabelBMFont('485', research_constant.time_text_dir );
+        var numberG_Text = new cc.LabelBMFont('', research_constant.time_text_dir );
+        this.numberG_Text = numberG_Text;
         numberG_Text.attr({
             x: quickFinishBtn.width*3/7,
             y: quickFinishBtn.height/2
         });
         quickFinishBtn.addChild(numberG_Text);
+        self = this;
+
+
 
         var imgG  = new cc.Sprite(research_constant.imgG_dir);
         imgG.attr({
@@ -188,17 +251,46 @@ var ResearchPopUp = ui.PopUp.extend({
         });
         mieng_trang_nothing.addChild(Chon_quan_linh_nang_cap_Text);
 
+        quickFinishBtn.addClickEventListener(() => self.quickFinishResearch(self.troop.type));
         this.addChild(mieng_trang_nothing, 100);
         this.addChild(mieng_trang, 100);
 //****************************************************************************
         if (this.status===research_constant.status.busy){
+            mieng_trang.setVisible(true);
+            mieng_trang_nothing.setVisible(false);
             var troop = this.getTroopResearching();
-            this.listImg_troop[type].setVisible(true);
-            this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
+            console.log("troop dang research la: "+ troop.type);
+            this.listImg_troop[troop.type].setVisible(true);
+            this.updateInfo(troop.name, troop.level);
             this.updateTimeCountDown(troop.type,troop.startTime,troop.level);
         }
         else if (this.status===research_constant.status.free){
             mieng_trang.setVisible(false);
+            mieng_trang_nothing.setVisible(true);
+        }
+    },
+    quickFinishResearch: function(){
+
+        console.log("on Quick Finish Researching");
+        troop = this.getTroopResearching();
+
+        var countDownDate = config.troop[troop.type][troop.level+1].researchTime*1000;
+        var now = getCurrentServerTime();
+        var distance = countDownDate - (now - troop.startTime);
+        console.log("distance = " + distance);
+        var gFinish = timeToG(distance/1000);
+
+
+        cc.log("==========================================THOI GIAN: " + distance);
+        if(gv.user.coin < gFinish){
+            showPopupNotEnoughG('quick_finish');
+        }else {
+            gv.user.coin -=gFinish;
+            console.log("gFinish = "+ gFinish);
+            console.log("gv.user.coin = "+ gv.user.coin);
+            LOBBY.update(gv.user);
+            NETWORK.sendResearchQuickFinish(troop.type);
+            this.onFinishResearch(troop.type, true);
         }
     },
     getTroopResearching: function(){
@@ -208,6 +300,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 return obj;
             }
         }
+        return null;
     }
     ,
     initScrollBar: function() {
@@ -236,7 +329,23 @@ var ResearchPopUp = ui.PopUp.extend({
         this.listBtn_troop = [];
         for (var i=0;i<6;i++){
             var button = new ccui.Button(dir_btn_bg_);
+            button.setCascadeColorEnabled(true);
             button.name = 'ARM_'+(i+1);
+            var troop = this.getTroopList('ARM_'+(i+1));
+            console.log("troop level ="+troop.level);
+            var level_txt = new cc.LabelBMFont(troop.level.toString(), 'res/Art/Fonts/soji_12.fnt');
+
+            button.level_txt = level_txt;
+            button.level_txt.attr({
+                    x:  button.width/4,
+                    y: button.height-15,
+                    anchorX: 0.5,
+                    anchorY: 0.5,
+                    scale: 1.5,
+                }
+            )
+
+
             button.label_rq = new cc.Sprite(research_constant.research_dir+"nen trong.png");
             button.label_rq.attr({
                 x: button.width/2+2,
@@ -270,7 +379,6 @@ var ResearchPopUp = ui.PopUp.extend({
             button.label_rq.text_rq3.attr({
                     x: button.label_rq.width/2,
                     y: 0,
-
                 }
             )
             button.label_rq.text_rq3.setColor(new cc.Color(220,20,60));
@@ -291,16 +399,18 @@ var ResearchPopUp = ui.PopUp.extend({
                 anchorX:0.5,
                 anchorY:0.5,
             });
-
+            button.img = img;
             //button.addClickEventListener(() => this.onSelectItem(button.name));
             button.addChild(img);
             button.addChild(button.label_rq);
+            button.addChild(button.level_txt);
             scrollView.addChild(button);
             this.listBtn_troop.push(button);
         }
 
         for (var i=6;i<10;i++) {
             var button = new ccui.Button(dir_btn_bg_);
+            button.setCascadeColorEnabled(true);
             button.name = 'ARM_'+(i+1);
 
             button.label_rq = new cc.Sprite(research_constant.research_dir+"nen trong.png");
@@ -358,11 +468,12 @@ var ResearchPopUp = ui.PopUp.extend({
                 anchorX: 0.5,
                 anchorY: 0.5,
             });
-
+            button.img = img;
             //button.addClickEventListener(() => this.onSelectItem(button.name));
 
             button.addChild(img);
             button.addChild(button.label_rq);
+
             scrollView.addChild(button);
             this.listBtn_troop.push(button);
         }
@@ -380,10 +491,21 @@ var ResearchPopUp = ui.PopUp.extend({
         if (this.status === research_constant.status.busy){
             this.setEnableBtn(false);
         }
+        else {
+            self = this;
+            this.listBtn_troop.forEach(function(element) {
+                try {
+                    self.checkRequireBtn(element,self.listTroop[element.name].level);
+                } catch (e) {
+                }
+            });
+
+        }
     }
     ,
     onSelectItem:function(type)
     {
+        console.log("status cua quan linh truoc khi train la "+ this.listTroop[type].status);
         NETWORK.sendResearchTroop(type);
         this.timeStart = getCurrentServerTime();
         // new popUp info cua troop hien len
@@ -393,6 +515,8 @@ var ResearchPopUp = ui.PopUp.extend({
         //troop = this.listTroop[name];
         this.status = research_constant.status.busy;
         this.listTroop[type].status = research_constant.status.busy;
+        this.listTroop[type].startTime = this.timeStart;
+        console.log("status cua quan linh dang train la "+ this.listTroop[type].status);
         //disable all button
         this.setEnableBtn(false);
 
@@ -405,13 +529,13 @@ var ResearchPopUp = ui.PopUp.extend({
 
     },
     updateInfo: function(name,level){
-        this.nameTroopText.setString(name+ " cấp "+level);
+        this.nameTroopText.setString(name+ " cấp "+(level+1));
 
     },
     updateTimeCountDown: function(type,timeStart,level){
         cc.log(name + "name");
         cc.log(level + "level");
-        var countDownDate = timeStart + config.troop[type][level].researchTime*3600;
+        var countDownDate = config.troop[type][level+1].researchTime*1000;
         var self = this;
         var x = setInterval(function() {
 
@@ -419,14 +543,17 @@ var ResearchPopUp = ui.PopUp.extend({
             var now = getCurrentServerTime();
 
             // Find the distance between now and the count down date
-            var distance = countDownDate - now;
+            var distance = countDownDate - (now - timeStart);
+            console.log("Thoi gian research quan: "+ type+" level "+ level+"len level "+ (level +1) );
+            cc.log("timeStart= "+timeStart+"countDownDate= "+countDownDate+"distance="+distance);
+            var gFinish = timeToG(distance*0.001);
 
             // If the count down is finished, write some text
             if (distance < 0) {
                 clearInterval(x);
                 console.log("Het gio");
                 //ham thuc hien cap nhat khi nghien cuu xong quan linh
-                self.onFinishResearch(type);
+                self.onFinishResearch(type,false);
             }
             var string = "";
             // Time calculations for days, hours, minutes and seconds
@@ -439,24 +566,29 @@ var ResearchPopUp = ui.PopUp.extend({
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
             if (seconds !== 0) { string = string + seconds + "s"};
             // Display the result in the element with id="demo"
-            self.time_text.setString( string);
+            self.time_text.setString(string);
+            self.numberG_Text.setString(gFinish);
 
 
         }, 1000);
         //this.time_text.setString(timeStart);
     },
-    onFinishResearch: function (type) {
+    onFinishResearch: function (type, isQuickFinish) {
 
+        this.listTroop[type].status = research_constant.status.free;
         this.upgradeBtn(type);
         this.status = research_constant.status.free;
         this.mieng_trang.setVisible(false);
         this.mieng_trang_nothing.setVisible(true);
         //this.setEnableBtn(true);
-        NETWORK.sendResearchComplete(type);
+        if (!isQuickFinish) {
+            NETWORK.sendResearchComplete(type);
+        }
     },
     setEnableBtn: function (status) {
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(status);
+            //element.img.setCascadeColorEnabled(!status);
         })
     },
     setBackStatusBtn: function () {
@@ -465,38 +597,71 @@ var ResearchPopUp = ui.PopUp.extend({
         this.listBtn_troop.forEach(function(element) {
             if (config.troop[element.name][self.listTroop[element.name].level+1].laboratoryLevelRequired > self.lab_level ) {
                 element.status = false;
+
             }
             else {
                 element.status = true;
+
             }
             console.log(element.name+" level="+ self.listTroop[element.name].level +" lab_level_rq= "+ config.troop[element.name][self.listTroop[element.name].level+1].laboratoryLevelRequired );
             console.log("status = "+element.status);
             element.setEnabled(element.status);
+            //element.img.setCascadeColorEnabled(!element.status);
         })
     },
     checkRequireBtn: function (btn, level_cur) {
         if (config.troop[btn.name][level_cur+1].laboratoryLevelRequired > this.lab_level ) {
             btn.setEnabled(false);
             btn.status = false;
+            //btn.img.setCascadeColorEnabled(!btn.status);
         }
+        else {
+            btn.label_rq.text_rq1.setVisible(false);
+            btn.label_rq.text_rq2.setVisible(false);
+            btn.label_rq.text_rq3.setVisible(false);
+        }
+
     },
     upgradeBtn: function(type){
         this.listTroop[type].level ++;
         var level_btn = this.listTroop[type].level;
+
         console.log("level_btn ="+level_btn);
         self = this;
         this.setBackStatusBtn();
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(element.status);
+            //element.img.setCascadeColorEnabled(!element.status);
             if (element.name === type) {
                 var level_text_rq = config.troop[element.name][level_btn+1].laboratoryLevelRequired;
                 console.log("level_text_rq ="+level_text_rq);
                 element.label_rq.text_rq3.setString("cấp "+level_text_rq);
+                element.level_txt.setString(self.listTroop[type].level);
                 self.checkRequireBtn(element, level_btn);
             }
+
         })
+    },
+    close: function(){
+        //this.zIndex = -1000;
+        //ResearchPOPUP.getParent().reorderChild(ResearchPOPUP,-1000);
+        //this.x = - 1000000; //cho ra khoi man hinh
+        //research_constant.used_open = true;
+        //console.log("Da hide popup");
+        //console.log("truowc khi close: ");
+        //console.log("lab_status : "+ research_constant.status);
+        //console.log("troop dang train neu co: "+ this.troop.toString());
+        research_constant.troop = this.getTroopResearching();
+        this.time_text.retain();
+        this.numberG_Text.retain();
+        //this.time_text.retain();
+        var act1 = new cc.ScaleTo(0.1, 1.4 * this.scale, 1.4 * this.scale);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
 
-
-
+        LAB_BUILDING.addResearchTimeBar();
+        LAB_BUILDING.countDownResearchBar();
     }
 });

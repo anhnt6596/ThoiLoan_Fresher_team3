@@ -93,19 +93,36 @@ var ObjectMenu = cc.Node.extend({
     },
     research: function() {
         cc.log('===========> RESEARCH');
-        //createResearchPopup();
+        console.log("open Popup research");
         var researchPopUp = new ResearchPopUp();
         MAPSCENE.addChild(researchPopUp, 1000);
+        //createResearchPopup();
+        //if (research_constant.used_open){
+        //    console.log("Re-open Popup research");
+        //    ResearchPOPUP.attr({
+        //        x: cc.winSize.width / 2,
+        //        y: cc.winSize.height / 2,
+        //        anchorX: 0.5,
+        //        anchorY: 0.5,
+        //    });
+        //
+        //     //cho popUp ve vi tri cu tren man hinh
+        //}
+        //else {
+        //    console.log("open Popup research");
+        //    var researchPopUp = new ResearchPopUp();
+        //    MAPSCENE.addChild(researchPopUp, 1000);
+        //}
+
     },
     collect: function() {
         cc.log('===========> COLLECT');
     },
     train: function() {
-        cc.log('===========> TRAIN');
-        NETWORK.sendGetBarrackQueueInfo();
-        //var data = {train: true, barrack: MAP._targetedObject};
-        //var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
-        //cc.director.getRunningScene().addChild(popup, 200);
+        //NETWORK.sendGetBarrackQueueInfo();
+        var data = {train: true, barrack: MAP._targetedObject};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+        cc.director.getRunningScene().addChild(popup, 200);
     },
     quickFinish: function(){
         if(MAP._targetedObject){
