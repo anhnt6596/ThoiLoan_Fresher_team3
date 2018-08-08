@@ -39,10 +39,11 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
-                this.sendGetTroopInfo();
                 this.sendGetMapInfo();
-                this.sendGetBarrackQueueInfo();
                 this.sendGetTroopInfo();
+                //this.sendGetBarrackQueueInfo();
+                //Phai hien thi them cac troop da dc train offline
+                //this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
@@ -184,9 +185,13 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
+                cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
+                this.sendGetBarrackQueueInfo();
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
+                //Cap nhat lai population cua linh sau khi kiem tra barrack queue info --> cai tien: chi can yeu cau population
+                //this.sendGetTroopInfo();
                 break;
             case gv.CMD.TRAIN_TROOP:
                 if (packet.validate) {
@@ -234,6 +239,7 @@ testnetwork.Connector = cc.Class.extend({
 
                     cc.log("======================================= trainedBarrackId" + trainedBarrackId);
                     this.finishTimeTroopTrain(trainedTroopType);
+                    troopInfo[trainedTroopType].population++;
 
                     //reset
                     trainedBarrackId = null;

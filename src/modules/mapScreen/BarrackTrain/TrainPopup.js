@@ -72,7 +72,11 @@ var TrainPopup = TinyPopup.extend({
         }
 
         //Hien thi du lieu tren queue
-        this.showQueueData();
+        if(this._troopList != null){
+            cc.log("==========================showQueueData=========================");
+            this.showQueueData();
+        }
+
 
         this.showTextTotalTroop();
         this.showQuickFinish();
@@ -88,6 +92,10 @@ var TrainPopup = TinyPopup.extend({
                 this._itemInQueue[i].setPosition(this._positionsInQueue[this._troopList[i]._currentPosition]);
                 this._itemInQueue[i].updateAmountSmall();
             }
+        }
+        if(!this._isShowTimeBar){
+            cc.log("==========================showTimeBar=========================");
+            this.showTimeBar();
         }
     },
 
@@ -150,7 +158,6 @@ var TrainPopup = TinyPopup.extend({
         }
     },
 
-
     enableItemDisplay: function() {
         for(var i in TRAIN_POPUP._troopList){
             //if(!TRAIN_POPUP._troopList[i]){
@@ -167,7 +174,6 @@ var TrainPopup = TinyPopup.extend({
         }
     },
 
-
     showTimeBar: function(){
         this.addTimeBarFirstItem();
         this.countDown();
@@ -175,7 +181,12 @@ var TrainPopup = TinyPopup.extend({
 
     addTimeBarFirstItem: function() {
         var cur = 0;
-        var max = this.getFirstItemInQueue()._trainingTime;
+        var max;
+        if(!this.getFirstItemInQueue()){
+            max = 1;
+        }else{
+            max = this.getFirstItemInQueue()._trainingTime;
+        }
 
         var timeBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_train_bar.png');
         timeBar.setPosition(this._positionsInQueue[0].x, this._positionsInQueue[0].y - this._edgeItem/1.5);
@@ -197,7 +208,7 @@ var TrainPopup = TinyPopup.extend({
             y: timeBar.height/2 - 20
         });
 
-        //timeBar.visible = false;
+        timeBar.visible = false;
 
         this._timeBar = timeBar;
         this.addChild(this._timeBar, 10000);
