@@ -12,7 +12,7 @@ var rootMapPos = {
     y: 560
 };
 
-var listTroopRefs = listTroopRefs || [];
+//var listTroopRefs = listTroopRefs || [];
 
 var MapLayer = cc.Layer.extend({
     _targetedObject: null,

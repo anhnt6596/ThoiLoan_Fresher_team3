@@ -777,12 +777,10 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     cc.log("================================= Troop Type: " + this.troopType);
                     this.amount = this.getInt();
                     cc.log("================================= Troop Amount: " + this.amount);
-                    this.isInQueue = this.getBool();
-                    cc.log("================================= is in queue: " + this.isInQueue);
 
                     this.currentPosition = this.getInt();
                     cc.log("================================= current position: " + this.currentPosition);
-                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.isInQueue, this.currentPosition);
+                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.currentPosition);
                 }
             }
         }

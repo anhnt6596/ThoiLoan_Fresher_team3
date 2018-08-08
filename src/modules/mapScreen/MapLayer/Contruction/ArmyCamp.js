@@ -32,7 +32,7 @@ var ArmyCamp = Building.extend({
     },
     addArmy: function(troop) {
         this._listArmy.push(troop);
-        listTroopRefs.push(troop);
+        //listTroopRefs.push(troop);
         this.calculatePopulation();
     },
     armyRun: function() {

@@ -45,7 +45,6 @@ var TrainPopup = TinyPopup.extend({
             cc.log("============================== TROOP: " + k);
             cc.log("============================== name: " + this._troopList[k]._name);
             cc.log("============================== amount: " + this._troopList[k]._amount);
-            cc.log("============================== isInQueue: " + this._troopList[k]._isInQueue);
             cc.log("============================== currentPosition: " + this._troopList[k]._currentPosition);
             cc.log("============================== _housingSpace: " + this._troopList[k]._housingSpace);
             cc.log("============================== _trainingTime: " + this._troopList[k]._trainingTime);
@@ -88,13 +87,18 @@ var TrainPopup = TinyPopup.extend({
         for(var i in this._troopList){
             k++;
             cc.log("======================= Linh thu: " + k);
-            if(this._troopList[i]._isInQueue){
+            if(this._troopList[i]._amount > 0){
+                this._isShowTimeBar = true;
+                this._statusCountDown = true;
+
                 this._itemInQueue[i].setPosition(this._positionsInQueue[this._troopList[i]._currentPosition]);
                 this._itemInQueue[i].updateAmountSmall();
             }
         }
-        if(!this._isShowTimeBar){
+        if(this._isShowTimeBar){
+        //if(this._isShowTimeBar){
             cc.log("==========================showTimeBar=========================");
+            cc.log("========================== Current time - start time = " + (getCurrentServerTime() - TRAIN_POPUP._startTime)/1000);
             this.showTimeBar();
         }
     },
@@ -180,7 +184,7 @@ var TrainPopup = TinyPopup.extend({
     },
 
     addTimeBarFirstItem: function() {
-        var cur = 0;
+        var cur = (getCurrentServerTime() - TRAIN_POPUP._startTime)/1000;
         var max;
         if(!this.getFirstItemInQueue()){
             max = 1;
@@ -208,7 +212,7 @@ var TrainPopup = TinyPopup.extend({
             y: timeBar.height/2 - 20
         });
 
-        timeBar.visible = false;
+        //timeBar.visible = false;
 
         this._timeBar = timeBar;
         this.addChild(this._timeBar, 10000);
@@ -306,8 +310,8 @@ var TrainPopup = TinyPopup.extend({
             children[i].retain();
         }
 
-        this._statusCountDown = false;
-        this._isShowTimeBar = false;
+        //this._statusCountDown = false;
+        //this._isShowTimeBar = false;
 
 
         //Luu lai trang thai cua queue
