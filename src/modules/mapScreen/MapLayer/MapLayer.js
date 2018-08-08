@@ -1,8 +1,12 @@
-var mapLogicArray = mapLogicArray || [];
-var objectRefs = objectRefs || [];
 var MAP = MAP || null;
 var contructionList = contructionList || [];
 var obstacleLists = obstacleLists || [];
+var objectRefs = objectRefs || [];
+var mapLogicArray = mapLogicArray || [];
+
+var armyCampRefs = armyCampRefs || [];
+var barrackRefs = barrackRefs || [];
+
 var rootMapPos = {
     x: 2100,
     y: 560
@@ -45,8 +49,9 @@ var MapLayer = cc.Layer.extend({
         this.initContructions(contructionList);
         this.initObstacles(obstacleLists);
         this.createLogicArray(contructionList, obstacleLists);
+        createSolidMapArray(); // tạo mảng di chuyển lính trên map
         
-        this.scale = 0.5;
+        this.scale = 0.75;
         for (var i = 0; i < objectRefs.length; i++) { // màn hình hướng đến nhà chính
             if(objectRefs[i]._name === 'TOW_1') {
                 var town = objectRefs[i];
@@ -78,6 +83,9 @@ var MapLayer = cc.Layer.extend({
         contructions.forEach(function(contruction, i) {
             var newBuilding = self.createBuilding(contruction);
             newBuilding && objectRefs.push(newBuilding);
+
+            if (newBuilding._name === "AMC_1")  armyCampRefs.push(newBuilding);
+            if (newBuilding._name === "BAR_1")  barrackRefs.push(newBuilding);
         });
     },
     initObstacles: function(obstacles) {

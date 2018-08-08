@@ -80,9 +80,30 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
+        var l = ["ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_2", "ARM_2", "ARM_3", "ARM_4"];
+        var createNewTroop = function(type) {
+            switch (type) {
+                case "ARM_1":
+                    var troop = new Warrior(armyCampRefs[0]);
+                    break;
+                case "ARM_2":
+                    var troop = new Archer(armyCampRefs[0]);
+                    break;
+                case "ARM_3":
+                    var troop = new Goblin(armyCampRefs[0]);
+                    break;
+                case "ARM_4":
+                    var troop = new Giant(armyCampRefs[0]);
+                    break;
+                default:
+                    break;
+                }
+                troop && troop.appear(MAP._targetedObject);
+                listTroopRefs.push(troop);
+        }
         if (MAP._targetedObject) {
-            var warrior = new Warrior(MAP._targetedObject, 4);
-            listTroopRefs.push(warrior);
+            var r = randomInt(0,8);
+            createNewTroop(l[r]);
         }
         // NETWORK.sendResearchTroop("ARM_1");
     },
