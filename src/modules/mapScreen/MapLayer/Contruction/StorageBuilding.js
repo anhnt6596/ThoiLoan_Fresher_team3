@@ -3,7 +3,7 @@ var StorageBuilding = Building.extend({
     _curStorage: 250,
     ctor: function(info, userInfo) {
         this._super(info);
-        this.calculateStorage(info, userInfo);
+        this.calculateStorage(userInfo);
     },
     presentImg: function() {
         var self = this;
@@ -19,9 +19,9 @@ var StorageBuilding = Building.extend({
             else self.buildingImage[i].opacity = 0;
         });
     },
-    calculateStorage: function(info, userInfo) {
-        if (info.status === 'complete' || info.status === 'upgrade') {
-            this._capacity = config.building[info.name][info.level].capacity;
+    calculateStorage: function(userInfo) {
+        if (this._status === 'complete' || this._status === 'upgrade') {
+            this._capacity = config.building[this._name][this._level].capacity;
             this._curStorage = userInfo[typeOfResource[this._name]] * this._capacity / userInfo[typeOfCapacity[this._name]];
         } else {
             this._capacity = 0;

@@ -545,6 +545,10 @@ var Contruction = cc.Class.extend({
     armyRun: function() {
         // để rỗng
     },
+    addArmy: function() {
+        // để rỗng
+        cc.log("Đây không phải nhà để chứa lính");
+    },
     countDown: function(cur, max){
         var tick = () => {
             setTimeout(() => {

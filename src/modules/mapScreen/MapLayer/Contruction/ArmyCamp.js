@@ -1,7 +1,10 @@
 var ArmyCamp = Building.extend({
     _listArmy: [],
+    _capacity: 20,
+    _curStorage: 0,
     ctor: function(info) {
         this._super(info);
+        this.calculatePopulation();
         // this.addBuildingImg();
     },
     addBuildingImg: function() {
@@ -22,25 +25,36 @@ var ArmyCamp = Building.extend({
             y: buildingImg.height / 2 + 35
         });
         animSprite.runAction(buildingAnim.repeatForever());
-        this.createArmy(); // test
-        this.createArmy(); // test
-        this.createArmy(); // test
-        this.createArmy(); // test
-        this.createArmy(); // test
     },
     caluclateZOrder: function(mapPos) {
         var newZ = 1000 - (mapPos.x + mapPos.y + (this._height - 3) / 2) * 10 + 1;
         return newZ - 200;
     },
-    createArmy: function() {
-        var warrior = new Warrior(this, 4);
-        this._listArmy.push(warrior);
-        listTroopRefs.push(warrior);
+    addArmy: function(troop) {
+        this._listArmy.push(troop);
+        listTroopRefs.push(troop);
+        this.calculatePopulation();
     },
     armyRun: function() {
         createSolidMapArray();
-        listTroopRefs.forEach(element => {
+        this._listArmy.forEach(element => {
             element.moveTo(objectRefs[0]);
         });
+    },
+    calculatePopulation: function() {
+        if (this._status === 'complete' || this._status === 'upgrade') {
+            this._capacity = config.building[this._name][this._level].capacity;
+            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._capacity: " + this._capacity);
+            this._curStorage = 0;
+            var self = this;
+            this._listArmy.forEach(function(troop) {
+                self._curStorage += troop._housingSpace;
+            });
+            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._curStorage: " + this._curStorage);
+        } else {
+            this._capacity = 0;
+            this._curStorage = 0;
+        }
+        this.presentImg();
     },
 });
