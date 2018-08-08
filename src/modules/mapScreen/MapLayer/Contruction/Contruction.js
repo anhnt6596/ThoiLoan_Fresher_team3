@@ -241,11 +241,14 @@ var Contruction = cc.Class.extend({
                 break;
             case 'BAR_1':
             case 'RES_1':
+            case 'RES_3':
+            case 'LAB_1':
                 this.squareShadow(3);
                 break
             case 'STO_1':
             case 'STO_2':
             case 'RES_2':
+            case 'STO_3':
                 this.roundShadow();
                 break;
             default:

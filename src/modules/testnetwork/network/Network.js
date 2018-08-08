@@ -39,13 +39,12 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.name,packet.username, packet.password,packet.validate);
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
-                this.sendGetTroopInfo();
                 this.sendGetMapInfo();
                 this.sendGetBarrackQueueInfo();
-                this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
                 fr.getCurrentScreen().onFinishGameInfo();
+                this.sendGetTroopInfo();
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
@@ -184,6 +183,7 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
+                this.divideTroopToArmyCamp();
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
@@ -248,6 +248,47 @@ testnetwork.Connector = cc.Class.extend({
                 }
                 break;
         }
+    },
+
+    divideTroopToArmyCamp: function() {
+        // cc.log(">>>>>>>>>>>>>>>>>: ", troopInfo.ARM_1.level + ' :<<<<<<<<<<<<<<<>>: ' + armyCampRefs[0]._name);
+        var numAMC = armyCampRefs.length;
+        var curAMCindex = 0;
+        var capacitys = armyCampRefs.map(function(amc) {
+            // cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ', config.building.AMC_1[amc._level].capacity);
+            return config.building.AMC_1[amc._level].capacity;
+        });
+        for(item in troopInfo) {
+            var troopType = troopInfo[item];
+            if (troopType.population > 0) {
+                for (var i = 0; i < troopType.population; i++) {
+                    this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
+                    
+                    curAMCindex += 1;
+                    if (curAMCindex >= numAMC) curAMCindex = 0;
+                }
+            }
+        }
+    },
+
+    createNewTroop_1: function(type, armyCamp) {
+        switch (type) {
+            case "ARM_1":
+                var troop = new Warrior(armyCamp);
+                break;
+            case "ARM_2":
+                var troop = new Archer(armyCamp);
+                break;
+            case "ARM_3":
+                var troop = new Goblin(armyCamp);
+                break;
+            case "ARM_4":
+                var troop = new Giant(armyCamp);
+                break;
+            default:
+                break;
+        }
+        return troop;
     },
 
     finishTimeTroopTrain: function(troopType) {
