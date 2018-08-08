@@ -88,6 +88,10 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later!";
             title = "Server denied to add resources";
             break;
+        case 'research':
+            data.content = "Add more G to buy resource";
+            title = "Do not have enough resource";
+            break;
         default:
             break;
     }
