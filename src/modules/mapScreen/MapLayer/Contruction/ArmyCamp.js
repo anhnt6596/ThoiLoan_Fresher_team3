@@ -3,6 +3,7 @@ var ArmyCamp = Building.extend({
     _capacity: 20,
     _curStorage: 0,
     ctor: function(info) {
+        this._listArmy = []; // chống trùng reference
         this._super(info);
         this.calculatePopulation();
         // this.addBuildingImg();
@@ -32,13 +33,14 @@ var ArmyCamp = Building.extend({
     },
     addArmy: function(troop) {
         this._listArmy.push(troop);
-        //listTroopRefs.push(troop);
+        // listTroopRefs.push(troop);
+        // cc.log(">>>>>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>> length: " + armyCampRefs[0]._listArmy.length + ' & ' + armyCampRefs[1]._listArmy.length);
         this.calculatePopulation();
     },
     armyRun: function() {
         createSolidMapArray();
         this._listArmy.forEach(element => {
-            element.moveTo(objectRefs[0]);
+            element.moveTo();
         });
     },
     calculatePopulation: function() {

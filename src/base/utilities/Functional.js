@@ -62,6 +62,19 @@ var checkUserResources = function(costBuilding){
     }
     return g;
 };
+var checkUserResourcesResearch = function(gold,elixir,darkElixir,coin){
+    var g = 0;
+    if(gv.user.gold < gold){
+        g += goldToG(gold - gv.user.gold);
+    }
+    if(gv.user.elixir < elixir){
+        g += elixirToG(elixir - gv.user.elixir);
+    }
+    if(gv.user.darkElixir < darkElixir){
+        g += darkElixirToG(darkElixir - gv.user.darkElixir);
+    }
+    return g;
+};
 
 //Get loại tài nguyên bị thiếu
 var getLackingResources = function(cost){
@@ -137,6 +150,30 @@ var reduceUserResources = function(costBuilding){
     }
     if(gv.user.coin >= costBuilding.coin){
         gv.user.coin -= costBuilding.coin;
+    }else{
+        gv.user.coin = 0;
+    }
+
+    LOBBY.update(gv.user);
+};
+var reduceUserResourcesResearch = function(gold,elixir,darkElixir,coin){
+    if(gv.user.gold >= gold){
+        gv.user.gold -= gold;
+    }else{
+        gv.user.gold = 0;
+    }
+    if(gv.user.elixir >= elixir){
+        gv.user.elixir -= elixir;
+    }else{
+        gv.user.elixir = 0;
+    }
+    if(gv.user.darkElixir >= darkElixir){
+        gv.user.darkElixir -= darkElixir;
+    }else{
+        gv.user.darkElixir = 0;
+    }
+    if(gv.user.coin >= coin){
+        gv.user.coin -= coin;
     }else{
         gv.user.coin = 0;
     }

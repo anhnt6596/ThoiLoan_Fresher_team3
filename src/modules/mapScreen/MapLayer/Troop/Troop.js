@@ -36,7 +36,8 @@ var Troop = cc.Sprite.extend({
         this.init();
     },
     init: function() {
-        MAP.addChild(this, 1100);
+        MAP.addChild(this);
+        this.setZOrder();
         var coor = this.calculateTroopCoorInArmyCamp();
         this.attr({
             x: coor.x,

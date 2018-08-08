@@ -187,6 +187,7 @@ testnetwork.Connector = cc.Class.extend({
                 cc.log('================>', packet.message);
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
                 this.sendGetBarrackQueueInfo();
+                this.divideTroopToArmyCamp();
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
@@ -266,7 +267,28 @@ testnetwork.Connector = cc.Class.extend({
         troop && troop.appear(barrack);
     },
 
-    createNewTroop: function(type, armyCamp) {
+    divideTroopToArmyCamp: function() {
+        // cc.log(">>>>>>>>>>>>>>>>>: ", troopInfo.ARM_1.level + ' :<<<<<<<<<<<<<<<>>: ' + armyCampRefs[0]._name);
+        var numAMC = armyCampRefs.length;
+        var curAMCindex = 0;
+        var capacitys = armyCampRefs.map(function(amc) {
+            // cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ', config.building.AMC_1[amc._level].capacity);
+            return config.building.AMC_1[amc._level].capacity;
+        });
+        for(item in troopInfo) {
+            var troopType = troopInfo[item];
+            if (troopType.population > 0) {
+                for (var i = 0; i < troopType.population; i++) {
+                    this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
+                    
+                    curAMCindex += 1;
+                    if (curAMCindex >= numAMC) curAMCindex = 0;
+                }
+            }
+        }
+    },
+
+    createNewTroop_1: function(type, armyCamp) {
         switch (type) {
             case "ARM_1":
                 var troop = new Warrior(armyCamp);
@@ -282,8 +304,8 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             default:
                 break;
-            return troop;
         }
+        return troop;
     },
 
     finishTimeTroopTrain: function(troopType) {

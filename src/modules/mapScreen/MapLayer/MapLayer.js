@@ -84,7 +84,7 @@ var MapLayer = cc.Layer.extend({
             var newBuilding = self.createBuilding(contruction);
             newBuilding && objectRefs.push(newBuilding);
 
-            if (newBuilding._name === "AMC_1")  armyCampRefs.push(newBuilding);
+            if (newBuilding._name === "AMC_1" && newBuilding._status !== "pending")  armyCampRefs.push(newBuilding);
             if (newBuilding._name === "BAR_1")  barrackRefs.push(newBuilding);
         });
     },
