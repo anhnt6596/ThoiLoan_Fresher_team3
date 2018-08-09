@@ -103,7 +103,7 @@ var showNextBuildingImg = function(info) {
     switch (info._name) {
         case 'TOW_1':
             buildingImg = new cc.Sprite(res.building.townhall[nextLevel]);
-
+            
             var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
@@ -132,7 +132,7 @@ var showNextBuildingImg = function(info) {
                 });
                 animSprite.runAction(buildingAnim.repeatForever());
             }
-
+            
             var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_'+ info._width +'_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
@@ -164,7 +164,7 @@ var showNextBuildingImg = function(info) {
                 y: buildingImg.height / 2
             });
             animSprite.runAction(elixirCollectorAnim.repeatForever());
-
+            
             var shadow = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_5_Shadow.png');
             shadow.attr({ scale: 2 });
             content.addChild(shadow, 5);
@@ -266,7 +266,7 @@ var showNextBuildingInfo = function(info) {
             listInfo.push('hitpoints');
             break;
         default:
-            break;
+        break;
     }
     var distanceY = 45;
     listInfo.forEach(function(element, i) {
@@ -296,7 +296,7 @@ var showNextBuildingInfo = function(info) {
 
         infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
         infoBarNext.setTextureRect(cc.rect(0, 0, (nextValue/maxValue) * infoBar.width, infoBar.height));
-
+        
         var textInfo = cc.LabelBMFont(curValue + ' + ' + (nextValue - curValue), 'res/Art/Fonts/soji_12.fnt');
         textInfo.attr({ anchorX: 0, x: 35, y: - i * distanceY });
         infoArea.addChild(textInfo, 5);

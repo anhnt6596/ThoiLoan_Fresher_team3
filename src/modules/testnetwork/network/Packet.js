@@ -480,16 +480,16 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
 
                 if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
-                        _id: this._id,
-                        name: this.name,
-                        level: this.level,
-                        posX: this.posX,
-                        posY: this.posY,
+                       _id: this._id,
+                       name: this.name,
+                       level: this.level,
+                       posX: this.posX,
+                       posY: this.posY,
                         status: this.status,
                         startTime: this.startTime,
                         buildTime: config.building[this.name][this.level].buildTime,
-                        width: config.building[this.name][1].width,
-                        height: config.building[this.name][1].height,
+                       width: config.building[this.name][1].width,
+                       height: config.building[this.name][1].height,
                     };
                     contructionList.push(contruction);
                 }

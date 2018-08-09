@@ -41,22 +41,22 @@ var ArmyCamp = Building.extend({
         createSolidMapArray();
         this._listArmy.forEach(element => {
             element.moveTo();
-    });
-},
-calculatePopulation: function() {
-    if (this._status === 'complete' || this._status === 'upgrade') {
-        this._capacity = config.building[this._name][this._level].capacity;
-        // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._capacity: " + this._capacity);
-        this._curStorage = 0;
-        var self = this;
-        this._listArmy.forEach(function(troop) {
-            self._curStorage += troop._housingSpace;
         });
-        // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._curStorage: " + this._curStorage);
-    } else {
-        this._capacity = 0;
-        this._curStorage = 0;
-    }
-    this.presentImg();
-},
+    },
+    calculatePopulation: function() {
+        if (this._status === 'complete' || this._status === 'upgrade') {
+            this._capacity = config.building[this._name][this._level].capacity;
+            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._capacity: " + this._capacity);
+            this._curStorage = 0;
+            var self = this;
+            this._listArmy.forEach(function(troop) {
+                self._curStorage += troop._housingSpace;
+            });
+            // cc.log(">>>>>>>>>>><<<<<<<<<<<<>>>>>>>>>>>>>>>this._curStorage: " + this._curStorage);
+        } else {
+            this._capacity = 0;
+            this._curStorage = 0;
+        }
+        this.presentImg();
+    },
 });

@@ -26,7 +26,7 @@ var Troop = cc.Sprite.extend({
     _status: "standing",
     _moveSpeed: 1,
     _stopFlag: 0,
-
+    
     ctor: function(building, img) {
         this._super(img);
         this._level = troopInfo[this._type].level || 1;
@@ -232,7 +232,7 @@ var Troop = cc.Sprite.extend({
                 for (var i = 1; i < _size - 1; i++) {
                     for (var j = 1; j < _size - 1; j++) {
                         if (_inRow + i < SOLID_MAP_VALUE.SIZE && _inColumn + j < SOLID_MAP_VALUE.SIZE)
-                            solidMapArray[_inRow + i][_inColumn + j] = SOLID_MAP_VALUE.SOLID_2;
+                        solidMapArray[_inRow + i][_inColumn + j] = SOLID_MAP_VALUE.SOLID_2;
                     }
                 }
             }
@@ -251,14 +251,14 @@ var Troop = cc.Sprite.extend({
     calculateTroopCoorInArmyCamp: function() {
         var add1 = randomInt(0, 1);
         var add2 = randomInt(0, 1);
-        var x = add1
-            ? this._buildingContain.buildingImg.x + randomInt(2, 6) * TILE_WIDTH / 4
-            : this._buildingContain.buildingImg.x - randomInt(2, 6) * TILE_WIDTH / 4;
+        var x = add1 
+        ? this._buildingContain.buildingImg.x + randomInt(2, 6) * TILE_WIDTH / 4
+        : this._buildingContain.buildingImg.x - randomInt(2, 6) * TILE_WIDTH / 4;
 
         var y = add2
-            ? this._buildingContain.buildingImg.y + randomInt(2, 6) * TILE_HEIGHT / 4
-            : this._buildingContain.buildingImg.y - randomInt(2, 6) * TILE_HEIGHT / 4;
-
+        ? this._buildingContain.buildingImg.y + randomInt(2, 6) * TILE_HEIGHT / 4
+        : this._buildingContain.buildingImg.y - randomInt(2, 6) * TILE_HEIGHT / 4;
+        
         return { x: x, y: y };
     },
     calculateStartPosionInBarrack: function(bar) {

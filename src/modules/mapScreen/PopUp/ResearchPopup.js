@@ -61,7 +61,7 @@ var ResearchPopUp = ui.PopUp.extend({
     nameTroopText: "",
     ctor: function() {
         ResearchPOPUP = this,
-            this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
+        this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
         this.init();
     },
     init: function () {
@@ -110,6 +110,21 @@ var ResearchPopUp = ui.PopUp.extend({
                 var distance = countDownDate - (now - obj.startTime);
                 if (distance<=0){
                     obj.level++;
+
+                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 1===================");
+                    //Cap nhat lai level linh trong TrainPopup cua Barrack
+                    for(var i in barrackQueueList){
+                        var barrack = barrackQueueList[i];
+                        if(barrack._troopList){
+                            for(var k in barrack._troopList){
+                                if(barrack._troopList[k]._name == obj.type){
+                                    barrack._troopList[k]._level++;
+                                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 3===================");
+                                }
+                            }
+                        }
+                    }
+
                     obj.status = research_constant.status.free;
                 }
             }
@@ -359,7 +374,7 @@ var ResearchPopUp = ui.PopUp.extend({
             )
             button.label_rq.text_rq1.setColor(new cc.Color(220,20,60));
 
-            /**/
+/**/
             button.label_rq.text_rq2 = new cc.LabelBMFont("nghiên cứu", research_constant.description_dir );
             button.label_rq.text_rq2.attr({
                     x: button.label_rq.width/2,
@@ -368,7 +383,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 }
             )
             button.label_rq.text_rq2.setColor(new cc.Color(220,20,60));
-            /**/
+/**/
             console.log("button name " + button.name);
             var level_btn = this.listTroop[button.name].level;
             console.log("level_btn ="+level_btn);
@@ -387,7 +402,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 x: button.width/2+2,
                 y: button.label_rq.height/2+7,
             })
-            /**/
+/**/
             button.label_rq.addChild(button.label_rq.text_rq1);
             button.label_rq.addChild(button.label_rq.text_rq2);
             button.label_rq.addChild(button.label_rq.text_rq3);

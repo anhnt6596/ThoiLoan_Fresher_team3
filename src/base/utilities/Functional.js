@@ -231,7 +231,7 @@ var increaseUserResources = function(resources){
     //if(gv.user.darkElixir + resources.darkElixir > gv.user.maxCapacityDarkElixir){
     //    gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
     //}else{
-    gv.user.darkElixir += resources.darkElixir;
+        gv.user.darkElixir += resources.darkElixir;
     //}
 
     gv.user.coin += resources.coin;
@@ -364,13 +364,21 @@ var objectSize = function(obj) {
     return size;
 };
 
-var getTotalTroopCapacity = function(){
+var getTotalCapacityAMCs = function(){
     var total = 0;
     for(var k in contructionList){
         var build = contructionList[k];
         if((build.status == 'complete' || build.status == 'upgrade') && (build.name == 'AMC_1')){
             total += config.building['AMC_1'][build.level].capacity;
         }
+    }
+    return total;
+};
+
+var getTotalCurrentTroopCapacity = function(){
+    var total = 0;
+    for(var i in troopInfo){
+        total += troopInfo[i].population * config.troopBase[i].housingSpace;
     }
     return total;
 };

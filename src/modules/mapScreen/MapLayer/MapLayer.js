@@ -50,7 +50,7 @@ var MapLayer = cc.Layer.extend({
         this.initObstacles(obstacleLists);
         this.createLogicArray(contructionList, obstacleLists);
         createSolidMapArray(); // tạo mảng di chuyển lính trên map
-
+        
         this.scale = 0.75;
         for (var i = 0; i < objectRefs.length; i++) { // màn hình hướng đến nhà chính
             if(objectRefs[i]._name === 'TOW_1') {
@@ -67,7 +67,7 @@ var MapLayer = cc.Layer.extend({
         mapPosition = this.reverseMapCoor(xy);
         cc.log('town.info.pos + ' + town._posX + '/' + town._posY);
         cc.log('mapPosition + ' + mapPosition.x + '/' + mapPosition.y);
-
+        
         var p = {x: 0, y: 0};
         p.x = (-mapPosition.x) + size.width/2;
         p.y = (-mapPosition.y) + size.height/2;
@@ -165,7 +165,7 @@ var MapLayer = cc.Layer.extend({
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
                     if (_inRow + i < MAPVALUE.MAPSIZE && _inColumn + j < MAPVALUE.MAPSIZE)
-                        mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
+                    mapLogicArray[_inRow + i][_inColumn + j] = contructions[contruction]._id;
                 }
             }
         }
@@ -176,7 +176,7 @@ var MapLayer = cc.Layer.extend({
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
                     if (_inRow + i < MAPVALUE.MAPSIZE && _inColumn + j < MAPVALUE.MAPSIZE)
-                        mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
+                    mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
                 }
             }
         }
@@ -191,7 +191,7 @@ var MapLayer = cc.Layer.extend({
             scale: 2,
         });
         this.addChild(bg_bl, Z.BACKGROUND);
-
+        
         var bg_br = new cc.Sprite(res.map.map_br);
         bg_br.attr({
             anchorX: 0,
@@ -396,7 +396,7 @@ var MapLayer = cc.Layer.extend({
             cc.log("Nha: " + contructionList[item].name + ", id: " + contructionList[item]._id + ", status: " + contructionList[item].status + ", startTime: " + contructionList[item].startTime);
         }
         cc.log("=======================Het Map=======================");
-
+    
         this._isBuilding = true;
         LOBBY.hideLobby();
         //var newBuilding = new BuilderHut(buildingInfo);
@@ -498,13 +498,13 @@ var MapLayer = cc.Layer.extend({
         buildingInfo.posY = newBuilding._posY;
 
         contructionList.push(buildingInfo);
-
+        
         if(buildingInfo.buildTime){
             var cur = Math.ceil((getCurrentServerTime() - buildingInfo.startTime)/1000);
             var max = buildingInfo.buildTime;
             newBuilding.build(cur, max);
         }
-
+        
         objectRefs.push(newBuilding);
         MAP.createLogicArray(contructionList, obstacleLists);
 
@@ -560,7 +560,7 @@ var MapLayer = cc.Layer.extend({
         }
         if (touches.length >= 2) {
             var size = cc.winSize;
-
+            
             var p1 = touches[0];
             var p2 = touches[1];
             var rootP1 = cc.pSub(p1.getLocation(), p1.getDelta());

@@ -137,7 +137,7 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         }
-
+        
         MAP.arrows[this._width].attr({
             x: coor.x,
             y: coor.y,
@@ -291,7 +291,7 @@ var Contruction = cc.Class.extend({
             opacity: 0,
         });
         MAP.addChild(nameText, 1000);
-
+        
         var levelText = new cc.LabelBMFont('cấp ' + this._level, 'res/Art/Fonts/soji_16.fnt');
         this.levelText = levelText;
         levelText.attr({
@@ -462,9 +462,7 @@ var Contruction = cc.Class.extend({
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
         increaseUserResources(refundResources);
 
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        LOBBY.update(gv.user);
+        updateGUI();
     },
     remove:function() {
         this.removeTarget();
@@ -478,9 +476,9 @@ var Contruction = cc.Class.extend({
     removeComplete:function(){
         var self = this;
         var newContructionList = contructionList.filter(function(element) {
-            if (element._id == self._id) return false;
-            return true;
-        });
+                if (element._id == self._id) return false;
+                return true;
+            });
         contructionList = newContructionList;
         this.removeImg();
         MAP.createLogicArray(contructionList, obstacleLists);
@@ -575,87 +573,87 @@ var Contruction = cc.Class.extend({
                 //    updateTimeFlag = false;
                 //}
                 cur = (getCurrentServerTime() - this.startTime)/1000;
-            if (cur >= max) {
-                if(this._status == 'pending'){
-                    this.buildComplete(false);
-                }else if(this._status == 'upgrade'){
-                    this.upgradeComplete(false);
+                if (cur >= max) {
+                    if(this._status == 'pending'){
+                        this.buildComplete(false);
+                    }else if(this._status == 'upgrade'){
+                        this.upgradeComplete(false);
+                    }
+                    return;
+                } else {
+                    this.updateTimeBar(cur, max);
+                    if(this._status == 'pending' || this._status == 'upgrade'){
+                        tick();
+                    }
                 }
-                return;
-            } else {
-                this.updateTimeBar(cur, max);
-                if(this._status == 'pending' || this._status == 'upgrade'){
-                    tick();
-                }
+                //cur +=1;
+            }, 1000);
+        }
+        //Chay 1 lan
+        tick();
+    },
+    onTargetSound: function() {
+        if (SOUND) {
+            switch (this._name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_pickup);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_pickup);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_pickup);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_pickup);
+                    break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_pickup);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_pickup);
+                    break;
+                default:
+                    break;
             }
-            //cur +=1;
-        }, 1000);
-    }
-    //Chay 1 lan
-    tick();
-},
-onTargetSound: function() {
-    if (SOUND) {
-        switch (this._name) {
-            case 'TOW_1':
-                cc.audioEngine.playEffect(sRes.townhall_pickup);
-                break;
-            case 'RES_1':
-                cc.audioEngine.playEffect(sRes.goldmine_pickup);
-                break;
-            case 'STO_1':
-                cc.audioEngine.playEffect(sRes.goldstorage_pickup);
-                break;
-            case 'RES_2':
-                cc.audioEngine.playEffect(sRes.elixirpump_pickup);
-                break;
-            case 'STO_2':
-                cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
-                break;
-            case 'BDH_1':
-                cc.audioEngine.playEffect(sRes.builderhut_pickup);
-                break;
-            case 'AMC_1':
-                cc.audioEngine.playEffect(sRes.camp_pickup);
-                break;
-            case 'DEF_1':
-                cc.audioEngine.playEffect(sRes.cannon_pickup);
-                break;
-            default:
-                break;
         }
-    }
-},
-onPlaceSound: function() {
-    if (SOUND) {
-        switch (this._name) {
-            case 'TOW_1':
-                cc.audioEngine.playEffect(sRes.townhall_place);
-                break;
-            case 'RES_1':
-                cc.audioEngine.playEffect(sRes.goldmine_place);
-                break;
-            case 'STO_1':
-                cc.audioEngine.playEffect(sRes.goldstorage_place);
-                break;
-            case 'RES_2':
-                cc.audioEngine.playEffect(sRes.elixirpump_place);
-                break;
-            case 'STO_2':
-                cc.audioEngine.playEffect(sRes.elixirstorage_place);
-                break;
-            case 'BDH_1':
-                cc.audioEngine.playEffect(sRes.builderhut_place);
-                break;
-            case 'AMC_1':
-                cc.audioEngine.playEffect(sRes.camp_place);
-                break;
-            case 'DEF_1':
-                cc.audioEngine.playEffect(sRes.cannon_place);
-                break;
-            default:
-                break;
+    },
+    onPlaceSound: function() {
+        if (SOUND) {
+            switch (this._name) {
+                case 'TOW_1':
+                    cc.audioEngine.playEffect(sRes.townhall_place);
+                    break;
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.goldmine_place);
+                    break;
+                case 'STO_1':
+                    cc.audioEngine.playEffect(sRes.goldstorage_place);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.elixirpump_place);
+                    break;
+                case 'STO_2':
+                    cc.audioEngine.playEffect(sRes.elixirstorage_place);
+                    break;
+                case 'BDH_1':
+                    cc.audioEngine.playEffect(sRes.builderhut_place);
+                    break;
+                case 'AMC_1':
+                    cc.audioEngine.playEffect(sRes.camp_place);
+                    break;
+                case 'DEF_1':
+                    cc.audioEngine.playEffect(sRes.cannon_place);
+                    break;
+                default:
+                    break;
+            }
         }
-    }
-},
+    },
 });
