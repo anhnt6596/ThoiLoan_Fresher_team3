@@ -701,7 +701,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 population: population,
                 startTime: startTime,
                 status: status,
-                name: name.troop[type].vi,
+                name: name.troop[type].vi
             };
 
         }
@@ -711,11 +711,11 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 research_constant.status.now = obj.status;
                 research_constant.troop = obj;
             }
-            cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
-            cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
-            cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
-            cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
-            cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+            //cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level);
+            //cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock);
+            //cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
+            //cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime);
+            //cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status);
         }
     }
 });
@@ -777,12 +777,10 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     cc.log("================================= Troop Type: " + this.troopType);
                     this.amount = this.getInt();
                     cc.log("================================= Troop Amount: " + this.amount);
-                    this.isInQueue = this.getBool();
-                    cc.log("================================= is in queue: " + this.isInQueue);
 
                     this.currentPosition = this.getInt();
                     cc.log("================================= current position: " + this.currentPosition);
-                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.isInQueue, this.currentPosition);
+                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.currentPosition);
                 }
             }
         }

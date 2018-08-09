@@ -99,21 +99,22 @@ var LobbyLayer = cc.Layer.extend({
                     break;
                 default:
                     break;
-                }
-                troop && troop.appear(MAP._targetedObject);
-                listTroopRefs.push(troop);
-        }
+            }
+            troop && troop.appear(MAP._targetedObject);
+        };
         if (MAP._targetedObject) {
             var r = randomInt(0,8);
             createNewTroop(l[r]);
+            //var troop = new Warrior(armyCampRefs[0]); // truyen vao object Army camp
+            //troop.appear(MAP._targetedObject); // truyen vao nha bat dau de no chay ra nha army camp tuong ung, con k co dong nay thi no se xuat hien o AMC ben tren
         }
         // NETWORK.sendResearchTroop("ARM_1");
     },
     onTreasure: function() {
-        createSolidMapArray();
-        listTroopRefs.forEach(element => {
-            element.moveTo(objectRefs[0]);
-        });
+        //createSolidMapArray();
+        //listTroopRefs.forEach(element => {
+        //    element.moveTo(objectRefs[0]);
+        //});
         // NETWORK.sendResearchComplete("ARM_1");
     },
     hideLobby: function() {

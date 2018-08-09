@@ -341,7 +341,7 @@ var Contruction = cc.Class.extend({
             barrackQueueList[this._id]._totalTroopCapacity = 0;
             barrackQueueList[this._id]._startTime = 0;
             barrackQueueList[this._id]._troopList = {};
-            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, false, -1);
+            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
         }
     },
     upgrade: function() {
@@ -408,7 +408,7 @@ var Contruction = cc.Class.extend({
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         if(this._name == "BAR_1"){
             var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, false, -1);
+            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
         }
     },
     cancel: function(building){
