@@ -33,6 +33,12 @@ var res = {
     mg_trophy: 'res/Art/GUIs/Main_Gui/trophy.png',
     mg_trophy_bg_bar: 'res/Art/GUIs/Main_Gui/trophy_bg_bar.png',
 
+    collect_bg: 'res/Art/GUIs/collect_res/collect_bg.png',
+    full_bg: 'res/Art/GUIs/collect_res/full_bg.png',
+    gold_img:  'res/Art/GUIs/collect_res/RES_1.png',
+    elixir_img:  'res/Art/GUIs/collect_res/RES_2.png',
+    darkElixir_img:  'res/Art/GUIs/collect_res/RES_3.png',
+
     textureTransparentPack_png : 'res/textureTransparentPack.png'
 };
 

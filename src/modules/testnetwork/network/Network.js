@@ -41,13 +41,15 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
                 this.sendGetMapInfo();
+                this.sendGetTroopInfo();
                 //this.sendGetBarrackQueueInfo();
                 //Phai hien thi them cac troop da dc train offline
                 //this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
+
                 fr.getCurrentScreen().onFinishGameInfo();
-                this.sendGetTroopInfo();
+
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
@@ -99,6 +101,7 @@ testnetwork.Connector = cc.Class.extend({
                     buildingUpgrade.countDown(cur, max);
                     buildingUpgrade.buildTime = max;
 
+
                     for(var item in contructionList){
                         if(contructionList[item]._id == buildingUpgrade._id){
                             contructionList[item].status = 'upgrade';
@@ -111,6 +114,11 @@ testnetwork.Connector = cc.Class.extend({
                     updateBuilderNumber();
                     reduceUserResources(ReducedTempResources);
                     resetReducedTempResources();
+                    console.log("ten nha = "+ buildingUpgrade._name);
+                    if (buildingUpgrade._name===('RES_1'||'RES_2'||'RES_3') ) {
+                        cc.log("cho phep upgrade");
+                        buildingUpgrade.onCollectResource(true);
+                    }
 
                     //reset
                     buildingUpgrade = null;
@@ -637,5 +645,10 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(idBarrack);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND QUICK FINISH TRAIN TROOP==========================================');
+    sendDoHarvest: function (id) {
+        var pk = this.gameClient.getOutPacket(CmdSendDoHarvest);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
     }
 });
