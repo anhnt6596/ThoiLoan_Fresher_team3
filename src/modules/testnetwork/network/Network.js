@@ -5,6 +5,7 @@
 var gv = gv||{};
 var testnetwork = testnetwork||{};
 count =0;
+var sendTroopInfoFlag = false;
 var requestedServerTime = 0;
 
 var NETWORK = NETWORK || null;
@@ -186,21 +187,36 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_TROOP_INFO: 
                 cc.log('================>', packet.message);
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
-                this.sendGetBarrackQueueInfo();
-                this.divideTroopToArmyCamp();
+                if(sendTroopInfoFlag == false){
+                    this.sendGetBarrackQueueInfo();
+                }else{
+                    this.divideTroopToArmyCamp();
+                    for (var item in troopInfo) {
+                        var obj = troopInfo[item];
+                        if (obj.status===research_constant.status.busy){
+                            research_constant.status.now = obj.status;
+                            research_constant.troop = obj;
+                        }
+                        cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
+                    }
+                }
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
                 //Cap nhat lai population cua linh sau khi kiem tra barrack queue info --> cai tien: chi can yeu cau population
-                //this.sendGetTroopInfo();
+                sendTroopInfoFlag = true;
+                this.sendGetTroopInfo();
                 break;
             case gv.CMD.TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN TRAIN TROOP tu SERVER=======================================");
-
-
                     cc.log("======================================= trainedBarrackId" + trainedBarrackId);
+                    cc.log("======================================= trainedTroopType" + trainedTroopType);
                     this.trainTroopCompleted(trainedTroopType);
+
+                    reduceUserResources(ReducedTempResources);
+                    logReducedUserResources();
+                    resetReducedTempResources();
 
                     //reset
                     trainedBarrackId = null;
@@ -210,6 +226,7 @@ testnetwork.Connector = cc.Class.extend({
                     showPopupNotEnoughG('server_denied_train_troop');
 
                     //reset
+                    resetReducedTempResources();
                     trainedBarrackId = null;
                     trainedTroopType = null;
                 }
@@ -275,7 +292,7 @@ testnetwork.Connector = cc.Class.extend({
             // cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ', config.building.AMC_1[amc._level].capacity);
             return config.building.AMC_1[amc._level].capacity;
         });
-        for(item in troopInfo) {
+        for(var item in troopInfo) {
             var troopType = troopInfo[item];
             if (troopType.population > 0) {
                 for (var i = 0; i < troopType.population; i++) {

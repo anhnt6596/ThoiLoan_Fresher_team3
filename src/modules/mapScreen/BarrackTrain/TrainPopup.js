@@ -105,25 +105,25 @@ var TrainPopup = TinyPopup.extend({
 
 
     touchEvent: function() {
-        NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
-        trainedBarrackId = TRAIN_POPUP._id;
-        trainedTroopType = this._name;
-
-
         //Check capacity va tai nguyen trc khi ++
-        //var costItem = TRAIN_POPUP._troopList[this._name].getCost();
-        //var gResources = checkUserResources(costItem);
+        var costItem = TRAIN_POPUP._troopList[this._name].getCost();
+        var gResources = checkUserResources(costItem);
 
-
-        //} else{ //Thieu tai nguyen
-        //    if(gv.user.coin < gResources){
-        //        showPopupNotEnoughG('train_troop');
-        //    }else{
-        //        var data = {g:gResources};
-        //        var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
-        //        cc.director.getRunningScene().addChild(popup, 2000000);
-        //    }
-        //}
+        if(gResources == 0){
+            _.extend(ReducedTempResources, costItem);
+            trainedBarrackId = TRAIN_POPUP._id;
+            trainedTroopType = this._name;
+            NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
+        } else if(gResources > 0){
+            if(gv.user.coin < gResources){
+                showPopupNotEnoughG('train_troop');
+            }else{
+                var temp = {id: TRAIN_POPUP._id, name: this._name};
+                var data = {type:getLackingResources(costItem), g:gResources, cost:costItem, temp:temp};
+                var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        }
     },
 
     updateAmount: function(item) {
@@ -221,7 +221,7 @@ var TrainPopup = TinyPopup.extend({
     countDown: function(){
         var tick = function() {
             setTimeout(function() {
-                cc.log("======================= AMOUNT ITEMS IN QUEUE =======================" + TRAIN_POPUP._amountItemInQueue);
+                //cc.log("======================= AMOUNT ITEMS IN QUEUE =======================" + TRAIN_POPUP._amountItemInQueue);
                     var cur = (getCurrentServerTime() - TRAIN_POPUP._startTime)/1000;
                     if(!TRAIN_POPUP.getFirstItemInQueue()){
                         return;
