@@ -14,6 +14,8 @@ gv.CMD.ADD_CONSTRUCTION = 2003;
 gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 gv.CMD.CANCEL_CONSTRUCTION = 2005;
 gv.CMD.REMOVE_OBSTACLE = 2006;
+gv.CMD.DO_HARVEST = 2008;
+
 
 gv.CMD.GET_SERVER_TIME = 2100;
 gv.CMD.FINISH_TIME_CONSTRUCTION = 2101;
@@ -411,6 +413,21 @@ CmdSendFinishTimeTrainTroop = fr.OutPacket.extend(
             this.putString(typeTroop);
             //So luong cua troop do con lai trong hang doi
             this.putInt(remainTroop);
+            this.updateSize();
+        }
+    }
+);
+CmdSendDoHarvest = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.DO_HARVEST);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
             this.updateSize();
         }
     }

@@ -100,9 +100,24 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later!";
             title = "Server denied to finish this troop";
             break;
+        case 'server_denied_quick_finish_train_troop':
+            data.content = "Please try again later!";
+            title = "Server denied to quick finish those troops";
+            break;
         case 'research':
             data.content = "Add more G to buy resource";
             title = "Do not have enough resource";
+        case 'server_denied_train_troop':
+            data.content = "Please try again later!";
+            title = "Server denied to train this troop";
+            break;
+        case 'server_denied_cancel_train_troop':
+            data.content = "Please try again later!";
+            title = "Server denied to cancel this troop";
+            break;
+        case 'server_denied_finish_time_train_troop':
+            data.content = "Please try again later!";
+            title = "Server denied to finish this troop";
             break;
         default:
             break;

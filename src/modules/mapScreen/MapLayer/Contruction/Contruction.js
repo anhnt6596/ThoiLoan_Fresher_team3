@@ -81,8 +81,22 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
-        this.onTargetSound();
-        LOBBY.showObjectMenu(MAP._targetedObject);
+        if (this._name===('RES_1'||'RES_2'||'RES_3') && (this.full_bg && this.collect_bg) ) {
+            if (this.full_bg.isVisible() || this.collect_bg.isVisible() ){
+                cc.log("cho phep upgrade");
+                this.onCollectResource(false);
+            }
+            else {
+                this.onTargetSound();
+                LOBBY.showObjectMenu(MAP._targetedObject);
+            }
+
+        }
+        else {
+            this.onTargetSound();
+            LOBBY.showObjectMenu(MAP._targetedObject);
+        }
+
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
@@ -312,6 +326,9 @@ var Contruction = cc.Class.extend({
         this.addTimeBar(cur, max);
         this.countDown(cur, max);
     },
+    setStartTime: function () {
+        this.startTime = getCurrentServerTime();
+    },
     buildComplete: function(isQuickFinish) {
         if(!isQuickFinish){
             NETWORK.sendFinishTimeConstruction(this._id);
@@ -325,10 +342,12 @@ var Contruction = cc.Class.extend({
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
+        this.setStartTime();
         cc.log("================================> _id: " + this._id);
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
+                contructionList[item].startTime = this.startTime;
                 break;
             }
         }
@@ -366,6 +385,7 @@ var Contruction = cc.Class.extend({
                 }
             }else{
                 _.extend(ReducedTempResources, costBuilding);
+
                 NETWORK.sendRequestUpgradeConstruction(this);
             }
         } else{
@@ -394,10 +414,12 @@ var Contruction = cc.Class.extend({
         this.presentImg();
         this.showLevelUpEffect();
         this.setStatus('complete');
+        this.setStartTime();
 
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
+                contructionList[item].startTime = this.startTime;
                 contructionList[item].level = this._level;
                 cc.log("============================= Level hien tai construction list: " + contructionList[item].level);
                 break;
@@ -422,9 +444,11 @@ var Contruction = cc.Class.extend({
         this.upgradeBarrier && this.buildingImg.removeChild(this.upgradeBarrier);
         this.timeBar = null;
         this.setStatus('complete');
+        this.setStartTime();
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
+                contructionList[item].startTime = this.startTime;
                 break;
             }
         }
@@ -462,9 +486,7 @@ var Contruction = cc.Class.extend({
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
         increaseUserResources(refundResources);
 
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        LOBBY.update(gv.user);
+        updateGUI();
     },
     remove:function() {
         this.removeTarget();

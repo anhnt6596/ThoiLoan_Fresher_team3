@@ -156,6 +156,35 @@ var reduceUserResources = function(costBuilding){
 
     LOBBY.update(gv.user);
 };
+var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi thoi gian sang san luong, thoi gian truyen vao tinh theo s
+    var unit_product = config.building[type][level].productivity;
+    console.log("unit_product = "+unit_product);
+    var ans = ((time_sanxuat / (60 * 60)) * unit_product);
+    var capacity = config.building[type][level].capacity;
+
+    if (ans>capacity){
+        ans = capacity;
+        return {sanluong:ans, is_full:true};
+    }
+    return {sanluong:ans, is_full:false};
+}
+var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
+    gv.user.gold = gv.user.gold + _gold;
+    if (gv.user.gold>gv.user.maxCapacityGold) {
+        gv.user.gold = gv.user.maxCapacityGold;
+    }
+    gv.user.elixir = gv.user.elixir + _elixir;
+    if (gv.user.elixir>gv.user.maxCapacityElixir) {
+        gv.user.elixir = gv.user.maxCapacityElixir;
+    }
+    gv.user.darkElixir = gv.user.darkElixir + _darkElixir;
+    if (gv.user.darkElixir>gv.user.maxCapacityDarkElixir){
+        gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
+    }
+    gv.user.coin = gv.user.coin + _coin;
+    LOBBY.update(gv.user);
+}
+
 var reduceUserResourcesResearch = function(gold,elixir,darkElixir,coin){
     if(gv.user.gold >= gold){
         gv.user.gold -= gold;
@@ -364,13 +393,21 @@ var objectSize = function(obj) {
     return size;
 };
 
-var getTotalTroopCapacity = function(){
+var getTotalCapacityAMCs = function(){
     var total = 0;
     for(var k in contructionList){
         var build = contructionList[k];
         if((build.status == 'complete' || build.status == 'upgrade') && (build.name == 'AMC_1')){
             total += config.building['AMC_1'][build.level].capacity;
         }
+    }
+    return total;
+};
+
+var getTotalCurrentTroopCapacity = function(){
+    var total = 0;
+    for(var i in troopInfo){
+        total += troopInfo[i].population * config.troopBase[i].housingSpace;
     }
     return total;
 };

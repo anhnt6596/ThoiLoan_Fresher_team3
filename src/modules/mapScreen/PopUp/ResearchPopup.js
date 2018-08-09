@@ -69,14 +69,14 @@ var ResearchPopUp = ui.PopUp.extend({
         //console.log("lab_status : "+ research_constant.status.now);
         //console.log("troop dang train neu co: "+ this.troop.toString());
         //
-        //for (item in troopInfo) {
-        //    var obj = troopInfo[item];
-        //    cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
-        //    cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
-        //    cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
-        //    cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
-        //    cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
-        //}
+        for (item in troopInfo) {
+            var obj = troopInfo[item];
+            cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
+            cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
+            cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
+            cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
+            cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+        }
         this.checkStatusTroop();
 
         this.lab_level = this.getConstructionList("LAB_1","level");
@@ -110,6 +110,21 @@ var ResearchPopUp = ui.PopUp.extend({
                 var distance = countDownDate - (now - obj.startTime);
                 if (distance<=0){
                     obj.level++;
+
+                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 1===================");
+                    //Cap nhat lai level linh trong TrainPopup cua Barrack
+                    for(var i in barrackQueueList){
+                        var barrack = barrackQueueList[i];
+                        if(barrack._troopList){
+                            for(var k in barrack._troopList){
+                                if(barrack._troopList[k]._name == obj.type){
+                                    barrack._troopList[k]._level++;
+                                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 3===================");
+                                }
+                            }
+                        }
+                    }
+
                     obj.status = research_constant.status.free;
                 }
             }
@@ -553,6 +568,7 @@ var ResearchPopUp = ui.PopUp.extend({
             });
             this.setEnableBtn(false);
         }
+
         else {
             self = this;
             this.listBtn_troop.forEach(function(element) {

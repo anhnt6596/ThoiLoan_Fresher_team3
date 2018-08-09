@@ -41,13 +41,15 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
                 this.sendGetMapInfo();
+                this.sendGetTroopInfo();
                 //this.sendGetBarrackQueueInfo();
                 //Phai hien thi them cac troop da dc train offline
                 //this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
+
                 fr.getCurrentScreen().onFinishGameInfo();
-                this.sendGetTroopInfo();
+
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
                 //short packet.validate //success=1; false=0;
@@ -99,6 +101,7 @@ testnetwork.Connector = cc.Class.extend({
                     buildingUpgrade.countDown(cur, max);
                     buildingUpgrade.buildTime = max;
 
+
                     for(var item in contructionList){
                         if(contructionList[item]._id == buildingUpgrade._id){
                             contructionList[item].status = 'upgrade';
@@ -111,6 +114,11 @@ testnetwork.Connector = cc.Class.extend({
                     updateBuilderNumber();
                     reduceUserResources(ReducedTempResources);
                     resetReducedTempResources();
+                    console.log("ten nha = "+ buildingUpgrade._name);
+                    if (buildingUpgrade._name===('RES_1'||'RES_2'||'RES_3') ) {
+                        cc.log("cho phep upgrade");
+                        buildingUpgrade.onCollectResource(true);
+                    }
 
                     //reset
                     buildingUpgrade = null;
@@ -234,10 +242,16 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.CANCEL_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN CANCEL TRAIN TROOP tu SERVER=======================================");
-
-
                     cc.log("======================================= trainedBarrackId" + trainedBarrackId);
                     this.canceledTrainTroop(trainedTroopType);
+
+                    var costItem = TRAIN_POPUP._troopList[trainedTroopType].getCost();
+                    cc.log("============================= Elixir cost: " + costItem.elixir);
+                    //Refund
+                    var refundResources = {gold:costItem.gold, elixir:costItem.elixir, darkElixir:costItem.darkElixir, coin:costItem.coin};
+                    increaseUserResources(refundResources);
+
+                    LOBBY.update(gv.user);
 
                     //reset
                     trainedBarrackId = null;
@@ -254,15 +268,17 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    //this.createTroopAfterSVResponseSuccess("ARM_1", armyCampRefs[0], MAP._targetedObject);
-
+                    var start;
+                    for(var i in objectRefs){
+                        if(objectRefs[i]._id == trainedBarrackId){
+                            start = objectRefs[i];
+                            break;
+                        }
+                    }
+                    this.createTroopAfterSVResponseSuccess(trainedTroopType, armyCampRefs[0], start);
 
                     cc.log("======================================= trainedBarrackId" + trainedBarrackId);
                     this.finishTimeTroopTrain(trainedTroopType);
-                    troopInfo[trainedTroopType].population++;
-
-                    //Cho linh chay ra
-
 
                     //reset
                     trainedBarrackId = null;
@@ -276,11 +292,77 @@ testnetwork.Connector = cc.Class.extend({
                     trainedTroopType = null;
                 }
                 break;
+            case gv.CMD.QUICK_FINISH_TRAIN_TROOP:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN QUICK FINISH TRAIN TROOP tu SERVER=======================================");
+                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
+                    this.quickFinishTroopTrain(trainedBarrackId);
+
+                    //reset
+                    trainedBarrackId = null;
+                }else {
+                    cc.log("=======================================SERVER TU CHOI QUICK FINISH TRAIN TROOP=======================================");
+                    showPopupNotEnoughG('server_denied_quick_finish_train_troop');
+
+                    //reset
+                    resetReducedTempResources();
+                    trainedBarrackId = null;
+                }
+                break;
         }
     },
 
+    quickFinishTroopTrain: function(id) {
+        //Tru tien
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+
+
+        //An tat ca, reset queue, troop
+        var here = barrackQueueList[trainedBarrackId];
+
+        TRAIN_POPUP._queueLength = 0;
+        TRAIN_POPUP._totalTroopCapacity = 0;
+        here._totalTroopCapacity = 0;
+        TRAIN_POPUP._amountItemInQueue = 0;
+        here._amountItemInQueue = 0;
+
+        var start;
+        for(var i in objectRefs){
+            if(objectRefs[i]._id == id){
+                start = objectRefs[i];
+                break;
+            }
+        }
+
+        //cho tat ca linh chay
+        for(var i in TRAIN_POPUP._troopList){
+            for(var j = 0; j < TRAIN_POPUP._troopList[i]._amount; j++){
+                this.createTroopAfterSVResponseSuccess(i, armyCampRefs[0], start);
+            }
+        }
+
+        for(var i in TRAIN_POPUP._troopList){
+            troopInfo[i].population += TRAIN_POPUP._troopList[i]._amount;
+            TRAIN_POPUP._troopList[i]._amount = 0;
+            TRAIN_POPUP._itemInQueue[i].setPosition(-1000, -1000);
+            TRAIN_POPUP._troopList[i]._currentPosition = -1;
+
+            TRAIN_POPUP._timeBar.visible = false;
+            TRAIN_POPUP._statusCountDown = false;
+
+        }
+
+        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+        TRAIN_POPUP.enableItemDisplay();
+
+        var totalCapacity = getTotalCapacityAMCs();
+        var currentCapacity = getTotalCurrentTroopCapacity();
+        TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
+    },
+
     createTroopAfterSVResponseSuccess: function(type, armyCamp, barrack) {
-        var troop = this.createNewTroop(type, armyCamp);
+        var troop = this.createNewTroop_1(type, armyCamp);
         troop && troop.appear(barrack);
     },
 
@@ -326,6 +408,7 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     finishTimeTroopTrain: function(troopType) {
+        troopInfo[trainedTroopType].population++;
         var here = barrackQueueList[trainedBarrackId];
 
         //if(TRAIN_POPUP._troopList[troopType]._amount > 0){
@@ -361,6 +444,12 @@ testnetwork.Connector = cc.Class.extend({
             TRAIN_POPUP._statusCountDown = true;
             TRAIN_POPUP.countDown();
         }
+
+        var totalCapacity = getTotalCapacityAMCs();
+        var currentCapacity = getTotalCurrentTroopCapacity();
+        TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
+        TRAIN_POPUP.upadateQuickFinishTimeAndCost();
+
         //}
     },
 
@@ -369,39 +458,41 @@ testnetwork.Connector = cc.Class.extend({
         var here = barrackQueueList[trainedBarrackId];
 
         if(TRAIN_POPUP._troopList[troopType]._amount == 0) {
-                TRAIN_POPUP._amountItemInQueue++;
-                here._amountItemInQueue++;
-                TRAIN_POPUP._troopList[troopType]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
+            TRAIN_POPUP._amountItemInQueue++;
+            here._amountItemInQueue++;
+            TRAIN_POPUP._troopList[troopType]._currentPosition = TRAIN_POPUP._amountItemInQueue - 1;
 
-                //item dau tien va icon dau tien trong item
-                if(TRAIN_POPUP._troopList[troopType]._currentPosition == 0 && TRAIN_POPUP._troopList[troopType]._amount == 0){
-                    TRAIN_POPUP._startTime = getCurrentServerTime();
-                    here._startTime = getCurrentServerTime();
+            //item dau tien va icon dau tien trong item
+            if(TRAIN_POPUP._troopList[troopType]._currentPosition == 0 && TRAIN_POPUP._troopList[troopType]._amount == 0){
+                TRAIN_POPUP._startTime = getCurrentServerTime();
+                here._startTime = getCurrentServerTime();
 
-                    if(!TRAIN_POPUP._isShowTimeBar){
-                        cc.log("================================ SHOW TIME BAR sau khi train troop ================================");
-                        TRAIN_POPUP.showTimeBar();
-                        TRAIN_POPUP._isShowTimeBar = true;
-                        TRAIN_POPUP._statusCountDown = true;
-                    }else{
-                        TRAIN_POPUP._statusCountDown = true;
-                        if(TRAIN_POPUP._isShowTimeBar){
-                            TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
-                            TRAIN_POPUP.countDown();
-                        }
+                if(!TRAIN_POPUP._isShowTimeBar){
+                    cc.log("================================ SHOW TIME BAR sau khi train troop ================================");
+                    TRAIN_POPUP.showTimeBar();
+                    TRAIN_POPUP._isShowTimeBar = true;
+                    TRAIN_POPUP._statusCountDown = true;
+                }else{
+                    TRAIN_POPUP._statusCountDown = true;
+                    if(TRAIN_POPUP._isShowTimeBar){
+                        TRAIN_POPUP.updateTimeBar(0, TRAIN_POPUP.getFirstItemInQueue()._trainingTime);
+                        TRAIN_POPUP.countDown();
                     }
-                    TRAIN_POPUP._timeBar.visible = true;
                 }
-
-                TRAIN_POPUP._itemInQueue[troopType].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[troopType]._currentPosition]);
+                TRAIN_POPUP._timeBar.visible = true;
             }
-            TRAIN_POPUP._troopList[troopType]._amount++;
-            TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
-            here._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
-            TRAIN_POPUP.disableItemDisplay();
 
-            TRAIN_POPUP.updateAmount(TRAIN_POPUP._itemDisplay[troopType]);
-            TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+            TRAIN_POPUP._itemInQueue[troopType].setPosition(TRAIN_POPUP._positionsInQueue[TRAIN_POPUP._troopList[troopType]._currentPosition]);
+        }
+        TRAIN_POPUP._troopList[troopType]._amount++;
+        TRAIN_POPUP._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
+        here._totalTroopCapacity += TRAIN_POPUP._troopList[troopType]._housingSpace;
+        TRAIN_POPUP.disableItemDisplay();
+
+        TRAIN_POPUP.updateAmount(TRAIN_POPUP._itemDisplay[troopType]);
+        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+        cc.log("========================================= total time: " + TRAIN_POPUP.getTotalTimeQuickFinish());
+        TRAIN_POPUP.upadateQuickFinishTimeAndCost();
     },
 
 
@@ -429,6 +520,7 @@ testnetwork.Connector = cc.Class.extend({
         TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
         TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
         TRAIN_POPUP.enableItemDisplay();
+        TRAIN_POPUP.upadateQuickFinishTimeAndCost();
     },
 
 
@@ -587,6 +679,19 @@ testnetwork.Connector = cc.Class.extend({
     sendFinishTimeTrainTroop: function(idBarrack, typeTroop, remainTroop) {
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeTrainTroop);
         pk.pack(idBarrack, typeTroop, remainTroop);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
+    },
+
+    sendQuickFinishTrainTroop: function(idBarrack) {
+        var pk = this.gameClient.getOutPacket(CmdSendQuickFinishTrainTroop);
+        pk.pack(idBarrack);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND QUICK FINISH TRAIN TROOP==========================================');
+    },
+    sendDoHarvest: function (id) {
+        var pk = this.gameClient.getOutPacket(CmdSendDoHarvest);
+        pk.pack(id);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
     }
