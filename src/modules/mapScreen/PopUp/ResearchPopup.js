@@ -553,6 +553,7 @@ var ResearchPopUp = ui.PopUp.extend({
             });
             this.setEnableBtn(false);
         }
+
         else {
             self = this;
             this.listBtn_troop.forEach(function(element) {
