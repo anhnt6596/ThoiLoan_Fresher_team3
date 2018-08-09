@@ -80,13 +80,11 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
-        if (MAP._targetedObject) {
-            var warrior = new Warrior(MAP._targetedObject);
-            listTroopRefs.push(warrior);
-        }
-        // NETWORK.sendResearchTroop("ARM_1");
-    },
-    onTreasure: function() {);
+        var l = ["ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_2", "ARM_2", "ARM_3", "ARM_4"];
+        var createNewTroop = function(type) {
+            switch (type) {
+                case "ARM_1":
+                    var troop = new Warrior(armyCampRefs[0]);
                     break;
                 case "ARM_2":
                     var troop = new Archer(armyCampRefs[0]);
