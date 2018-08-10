@@ -5,6 +5,7 @@ var objectRefs = objectRefs || [];
 var mapLogicArray = mapLogicArray || [];
 
 var armyCampRefs = armyCampRefs || [];
+var storageBuildingRefs = storageBuildingRefs || [];
 var barrackRefs = barrackRefs || [];
 
 var rootMapPos = {
@@ -85,6 +86,7 @@ var MapLayer = cc.Layer.extend({
             newBuilding && objectRefs.push(newBuilding);
 
             if (newBuilding._name === "AMC_1" && newBuilding._status !== "pending")  armyCampRefs.push(newBuilding);
+            if (newBuilding instanceof StorageBuilding && newBuilding._status !== "pending") storageBuildingRefs.push(newBuilding);
             if (newBuilding._name === "BAR_1")  barrackRefs.push(newBuilding);
         });
     },
