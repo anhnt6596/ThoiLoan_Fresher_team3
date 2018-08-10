@@ -117,6 +117,9 @@ var ObjectMenu = cc.Node.extend({
     },
     collect: function() {
         cc.log('===========> COLLECT');
+        MAP._targetedObject.onCollectResource();
+        ui.dropCoinEffect(MAP._targetedObject);
+
     },
     train: function() {
         //NETWORK.sendGetBarrackQueueInfo();
