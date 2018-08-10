@@ -40,6 +40,9 @@ var DarkElixirCollector = CollectorBuilding.extend({
             if ( (productivity.sanluong>=suc_chua/100)  ){
                 this.addCollectIcon(productivity.is_full);
             }
+            else {
+                this.disableCollectIcon();
+            }
 
         }
     },
