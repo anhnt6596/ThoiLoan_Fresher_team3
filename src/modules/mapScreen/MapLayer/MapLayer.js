@@ -5,6 +5,7 @@ var objectRefs = objectRefs || [];
 var mapLogicArray = mapLogicArray || [];
 
 var armyCampRefs = armyCampRefs || [];
+var storageBuildingRefs = storageBuildingRefs || [];
 var barrackRefs = barrackRefs || [];
 
 var rootMapPos = {
@@ -85,6 +86,7 @@ var MapLayer = cc.Layer.extend({
             newBuilding && objectRefs.push(newBuilding);
 
             if (newBuilding._name === "AMC_1" && newBuilding._status !== "pending")  armyCampRefs.push(newBuilding);
+            if (newBuilding instanceof StorageBuilding && newBuilding._status !== "pending") storageBuildingRefs.push(newBuilding);
             if (newBuilding._name === "BAR_1")  barrackRefs.push(newBuilding);
         });
     },
@@ -330,7 +332,7 @@ var MapLayer = cc.Layer.extend({
                     } else {    // chọn object mới thì remove object cũ, target object mới và đặt zOrder cao.
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
-                        self._targetedObject.onTarget();
+                        self._targetedObject.onTargeting();
                         break;
                     }
                 } else {

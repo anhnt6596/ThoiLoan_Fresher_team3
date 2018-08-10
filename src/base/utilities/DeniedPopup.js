@@ -31,7 +31,13 @@ var DeniedPopup = TinyPopup.extend({
     }
 });
 
-
+var showPopupDisconect = function(){
+    var data = {};
+    data.content = "Mất kết nối với Server, hãy thử kết nối lại!";
+    var title = "Disconected";
+    var popup = new DeniedPopup(cc.winSize.width/2, cc.winSize.height/1.5, title, true, data);
+    cc.director.getRunningScene().addChild(popup, 2000000);
+}
 
 
 //Show thong bao khong du G de lam gi do

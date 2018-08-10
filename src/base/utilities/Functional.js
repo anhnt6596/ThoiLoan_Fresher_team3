@@ -173,8 +173,7 @@ var changeUserResource = function (_gold,_elixir,_darkElixir,_coin, is_add) {
     ? addUserResources(_gold,_elixir,_darkElixir,_coin)
     : reduceUserResourcesResearch(_gold,_elixir,_darkElixir,_coin);
     LOBBY.update(gv.user);
-
-
+    storageBuildingUpdateImg(gv.user);
 }
 var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
     gv.user.gold = gv.user.gold + _gold;
@@ -190,6 +189,7 @@ var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
         gv.user.darkElixir = gv.user.maxCapacityDarkElixir;
     }
     gv.user.coin = gv.user.coin + _coin;
+    LOBBY.update(gv.user);
 
 }
 
@@ -214,6 +214,14 @@ var reduceUserResourcesResearch = function(gold,elixir,darkElixir,coin){
     }else{
         gv.user.coin = 0;
     }
+    storageBuildingUpdateImg(gv.user);
+    LOBBY.update(gv.user);
+};
+
+var storageBuildingUpdateImg = function(userInfo) {
+    storageBuildingRefs.forEach(function(element) {
+        element.calculateStorage(userInfo);
+    });
 };
 
 var logReducedUserResources = function(){
@@ -270,6 +278,7 @@ var increaseUserResources = function(resources){
     //}
 
     gv.user.coin += resources.coin;
+    storageBuildingUpdateImg(gv.user);
     LOBBY.update(gv.user);
 };
 

@@ -22,7 +22,12 @@ var CollectorBuilding = Building.extend({
             var time_sx = (getCurrentServerTime() - this.startTime)/1000;
             //cc.log("============================start time: " +this.startTime);
             var productivity = timeToProductivity(this._name,this._level,time_sx);
+            this.productivity = productivity;
             var suc_chua = config.building[this._name][this._level].capacity;
+            //console.log("san luong = "+ productivity.sanluong);
+            if (productivity.sanluong>=1) {
+                LOBBY.objectMenu.enableCollectorBtn();
+            }
             if ( (productivity.sanluong>=suc_chua/100)  ){
                 this.addCollectIcon(productivity.is_full);
             }
@@ -98,6 +103,7 @@ var CollectorBuilding = Building.extend({
         cc.log("============================time san xuat: " + time_sx);
         var productivity = timeToProductivity(this._name,this._level,time_sx);
         productivity.sanluong = Math.round(productivity.sanluong);
+
         cc.log("============================san luong thu hoach: " +productivity.sanluong);
         switch (this._name){
             case 'RES_1':
@@ -120,5 +126,33 @@ var CollectorBuilding = Building.extend({
                 break;
             }
         }
+        this.collectEffect(this._name, productivity.sanluong);
+    },
+    collect: function() {
+        if (this.full_bg.isVisible()|| this.collect_bg.isVisible() ){
+            cc.log("cho phep upgrade");
+            this.onCollectResource(false);
+        }
+        else {
+            MAP._targetedObject = this;
+            this.onTarget();
+        }
+    },
+    collectEffect: function(type, product) {
+        ui.productTextEffect(this, type, product);
+        ui.dropCoinEffect(this);
+        var self = this;
+        setTimeout(function() {
+            ui.dropCoinEffect(self, 1);
+        }, 50);
+        setTimeout(function() {
+            ui.dropCoinEffect(self, 1);
+        }, 100);
+        setTimeout(function() {
+            ui.dropCoinEffect(self, 1);
+        }, 150);
+        setTimeout(function() {
+            ui.dropCoinEffect(self, 1);
+        }, 200);
     }
 });

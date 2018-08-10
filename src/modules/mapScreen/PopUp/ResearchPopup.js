@@ -332,6 +332,7 @@ var ResearchPopUp = ui.PopUp.extend({
         var dir_btn_bg_ = "res/Art/GUIs/research troop/slost.png";
         var imageView = new ccui.ImageView();
         imageView.loadTexture(dir_btn_bg_);
+
         var innerWidth = imageView.getContentSize().width;
         var innerHeight =imageView.getContentSize().height;
 
@@ -675,8 +676,12 @@ var ResearchPopUp = ui.PopUp.extend({
         }
     },
     setEnableBtn: function (status) {
+        var self = this;
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(status);
+            !status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            //element.label_rq_resource.setVisible(status);
+            //element.img.setBright(status);
             //element.img.setCascadeColorEnabled(!status);
         })
     },
@@ -695,12 +700,18 @@ var ResearchPopUp = ui.PopUp.extend({
             console.log(element.name+" level="+ self.listTroop[element.name].level +" lab_level_rq= "+ config.troop[element.name][self.listTroop[element.name].level+1].laboratoryLevelRequired );
             console.log("status = "+element.status);
             element.setEnabled(element.status);
+            //element.img.setBright(element.status);
+            !element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            //element.label_rq_resource.setVisible(element.status);
             //element.img.setCascadeColorEnabled(!element.status);
         })
     },
     checkRequireBtn: function (btn, level_cur) {
         if (config.troop[btn.name][level_cur+1].laboratoryLevelRequired > this.lab_level ) {
             btn.setEnabled(false);
+            btn.img.setColor(new cc.color(100, 100, 100, 255));
+            //btn.label_rq_resource.setVisible(false);
+            //btn.img.setBright(false);
             btn.status = false;
             btn.label_rq.setVisible(true);
             btn.label_rq.text_rq1.setVisible(true);
@@ -727,6 +738,8 @@ var ResearchPopUp = ui.PopUp.extend({
         this.setBackStatusBtn();
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(element.status);
+            !element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            //element.label_rq_resource.setVisible(element.status);
             //element.img.setCascadeColorEnabled(!element.status);
             if (element.name === type) {
                 var level_text_rq = config.troop[element.name][level_btn+1].laboratoryLevelRequired;

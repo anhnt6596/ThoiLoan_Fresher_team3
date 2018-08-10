@@ -45,6 +45,14 @@ var Contruction = cc.Class.extend({
 
         }
     },
+    onTargeting: function() {
+        if (this instanceof CollectorBuilding && (this.full_bg && this.collect_bg) ) {
+            MAP._targetedObject = null;
+            this.collect();
+        } else {
+            this.onTarget();
+        }
+    },
     onTarget: function() {
         var coor = this.xyOnMap(this._posX, this._posY);
         cc.log('targeted pos' + this._posX + '/' + this._posY);
@@ -81,22 +89,11 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
-        if (this._name===('RES_1'||'RES_2'||'RES_3') && (this.full_bg && this.collect_bg) ) {
-            if (this.full_bg.isVisible() || this.collect_bg.isVisible() ){
-                cc.log("cho phep upgrade");
-                this.onCollectResource(false);
-            }
-            else {
-                this.onTargetSound();
-                LOBBY.showObjectMenu(MAP._targetedObject);
-            }
-
-        }
-        else {
-            this.onTargetSound();
-            LOBBY.showObjectMenu(MAP._targetedObject);
-        }
-
+        this.onTargetSound();
+        LOBBY.showObjectMenu(MAP._targetedObject);
+    },
+    collect: function() {
+        // để rỗng
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
