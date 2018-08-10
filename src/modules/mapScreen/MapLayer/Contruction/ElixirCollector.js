@@ -1,6 +1,4 @@
 var ElixirCollector = CollectorBuilding.extend({
-    img_x: -22,
-    img_y: -44,
     ctor: function(info) {
         this._super(info);
         // this.addBuildingImg();
@@ -61,8 +59,8 @@ var ElixirCollector = CollectorBuilding.extend({
             var self = this;
             this.collect_bg.addClickEventListener(() => self.onCollectResource(false));
             this.full_bg.addClickEventListener(() => self.onCollectResource(false));
-            this.buildingImg.addChild(this.collect_bg);
-            this.buildingImg.addChild(this.full_bg);
+            this.buildingImg.addChild(this.collect_bg, 1100);
+            this.buildingImg.addChild(this.full_bg, 1100);
         }
 
         this.collect_bg.setVisible(!is_full);
@@ -73,14 +71,14 @@ var ElixirCollector = CollectorBuilding.extend({
         this.collect_img = collect_img;
         collect_img.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         var collect_img2 = new cc.Sprite(res.elixir_img);
         this.collect_img2 = collect_img2;
         collect_img2.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         this.collect_bg.addChild(collect_img);

@@ -1,6 +1,4 @@
 var DarkElixirCollector = CollectorBuilding.extend({
-    img_x: -22,
-    img_y: -44,
     ctor: function(info) {
         this._super(info);
         // this.addBuildingImg();
@@ -51,23 +49,20 @@ var DarkElixirCollector = CollectorBuilding.extend({
             this.full_bg = full_bg;
 
             collect_bg.attr({
-                x: 130,
-                y: 220,
+                x: 250,
+                y: 380,
 
             });
             full_bg.attr({
-                x: 130,
-                y: 220,
+                x: 250,
+                y: 380,
             });
             var self = this;
             this.collect_bg.addClickEventListener(() => self.onCollectResource(false));
             this.full_bg.addClickEventListener(() => self.onCollectResource(false));
-            this.buildingImg.addChild(this.collect_bg);
-            this.buildingImg.addChild(this.full_bg);
-
+            this.buildingImg.addChild(this.collect_bg, 1100);
+            this.buildingImg.addChild(this.full_bg, 1100);
         }
-        this.collect_bg.setZOrder(1000000000);
-        this.full_bg.setLocalZOrder(1000000000);
         this.collect_bg.setVisible(!is_full);
         this.full_bg.setVisible(is_full);
 
@@ -76,14 +71,14 @@ var DarkElixirCollector = CollectorBuilding.extend({
         this.collect_img = collect_img;
         collect_img.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         var collect_img2 = new cc.Sprite(res.darkElixir_img);
         this.collect_img2 = collect_img2;
         collect_img2.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         this.collect_bg.addChild(collect_img);
