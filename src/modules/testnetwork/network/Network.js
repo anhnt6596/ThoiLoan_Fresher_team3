@@ -436,7 +436,7 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     finishTimeTroopTrain: function(id, troopType) {
-        troopInfo[trainedTroopType].population++;
+        troopInfo[troopType].population++;
         var here = barrackQueueList[id];
 
         cc.log("=================================== id luc xac nhan finish time: " + id);

@@ -117,6 +117,8 @@ var ObjectMenu = cc.Node.extend({
     },
     collect: function() {
         cc.log('===========> COLLECT');
+        MAP._targetedObject.onCollectResource();
+        this.disableCollectorBtn();
     },
     train: function() {
         //NETWORK.sendGetBarrackQueueInfo();
@@ -174,6 +176,16 @@ var ObjectMenu = cc.Node.extend({
                 y: -55
             });
         });
+    },
+    disableCollectorBtn: function() {
+        this.collectGoldBtn.setEnabled(false);
+        this.collectElixirBtn.setEnabled(false);
+        this.collectDarkElixirBtn.setEnabled(false);
+    },
+    enableCollectorBtn: function() {
+        this.collectGoldBtn.setEnabled(true);
+        this.collectElixirBtn.setEnabled(true);
+        this.collectDarkElixirBtn.setEnabled(true);
     }
 });
 
