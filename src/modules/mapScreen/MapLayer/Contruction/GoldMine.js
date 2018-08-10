@@ -1,6 +1,4 @@
 var GoldMine = CollectorBuilding.extend({
-    img_x: -3,
-    img_y: -26,
     ctor: function(info) {
         this._super(info);
         //this.setCollectIcon();
@@ -55,14 +53,6 @@ var GoldMine = CollectorBuilding.extend({
 
         }
     },
-    disableCollectIcon: function(){
-        if (this.collect_bg){
-            this.collect_bg.setVisible(false);
-        }
-        if (this.full_bg){
-            this.full_bg.setVisible(false);
-        }
-    },
     addCollectIcon: function(is_full){
         if (!this.collect_bg){
             var collect_bg = new ccui.Button(res.collect_bg);
@@ -78,8 +68,8 @@ var GoldMine = CollectorBuilding.extend({
                 x: 130,
                 y: 220,
             });
-            this.buildingImg.addChild(this.collect_bg);
-            this.buildingImg.addChild(this.full_bg);
+            this.buildingImg.addChild(this.collect_bg, 1100);
+            this.buildingImg.addChild(this.full_bg, 1100);
         }
         var self = this;
         this.collect_bg.addClickEventListener(() => self.onCollectResource(false));
@@ -93,14 +83,14 @@ var GoldMine = CollectorBuilding.extend({
         this.collect_img = collect_img;
         collect_img.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         var collect_img2 = new cc.Sprite(res.gold_img);
         this.collect_img2 = collect_img2;
         collect_img2.attr({
             x: this.collect_bg.width/2,
-            y: this.collect_bg.height/2,
+            y: this.collect_bg.height/2 + 5,
         });
 
         this.collect_bg.addChild(collect_img);

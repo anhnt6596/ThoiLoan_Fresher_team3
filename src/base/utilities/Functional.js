@@ -393,13 +393,21 @@ var objectSize = function(obj) {
     return size;
 };
 
-var getTotalTroopCapacity = function(){
+var getTotalCapacityAMCs = function(){
     var total = 0;
     for(var k in contructionList){
         var build = contructionList[k];
         if((build.status == 'complete' || build.status == 'upgrade') && (build.name == 'AMC_1')){
             total += config.building['AMC_1'][build.level].capacity;
         }
+    }
+    return total;
+};
+
+var getTotalCurrentTroopCapacity = function(){
+    var total = 0;
+    for(var i in troopInfo){
+        total += troopInfo[i].population * config.troopBase[i].housingSpace;
     }
     return total;
 };

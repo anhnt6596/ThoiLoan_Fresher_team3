@@ -12,6 +12,13 @@ var ShowTrainPopup = TinyPopup.extend({
         }, this)));
 
        //Xu ly o day
+        if(this._data.type != 'builder'){
+            _.extend(ReducedTempResources, this._data.cost);
+            ReducedTempResources.coin += this._data.g;
+            trainedBarrackId = this._data.temp.id;
+            trainedTroopType = this._data.temp.name;
+            NETWORK.sendTrainTroop(trainedBarrackId, trainedTroopType);
+        }
     },
 
     close: function() {

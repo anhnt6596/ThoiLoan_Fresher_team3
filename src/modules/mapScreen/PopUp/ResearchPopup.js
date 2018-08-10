@@ -110,6 +110,21 @@ var ResearchPopUp = ui.PopUp.extend({
                 var distance = countDownDate - (now - obj.startTime);
                 if (distance<=0){
                     obj.level++;
+
+                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 1===================");
+                    //Cap nhat lai level linh trong TrainPopup cua Barrack
+                    for(var i in barrackQueueList){
+                        var barrack = barrackQueueList[i];
+                        if(barrack._troopList){
+                            for(var k in barrack._troopList){
+                                if(barrack._troopList[k]._name == obj.type){
+                                    barrack._troopList[k]._level++;
+                                    cc.log("=========================================HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR 3===================");
+                                }
+                            }
+                        }
+                    }
+
                     obj.status = research_constant.status.free;
                 }
             }

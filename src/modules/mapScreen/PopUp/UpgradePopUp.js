@@ -54,13 +54,85 @@ var createUpgradePopUp = function() {
         y: 160
     });
     content.push(nextBuildingInfo);
+    if (MAP._targetedObject._name === "TOW_1") {
+        var scrollList = createScrollBar(info._level);
+        scrollList.attr({
+            x: 0,
+            y: -58
+        });
+        content.push(scrollList);
+        var text3 = new cc.LabelTTF("CÔNG TRÌNH MỞ KHÓA:", "Calibri", 26);
+        text3.attr({ y: -15, color: new cc.color(142, 8, 8, 255) });
+        content.push(text3);
+    } else if (MAP._targetedObject._name === "BAR_1") {
+        var unlockedUnit = config.building.BAR_1[info._level+1].unlockedUnit;
+        var slot = new cc.Sprite("res/Art/GUIs/train_troop_gui/slot.png");
+        slot.attr({ x: 0, y: -80 });
+        var img = new cc.Sprite("res/Art/GUIs/train_troop_gui/icon/" + unlockedUnit + '.png' || "res/Art/GUIs/train_troop_gui/icon/ARM_1.png");
+        img.attr({ anchorX: 0.5, anchorY: 0.5, x: slot.width / 2, y: slot.height / 2 });
+        slot.addChild(img);
+        content.push(slot);
+        var text3 = new cc.LabelTTF("QUÂN LÍNH ĐƯỢC MỞ KHÓA:", "Calibri", 26);
+        text3.attr({ y: -15, color: new cc.color(142, 8, 8, 255) });
+        content.push(text3);
+    }
     var upgradePopUp = new ui.PopUp('Upgrade', content);
+
+    scrollList && scrollList.setContentSize(cc.size(upgradePopUp.frame.width - 50, 200));
 
     MAPSCENE.addChild(upgradePopUp, 1000);
     acceptBtn.addClickEventListener(function() {
         MAP._targetedObject && MAP._targetedObject.upgrade();
         upgradePopUp.close();
     });
+};
+
+var createScrollBar = function(tow_level) {
+    var scrollView = new ccui.ScrollView();
+    scrollView.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
+    scrollView.setTouchEnabled(true);
+    scrollView.setBounceEnabled(false);
+    // scrollView.setContentSize(cc.size(800,200));
+    scrollView.setPosition(cc.p(0,0));
+    scrollView.setAnchorPoint(cc.p(0.5,0.5));
+
+    var thisLevelInfo = config.building.TOW_1[tow_level];
+    var nextLevelInfo = config.building.TOW_1[tow_level + 1];
+
+    var count = 0;
+
+    listBuildingShortName.forEach(function(item, i) {
+        var number = nextLevelInfo[item] - thisLevelInfo[item];
+        if(number && number > 0 && count < 10) {
+            slot = createSlot(item, number);
+            slot.attr({ x: 100 * (count) + 70, y: 75 });
+            count += 1;            
+            scrollView.addChild(slot);
+        }
+    });
+
+    scrollView.setInnerContainerSize(cc.size(count * 100 + 70, 200));
+    return scrollView;
+};
+
+var createSlot = function (type, number) {
+    var slot = new cc.Sprite("res/Art/GUIs/upgrade_building_gui/slot.png");
+    var img = new cc.Sprite("res/Art/GUIs/icons/shop_gui/icon/" + type + ".png");
+    img.attr({
+        anchorX: 0.5,
+        anchory: 0.5,
+        x: slot.width / 2,
+        y: slot.height / 2,
+        scale: 0.5
+    });
+    var number = new cc.LabelBMFont("x" + number, 'res/Art/Fonts/soji_16.fnt');
+    number.attr({
+        x: slot.width - 20,
+        y: slot.height - 20,
+    });
+    slot.addChild(img);
+    slot.addChild(number);
+    return slot;
 };
 
 var createNewRequireItem = function(type, value, num) {
@@ -330,3 +402,54 @@ var productforeachbuilding = {
     RES_2: 'elixir_productivity',
     RES_3: 'dark_elixir_productivity'
 };
+
+var listBuildingShortName = [
+    "LAB_1",
+    "CLC_1",
+    "WAL_1",
+    "RES_1",
+    "RES_2",
+    "RES_3",
+    "STO_1",
+    "STO_2",
+    "STO_3",
+    "BAR_1",
+    "BAR_2",
+    "AMC_1",
+    "SPF_1",
+    "DEF_1",
+    "DEF_2",
+    "DEF_3",
+    "DEF_4",
+    "DEF_5",
+    // "DEF_6",
+    "DEF_7",
+    "DEF_8",
+    "DEF_9",
+    // "DEF_11",
+    "DEF_12",
+    // "GUA_1",
+    "TRA_1",
+    "TRA_2",
+    "TRA_3",
+    "TRA_4",
+    // "TRA_5",
+    "TRA_6",
+    // "DAF_1",
+    "KQB_1",
+    "KQB_2",
+    "KQB_3",
+    "KQB_4",
+    "DEC_1",
+    "DEC_2",
+    "DEC_3",
+    "DEC_4",
+    "DEC_5",
+    "DEC_6",
+    // "DEC_7",
+    // "DEC_8",
+    // "DEC_9",
+    // "DEC_10",
+    // "DEC_11",
+    // "DEC_12"
+];

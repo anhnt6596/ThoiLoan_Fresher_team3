@@ -486,9 +486,7 @@ var Contruction = cc.Class.extend({
         var refundResources = {gold:gold/2, elixir:elixir/2, darkElixir:darkElixir/2, coin:coin/2};
         increaseUserResources(refundResources);
 
-        updateBuilderNumber();
-        setUserResourcesCapacity();
-        LOBBY.update(gv.user);
+        updateGUI();
     },
     remove:function() {
         this.removeTarget();
