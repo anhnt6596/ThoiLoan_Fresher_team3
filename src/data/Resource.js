@@ -596,15 +596,15 @@ name.troop = {
     },
     ARM_2: {
         vi: 'Cô gái nhà bên',
-        en: 'The girl next door'
+        en: 'Archer'
     },
     ARM_3: {
-        vi: 'Đạo sĩ',
-        en: ''
+        vi: 'Đạo tặc',
+        en: 'Goblin'
     },
     ARM_4: {
         vi: 'Quái thú',
-        en: 'Monster'
+        en: 'Giant'
     },
     ARM_5: {
         vi: 'Xác ướp',

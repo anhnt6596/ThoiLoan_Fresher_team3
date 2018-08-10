@@ -34,7 +34,7 @@ var ElixirCollector = CollectorBuilding.extend({
         cc.log(this._level+"= level");
         if (this._status === 'complete' && this.startTime) {
             var time_sx = (getCurrentServerTime() - this.startTime)/1000;
-            cc.log("============================start time: " +this.startTime);
+            //cc.log("============================start time: " +this.startTime);
             var productivity = timeToProductivity(this._name,this._level,time_sx);
             var suc_chua = config.building[this._name][this._level].capacity;
             if ( (productivity.sanluong>=suc_chua/100)  ){

@@ -36,7 +36,7 @@ var Contruction = cc.Class.extend({
     setBuildingStatus: function() {
         if (this._status === 'upgrade' || this._status === 'pending' && this.startTime) {
             var cur = (getCurrentServerTime() - this.startTime)/1000;
-            cc.log("============================start time: " +this.startTime);
+            //cc.log("============================start time: " +this.startTime);
             var max = this.buildTime;
             if(!this.timeBar){
                 this.addTimeBar(cur, max);
@@ -356,6 +356,7 @@ var Contruction = cc.Class.extend({
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         if(this._name == "BAR_1"){
             barrackQueueList[this._id] = {};
+            barrackQueueList[this._id].flagCountDown = true;
             barrackQueueList[this._id]._amountItemInQueue = 0;
             barrackQueueList[this._id]._totalTroopCapacity = 0;
             barrackQueueList[this._id]._startTime = 0;
@@ -431,7 +432,12 @@ var Contruction = cc.Class.extend({
         if(this._name == "BAR_1"){
             var troopType = config.building['BAR_1'][this._level].unlockedUnit;
             barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
+
+            //Cap nhat startTime cho barrack
+            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+            barrackQueueList[this._id].flagCountDown = true;
         }
+
     },
     cancel: function(building){
         buildingCancel = building;
@@ -463,6 +469,14 @@ var Contruction = cc.Class.extend({
         increaseUserResources(refundResources);
 
         updateGUI();
+
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        if(this._name == "BAR_1"){
+            //Cap nhat startTime cho barrack
+            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+            barrackQueueList[this._id].flagCountDown = true;
+        }
+
     },
     cancelBuild: function() {
         var self = this;

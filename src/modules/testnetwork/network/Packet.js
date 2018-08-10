@@ -783,6 +783,9 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 barrackQueueList[this.idBarrack]._startTime = this.startTime;
                 cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
+                //Dat them 1 thuoc tinh flag cho Barrack de stop countdown luc barrack dc upgrade
+                barrackQueueList[this.idBarrack].flagCountDown = true;
+
                 this.m = this.getInt();
                 cc.log("================================= SO LUONG TROOP: " + this.m);
                 barrackQueueList[this.idBarrack]._troopList = {};

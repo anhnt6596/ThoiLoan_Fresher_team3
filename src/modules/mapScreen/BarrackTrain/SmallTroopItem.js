@@ -31,28 +31,6 @@ var SmallTroopItem = ccui.Button.extend({
         trainedBarrackId = TRAIN_POPUP._id;                                  //gap van de neu next prev giua nhieu barrack
         trainedTroopType = this._name;
         NETWORK.sendCancelTrainTroop(TRAIN_POPUP._id, this._name);
-
-
-        //    TRAIN_POPUP._troopList[this._name]._amount--;
-        //    TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[this._name]._housingSpace;
-        //    if(TRAIN_POPUP._troopList[this._name]._amount == 0){
-        //        TRAIN_POPUP._amountItemInQueue--;
-        //        if(TRAIN_POPUP._amountItemInQueue == 0){
-        //            TRAIN_POPUP._timeBar.visible = false;
-        //            cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
-        //            TRAIN_POPUP._statusCountDown = false;
-        //        }else{
-        //            TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[this._name]._currentPosition);
-        //        }
-        //        this.setPosition(-1000, -1000);
-        //        TRAIN_POPUP._troopList[this._name]._currentPosition = -1;
-        //    }
-        //    this.updateAmountSmall();
-        //    TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
-        //    TRAIN_POPUP.enableItemDisplay();
-        //
-        ////Refund
-
     },
 
     updateAmountSmall: function() {

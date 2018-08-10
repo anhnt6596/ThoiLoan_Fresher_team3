@@ -158,7 +158,7 @@ var reduceUserResources = function(costBuilding){
 };
 var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi thoi gian sang san luong, thoi gian truyen vao tinh theo s
     var unit_product = config.building[type][level].productivity;
-    console.log("unit_product = "+unit_product);
+    //console.log("unit_product = "+unit_product);
     var ans = ((time_sanxuat / (60 * 60)) * unit_product);
     var capacity = config.building[type][level].capacity;
 

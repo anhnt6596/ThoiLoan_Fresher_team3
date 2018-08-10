@@ -43,7 +43,7 @@ var GoldMine = CollectorBuilding.extend({
         // level+"= level");
         if (this._status === 'complete' && this.startTime) {
             var time_sx = (getCurrentServerTime() - this.startTime)/1000;
-            cc.log("============================start time: " +this.startTime);
+            //cc.log("============================start time: " +this.startTime);
             var productivity = timeToProductivity(this._name,this._level,time_sx);
             var suc_chua = config.building[this._name][this._level].capacity;
             if ( (productivity.sanluong>=suc_chua/100)  ){
@@ -114,7 +114,7 @@ var GoldMine = CollectorBuilding.extend({
 
         var time_sx = (getCurrentServerTime() - this.startTime)/1000;
         cc.log("============================cur_time: " +getCurrentServerTime());
-        cc.log("============================start time: " +this.startTime);
+        //cc.log("============================start time: " +this.startTime);
         cc.log("============================time san xuat: " + time_sx);
         var productivity = timeToProductivity(this._name,this._level,time_sx);
         productivity.sanluong = Math.round(productivity.sanluong);

@@ -25,7 +25,7 @@ var TroopItem = ccui.Button.extend({
             cost.setPosition(this.width/2, cost.height/2+10);
             this.addChild(cost, 101);
 
-            var currentLevelTroop = 1;
+            var currentLevelTroop = troopInfo[troopName].level;
 
             var cost_label = new cc.LabelBMFont(config.troop[troopName][currentLevelTroop].trainingElixir, 'res/Art/Fonts/soji_12.fnt');
             cost_label.setPosition(this.width/2, cost.y);
@@ -35,6 +35,17 @@ var TroopItem = ccui.Button.extend({
             costUnit.setPosition(this.width - costUnit.width, cost.y);
             this.addChild(costUnit, 101);
         }
+
+        var btnInfo = new ccui.Button('res/Art/GUIs/train_troop_gui/info.png', 'res/Art/GUIs/train_troop_gui/info.png');
+        btnInfo.setPosition(this.x + this.width - btnInfo.width/2, this.y + this.height - btnInfo.height/2);
+        btnInfo.addClickEventListener(this.onInfo.bind(this));
+        this.addChild(btnInfo, 111);
+    },
+
+    onInfo: function() {
+        var data = {_level: troopInfo[this._name].level, itemName:this._name};
+        var popup = new TroopInfo(cc.winSize.width*3/4, cc.winSize.height*5.7/6, name.troop[this._name].en + ' level ' + troopInfo[this._name].level, true, data);
+        cc.director.getRunningScene().addChild(popup, 200);
     },
 
     setDisable: function() {
