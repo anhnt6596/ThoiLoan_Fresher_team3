@@ -610,6 +610,7 @@ var ResearchPopUp = ui.PopUp.extend({
             this.listImg_troop[type].setVisible(true);
             this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
             this.updateTimeCountDown(type,this.timeStart, this.listTroop[type].level);
+            LAB_BUILDING.progressStatus();
         }
     },
     getResourceRequire: function(type,level,resource_type){
@@ -671,6 +672,9 @@ var ResearchPopUp = ui.PopUp.extend({
         if (!isQuickFinish) {
             NETWORK.sendResearchComplete(type);
         }
+        console.log("Xu ly mat timebar");
+        LAB_BUILDING.timeBar !== null && MAP.removeChild(LAB_BUILDING.timeBar);
+        LAB_BUILDING.timeBar = null;
     },
     setEnableBtn: function (status) {
         var self = this;
@@ -783,7 +787,6 @@ var ResearchPopUp = ui.PopUp.extend({
             self.getParent().removeChild(self);
         }, this)));
 
-        LAB_BUILDING.addResearchTimeBar();
-        LAB_BUILDING.countDownResearchBar();
+        LAB_BUILDING.progressStatus();
     }
 });

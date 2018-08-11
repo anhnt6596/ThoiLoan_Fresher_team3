@@ -24,8 +24,8 @@ var CollectorBuilding = Building.extend({
             if (productivity.sanluong>=1) {
                 LOBBY.objectMenu.enableCollectorBtn();
             }
-            //if ( (productivity.sanluong>=suc_chua/100)  ){
-            if ( (productivity.sanluong>=0)  ){
+            if ( (productivity.sanluong>=suc_chua/100)  ){
+            //if ( (productivity.sanluong>=0)  ){
                 this.addCollectIcon(productivity.is_full);
             }
             else {

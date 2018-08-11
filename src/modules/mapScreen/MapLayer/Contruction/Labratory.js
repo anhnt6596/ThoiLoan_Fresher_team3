@@ -71,7 +71,6 @@ var Labratory = Building.extend({
             });
             timeBar.addChild(timeText);
         }
-
     },
     countDownResearchBar: function(){
        if (research_constant.troop){
