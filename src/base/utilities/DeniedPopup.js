@@ -31,7 +31,13 @@ var DeniedPopup = TinyPopup.extend({
     }
 });
 
-
+var showPopupDisconect = function(){
+    var data = {};
+    data.content = "Mất kết nối với Server, hãy thử kết nối lại!";
+    var title = "Disconected";
+    var popup = new DeniedPopup(cc.winSize.width/2, cc.winSize.height/1.5, title, true, data);
+    cc.director.getRunningScene().addChild(popup, 2000000);
+}
 
 
 //Show thong bao khong du G de lam gi do
@@ -76,6 +82,10 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later!";
             title = "Server denied to quick finish";
             break;
+        case 'server_denied_finish_time':
+            data.content = "Please try again later!";
+            title = "Server denied to finish this building";
+            break;
         case 'server_denied_cancel':
             data.content = "Please try again later!";
             title = "Server denied to cancel";
@@ -88,18 +98,6 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later!";
             title = "Server denied to add resources";
             break;
-        case 'server_denied_train_troop':
-            data.content = "Please try again later!";
-            title = "Server denied to train this troop";
-            break;
-        case 'server_denied_cancel_train_troop':
-            data.content = "Please try again later!";
-            title = "Server denied to cancel this troop";
-            break;
-        case 'server_denied_finish_time_train_troop':
-            data.content = "Please try again later!";
-            title = "Server denied to finish this troop";
-            break;
         case 'server_denied_quick_finish_train_troop':
             data.content = "Please try again later!";
             title = "Server denied to quick finish those troops";
@@ -107,6 +105,7 @@ var showPopupNotEnoughG = function(type){
         case 'research':
             data.content = "Add more G to buy resource";
             title = "Do not have enough resource";
+            break;
         case 'server_denied_train_troop':
             data.content = "Please try again later!";
             title = "Server denied to train this troop";

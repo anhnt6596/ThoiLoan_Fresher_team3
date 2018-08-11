@@ -158,7 +158,7 @@ var reduceUserResources = function(costBuilding){
 };
 var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi thoi gian sang san luong, thoi gian truyen vao tinh theo s
     var unit_product = config.building[type][level].productivity;
-    console.log("unit_product = "+unit_product);
+    //console.log("unit_product = "+unit_product);
     var ans = ((time_sanxuat / (60 * 60)) * unit_product);
     var capacity = config.building[type][level].capacity;
 
@@ -167,6 +167,13 @@ var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi tho
         return {sanluong:ans, is_full:true};
     }
     return {sanluong:ans, is_full:false};
+}
+var changeUserResource = function (_gold,_elixir,_darkElixir,_coin, is_add) {
+    is_add
+    ? addUserResources(_gold,_elixir,_darkElixir,_coin)
+    : reduceUserResourcesResearch(_gold,_elixir,_darkElixir,_coin);
+    LOBBY.update(gv.user);
+    storageBuildingUpdateImg(gv.user);
 }
 var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
     gv.user.gold = gv.user.gold + _gold;
@@ -183,6 +190,7 @@ var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
     }
     gv.user.coin = gv.user.coin + _coin;
     LOBBY.update(gv.user);
+
 }
 
 var reduceUserResourcesResearch = function(gold,elixir,darkElixir,coin){

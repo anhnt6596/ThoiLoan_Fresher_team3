@@ -332,7 +332,7 @@ var MapLayer = cc.Layer.extend({
                     } else {    // chọn object mới thì remove object cũ, target object mới và đặt zOrder cao.
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
-                        self._targetedObject.onTarget();
+                        self._targetedObject.onTargeting();
                         break;
                     }
                 } else {

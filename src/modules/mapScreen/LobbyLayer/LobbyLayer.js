@@ -74,9 +74,9 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        var resource = { gold:100000, elixir:100000, darkElixir:100000, coin:1000000 };
+        var resource = { gold:1000, elixir:0, darkElixir:0, coin:1000000 };
         _.extend(ReducedTempResources, resource);
-        NETWORK.sendAddResource(100000, 100000, 100000, 1000000);
+        NETWORK.sendAddResource(1000, 0, 0, 1000000);
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
@@ -135,6 +135,20 @@ var LobbyLayer = cc.Layer.extend({
         this.objectMenu.attr({ y: -200, opacity: 0 });
         this.objectMenu.runAction(showAct);
         this.objectMenu.runAction(fadeInAct);
+
+        // set ko disable mac dinh
+        this.objectMenu.enableCollectorBtn();
+
+
+        // disable mot so button o day nhe'
+        var tartgetedObj = MAP._targetedObject;
+        //console.log("san luong = " +tartgetedObj.productivity.sanluong);
+
+        if (tartgetedObj instanceof CollectorBuilding && tartgetedObj.productivity.sanluong < 1){
+            this.objectMenu.disableCollectorBtn();
+        }
+        //this.objectMenu.collectGoldBtn.setBright(false);
+        //this.objectMenu.collectGoldBtn.setOpacity(100);
     },
     hideObjectMenu: function(object) {
         var hideAct = cc.moveTo(0.2, cc.p(0, -200));

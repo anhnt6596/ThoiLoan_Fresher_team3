@@ -16,6 +16,9 @@ var buildingUpgrade = null;
 //Quick Finish Construction
 var buildingQuickFinish = null;
 
+//Finish Time Construction
+var buildingFinishTime = null;
+
 //Cancel Construction
 var buildingCancel = null;
 

@@ -73,7 +73,10 @@ var GameClient = cc.Class.extend(
         {
             cc.log("onDisconnected");
             //Ket noi lai
+            showPopupDisconect();
             gv.gameClient.connect();
+
+
 
         },
         _onReceived:function(cmd, pkg)

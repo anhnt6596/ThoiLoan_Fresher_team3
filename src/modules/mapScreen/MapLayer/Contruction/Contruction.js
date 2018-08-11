@@ -36,13 +36,21 @@ var Contruction = cc.Class.extend({
     setBuildingStatus: function() {
         if (this._status === 'upgrade' || this._status === 'pending' && this.startTime) {
             var cur = (getCurrentServerTime() - this.startTime)/1000;
-            cc.log("============================start time: " +this.startTime);
+            //cc.log("============================start time: " +this.startTime);
             var max = this.buildTime;
             if(!this.timeBar){
                 this.addTimeBar(cur, max);
                 this.countDown(cur, max);
             }
 
+        }
+    },
+    onTargeting: function() {
+        if (this instanceof CollectorBuilding && (this.full_bg && this.collect_bg) ) {
+            MAP._targetedObject = null;
+            this.collect();
+        } else {
+            this.onTarget();
         }
     },
     onTarget: function() {
@@ -81,22 +89,11 @@ var Contruction = cc.Class.extend({
         };
         this.buildingImg.runAction(ui.BounceEff());
         this.buildingImg.runAction(ui.targettingEff().repeatForever());
-        if (this._name===('RES_1'||'RES_2'||'RES_3') && (this.full_bg && this.collect_bg) ) {
-            if (this.full_bg.isVisible() || this.collect_bg.isVisible() ){
-                cc.log("cho phep upgrade");
-                this.onCollectResource(false);
-            }
-            else {
-                this.onTargetSound();
-                LOBBY.showObjectMenu(MAP._targetedObject);
-            }
-
-        }
-        else {
-            this.onTargetSound();
-            LOBBY.showObjectMenu(MAP._targetedObject);
-        }
-
+        this.onTargetSound();
+        LOBBY.showObjectMenu(MAP._targetedObject);
+    },
+    collect: function() {
+        // để rỗng
     },
     removeTarget: function() {
         var act = new cc.FadeOut(0.2);
@@ -356,6 +353,7 @@ var Contruction = cc.Class.extend({
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         if(this._name == "BAR_1"){
             barrackQueueList[this._id] = {};
+            barrackQueueList[this._id].flagCountDown = true;
             barrackQueueList[this._id]._amountItemInQueue = 0;
             barrackQueueList[this._id]._totalTroopCapacity = 0;
             barrackQueueList[this._id]._startTime = 0;
@@ -431,7 +429,12 @@ var Contruction = cc.Class.extend({
         if(this._name == "BAR_1"){
             var troopType = config.building['BAR_1'][this._level].unlockedUnit;
             barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
+
+            //Cap nhat startTime cho barrack
+            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+            barrackQueueList[this._id].flagCountDown = true;
         }
+
     },
     cancel: function(building){
         buildingCancel = building;
@@ -463,6 +466,14 @@ var Contruction = cc.Class.extend({
         increaseUserResources(refundResources);
 
         updateGUI();
+
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        if(this._name == "BAR_1"){
+            //Cap nhat startTime cho barrack
+            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+            barrackQueueList[this._id].flagCountDown = true;
+        }
+
     },
     cancelBuild: function() {
         var self = this;

@@ -17,50 +17,53 @@ var Labratory = Building.extend({
         MAP.addChild(buildingImg, zOrder);
     },
     addResearchTimeBar: function(){
-        var cur = getCurrentServerTime() - research_constant.troop.startTime;
-        var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime*1000;
-        if (research_constant.status.now === research_constant.status.free){
-            return;
+        if (research_constant.troop){
+            var cur = getCurrentServerTime() - research_constant.troop.startTime;
+            var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime*1000;
+            if (research_constant.status.now === research_constant.status.free){
+                return;
+            }
+
+            var upgradeBarrier = new cc.Sprite('res/Art/Map/map_obj_bg/upgrading.png');
+            upgradeBarrier.attr({
+                x: this.buildingImg.width / 2,
+                y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
+                scale: this._width * 3 / 4
+            });
+            this.buildingImg.addChild(upgradeBarrier, 1000);
+
+            var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
+            this.timeBar = timeBar;
+            var coor = this.xyOnMap(this._posX, this._posY);
+            timeBar.attr({
+                x: coor.x,
+                y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
+            });
+            MAP.addChild(timeBar, 1100);
+
+            var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+            this.processBar = processBar;
+            processBar.attr({
+                anchorX: 0,
+                anchorY: 0
+            });
+            timeBar.addChild(processBar);
+
+            var ratio = cur / max;
+
+            processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
+
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
+            var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
+            this.timeText = timeText;
+            timeText.attr({
+                x: timeBar.width / 2,
+                y: 42
+            });
+            timeBar.addChild(timeText);
         }
 
-        var upgradeBarrier = new cc.Sprite('res/Art/Map/map_obj_bg/upgrading.png');
-        upgradeBarrier.attr({
-            x: this.buildingImg.width / 2,
-            y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
-            scale: this._width * 3 / 4
-        });
-        this.buildingImg.addChild(upgradeBarrier, 1000);
-
-        var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
-        this.timeBar = timeBar;
-        var coor = this.xyOnMap(this._posX, this._posY);
-        timeBar.attr({
-            x: coor.x,
-            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
-        });
-        MAP.addChild(timeBar, 1100);
-
-        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
-        this.processBar = processBar;
-        processBar.attr({
-            anchorX: 0,
-            anchorY: 0
-        });
-        timeBar.addChild(processBar);
-
-        var ratio = cur / max;
-
-        processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
-
-        //var t = timeToString(max - cur);
-        var t = timeToReadable(max - cur);
-        var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
-        this.timeText = timeText;
-        timeText.attr({
-            x: timeBar.width / 2,
-            y: 42
-        });
-        timeBar.addChild(timeText);
     },
     countDownResearchBar: function(){
         this.startTime = research_constant.troop.startTime;
