@@ -20,8 +20,8 @@ var CollectorBuilding = Building.extend({
             var productivity = timeToProductivity(this._name,this._level,time_sx);
             this.productivity = productivity;
             var suc_chua = config.building[this._name][this._level].capacity;
-            //console.log("san luong = "+ productivity.sanluong);
-            if (productivity.sanluong>=1) {
+            if (productivity.sanluong >= 1 && MAP._targetedObject === this) {
+                console.log("san luong = "+ productivity.sanluong);
                 LOBBY.objectMenu.enableCollectorBtn();
             }
             if ( (productivity.sanluong>=suc_chua/100)  ){
