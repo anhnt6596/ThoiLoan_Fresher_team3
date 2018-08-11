@@ -8,12 +8,8 @@ var CollectorBuilding = Building.extend({
         }, 1000);
     },
     disableCollectIcon: function(){
-        if (this.collect_bg){
-            this.collect_bg.setVisible(false);
-        }
-        if (this.full_bg){
-            this.full_bg.setVisible(false);
-        }
+        this.collect_bg && this.collect_bg.setVisible(false);
+        this.full_bg && this.full_bg.setVisible(false);
     },
     setCollectIcon: function() {
         //cc.log(this._
@@ -140,19 +136,8 @@ var CollectorBuilding = Building.extend({
     },
     collectEffect: function(type, product) {
         ui.productTextEffect(this, type, product);
-        ui.dropCoinEffect(this);
-        var self = this;
-        setTimeout(function() {
-            ui.dropCoinEffect(self, 1);
-        }, 50);
-        setTimeout(function() {
-            ui.dropCoinEffect(self, 1);
-        }, 100);
-        setTimeout(function() {
-            ui.dropCoinEffect(self, 1);
-        }, 150);
-        setTimeout(function() {
-            ui.dropCoinEffect(self, 1);
-        }, 200);
+        if (type === "RES_1") ui.dropCoinEffect(this, product);
+        else if (type === "RES_2") ui.dropElixirEff(this, product);
+        else if (type === "RES_3") ui.dropElixirEff(this, product, 1);
     }
 });

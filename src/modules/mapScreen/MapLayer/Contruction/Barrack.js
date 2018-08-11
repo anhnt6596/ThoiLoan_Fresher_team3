@@ -24,5 +24,24 @@ var Barrack = Building.extend({
             });
             animSprite.runAction(buildingAnim.repeatForever());
         }
+    },
+    updateBarrackQueueList: function() {
+        barrackQueueList[this._id] = {};
+        barrackQueueList[this._id].flagCountDown = true;
+        barrackQueueList[this._id]._amountItemInQueue = 0;
+        barrackQueueList[this._id]._totalTroopCapacity = 0;
+        barrackQueueList[this._id]._startTime = 0;
+        barrackQueueList[this._id]._troopList = {};
+        barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
+    },
+    updateBarrackQueueListAfterUpgradeComplete: function() {
+        if(this._name == "BAR_1"){
+            var troopType = config.building['BAR_1'][this._level].unlockedUnit;
+            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
+
+            //Cap nhat startTime cho barrack
+            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+            barrackQueueList[this._id].flagCountDown = true;
+        }
     }
 });

@@ -303,7 +303,7 @@ testnetwork.Connector = cc.Class.extend({
                             break;
                         }
                     }
-                    this.createTroopAfterSVResponseSuccess(trainedTroopType, armyCampRefs[0], start);
+                    this.createTroopAfterSVResponseSuccess(trainedTroopType, start);
 
                     cc.log("======================================= trainedBarrackId" + trainedBarrackId);
                     this.finishTimeTroopTrain(trainedBarrackId, trainedTroopType);
@@ -366,7 +366,7 @@ testnetwork.Connector = cc.Class.extend({
         //cho tat ca linh chay
         for(var i in TRAIN_POPUP._troopList){
             for(var j = 0; j < TRAIN_POPUP._troopList[i]._amount; j++){
-                this.createTroopAfterSVResponseSuccess(i, armyCampRefs[0], start);
+                this.createTroopAfterSVResponseSuccess(i, start);
             }
         }
 
@@ -389,7 +389,11 @@ testnetwork.Connector = cc.Class.extend({
         TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
     },
 
-    createTroopAfterSVResponseSuccess: function(type, armyCamp, barrack) {
+    createTroopAfterSVResponseSuccess: function(type, barrack) {
+        var armyCamp = armyCampRefs[0];
+        armyCampRefs.forEach(function(element) {
+            if(element._curStorage < armyCamp._curStorage) armyCamp = element;
+        });
         var troop = this.createNewTroop_1(type, armyCamp);
         troop && troop.appear(barrack);
     },
