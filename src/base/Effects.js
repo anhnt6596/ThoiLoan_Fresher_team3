@@ -123,8 +123,8 @@ ui.dropElixirEff = function(building, product, isDark = 0) {
                 
                 dropElixirEff.addChild(elixirSprite);
                 
-                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
-                var fade_action = cc.FadeOut(1);
+                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(250, 280)),randomInt(280, 300),1);
+                var fade_action = cc.FadeOut(0.75);
             
                 elixirSprite.runAction(jump_action);
                 elixirSprite.runAction(fade_action);
