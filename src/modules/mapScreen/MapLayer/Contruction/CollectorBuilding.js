@@ -24,7 +24,8 @@ var CollectorBuilding = Building.extend({
             if (productivity.sanluong>=1) {
                 LOBBY.objectMenu.enableCollectorBtn();
             }
-            if ( (productivity.sanluong>=suc_chua/100)  ){
+            //if ( (productivity.sanluong>=suc_chua/100)  ){
+            if ( (productivity.sanluong>=0)  ){
                 this.addCollectIcon(productivity.is_full);
             }
             else {
@@ -40,13 +41,34 @@ var CollectorBuilding = Building.extend({
             var full_bg = new ccui.Button(res.full_bg);
             this.full_bg = full_bg;
 
+            var resource_img = null;
+            var x_bg = null;
+            var y_bg = null;
+            switch (this._name){
+                case 'RES_1':
+                    resource_img = res.gold_img;
+                    x_bg = this.buildingImg.width/2;
+                    y_bg = this.buildingImg.height-30;
+                    break;
+                case 'RES_2':
+                    resource_img = res.elixir_img;
+                    x_bg = this.buildingImg.width/2;
+                    y_bg = this.buildingImg.height-30;
+                    break;
+                case 'RES_3':
+                    resource_img = res.darkElixir_img;
+                    x_bg = this.buildingImg.width/2;
+                    y_bg = this.buildingImg.height-150;
+                    break;
+            }
+
             collect_bg.attr({
-                x: 130,
-                y: 220,
+                x: x_bg,
+                y: y_bg,
             });
             full_bg.attr({
-                x: 130,
-                y: 220,
+                x: x_bg,
+                y: y_bg,
             });
             this.buildingImg.addChild(this.collect_bg, 1100);
             this.buildingImg.addChild(this.full_bg, 1100);
@@ -58,18 +80,7 @@ var CollectorBuilding = Building.extend({
         this.collect_bg.setVisible(!is_full);
         this.full_bg.setVisible(is_full);
 
-        var resource_img = null;
-        switch (this._name){
-            case 'RES_1':
-                resource_img = res.gold_img;
-                break;
-            case 'RES_2':
-                resource_img = res.elixir_img;
-                break;
-            case 'RES_3':
-                resource_img = res.darkElixir_img;
-                break;
-        }
+
         var collect_img = new cc.Sprite(resource_img);
         this.collect_img = collect_img;
         collect_img.attr({
