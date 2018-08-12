@@ -38,7 +38,7 @@ var Obstacle = cc.Class.extend({
         var newZ = 1000 - (_x + _y + (this._height - 3) / 2) * 10 + 1;
         return newZ;
     },
-    onTarget: function() {
+    onTargeting: function() {
         this.objImg.runAction(ui.BounceEff());
         this.objImg.runAction(ui.targettingEff().repeatForever());
         LOBBY.showObjectMenu(MAP._targetedObject);
