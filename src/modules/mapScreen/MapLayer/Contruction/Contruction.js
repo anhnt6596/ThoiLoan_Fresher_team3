@@ -360,6 +360,10 @@ var Contruction = cc.Class.extend({
             barrackQueueList[this._id]._troopList = {};
             barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
         }
+
+        if(this._name == "AMC_1"){
+            pauseOverCapacityFlag = false;
+        }
     },
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
@@ -433,6 +437,15 @@ var Contruction = cc.Class.extend({
             //Cap nhat startTime cho barrack
             barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
             barrackQueueList[this._id].flagCountDown = true;
+
+            //var data = {train: true, barrack: this};
+            //new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+
+            BARRACK[this._id].countDown();
+        }
+
+        if(this._name == "AMC_1"){
+            pauseOverCapacityFlag = false;
         }
 
     },

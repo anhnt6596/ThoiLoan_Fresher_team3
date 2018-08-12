@@ -783,8 +783,16 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 barrackQueueList[this.idBarrack]._startTime = this.startTime;
                 cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
+                barrackQueueList[this.idBarrack]._isFirst = true;
+
                 //Dat them 1 thuoc tinh flag cho Barrack de stop countdown luc barrack dc upgrade
-                barrackQueueList[this.idBarrack].flagCountDown = true;
+                //Neu barrack dang upgrade thi khong countdown
+                if(getObjBuildingById(this.idBarrack)._status == 'upgrade'){
+                    barrackQueueList[this.idBarrack].flagCountDown = false;
+                }else{
+                    barrackQueueList[this.idBarrack].flagCountDown = true;
+                }
+
 
                 this.m = this.getInt();
                 cc.log("================================= SO LUONG TROOP: " + this.m);
@@ -802,6 +810,19 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     cc.log("================================= current position: " + this.currentPosition);
                     barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.currentPosition);
                 }
+
+                //Cho chạy ngầm từ đầu
+                var barrackObj = getObjBuildingById(this.idBarrack);
+
+                var totalCapacity = getTotalCapacityAMCs();
+                var currentCapacity = getTotalCurrentTroopCapacity();
+                if(currentCapacity >= totalCapacity){
+                    cc.log("================================= Set  pauseOverCapacityFlag = TRUE");
+                    pauseOverCapacityFlag = true;
+                }
+
+                var data = {train: true, barrack: barrackObj};
+                new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
             }
         }
     }

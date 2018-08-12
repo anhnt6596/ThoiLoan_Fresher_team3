@@ -2,11 +2,13 @@ var SMALL_TROOP_ITEM = SMALL_TROOP_ITEM || null;
 
 var SmallTroopItem = ccui.Button.extend({
     _name:null,
+    _barrackId:null,
 
-    ctor: function (troopName) {
+    ctor: function (troopName, barrackId) {
         SMALL_TROOP_ITEM = this;
         this._super('res/Art/GUIs/train_troop_gui/slot.png');
         this._name = troopName;
+        this._barrackId = barrackId;
         this.initSmallItem(troopName);
     },
 
@@ -34,6 +36,6 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     updateAmountSmall: function() {
-        this.getChildByTag(101).setString('x'+TRAIN_POPUP._troopList[this._name]._amount);
+        this.getChildByTag(101).setString('x'+BARRACK[this._barrackId]._troopList[this._name]._amount);
     }
 });
