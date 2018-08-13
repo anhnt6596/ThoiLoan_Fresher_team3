@@ -728,11 +728,11 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 research_constant.status.now = obj.status;
                 research_constant.troop = obj;
             }
-            //cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level);
-            //cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock);
-            //cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
-            //cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime);
-            //cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status);
+            // cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level);
+            // cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock);
+            // cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
+            // cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime);
+            // cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status);
         }
     }
 });
