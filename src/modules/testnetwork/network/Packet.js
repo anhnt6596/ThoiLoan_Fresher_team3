@@ -723,6 +723,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
 
         }
         for (var item in troopInfo) {
+
             var obj = troopInfo[item];
             if (obj.status===research_constant.status.busy){
                 research_constant.status.now = obj.status;

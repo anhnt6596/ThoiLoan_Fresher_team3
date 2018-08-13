@@ -48,7 +48,7 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_MAP_INFO:
 
-                fr.getCurrentScreen().onFinishGameInfo();
+                //fr.getCurrentScreen().onFinishGameInfo();
 
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
@@ -210,11 +210,12 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }
                 break;
-            case gv.CMD.GET_TROOP_INFO: 
+            case gv.CMD.GET_TROOP_INFO:
                 //cc.log('================>', packet.message);
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
                 if(sendTroopInfoFlag == false){
                     this.sendGetBarrackQueueInfo();
+                    fr.getCurrentScreen().onFinishGameInfo();
                 }else{
                     this.divideTroopToArmyCamp();
                     for (var item in troopInfo) {
