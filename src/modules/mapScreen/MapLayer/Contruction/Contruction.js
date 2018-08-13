@@ -340,7 +340,6 @@ var Contruction = cc.Class.extend({
         this.showLevelUpEffect();
         this.setStatus('complete');
         this.setStartTime();
-        cc.log("================================> _id: " + this._id);
         for(var item in contructionList){
             if(contructionList[item]._id == this._id){
                 contructionList[item].status = 'complete';
@@ -349,13 +348,12 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
-
         this.updateListBuildingRef();
-        if(this._name == "AMC_1"){
-            pauseOverCapacityFlag = false;
-        }
         this.updateBarrackQueueList();
+        this.updateArmyCampCapacity();
     },
+
+
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
             showPopupNotEnoughG('upgrade_require_townhall');
@@ -419,10 +417,7 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
-        if(this._name == "AMC_1"){
-            pauseOverCapacityFlag = false;
-        }
-
+        this.updateArmyCampCapacity();
         this.updateBarrackQueueListAfterUpgradeComplete();
         
         // fix bug trường hợp nhà collector có nút thu hoạch
@@ -598,6 +593,11 @@ var Contruction = cc.Class.extend({
     updateBarrackQueueListAfterUpgradeComplete: function() {
         // để trống
     },
+
+    updateArmyCampCapacity: function() {
+        // de trong
+    },
+
     updateListBuildingRef: function() {
         if (this._name === "AMC_1") armyCampRefs.push(this);
         if (this instanceof StorageBuilding) storageBuildingRefs.push(this);

@@ -59,4 +59,8 @@ var ArmyCamp = Building.extend({
         }
         this.presentImg();
     },
+
+    updateArmyCampCapacity: function() {
+        pauseOverCapacityFlag = false;
+    },
 });

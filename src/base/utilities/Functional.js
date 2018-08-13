@@ -8,6 +8,7 @@ var checkPendingBuilding = function(){
     }
     return pendingBuilding;
 };
+
 //kiem tra xem co quan linh dang duoc nghien cuu khong
 var getTroopResearching = function(){
     for (item in troopInfo) {
@@ -18,7 +19,8 @@ var getTroopResearching = function(){
         }
     }
     return null;
-}
+};
+
 //Kiem tra so tho xay user co
 var checkBuilder = function(){
     var builder = 0;

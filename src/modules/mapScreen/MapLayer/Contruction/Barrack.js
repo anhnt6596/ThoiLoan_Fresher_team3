@@ -26,6 +26,7 @@ var Barrack = Building.extend({
         }
     },
     updateBarrackQueueList: function() {
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         barrackQueueList[this._id] = {};
         barrackQueueList[this._id].flagCountDown = true;
         barrackQueueList[this._id]._amountItemInQueue = 0;
@@ -35,13 +36,14 @@ var Barrack = Building.extend({
         barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
     },
     updateBarrackQueueListAfterUpgradeComplete: function() {
-        if(this._name == "BAR_1"){
-            var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        var troopType = config.building['BAR_1'][this._level].unlockedUnit;
+        barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
 
-            //Cap nhat startTime cho barrack
-            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-            barrackQueueList[this._id].flagCountDown = true;
-        }
+        //Cap nhat startTime cho barrack
+        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+        barrackQueueList[this._id].flagCountDown = true;
+
+        BARRACK[this._id].countDown();
     }
 });
