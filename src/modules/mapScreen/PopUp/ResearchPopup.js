@@ -3,49 +3,50 @@ var ResearchPOPUP = ResearchPOPUP || null;
 var ResearchPopUp = ui.PopUp.extend({
 
     lab_level: 1,
-    listTroop: {
-        ARM_1: {
-            name: "Đạo tặc",
-            level: 0,
-        },
-        ARM_2: {
-            name: "Cô nương",
-            level: 0,
-        },
-        ARM_3: {
-            name: "Công tước",
-            level: 0,
-        },
-        ARM_4: {
-            name: "Quái thú",
-            level: 0,
-        },
-        ARM_5: {
-            name: "Chiến binh",
-            level: 0,
-        },
-        ARM_6: {
-            name: "Quân sư",
-            level: 0,
-        },
-        ARM_7: {
-            name: "Pháp sư",
-            level: 0,
-        },
-        ARM_8: {
-            name: "Chó trắng",
-            level: 0,
-        },
-        ARM_9: {
-            name: "Ốc con công",
-            level: 0,
-        },
-        ARM_10: {
-            name: "Cây xà quỳ",
-            level: 0,
-        },
-
-    },
+    //listTroop: {
+    //    ARM_1: {
+    //        name: "Đạo tặc",
+    //        level: 0,
+    //    },
+    //    ARM_2: {
+    //        name: "Cô nương",
+    //        level: 0,
+    //    },
+    //    ARM_3: {
+    //        name: "Công tước",
+    //        level: 0,
+    //    },
+    //    ARM_4: {
+    //        name: "Quái thú",
+    //        level: 0,
+    //    },
+    //    ARM_5: {
+    //        name: "Chiến binh",
+    //        level: 0,
+    //    },
+    //    ARM_6: {
+    //        name: "Quân sư",
+    //        level: 0,
+    //    },
+    //    ARM_7: {
+    //        name: "Pháp sư",
+    //        level: 0,
+    //    },
+    //    ARM_8: {
+    //        name: "Chó trắng",
+    //        level: 0,
+    //    },
+    //    ARM_9: {
+    //        name: "Ốc con công",
+    //        level: 0,
+    //    },
+    //    ARM_10: {
+    //        name: "Cây xà quỳ",
+    //        level: 0,
+    //    },
+    //
+    //},
+    listTroop: {},
     listBtn_troop : [],
     listImg_troop : {},
     status: research_constant.status.free,
@@ -80,7 +81,7 @@ var ResearchPopUp = ui.PopUp.extend({
         this.checkStatusTroop();
 
         this.lab_level = this.getConstructionList("LAB_1","level");
-        var troop = this.getTroopResearching();
+        var troop = getTroopResearching();
 
         if (troop===null) {
             console.log("Khong co troop dang train");
@@ -94,8 +95,10 @@ var ResearchPopUp = ui.PopUp.extend({
             this.timeStart = troop.startTime;
         }
         console.log("lab_level "+ this.lab_level);
+
         this.initInfoResearch();
         this.initScrollBar();
+
     },
     checkStatusTroop: function(){
         console.log("vao check status");
@@ -217,7 +220,7 @@ var ResearchPopUp = ui.PopUp.extend({
             y: mui_ten.y,
         });
 
-        mieng_trang.addChild(quickFinishBtn);
+
 
         var numberG_Text = new cc.LabelBMFont('', research_constant.time_text_dir );
         this.numberG_Text = numberG_Text;
@@ -247,6 +250,7 @@ var ResearchPopUp = ui.PopUp.extend({
         )
         quick_finish_Text.setColor(new cc.Color(134,95,48));
         mieng_trang.addChild(quick_finish_Text);
+        mieng_trang.addChild(quickFinishBtn);
         //********************khi khong co quan linh dang train********************************* */
         //********************khi khong co quan linh dang train********************************* */
         var mieng_trang_nothing = new cc.Sprite(research_constant.research_dir+"mieng_trang.png");
@@ -267,13 +271,13 @@ var ResearchPopUp = ui.PopUp.extend({
         mieng_trang_nothing.addChild(Chon_quan_linh_nang_cap_Text);
 
         quickFinishBtn.addClickEventListener(() => self.quickFinishResearch(self.troop.type));
-        this.addChild(mieng_trang_nothing, 100);
-        this.addChild(mieng_trang, 100);
+        this.addChild(mieng_trang_nothing, 101);
+        this.addChild(mieng_trang, 101);
 //****************************************************************************
         if (this.status===research_constant.status.busy){
             mieng_trang.setVisible(true);
             mieng_trang_nothing.setVisible(false);
-            var troop = this.getTroopResearching();
+            var troop = getTroopResearching();
             console.log("troop dang research la: "+ troop.type);
             this.listImg_troop[troop.type].setVisible(true);
             this.updateInfo(troop.name, troop.level);
@@ -287,7 +291,7 @@ var ResearchPopUp = ui.PopUp.extend({
     quickFinishResearch: function(){
 
         console.log("on Quick Finish Researching");
-        troop = this.getTroopResearching();
+        troop = getTroopResearching();
 
         var countDownDate = config.troop[troop.type][troop.level+1].researchTime*1000;
         var now = getCurrentServerTime();
@@ -300,6 +304,8 @@ var ResearchPopUp = ui.PopUp.extend({
         if(gv.user.coin < gFinish){
             showPopupNotEnoughG('quick_finish');
         }else {
+            this.listImg_troop[troop.type].setVisible(false);
+            clearInterval(this.time_count);
             gv.user.coin -=gFinish;
             console.log("gFinish = "+ gFinish);
             console.log("gv.user.coin = "+ gv.user.coin);
@@ -308,16 +314,7 @@ var ResearchPopUp = ui.PopUp.extend({
             this.onFinishResearch(troop.type, true);
         }
     },
-    getTroopResearching: function(){
-        for (item in troopInfo) {
-            var obj = troopInfo[item];
-            if (obj.status==="researching"){
-                return obj;
-            }
-        }
-        return null;
-    }
-    ,
+
     initScrollBar: function() {
         var scrollView = new ccui.ScrollView();
         scrollView.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
@@ -613,6 +610,7 @@ var ResearchPopUp = ui.PopUp.extend({
             this.listImg_troop[type].setVisible(true);
             this.updateInfo(this.listTroop[type].name, this.listTroop[type].level);
             this.updateTimeCountDown(type,this.timeStart, this.listTroop[type].level);
+            LAB_BUILDING.progressStatus();
         }
     },
     getResourceRequire: function(type,level,resource_type){
@@ -628,14 +626,14 @@ var ResearchPopUp = ui.PopUp.extend({
         var countDownDate = config.troop[type][level+1].researchTime*1000;
         var self = this;
         var x = setInterval(function() {
-
+            self.time_count = x;
             // Get todays date and time
             var now = getCurrentServerTime();
 
             // Find the distance between now and the count down date
             var distance = countDownDate - (now - timeStart);
-            console.log("Thoi gian research quan: "+ type+" level "+ level+"len level "+ (level +1) );
-            cc.log("timeStart= "+timeStart+"countDownDate= "+countDownDate+"distance="+distance);
+            //console.log("Thoi gian research quan: "+ type+" level "+ level+"len level "+ (level +1) );
+            //cc.log("timeStart= "+timeStart+"countDownDate= "+countDownDate+"distance="+distance);
             var gFinish = timeToG(distance*0.001);
 
             // If the count down is finished, write some text
@@ -674,12 +672,19 @@ var ResearchPopUp = ui.PopUp.extend({
         if (!isQuickFinish) {
             NETWORK.sendResearchComplete(type);
         }
+        console.log("Xu ly mat timebar");
+        LAB_BUILDING.timeBar !== null && MAP.removeChild(LAB_BUILDING.timeBar);
+        LAB_BUILDING.timeBar = null;
     },
     setEnableBtn: function (status) {
         var self = this;
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(status);
-            !status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            if (status) {
+                element.img.setColor(new cc.color(255, 255, 255, 255));
+            } else {
+                element.img.setColor(new cc.color(100, 100, 100, 255));
+            }
             //element.label_rq_resource.setVisible(status);
             //element.img.setBright(status);
             //element.img.setCascadeColorEnabled(!status);
@@ -700,8 +705,13 @@ var ResearchPopUp = ui.PopUp.extend({
             console.log(element.name+" level="+ self.listTroop[element.name].level +" lab_level_rq= "+ config.troop[element.name][self.listTroop[element.name].level+1].laboratoryLevelRequired );
             console.log("status = "+element.status);
             element.setEnabled(element.status);
+            if (element.status) {
+                element.img.setColor(new cc.color(255, 255, 255, 255));
+            } else {
+                element.img.setColor(new cc.color(100, 100, 100, 255));
+            }
             //element.img.setBright(element.status);
-            !element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            //!element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
             //element.label_rq_resource.setVisible(element.status);
             //element.img.setCascadeColorEnabled(!element.status);
         })
@@ -710,6 +720,8 @@ var ResearchPopUp = ui.PopUp.extend({
         if (config.troop[btn.name][level_cur+1].laboratoryLevelRequired > this.lab_level ) {
             btn.setEnabled(false);
             btn.img.setColor(new cc.color(100, 100, 100, 255));
+
+            //btn.img.setColor(new cc.color(100, 100, 100, 255));
             //btn.label_rq_resource.setVisible(false);
             //btn.img.setBright(false);
             btn.status = false;
@@ -738,7 +750,12 @@ var ResearchPopUp = ui.PopUp.extend({
         this.setBackStatusBtn();
         this.listBtn_troop.forEach(function(element) {
             element.setEnabled(element.status);
-            !element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
+            if (element.status) {
+                element.img.setColor(new cc.color(255, 255, 255, 255));
+            } else {
+                element.img.setColor(new cc.color(100, 100, 100, 255));
+            }
+            //!element.status && element.img.setColor(new cc.color(100, 100, 100, 255));
             //element.label_rq_resource.setVisible(element.status);
             //element.img.setCascadeColorEnabled(!element.status);
             if (element.name === type) {
@@ -760,7 +777,7 @@ var ResearchPopUp = ui.PopUp.extend({
         //console.log("truowc khi close: ");
         //console.log("lab_status : "+ research_constant.status);
         //console.log("troop dang train neu co: "+ this.troop.toString());
-        research_constant.troop = this.getTroopResearching();
+        research_constant.troop = getTroopResearching();
         this.time_text.retain();
         this.numberG_Text.retain();
         //this.time_text.retain();
@@ -770,7 +787,6 @@ var ResearchPopUp = ui.PopUp.extend({
             self.getParent().removeChild(self);
         }, this)));
 
-        LAB_BUILDING.addResearchTimeBar();
-        LAB_BUILDING.countDownResearchBar();
+        LAB_BUILDING.progressStatus();
     }
 });

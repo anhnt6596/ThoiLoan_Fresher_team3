@@ -209,7 +209,7 @@ var Troop = cc.Sprite.extend({
     },
     setZOrder: function() {
         var mapPos = MAP.calculatePos(this);
-        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 28;
+        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 27;
         MAP.reorderChild(this, newZ);
     },
     createSolidMapArray: function() {

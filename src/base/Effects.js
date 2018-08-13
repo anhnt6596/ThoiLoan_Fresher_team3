@@ -46,43 +46,95 @@ ui.productTextEffect = function (building, type, text) {
         MAP.removeChild(textEff);
     }, 1200);
 };
-ui.dropCoinEffect = function(building, isFlip) {
+ui.dropCoinEffect = function(building, product) {
+    var numberOfCoin = 1;
+    if (product < 100) {
+        numberOfCoin = Math.floor(product / 5 + 1);
+    } else if (product < 1000) {
+        numberOfCoin = Math.floor(product / 50 + 21);
+    } else if (product < 10000) {
+        numberOfCoin = Math.floor(product / 500 + 41);
+    } else if (product < 100000) {
+        numberOfCoin = Math.floor(product / 5000 + 61);
+    } else {
+        numberOfCoin = 80;
+    }
+
     var dropCoinEff = new cc.Sprite();
     dropCoinEff.attr({
         x: building.buildingImg.x,
         y: building.buildingImg.y,
     });
     MAP.addChild(dropCoinEff, 1100);
-    var coin2 = ui.makeAnimation('coindrop_2_', 0, 4, 0.1);
-    var coin3 = ui.makeAnimation('coindrop_3_', 0, 4, 0.1);
-
-    var coin2Sprite = new cc.Sprite();
-    var coin3Sprite = new cc.Sprite();
-
-    isFlip && coin2Sprite.attr({ scaleX: -1 });
-    isFlip && coin3Sprite.setRotation(90);
-    dropCoinEff.addChild(coin2Sprite);
-    dropCoinEff.addChild(coin3Sprite);
-
-
-    var jump2_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
-    var jump3_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
-    var jump4_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
-
-    var fade_action = cc.FadeOut(0.8);
-
-
-    coin2Sprite.runAction(coin2.repeatForever());
-    coin2Sprite.runAction(jump2_action);
-    coin2Sprite.runAction(fade_action);
-
-    coin3Sprite.runAction(coin3.repeatForever());
-    coin3Sprite.runAction(jump3_action);
-    coin3Sprite.runAction(fade_action.clone());
+    
+    for(var i = 0; i < numberOfCoin; i++) {
+        (function() {
+            setTimeout(function() {
+                var coinSprite = new cc.Sprite();
+                
+                var coin_type = randomInt(2, 3);
+                var isFlip = randomInt(0, 1);
+                isFlip && coin_type == 2 && coinSprite.attr({ scaleX: -1 });
+                isFlip && coin_type == 3 && coinSprite.setRotation(90);
+                
+                dropCoinEff.addChild(coinSprite);
+                
+                var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '_', 0, 4, 0.1);
+                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
+                var fade_action = cc.FadeOut(1);
+            
+                coinSprite.runAction(coin_anims.repeatForever());
+                coinSprite.runAction(jump_action);
+                coinSprite.runAction(fade_action);
+            }, i*50);
+        })(i);
+    }
 
     setTimeout(function() {
         MAP.removeChild(dropCoinEff);
-    }, 1000);
+    }, 3000);
+};
+
+ui.dropElixirEff = function(building, product, isDark = 0) {
+    var numberOfDrop = 1;
+    if (product < 100) {
+        numberOfDrop = Math.floor(product / 5 + 1)
+    } else if (product < 1000) {
+        numberOfDrop = Math.floor(product / 50 + 21);
+    } else if (product < 10000) {
+        numberOfDrop = Math.floor(product / 500 + 41);
+    } else if (product < 100000) {
+        numberOfDrop = Math.floor(product / 5000 + 61);
+    } else {
+        numberOfDrop = 80;
+    }
+
+    var dropElixirEff = new cc.Sprite();
+    dropElixirEff.attr({
+        x: building.buildingImg.x,
+        y: building.buildingImg.y,
+    });
+    MAP.addChild(dropElixirEff, 1100);
+    
+    for(var i = 0; i < numberOfDrop; i++) {
+        (function() {
+            setTimeout(function() {
+                var elixirSprite = new cc.Sprite(!isDark ? "res/Art/GUIs/upgrade_building_gui/small/10.png" : "res/Art/GUIs/upgrade_building_gui/small/9.png");
+                
+                dropElixirEff.addChild(elixirSprite);
+                
+                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(250, 280)),randomInt(280, 300),1);
+                var fade_action = cc.FadeOut(0.75);
+            
+                elixirSprite.runAction(jump_action);
+                elixirSprite.runAction(fade_action);
+            }, i*50);
+        })(i);
+    }
+
+    setTimeout(function() {
+        MAP.removeChild(dropElixirEff);
+    }, 3000);
 };
 
 ui.BounceEff = function(scale = 1) {

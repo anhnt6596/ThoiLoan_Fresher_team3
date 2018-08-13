@@ -36,6 +36,11 @@ var TroopItem = ccui.Button.extend({
             this.addChild(costUnit, 101);
         }
 
+        var levelLabel = new cc.LabelBMFont(troopInfo[this._name].level, 'res/Art/Fonts/soji_24.fnt');
+        levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
+        levelLabel.setColor(new cc.color(0, 255, 0, 255));
+        this.addChild(levelLabel, 109);
+
         var btnInfo = new ccui.Button('res/Art/GUIs/train_troop_gui/info.png', 'res/Art/GUIs/train_troop_gui/info.png');
         btnInfo.setPosition(this.x + this.width - btnInfo.width/2, this.y + this.height - btnInfo.height/2);
         btnInfo.addClickEventListener(this.onInfo.bind(this));

@@ -3,7 +3,15 @@ var Labratory = Building.extend({
     ctor: function(info) {
         this._super(info);
         LAB_BUILDING = this;
+        this.progressStatus();
         // this.addBuildingImg();
+    },
+    progressStatus: function () {
+        var troop = getTroopResearching();
+        if (troop){
+            this.addResearchTimeBar();
+            this.countDownResearchBar();
+        }
     },
     addBuildingImg: function() {
         var buildingImg = new cc.Sprite(res.building.labratory[this._level]);
@@ -63,31 +71,34 @@ var Labratory = Building.extend({
             });
             timeBar.addChild(timeText);
         }
-
     },
     countDownResearchBar: function(){
-        this.startTime = research_constant.troop.startTime;
-        //var cur = getCurrentServerTime() - research_constant.troop.startTime;
-        var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime;
+       if (research_constant.troop){
+            this.startTime = research_constant.troop.startTime;
+            //var cur = getCurrentServerTime() - research_constant.troop.startTime;
+            var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime;
 
-        var tick = () => {
-            setTimeout(() => {
-                cur = (getCurrentServerTime() - this.startTime)/1000;
-            if (cur >= max) {
-                research_constant.status.now = research_constant.status.free;
-                //linhrafa need to xu li tang level troop
-                return;
-            } else {
-                this.updateTimeResearchBar(cur, max);
-                if(research_constant.status.now = research_constant.status.busy){
-                    tick();
+            var tick = () => {
+                setTimeout( () => {
+                    cur = (getCurrentServerTime() - this.startTime)/1000;
+                    if (cur >= max) {
+                        research_constant.status.now = research_constant.status.free;
+                        //linhrafa need to xu li tang level troop
+                        return;
+                    } else {
+                        this.updateTimeResearchBar(cur, max);
+                        if(research_constant.status.now = research_constant.status.busy){
+                            tick();
+                    }
                 }
-            }
-            //cur +=1;
-        }, 1000);
-        }
+                //cur +=1;
+            }, 1000);
+       }
+
         //Chay 1 lan
         tick();
+       }
+
     },
     updateTimeResearchBar: function(cur, max) {
         if (this.timeBar) {

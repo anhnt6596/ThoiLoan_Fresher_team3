@@ -350,16 +350,11 @@ var Contruction = cc.Class.extend({
         }
         updateGUI();
 
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        if(this._name == "BAR_1"){
-            barrackQueueList[this._id] = {};
-            barrackQueueList[this._id].flagCountDown = true;
-            barrackQueueList[this._id]._amountItemInQueue = 0;
-            barrackQueueList[this._id]._totalTroopCapacity = 0;
-            barrackQueueList[this._id]._startTime = 0;
-            barrackQueueList[this._id]._troopList = {};
-            barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
+        this.updateListBuildingRef();
+        if(this._name == "AMC_1"){
+            pauseOverCapacityFlag = false;
         }
+        this.updateBarrackQueueList();
     },
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
@@ -424,17 +419,15 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
-
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        if(this._name == "BAR_1"){
-            var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-            barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
-
-            //Cap nhat startTime cho barrack
-            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-            barrackQueueList[this._id].flagCountDown = true;
+        if(this._name == "AMC_1"){
+            pauseOverCapacityFlag = false;
         }
 
+        this.updateBarrackQueueListAfterUpgradeComplete();
+        
+        // fix bug trường hợp nhà collector có nút thu hoạch
+        this.collect_bg = null;
+        this.full_bg = null;
     },
     cancel: function(building){
         buildingCancel = building;
@@ -598,6 +591,17 @@ var Contruction = cc.Class.extend({
     addArmy: function() {
         // để rỗng
         cc.log("Đây không phải nhà để chứa lính");
+    },
+    updateBarrackQueueList: function() {
+        // để trống
+    },
+    updateBarrackQueueListAfterUpgradeComplete: function() {
+        // để trống
+    },
+    updateListBuildingRef: function() {
+        if (this._name === "AMC_1") armyCampRefs.push(this);
+        if (this instanceof StorageBuilding) storageBuildingRefs.push(this);
+        if (this._name === "BAR_1") barrackRefs.push(this);
     },
     countDown: function(cur, max){
         var tick = () => {

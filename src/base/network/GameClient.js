@@ -40,10 +40,12 @@ var GameClient = cc.Class.extend(
 
         },
         sendPacket: function (pk) {
+            // LAG_SCREEN && LAG_SCREEN.show();
             this.getNetwork().send(pk);
             gv.poolObjects.push(pk);
         },
         getInPacket: function (cmd, pkg) {
+            // LAG_SCREEN && LAG_SCREEN.hide();
             return this.packetFactory.createPacket(cmd, pkg);
         },
         getOutPacket: function (objClass) {

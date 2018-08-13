@@ -144,7 +144,7 @@ var LobbyLayer = cc.Layer.extend({
         var tartgetedObj = MAP._targetedObject;
         //console.log("san luong = " +tartgetedObj.productivity.sanluong);
 
-        if (tartgetedObj instanceof CollectorBuilding && tartgetedObj.productivity.sanluong < 1){
+        if (tartgetedObj instanceof CollectorBuilding && tartgetedObj.productivity && tartgetedObj.productivity.sanluong < 1){
             this.objectMenu.disableCollectorBtn();
         }
         //this.objectMenu.collectGoldBtn.setBright(false);

@@ -25,3 +25,5 @@ var buildingCancel = null;
 //Train Troop
 var trainedBarrackId = null;
 var trainedTroopType = null;
+//Bao hieu vuot qua capacity: true
+var pauseOverCapacityFlag = false;

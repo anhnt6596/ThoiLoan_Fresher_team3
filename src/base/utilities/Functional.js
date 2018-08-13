@@ -8,7 +8,17 @@ var checkPendingBuilding = function(){
     }
     return pendingBuilding;
 };
-
+//kiem tra xem co quan linh dang duoc nghien cuu khong
+var getTroopResearching = function(){
+    for (item in troopInfo) {
+        var obj = troopInfo[item];
+        if (obj.status==="researching"){
+            research_constant.troop = obj;
+            return obj;
+        }
+    }
+    return null;
+}
 //Kiem tra so tho xay user co
 var checkBuilder = function(){
     var builder = 0;
@@ -39,6 +49,14 @@ var finishSmallestRemainingTimeBuilding = function(){
             }else if(objectRefs[k]._status == 'upgrade'){
                 objectRefs[k].upgradeComplete(false);
             }
+        }
+    }
+};
+
+var getObjBuildingById = function(id) {
+    for(var k in objectRefs){
+        if(objectRefs[k]._id == id){
+            return objectRefs[k];
         }
     }
 };
@@ -156,6 +174,7 @@ var reduceUserResources = function(costBuilding){
 
     LOBBY.update(gv.user);
 };
+
 var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi thoi gian sang san luong, thoi gian truyen vao tinh theo s
     var unit_product = config.building[type][level].productivity;
     //console.log("unit_product = "+unit_product);
@@ -167,14 +186,16 @@ var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi tho
         return {sanluong:ans, is_full:true};
     }
     return {sanluong:ans, is_full:false};
-}
+};
+
 var changeUserResource = function (_gold,_elixir,_darkElixir,_coin, is_add) {
     is_add
     ? addUserResources(_gold,_elixir,_darkElixir,_coin)
     : reduceUserResourcesResearch(_gold,_elixir,_darkElixir,_coin);
     LOBBY.update(gv.user);
     storageBuildingUpdateImg(gv.user);
-}
+};
+
 var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
     gv.user.gold = gv.user.gold + _gold;
     if (gv.user.gold>gv.user.maxCapacityGold) {
@@ -191,7 +212,7 @@ var addUserResources = function (_gold,_elixir,_darkElixir,_coin) {
     gv.user.coin = gv.user.coin + _coin;
     LOBBY.update(gv.user);
 
-}
+};
 
 var reduceUserResourcesResearch = function(gold,elixir,darkElixir,coin){
     if(gv.user.gold >= gold){
