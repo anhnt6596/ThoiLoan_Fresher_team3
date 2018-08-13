@@ -73,6 +73,7 @@
         "src/modules/mapScreen/MapLayer/Contruction/Cannon.js",
         "src/modules/mapScreen/MapLayer/Contruction/DarkElixirCollector.js",
         "src/modules/mapScreen/MapLayer/Contruction/DarkElixirStorage.js",
+        "src/modules/mapScreen/MapLayer/Contruction/Wall.js",
         "src/modules/mapScreen/MapLayer/Obstacle/Obstacle.js",
         "src/modules/mapScreen/MapLayer/Troop/Troop.js",
         "src/modules/mapScreen/MapLayer/Troop/Warrior.js",
