@@ -26,6 +26,8 @@ var TrainPopup = TinyPopup.extend({
     _itemInQueue:{},
     _itemDisplay:{},
     _positionsInQueue:[],
+    _nextBtn:null,
+    _prevBtn:null,
 
 
     ctor: function (width, height, title, type, data) {
@@ -63,6 +65,7 @@ var TrainPopup = TinyPopup.extend({
 
         this.initQueue();
         this.init4PositionsInQueue();
+        //this.initNavigation(width, height);
 
         for (var i = 0; i < 4; i++) {
             var a = i + 1;
@@ -464,6 +467,87 @@ var TrainPopup = TinyPopup.extend({
         this.str = str;
         this.addChild(str, 2, 5);
     },
+
+    initNavigation: function(width, height) {
+        this._nextBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/forward.png', 'res/Art/GUIs/train_troop_gui/forward.png');
+        this._nextBtn.setPosition(width/2 + 20, 0);
+        this._nextBtn.addClickEventListener(this.onNext.bind(this));
+        this.addChild(this._nextBtn, 111);
+
+        this._prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+        this._prevBtn.setPosition(-width/2 - 20, 0);
+        this._prevBtn.addClickEventListener(this.onPrev.bind(this));
+        this.addChild(this._prevBtn, 111);
+    },
+
+    onNext: function() {
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
+        this.getParent().removeChild(this);
+
+
+        //var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        //var self = this;
+        //this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+        //    self.getParent().removeChild(self);
+        //}, this)));
+        //
+        //var children = this.getChildren();
+        //cc.log("=========================== RETAIN CHILDREN ============================");
+        //for(var i in children){
+        //    //if(children[i].tag != 1711){
+        //    //    cc.log("============= children tag: " + children[i].tag);
+        //    children[i].retain();
+        //    //}
+        //}
+
+        cc.log("========================= NEXT BARRACK: " + this.getNextBarrack(this._id)._id);
+
+        var data = {train: true, barrack: this.getNextBarrack(this._id)};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+        cc.director.getRunningScene().addChild(popup, 200);
+    },
+
+    onPrev: function() {
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
+        this.getParent().removeChild(this);
+
+        var data = {train: true, barrack: this.getPrevBarrack(this._id)};
+        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+        cc.director.getRunningScene().addChild(popup, 200);
+    },
+
+    getNextBarrack: function(currentIdBarrack) {
+        for(var k in barrackRefs){
+            if(barrackRefs[k]._id == currentIdBarrack){
+                if(!barrackRefs[k + 1]){
+                    cc.log("============================= BARRACK[0] la: " + barrackRefs[0]._id);
+                    return barrackRefs[0];
+                }else{
+                    return barrackRefs[k + 1];
+                }
+            }
+        }
+    },
+
+    getPrevBarrack: function(currentIdBarrack) {
+        for(var k in barrackRefs){
+            if(barrackRefs[k]._id == currentIdBarrack){
+                if(barrackRefs[k - 1]){
+                    return barrackRefs[k - 1];
+                }else{
+                    return barrackRefs[barrackRefs.length - 1];
+                }
+            }
+        }
+    },
+
 
 
     close: function() {

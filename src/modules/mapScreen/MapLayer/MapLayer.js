@@ -378,7 +378,7 @@ var MapLayer = cc.Layer.extend({
             case 'LAB_1':
                 newBuilding = new Labratory(buildingInfo);
                 break;
-            case 'DEF_1':
+            case 'DEF_1': case 'WAL_1':
                 newBuilding = new Cannon(buildingInfo);
                 break;
             case 'WAL_1':
