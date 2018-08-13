@@ -86,7 +86,7 @@ ui.dropCoinEffect = function(building, product) {
                 coinSprite.runAction(coin_anims.repeatForever());
                 coinSprite.runAction(jump_action);
                 coinSprite.runAction(fade_action);
-            }, i*50);
+            }, i*20);
         })(i);
     }
 
@@ -114,6 +114,7 @@ ui.dropElixirEff = function(building, product, isDark = 0) {
         x: building.buildingImg.x,
         y: building.buildingImg.y,
     });
+    dropElixirEff.setOpacity(100);
     MAP.addChild(dropElixirEff, 1100);
     
     for(var i = 0; i < numberOfDrop; i++) {
@@ -123,12 +124,12 @@ ui.dropElixirEff = function(building, product, isDark = 0) {
                 
                 dropElixirEff.addChild(elixirSprite);
                 
-                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(250, 280)),randomInt(280, 300),1);
+                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(200, 280)),randomInt(250, 300),1);
                 var fade_action = cc.FadeOut(0.75);
             
                 elixirSprite.runAction(jump_action);
                 elixirSprite.runAction(fade_action);
-            }, i*50);
+            }, i*20);
         })(i);
     }
 

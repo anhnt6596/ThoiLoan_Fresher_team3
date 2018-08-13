@@ -310,6 +310,12 @@ testnetwork.Connector = cc.Class.extend({
                     resetReducedTempResources();
                 }
                 break;
+            case gv.CMD.RESEARCH_TROOP_COMPLETE:
+                cc.log("RESEARCH COMPLETEEEEEEEEEEEEEEEE");
+                break;
+            case gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE:
+                cc.log("RESEARCH COMPLETEEEEEEEEEEEEEEEE");
+                break;
         }
     },
 

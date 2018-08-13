@@ -449,6 +449,51 @@ res.building = {
             buildingsDir + 'dark elixir storage/STO_3_6/idle/image0002.png',
             buildingsDir + 'dark elixir storage/STO_3_6/idle/image0003.png',
         ],
+    ],
+    wall: [
+        [],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_1/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_1/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_1/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_1/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0003.png',
+        ],
+        [
+            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0003.png',
+        ],
     ]
 };
 
@@ -530,6 +575,10 @@ name.building = {
     RES_3: {
         vi: 'Mỏ dầu đen',
         en: 'Dark Elixir Mine'
+    },
+    WAL_1: {
+        vi: 'Tường',
+        en: 'Wall'
     },
     LAB_1: {
         vi: '',
