@@ -569,7 +569,13 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             this.serverTime = this.getLong();
             //cc.log("server time: " + this.serverTime);
 
-
+            this.is_in_guild = this.getBool();
+            if (this.is_in_guild){
+                this.id_guild = this.getInt();
+                this.name_guild = this.getString();
+                this.id_logo_guild = this.getInt();
+                this.last_time_ask_for_troops = this.getInt();
+            }
             //get level troop
             //gv.user.troopLevel = {};
             //gv.user.troopLevel.ARM_1 = this.getShort();

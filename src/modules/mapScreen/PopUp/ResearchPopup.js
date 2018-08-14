@@ -633,11 +633,8 @@ var ResearchPopUp = ui.PopUp.extend({
             NETWORK.sendResearchComplete(type);
         }
         console.log("Xu ly mat timebar");
-        clearInterval(LAB_BUILDING.timeCounDown);
-        MAP.removeChild(LAB_BUILDING.timeBar);
-        LAB_BUILDING.timeBar = null;
-        //LAB_BUILDING.addBuildingImg();
-        LAB_BUILDING.animSprite.setOpacity(0);
+        LAB_BUILDING.clearResearchTimebar();
+
     },
     setEnableBtn: function (status) {
         var self = this;

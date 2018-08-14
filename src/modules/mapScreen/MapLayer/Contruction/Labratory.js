@@ -3,12 +3,12 @@ var Labratory = Building.extend({
     ctor: function(info) {
         this._super(info);
         LAB_BUILDING = this;
+        //this.addBuildingImg();
         this.progressStatus();
-        // this.addBuildingImg();
+
     },
     progressStatus: function () {
         console.log("process status researching");
-        console.log("troop dang nghien cuu la: " +research_constant.troop.type+" start time: "+ research_constant.troop.startTime);
         if (research_constant.troop && !this.timeBar){
             this.addResearchTimeBar();
             this.countDownResearchBar();
@@ -135,9 +135,11 @@ var Labratory = Building.extend({
             this.timeText.setString(t);
         }
     },
-
-    addEffectResearching: function(){
-
-
-    }
+    clearResearchTimebar: function () {
+        clearInterval(this.timeCounDown);
+        MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+        //LAB_BUILDING.addBuildingImg();
+        this.animSprite.setOpacity(0);
+    },
 });
