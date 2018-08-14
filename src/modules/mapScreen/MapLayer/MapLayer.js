@@ -470,6 +470,9 @@ var MapLayer = cc.Layer.extend({
     },
 
     updateMapWhenValidatedBuild:function(newBuilding, buildingInfo){
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+
         this._isBuilding = false;
         // newBuilding.setStatus('pending');
         newBuilding._status = 'pending';

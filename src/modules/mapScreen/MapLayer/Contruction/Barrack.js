@@ -43,7 +43,9 @@ var Barrack = Building.extend({
         //Cap nhat startTime cho barrack
         barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
         barrackQueueList[this._id].flagCountDown = true;
-
-        BARRACK[this._id].countDown();
+        //Neu chua co linh train thi khong cowntdown
+        if(BARRACK[this._id]){
+            BARRACK[this._id].countDown();
+        }
     }
 });

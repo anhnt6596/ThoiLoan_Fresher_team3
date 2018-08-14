@@ -127,15 +127,15 @@ var TrainPopup = TinyPopup.extend({
         var gResources = checkUserResources(costItem);
         if(gResources == 0){
             _.extend(ReducedTempResources, costItem);
-            trainedBarrackId = TRAIN_POPUP._id;
-            trainedTroopType = this._name;
+            temp.trainedBarrackId = TRAIN_POPUP._id;
+            temp.trainedTroopType = this._name;
             NETWORK.sendTrainTroop(TRAIN_POPUP._id, this._name);
         } else if(gResources > 0){
             if(gv.user.coin < gResources){
                 showPopupNotEnoughG('train_troop');
             }else{
-                var temp = {id: TRAIN_POPUP._id, name: this._name};
-                var data = {type:getLackingResources(costItem), g:gResources, cost:costItem, temp:temp};
+                var temp1 = {id: TRAIN_POPUP._id, name: this._name};
+                var data = {type:getLackingResources(costItem), g:gResources, cost:costItem, temp:temp1};
                 var popup = new ShowTrainPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
                 cc.director.getRunningScene().addChild(popup, 2000000);
             }
@@ -198,7 +198,7 @@ var TrainPopup = TinyPopup.extend({
         this.addTimeBarFirstItem();
         if(!this._statusCountDown || barrackQueueList[this._id]._isFirst){
             this.countDown();
-        }else if(!pauseOverCapacityFlag){       //Can them check dieu kien khi finish time success
+        }else if(!temp.pauseOverCapacityFlag){       //Can them check dieu kien khi finish time success
             this.lieTick();
         }
     },
@@ -289,7 +289,7 @@ var TrainPopup = TinyPopup.extend({
         var currentTroopCapacity = getTotalCurrentTroopCapacity();
         var totalCapacity = getTotalCapacityAMCs();
         var currentCapacityInQueue = this.getTotalCapacityInQueue();
-        if(currentCapacityInQueue + currentTroopCapacity > totalCapacity || pauseOverCapacityFlag){
+        if(currentCapacityInQueue + currentTroopCapacity > totalCapacity || temp.pauseOverCapacityFlag){
             //cc.log("==================================== CASE 1");
             this._btnQuickFinish.setBright(false);
             this._btnQuickFinish.setEnabled(false);
@@ -317,7 +317,7 @@ var TrainPopup = TinyPopup.extend({
     },
 
     onQuickFinish: function() {
-        trainedBarrackId = this._id;
+        temp.trainedBarrackId = this._id;
         ReducedTempResources = {gold:0, elixir:0, darkElixir:0, coin:timeToG(this.getTotalTimeQuickFinish())};
         NETWORK.sendQuickFinishTrainTroop(this._id);
     },
@@ -341,23 +341,23 @@ var TrainPopup = TinyPopup.extend({
                 var max = self.getFirstItemInQueue()._trainingTime;
                 //Chay xong 1 icon
                 //if (max - cur <= 0) {
-                if (max - cur <= 0 && !pauseOverCapacityFlag) {
+                if (max - cur <= 0 && !temp.pauseOverCapacityFlag) {
                     var name = self.getFirstItemInQueue()._name;
-                    trainedBarrackId = self._id;
-                    trainedTroopType = name;
+                    temp.trainedBarrackId = self._id;
+                    temp.trainedTroopType = name;
                     NETWORK.sendFinishTimeTrainTroop(self._id, name, self._troopList[name]._amount - 1);
                 } else {
                     //cc.log("============================== HERE 1 ");
                     if(BARRACK[self._id]._statusCountDown){
                         if(currentCapacity >= totalCapacity){
-                            pauseOverCapacityFlag = true;
+                            temp.pauseOverCapacityFlag = true;
                             //barrackQueueList[self._id]._startTime += 1000;
                             //Chap nhan xong xenh, luc pause thi cho hien thi = trainingTime
                             barrackQueueList[self._id]._startTime = getCurrentServerTime();
                             cc.log("============================== HERE 2 ");
 
                         }else{
-                            pauseOverCapacityFlag = false;
+                            temp.pauseOverCapacityFlag = false;
                             cc.log("============================== HERE 3 ");
 
                             //self.updateTimeBar(cur, max);
@@ -392,7 +392,7 @@ var TrainPopup = TinyPopup.extend({
         var totalCapacity = getTotalCapacityAMCs();
         var currentCapacityInQueue = this.getTotalCapacityInQueue();
 
-        if(currentCapacityInQueue + currentTroopCapacity > totalCapacity || pauseOverCapacityFlag){
+        if(currentCapacityInQueue + currentTroopCapacity > totalCapacity || temp.pauseOverCapacityFlag){
             //cc.log("==================================== CASE 1");
             this._btnQuickFinish.setBright(false);
             this._btnQuickFinish.setEnabled(false);

@@ -71,14 +71,17 @@ var showPopupNotEnoughG = function(type){
             title = "Not enough level of TownHall";
             break;
         case 'server_denied_build':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to build";
             break;
         case 'server_denied_upgrade':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to upgrade";
             break;
         case 'server_denied_quick_finish':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to quick finish";
             break;
@@ -95,10 +98,12 @@ var showPopupNotEnoughG = function(type){
             title = "Server denied to remove";
             break;
         case 'server_denied_add_resources':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to add resources";
             break;
         case 'server_denied_quick_finish_train_troop':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to quick finish those troops";
             break;
@@ -107,10 +112,12 @@ var showPopupNotEnoughG = function(type){
             title = "Do not have enough resource";
             break;
         case 'server_denied_train_troop':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to train this troop";
             break;
         case 'server_denied_cancel_train_troop':
+            resetReducedTempResources();
             data.content = "Please try again later!";
             title = "Server denied to cancel this troop";
             break;

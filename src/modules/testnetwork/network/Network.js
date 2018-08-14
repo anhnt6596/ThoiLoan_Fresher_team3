@@ -65,124 +65,48 @@ testnetwork.Connector = cc.Class.extend({
                 }
                 break;
             case gv.CMD.ADD_CONSTRUCTION:
-                //short packet.validate //success=1; false=0;
                 if (packet.validate) {
-                    cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
                     cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
-                    MAP.updateMapWhenValidatedBuild(newBuildingAdd, buildingAdd);
-                    cc.log('=======================================G bi tru di khi xay: ' + ReducedTempResources.coin);
-                    reduceUserResources(ReducedTempResources);
-
-                    //reset
-                    resetReducedTempResources();
+                    MAP.updateMapWhenValidatedBuild(temp.newBuildingAdd, temp.buildingAdd);
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
                     showPopupNotEnoughG('server_denied_build');
-                    //reset
-                    buildingAdd = null;
-                    newBuildingAdd = null;
-                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.UPGRADE_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN UPGRADE tu SERVER=======================================");
-
-                    buildingUpgrade.setStatus('upgrade');
-                    cc.log(buildingUpgrade._status);
-                    buildingUpgrade.startTime = getCurrentServerTime();
-                    cc.log(buildingUpgrade.startTime);
-                    var cur = (getCurrentServerTime() - buildingUpgrade.startTime)/1000;
-                    var max = config.building[buildingUpgrade._name][buildingUpgrade._level+1].buildTime;
-                    buildingUpgrade.addTimeBar(cur, max);
-                    buildingUpgrade.countDown(cur, max);
-                    buildingUpgrade.buildTime = max;
-
-
-                    for(var item in contructionList){
-                        if(contructionList[item]._id == buildingUpgrade._id){
-                            contructionList[item].status = 'upgrade';
-                            contructionList[item].startTime = buildingUpgrade.startTime;
-                            contructionList[item].buildTime = max;
-                            break;
-                        }
-                    }
-
-                    updateBuilderNumber();
-                    reduceUserResources(ReducedTempResources);
-                    resetReducedTempResources();
-                    console.log("ten nha = "+ buildingUpgrade._name);
-                    if (buildingUpgrade._name===('RES_1'||'RES_2'||'RES_3') ) {
-                        cc.log("cho phep upgrade");
-                        buildingUpgrade.onCollectResource(true);
-                    }
-
-                    if(buildingUpgrade._name == "BAR_1"){
-                        //Cap nhat startTime cho barrack
-                        barrackQueueList[buildingUpgrade._id]._startTime = buildingUpgrade.startTime - barrackQueueList[buildingUpgrade._id]._startTime;
-                        //Dung countdown cua barrack nay
-                        barrackQueueList[buildingUpgrade._id].flagCountDown = false;
-                    }
-
+                    this.upgradeConstruction(temp.buildingUpgrade);
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
                     showPopupNotEnoughG('server_denied_upgrade');
-                    //reset
-                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.QUICK_FINISH:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN QUICK FINISH tu SERVER=======================================");
-                    reduceUserResources(ReducedTempResources);
-                    if(buildingQuickFinish._status == 'pending'){
-                        buildingQuickFinish.buildComplete(true);
-                    }else if(buildingQuickFinish._status == 'upgrade'){
-                        buildingQuickFinish.upgradeComplete(true);
-                    }
-                    //reset
-                    resetReducedTempResources();
+                    this.quickFinishConstruction(temp.buildingQuickFinish);
                 }else {
                     cc.log("=======================================SERVER TU CHOI QUICK FINISH=======================================");
                     showPopupNotEnoughG('server_denied_quick_finish');
-                    //reset
-                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.FINISH_TIME_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME tu SERVER=======================================");
-                    if(buildingFinishTime._status == 'pending'){
-                        buildingFinishTime.buildComplete(true);
-                    }else if(buildingFinishTime._status == 'upgrade'){
-                        buildingFinishTime.upgradeComplete(true);
-                    }
-                    //reset
+                    //this.finishTimeConstruction(temp.buildingFinishTime);
                 }else {
                     cc.log("=======================================SERVER TU CHOI FINISH TIME=======================================");
                     showPopupNotEnoughG('server_denied_finish_time');
-                    //reset
-                    buildingFinishTime = null;
                 }
-                if(buildingUpgrade._name == "BAR_1"){
-                    //Cap nhat startTime cho barrack
-                    barrackQueueList[this._id]._startTime = this.startTime - barrackQueueList[this._id]._startTime;
-                    barrackQueueList[this._id].flagCountDown = true;
-                }
-
                 break;
             case gv.CMD.CANCEL_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN CANCEL tu SERVER=======================================");
-                    if (buildingCancel._status == 'upgrade') buildingCancel.cancelUpgrade();
-                    else if (buildingCancel._status == 'pending') buildingCancel.cancelBuild();
-                    //reset
-                    resetReducedTempResources();
+                    this.cancelConstruction(temp.buildingCancel);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL=======================================");
                     showPopupNotEnoughG('server_denied_cancel');
-                    //reset
-                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.REMOVE_OBSTACLE:
@@ -196,22 +120,17 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_SERVER_TIME:
                 requestedServerTime++;
                 time.DeltaTime = getCurrentClientTime() - packet.currentServerTime;
-                //updateTimeFlag = true;
-                //cc.log("DeltaTime lan thu " + requestedServerTime + " nhan tu SERVER: " + time.DeltaTime + " ms");
                 break;
             case gv.CMD.ADD_RESOURCE:
                 if(packet.validate) {
                     cc.log("=======================================XAC NHAN ADD RESOURCE tu SERVER=======================================");
                     increaseUserResources(ReducedTempResources);
-                    resetReducedTempResources();
                 }else {
                     cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
                     showPopupNotEnoughG('server_denied_add_resources');
-                    resetReducedTempResources();
                 }
                 break;
-            case gv.CMD.GET_TROOP_INFO: 
-                //cc.log('================>', packet.message);
+            case gv.CMD.GET_TROOP_INFO:
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
                 if(sendTroopInfoFlag == false){
                     this.sendGetBarrackQueueInfo();
@@ -236,59 +155,25 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN TRAIN TROOP tu SERVER=======================================");
-                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
-                    cc.log("======================================= trainedTroopType" + trainedTroopType);
-                    this.trainTroopCompleted(trainedTroopType);
-
-                    reduceUserResources(ReducedTempResources);
-                    resetReducedTempResources();
-
+                    this.trainTroopCompleted(temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_train_troop');
-
-                    //reset
-                    resetReducedTempResources();
-                    trainedBarrackId = null;
-                    trainedTroopType = null;
                 }
                 break;
             case gv.CMD.CANCEL_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN CANCEL TRAIN TROOP tu SERVER=======================================");
-                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
-                    this.canceledTrainTroop(trainedTroopType);
-
-                    var costItem = TRAIN_POPUP._troopList[trainedTroopType].getCost();
-                    cc.log("============================= Elixir cost: " + costItem.elixir);
-                    //Refund
-                    var refundResources = {gold:costItem.gold, elixir:costItem.elixir, darkElixir:costItem.darkElixir, coin:costItem.coin};
-                    increaseUserResources(refundResources);
-
-                    LOBBY.update(gv.user);
-
+                    this.canceledTrainTroop(temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_cancel_train_troop');
-
                 }
                 break;
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    var start;
-                    for(var i in objectRefs){
-                        if(objectRefs[i]._id == trainedBarrackId){
-                            start = objectRefs[i];
-                            break;
-                        }
-                    }
-                    this.createTroopAfterSVResponseSuccess(trainedTroopType, start);
-
-                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
-                    this.finishTimeTroopTrain(trainedBarrackId, trainedTroopType);
-                    // this.createTroopAfterSVResponseSuccess(trainedTroopType, armyCampRefs[0], start);
-
+                    this.finishTimeTroopTrain(temp.trainedBarrackId, temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_finish_time_train_troop');
@@ -297,17 +182,10 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.QUICK_FINISH_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN QUICK FINISH TRAIN TROOP tu SERVER=======================================");
-                    cc.log("======================================= trainedBarrackId" + trainedBarrackId);
-                    this.quickFinishTroopTrain(trainedBarrackId);
-
-                    //reset
-                    trainedBarrackId = null;
+                    this.quickFinishTroopTrain(temp.trainedBarrackId);
                 }else {
                     cc.log("=======================================SERVER TU CHOI QUICK FINISH TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_quick_finish_train_troop');
-
-                    //reset
-                    resetReducedTempResources();
                 }
                 break;
             case gv.CMD.RESEARCH_TROOP_COMPLETE:
@@ -319,54 +197,62 @@ testnetwork.Connector = cc.Class.extend({
         }
     },
 
-    quickFinishTroopTrain: function(id) {
-        //Tru tien
-        reduceUserResources(ReducedTempResources);
-        resetReducedTempResources();
+    upgradeConstruction: function(building) {
+        building.setStatus('upgrade');
+        building.startTime = getCurrentServerTime();
+        var cur = (getCurrentServerTime() - building.startTime)/1000;
+        var max = config.building[building._name][building._level+1].buildTime;
+        building.addTimeBar(cur, max);
+        building.countDown(cur, max);
+        building.buildTime = max;
 
-
-        //An tat ca, reset queue, troop
-        var here = barrackQueueList[trainedBarrackId];
-
-        TRAIN_POPUP._startTime = 0;
-        here._startTime = 0;
-        TRAIN_POPUP._totalTroopCapacity = 0;
-        here._totalTroopCapacity = 0;
-        TRAIN_POPUP._amountItemInQueue = 0;
-        here._amountItemInQueue = 0;
-
-        var start;
-        for(var i in objectRefs){
-            if(objectRefs[i]._id == id){
-                start = objectRefs[i];
+        for(var item in contructionList){
+            if(contructionList[item]._id == building._id){
+                contructionList[item].status = 'upgrade';
+                contructionList[item].startTime = building.startTime;
+                contructionList[item].buildTime = max;
                 break;
             }
         }
 
-        //cho tat ca linh chay
-        for(var i in TRAIN_POPUP._troopList){
-            for(var j = 0; j < TRAIN_POPUP._troopList[i]._amount; j++){
-                this.createTroopAfterSVResponseSuccess(i, start);
-            }
+        updateBuilderNumber();
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+        console.log("ten nha = "+ building._name);
+        if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
+            cc.log("cho phep upgrade");
+            building.onCollectResource(true);
         }
 
-        for(var i in TRAIN_POPUP._troopList){
-            troopInfo[i].population += TRAIN_POPUP._troopList[i]._amount;
-            TRAIN_POPUP._troopList[i]._amount = 0;
-            TRAIN_POPUP._itemInQueue[i].setPosition(-1000, -1000);
-            TRAIN_POPUP._troopList[i]._currentPosition = -1;
-
-            TRAIN_POPUP._timeBar.visible = false;
-            TRAIN_POPUP._statusCountDown = false;
-
+        if(building._name == "BAR_1"){
+            //Cap nhat startTime cho barrack
+            barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
+            //Dung countdown cua barrack nay
+            barrackQueueList[building._id].flagCountDown = false;
         }
+    },
 
-        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
-        TRAIN_POPUP.enableItemDisplay();
+    quickFinishConstruction: function(building) {
+        reduceUserResources(ReducedTempResources);
+        if(building._status == 'pending'){
+            building.buildComplete(true);
+        }else if(building._status == 'upgrade'){
+            building.upgradeComplete(true);
+        }
+        resetReducedTempResources();
+    },
 
-        var totalCapacity = getTotalCapacityAMCs();
-        var currentCapacity = getTotalCurrentTroopCapacity();
-        TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
+    finishTimeConstruction: function(building) {
+        if(building._status == 'pending'){
+            building.buildComplete(true);
+        }else if(building._status == 'upgrade'){
+            building.upgradeComplete(true);
+        }
+    },
+
+    cancelConstruction: function(building) {
+        if (building._status == 'upgrade') building.cancelUpgrade();
+        else if (building._status == 'pending') building.cancelBuild();
     },
 
     createTroopAfterSVResponseSuccess: function(type, barrack) {
@@ -420,6 +306,17 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     finishTimeTroopTrain: function(id, troopType) {
+        //Cho linh chay ra
+        var start;
+        for(var i in objectRefs){
+            if(objectRefs[i]._id == id){
+                start = objectRefs[i];
+                break;
+            }
+        }
+        this.createTroopAfterSVResponseSuccess(troopType, start);
+
+
         troopInfo[troopType].population++;
         var here = barrackQueueList[id];
 
@@ -463,9 +360,61 @@ testnetwork.Connector = cc.Class.extend({
         BARRACK[id].upadateQuickFinishTimeAndCost();
     },
 
+    quickFinishTroopTrain: function(id) {
+        //Tru tien
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+
+
+        //An tat ca, reset queue, troop
+        var here = barrackQueueList[id];
+
+        TRAIN_POPUP._startTime = 0;
+        here._startTime = 0;
+        TRAIN_POPUP._totalTroopCapacity = 0;
+        here._totalTroopCapacity = 0;
+        TRAIN_POPUP._amountItemInQueue = 0;
+        here._amountItemInQueue = 0;
+
+        var start;
+        for(var i in objectRefs){
+            if(objectRefs[i]._id == id){
+                start = objectRefs[i];
+                break;
+            }
+        }
+
+        //cho tat ca linh chay
+        for(var i in TRAIN_POPUP._troopList){
+            for(var j = 0; j < TRAIN_POPUP._troopList[i]._amount; j++){
+                this.createTroopAfterSVResponseSuccess(i, start);
+            }
+        }
+
+        for(var i in TRAIN_POPUP._troopList){
+            troopInfo[i].population += TRAIN_POPUP._troopList[i]._amount;
+            TRAIN_POPUP._troopList[i]._amount = 0;
+            TRAIN_POPUP._itemInQueue[i].setPosition(-1000, -1000);
+            TRAIN_POPUP._troopList[i]._currentPosition = -1;
+
+            TRAIN_POPUP._timeBar.visible = false;
+            TRAIN_POPUP._statusCountDown = false;
+
+        }
+
+        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+        TRAIN_POPUP.enableItemDisplay();
+
+        var totalCapacity = getTotalCapacityAMCs();
+        var currentCapacity = getTotalCurrentTroopCapacity();
+        TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
+    },
 
     trainTroopCompleted: function(troopType) {
-        var here = barrackQueueList[trainedBarrackId];
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+
+        var here = barrackQueueList[temp.trainedBarrackId];
 
         if(TRAIN_POPUP._troopList[troopType]._amount == 0) {
             TRAIN_POPUP._amountItemInQueue++;
@@ -505,9 +454,8 @@ testnetwork.Connector = cc.Class.extend({
         TRAIN_POPUP.upadateQuickFinishTimeAndCost();
     },
 
-
     canceledTrainTroop: function(troopType) {
-        var here = barrackQueueList[trainedBarrackId];
+        var here = barrackQueueList[temp.trainedBarrackId];
 
         TRAIN_POPUP._troopList[troopType]._amount--;
         TRAIN_POPUP._totalTroopCapacity -= TRAIN_POPUP._troopList[troopType]._housingSpace;
@@ -531,8 +479,13 @@ testnetwork.Connector = cc.Class.extend({
         TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
         TRAIN_POPUP.enableItemDisplay();
         TRAIN_POPUP.upadateQuickFinishTimeAndCost();
-    },
 
+        //Refund
+        var costItem = TRAIN_POPUP._troopList[troopType].getCost();
+        cc.log("============================= Elixir cost: " + costItem.elixir);
+        var refundResources = {gold:costItem.gold, elixir:costItem.elixir, darkElixir:costItem.darkElixir, coin:costItem.coin};
+        increaseUserResources(refundResources);
+    },
 
     sendGetUserInfo:function()
     {
@@ -587,8 +540,8 @@ testnetwork.Connector = cc.Class.extend({
     },
     sendRequestAddConstruction: function(newBuilding, building){
         this.sendAddConstruction(building.name, newBuilding._posX, newBuilding._posY);
-        buildingAdd = building;
-        newBuildingAdd = newBuilding;
+        temp.buildingAdd = building;
+        temp.newBuildingAdd = newBuilding;
         cc.log("=======================================SEND REQUEST ADD CONSTRUCTION=======================================" + building._id);
     },
     sendUpgradeConstruction:function(id){
@@ -600,7 +553,7 @@ testnetwork.Connector = cc.Class.extend({
     },
     sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);
-        buildingUpgrade = building;
+        temp.buildingUpgrade = building;
     },
 
     //Finish build or Finish upgrade

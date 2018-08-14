@@ -30,8 +30,8 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     touchEventSmall: function() {
-        trainedBarrackId = TRAIN_POPUP._id;                                  //gap van de neu next prev giua nhieu barrack
-        trainedTroopType = this._name;
+        temp.trainedBarrackId = TRAIN_POPUP._id;                                  //gap van de neu next prev giua nhieu barrack
+        temp.trainedTroopType = this._name;
         NETWORK.sendCancelTrainTroop(TRAIN_POPUP._id, this._name);
     },
 

@@ -24,7 +24,7 @@ var QuickFinishPopup = TinyPopup.extend({
         }, this)));
 
         ReducedTempResources.coin = this._data.g;
-        buildingQuickFinish = this._data.building;
+        temp.buildingQuickFinish = this._data.building;
         NETWORK.sendQuickFinish(this._data.building._id);
     },
 
