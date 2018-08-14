@@ -41,14 +41,15 @@ testnetwork.Connector = cc.Class.extend({
                 //fr.getCurrentScreen().onUserValidate(packet.validate);
                 this.setUserInfomation(packet);
                 this.sendGetMapInfo();
-                this.sendGetTroopInfo();
+                //this.sendGetTroopInfo();
                 //this.sendGetBarrackQueueInfo();
                 //Phai hien thi them cac troop da dc train offline
                 //this.sendGetTroopInfo();
                 break;
             case gv.CMD.GET_MAP_INFO:
+                this.sendGetTroopInfo();
 
-                fr.getCurrentScreen().onFinishGameInfo();
+                //fr.getCurrentScreen().onFinishGameInfo();
 
                 break;
             case gv.CMD.MOVE_CONSTRUCTION:
@@ -134,6 +135,7 @@ testnetwork.Connector = cc.Class.extend({
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
                 if(sendTroopInfoFlag == false){
                     this.sendGetBarrackQueueInfo();
+                    fr.getCurrentScreen().onFinishGameInfo();
                 }else{
                     this.divideTroopToArmyCamp();
                     for (var item in troopInfo) {

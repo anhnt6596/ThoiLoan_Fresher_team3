@@ -3,49 +3,6 @@ var ResearchPOPUP = ResearchPOPUP || null;
 var ResearchPopUp = ui.PopUp.extend({
 
     lab_level: 1,
-    //listTroop: {
-    //    ARM_1: {
-    //        name: "Đạo tặc",
-    //        level: 0,
-    //    },
-    //    ARM_2: {
-    //        name: "Cô nương",
-    //        level: 0,
-    //    },
-    //    ARM_3: {
-    //        name: "Công tước",
-    //        level: 0,
-    //    },
-    //    ARM_4: {
-    //        name: "Quái thú",
-    //        level: 0,
-    //    },
-    //    ARM_5: {
-    //        name: "Chiến binh",
-    //        level: 0,
-    //    },
-    //    ARM_6: {
-    //        name: "Quân sư",
-    //        level: 0,
-    //    },
-    //    ARM_7: {
-    //        name: "Pháp sư",
-    //        level: 0,
-    //    },
-    //    ARM_8: {
-    //        name: "Chó trắng",
-    //        level: 0,
-    //    },
-    //    ARM_9: {
-    //        name: "Ốc con công",
-    //        level: 0,
-    //    },
-    //    ARM_10: {
-    //        name: "Cây xà quỳ",
-    //        level: 0,
-    //    },
-    //
-    //},
     listTroop: {},
     listBtn_troop : [],
     listImg_troop : {},
@@ -62,7 +19,7 @@ var ResearchPopUp = ui.PopUp.extend({
     nameTroopText: "",
     ctor: function() {
         ResearchPOPUP = this,
-        this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
+            this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
         this.init();
     },
     init: function () {
@@ -70,14 +27,14 @@ var ResearchPopUp = ui.PopUp.extend({
         //console.log("lab_status : "+ research_constant.status.now);
         //console.log("troop dang train neu co: "+ this.troop.toString());
         //
-        for (item in troopInfo) {
-            var obj = troopInfo[item];
-            cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
-            cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
-            cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
-            cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
-            cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
-        }
+        //for (item in troopInfo) {
+        //    var obj = troopInfo[item];
+        //    cc.log('troopInfo.'+obj.type+'.level', troopInfo[item].level)
+        //    cc.log('troopInfo.'+obj.type+'.isUnlock', troopInfo[item].isUnlock)
+        //    cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population)
+        //    cc.log('troopInfo.'+obj.type+'.startTime', troopInfo[item].startTime)
+        //    cc.log('troopInfo.'+obj.type+'.status', troopInfo[item].status)
+        //}
         this.checkStatusTroop();
 
         this.lab_level = this.getConstructionList("LAB_1","level");
@@ -372,7 +329,7 @@ var ResearchPopUp = ui.PopUp.extend({
             )
             button.label_rq.text_rq1.setColor(new cc.Color(220,20,60));
 
-/**/
+            /**/
             button.label_rq.text_rq2 = new cc.LabelBMFont("nghiên cứu", research_constant.description_dir );
             button.label_rq.text_rq2.attr({
                     x: button.label_rq.width/2,
@@ -381,7 +338,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 }
             )
             button.label_rq.text_rq2.setColor(new cc.Color(220,20,60));
-/**/
+            /**/
             console.log("button name " + button.name);
             var level_btn = this.listTroop[button.name].level;
             console.log("level_btn ="+level_btn);
@@ -400,7 +357,7 @@ var ResearchPopUp = ui.PopUp.extend({
                 x: button.width/2+2,
                 y: button.label_rq.height/2+7,
             })
-/**/
+            /**/
             button.label_rq.addChild(button.label_rq.text_rq1);
             button.label_rq.addChild(button.label_rq.text_rq2);
             button.label_rq.addChild(button.label_rq.text_rq3);
@@ -591,6 +548,7 @@ var ResearchPopUp = ui.PopUp.extend({
         else {
             console.log("status cua quan linh truoc khi train la "+ this.listTroop[type].status);
             NETWORK.sendResearchTroop(type);
+            research_constant.status.now = research_constant.status.busy;
             this.timeStart = getCurrentServerTime();
             reduceUserResourcesResearch(0,elixir_rq,dark_elixir_rq,g_chuyendoi);
             // new popUp info cua troop hien len
@@ -666,6 +624,8 @@ var ResearchPopUp = ui.PopUp.extend({
         this.listTroop[type].status = research_constant.status.free;
         this.upgradeBtn(type);
         this.status = research_constant.status.free;
+        research_constant.status.now = research_constant.status.free;
+        research_constant.troop = null;
         this.mieng_trang.setVisible(false);
         this.mieng_trang_nothing.setVisible(true);
         //this.setEnableBtn(true);
@@ -673,8 +633,11 @@ var ResearchPopUp = ui.PopUp.extend({
             NETWORK.sendResearchComplete(type);
         }
         console.log("Xu ly mat timebar");
-        LAB_BUILDING.timeBar !== null && MAP.removeChild(LAB_BUILDING.timeBar);
+        clearInterval(LAB_BUILDING.timeCounDown);
+        MAP.removeChild(LAB_BUILDING.timeBar);
         LAB_BUILDING.timeBar = null;
+        //LAB_BUILDING.addBuildingImg();
+        LAB_BUILDING.animSprite.setOpacity(0);
     },
     setEnableBtn: function (status) {
         var self = this;
