@@ -29,6 +29,11 @@ var LobbyLayer = cc.Layer.extend({
         var btnTreasure = ui.iconButton(60, size.width - 35, 195, 'res/Art/GUIs/Main_Gui/kho.png', '');
         this.addChild(btnTreasure);
         btnTreasure.addClickEventListener(this.onTreasure.bind(this));
+
+        var btnGuild = ccui.Button('res/Art/GUIs/train_troop_gui/forward.png', 'res/Art/GUIs/train_troop_gui/forward.png');
+        btnGuild.setPosition(btnGuild.width/2, size.height/2);
+        btnGuild.addClickEventListener(this.onGuild.bind(this));
+        this.addChild(btnGuild);
     },
     initBar: function() {
         var size = cc.winSize;
@@ -115,6 +120,30 @@ var LobbyLayer = cc.Layer.extend({
         //});
         // NETWORK.sendResearchComplete("ARM_1");
     },
+
+    onGuild: function() {
+        var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
+        bg.setAnchorPoint(0, 0);
+        bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
+        bg.setColor(cc.color(0,255,0,255));
+        bg.setZoomScale(0);
+        this.getParent().addChild(bg, 20, 17);
+
+        var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
+        layer.setAnchorPoint(0, 0);
+        bg.addChild(layer);
+
+        var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+        prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
+        prevBtn.addClickEventListener(this.onCloseGuild.bind(this));
+        this.getParent().addChild(prevBtn, 21, 18);
+    },
+
+    onCloseGuild: function() {
+        this.getParent().removeChildByTag(17);
+        this.getParent().removeChildByTag(18);
+    },
+
     hideLobby: function() {
         this.attr({
             x: - 100000,

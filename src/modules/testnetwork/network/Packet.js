@@ -626,6 +626,19 @@ testnetwork.packetMap[gv.CMD.UPGRADE_CONSTRUCTION] = fr.InPacket.extend(
     }
 );
 
+testnetwork.packetMap[gv.CMD.FINISH_TIME_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+
 testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
     {
         ctor:function()
@@ -825,7 +838,7 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 var currentCapacity = getTotalCurrentTroopCapacity();
                 if(currentCapacity >= totalCapacity){
                     cc.log("================================= Set  pauseOverCapacityFlag = TRUE");
-                    pauseOverCapacityFlag = true;
+                    temp.pauseOverCapacityFlag = true;
                 }
 
                 var data = {train: true, barrack: barrackObj};
