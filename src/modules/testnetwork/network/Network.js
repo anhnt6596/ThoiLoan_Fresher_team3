@@ -75,6 +75,14 @@ testnetwork.Connector = cc.Class.extend({
 
                     //reset
                     resetReducedTempResources();
+
+                    // eo hieu gi
+                    if (newBuildingAdd._name === "WAL_1") {
+                        wallRefs.push(newBuildingAdd);
+                        wallRefs.forEach(function(element) {
+                            element.updatePresentImg();
+                        });
+                    }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
                     showPopupNotEnoughG('server_denied_build');
@@ -88,42 +96,45 @@ testnetwork.Connector = cc.Class.extend({
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN UPGRADE tu SERVER=======================================");
 
-                    buildingUpgrade.setStatus('upgrade');
-                    cc.log(buildingUpgrade._status);
-                    buildingUpgrade.startTime = getCurrentServerTime();
-                    cc.log(buildingUpgrade.startTime);
-                    var cur = (getCurrentServerTime() - buildingUpgrade.startTime)/1000;
-                    var max = config.building[buildingUpgrade._name][buildingUpgrade._level+1].buildTime;
-                    buildingUpgrade.addTimeBar(cur, max);
-                    buildingUpgrade.countDown(cur, max);
-                    buildingUpgrade.buildTime = max;
+                    if (buildingUpgrade._name == "WAL_1") {
+                        buildingUpgrade.upgradeComplete(true);
+                    } else {
+                        buildingUpgrade.setStatus('upgrade');
+                        cc.log(buildingUpgrade._status);
+                        buildingUpgrade.startTime = getCurrentServerTime();
+                        cc.log(buildingUpgrade.startTime);
+                        var cur = (getCurrentServerTime() - buildingUpgrade.startTime) / 1000;
+                        var max = config.building[buildingUpgrade._name][buildingUpgrade._level + 1].buildTime;
+                        buildingUpgrade.addTimeBar(cur, max);
+                        buildingUpgrade.countDown(cur, max);
+                        buildingUpgrade.buildTime = max;
 
 
-                    for(var item in contructionList){
-                        if(contructionList[item]._id == buildingUpgrade._id){
-                            contructionList[item].status = 'upgrade';
-                            contructionList[item].startTime = buildingUpgrade.startTime;
-                            contructionList[item].buildTime = max;
-                            break;
+                        for (var item in contructionList) {
+                            if (contructionList[item]._id == buildingUpgrade._id) {
+                                contructionList[item].status = 'upgrade';
+                                contructionList[item].startTime = buildingUpgrade.startTime;
+                                contructionList[item].buildTime = max;
+                                break;
+                            }
+                        }
+
+                        updateBuilderNumber();
+                        reduceUserResources(ReducedTempResources);
+                        resetReducedTempResources();
+                        console.log("ten nha = " + buildingUpgrade._name);
+                        if (buildingUpgrade._name === ('RES_1' || 'RES_2' || 'RES_3')) {
+                            cc.log("cho phep upgrade");
+                            buildingUpgrade.onCollectResource(true);
+                        }
+
+                        if (buildingUpgrade._name == "BAR_1") {
+                            //Cap nhat startTime cho barrack
+                            barrackQueueList[buildingUpgrade._id]._startTime = buildingUpgrade.startTime - barrackQueueList[buildingUpgrade._id]._startTime;
+                            //Dung countdown cua barrack nay
+                            barrackQueueList[buildingUpgrade._id].flagCountDown = false;
                         }
                     }
-
-                    updateBuilderNumber();
-                    reduceUserResources(ReducedTempResources);
-                    resetReducedTempResources();
-                    console.log("ten nha = "+ buildingUpgrade._name);
-                    if (buildingUpgrade._name===('RES_1'||'RES_2'||'RES_3') ) {
-                        cc.log("cho phep upgrade");
-                        buildingUpgrade.onCollectResource(true);
-                    }
-
-                    if(buildingUpgrade._name == "BAR_1"){
-                        //Cap nhat startTime cho barrack
-                        barrackQueueList[buildingUpgrade._id]._startTime = buildingUpgrade.startTime - barrackQueueList[buildingUpgrade._id]._startTime;
-                        //Dung countdown cua barrack nay
-                        barrackQueueList[buildingUpgrade._id].flagCountDown = false;
-                    }
-
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
                     showPopupNotEnoughG('server_denied_upgrade');

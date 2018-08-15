@@ -196,7 +196,7 @@ var Contruction = cc.Class.extend({
         this._posY = mapPos.y;
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
-        if (this._name === "AMC_1") this.armyRun();
+        this.afterUpdatePosionAction(mapPos);
         try {
             temp.lastMoveBuilding = this;
             if(this._status !== 'setting' && (this._oldX !== this._posX || this._oldY !== this._posY)) {
@@ -219,9 +219,22 @@ var Contruction = cc.Class.extend({
         this.moving({ x: this._oldX, y: this._oldY });
         this._posX = this._oldX;
         this._posY = this._oldY;
-        MAP.updateContructionList(this.info);
+        MAP.updateContructionList(this);
+        // MAP.createLogicArray(contructionList, obstacleLists);
+        this.afterUpdatePosionAction(mapPos);
+    },
+    afterUpdatePosionAction: function(mapPos) {
+        MAP.updateContructionList(this);
         MAP.createLogicArray(contructionList, obstacleLists);
         if (this._name === "AMC_1") this.armyRun();
+        if(this._name === "WAL_1") {
+            setTimeout(function() {
+                wallRefs.forEach(function(wall) {
+                    if (wall._id === this._id) wall.updatePresentImg(mapPos);
+                    else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
+                });
+            }, 0);
+        }
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;
@@ -423,6 +436,10 @@ var Contruction = cc.Class.extend({
         // fix bug trường hợp nhà collector có nút thu hoạch
         this.collect_bg = null;
         this.full_bg = null;
+        // cập nhật hình ảnh tường sau khi upgrade thành công
+        if(this._name === "WAL_1") {
+            this.updatePresentImg({ x: this._posX, y: this._posY });
+        }
     },
     cancel: function(building){
         buildingCancel = building;
@@ -602,6 +619,7 @@ var Contruction = cc.Class.extend({
         if (this._name === "AMC_1") armyCampRefs.push(this);
         if (this instanceof StorageBuilding) storageBuildingRefs.push(this);
         if (this._name === "BAR_1") barrackRefs.push(this);
+        if (this._name === "WAL_1") wallRefs.push(this);
     },
     countDown: function(cur, max){
         var tick = () => {

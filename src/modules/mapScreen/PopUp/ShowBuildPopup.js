@@ -25,11 +25,13 @@ var ShowBuildPopup = TinyPopup.extend({
                 }
             }else{
                 NETWORK.sendRequestAddConstruction(this._data.newBuilding, this._data.building);
+                MAP.suggestNewWal(this._data.newBuilding);
             }
         }else if(this._data.type == 'builder'){
             ReducedTempResources.coin += this._data.g;
             finishSmallestRemainingTimeBuilding();
             NETWORK.sendRequestAddConstruction(this._data.newBuilding, this._data.building);
+            MAP.suggestNewWal(this._data.newBuilding);
         }
     },
 

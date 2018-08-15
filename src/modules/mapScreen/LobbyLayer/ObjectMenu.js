@@ -72,6 +72,12 @@ var ObjectMenu = cc.Node.extend({
         this.trainBtn = trainBtn;
         this.addChild(trainBtn);
         trainBtn.addClickEventListener(this.train.bind(this));
+
+        var selectLineBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/select_line.png', 'SelectLine');
+        this._listBtn.push(selectLineBtn);
+        this.selectLineBtn = selectLineBtn;
+        this.addChild(selectLineBtn);
+        selectLineBtn.addClickEventListener(this.selectLine.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -140,6 +146,11 @@ var ObjectMenu = cc.Node.extend({
             }
         }
     },
+    selectLine: function() {
+        if (MAP._targetedObject) {
+            MAP._targetedObject.selectLine();
+        }
+    },
     setUpValidBtn: function(object) {
         this.hideAll();
         this._listValidBtn = [];
@@ -152,6 +163,7 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "RES_2")  this._listValidBtn.push(this.collectElixirBtn);
                 if (object._name == "RES_3")  this._listValidBtn.push(this.collectDarkElixirBtn);
                 if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
+                if (object._name == "WAL_1")  this._listValidBtn.push(this.selectLineBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish

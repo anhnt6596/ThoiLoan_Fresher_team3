@@ -269,6 +269,9 @@ var showNextBuildingImg = function(info) {
         case 'STO_3':
             buildingImg = new cc.Sprite(res.building.dark_elixir_storage[nextLevel][3]);
             break;
+        case 'WAL_1':
+            buildingImg = new cc.Sprite(res.building.wall[nextLevel][3]);
+            break;
         case 'BDH_1':
             buildingImg = new cc.Sprite(res.building.builder_hut[nextLevel]);
             break;
@@ -316,6 +319,7 @@ var showNextBuildingInfo = function(info) {
             break;
         case 'BAR_1':
         case 'LAB_1':
+        case 'WAL_1':
             listInfo.push('hitpoints');
             break;
         case 'STO_1':

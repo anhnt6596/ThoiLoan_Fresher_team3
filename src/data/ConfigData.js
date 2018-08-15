@@ -18,6 +18,8 @@ var listBuildingConfigDir = [
     "res/Config json/Storage.json",
     "res/Config json/TownHall.json",
     "res/Config json/Defence.json",
+    "res/Config json/Wall.json",
+    "res/Config json/ClanCastle.json",
 ];
 
 //Ham doc file JSON
