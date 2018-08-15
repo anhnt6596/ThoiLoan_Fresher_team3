@@ -15,9 +15,9 @@ var ShowTrainPopup = TinyPopup.extend({
         if(this._data.type != 'builder'){
             _.extend(ReducedTempResources, this._data.cost);
             ReducedTempResources.coin += this._data.g;
-            trainedBarrackId = this._data.temp.id;
-            trainedTroopType = this._data.temp.name;
-            NETWORK.sendTrainTroop(trainedBarrackId, trainedTroopType);
+            temp.trainedBarrackId = this._data.temp.id;
+            temp.trainedTroopType = this._data.temp.name;
+            NETWORK.sendTrainTroop(temp.trainedBarrackId, temp.trainedTroopType);
         }
     },
 

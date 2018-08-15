@@ -303,6 +303,7 @@ var increaseUserResources = function(resources){
     gv.user.coin += resources.coin;
     storageBuildingUpdateImg(gv.user);
     LOBBY.update(gv.user);
+    resetReducedTempResources();
 };
 
 var setUserResourcesCapacity = function(){

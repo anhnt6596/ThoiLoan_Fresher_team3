@@ -342,6 +342,7 @@ var Contruction = cc.Class.extend({
     buildComplete: function(isQuickFinish) {
         if(!isQuickFinish){
             NETWORK.sendFinishTimeConstruction(this._id);
+            temp.buildingFinishTime = this;
         }
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
@@ -407,6 +408,7 @@ var Contruction = cc.Class.extend({
     upgradeComplete: function(isQuickFinish) {
         if(!isQuickFinish){
             NETWORK.sendFinishTimeConstruction(this._id);
+            temp.buildingFinishTime = this;
         }
         this._level = this._level + 1;
         this.buildingImg && MAP.removeChild(this.buildingImg);
@@ -442,7 +444,7 @@ var Contruction = cc.Class.extend({
         }
     },
     cancel: function(building){
-        buildingCancel = building;
+        temp.buildingCancel = building;
         NETWORK.sendCancel(building._id);
         //if (this._status == 'upgrade') this.cancelUpgrade();
         //else if (this._status == 'pending') this.cancelBuild();

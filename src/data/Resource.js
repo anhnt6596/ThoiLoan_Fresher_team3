@@ -743,6 +743,7 @@ var time = {
 
 
 var research_constant = {
+    troop: null,
     time_text_dir : 'res/Art/Fonts/soji_20.fnt',
     research_dir : "res/Art/GUIs/research troop/",
     img_troop_dir : "res/Art/GUIs/upgrade_troop/small_icon/",

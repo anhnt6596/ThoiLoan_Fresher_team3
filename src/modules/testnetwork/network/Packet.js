@@ -569,7 +569,13 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             this.serverTime = this.getLong();
             //cc.log("server time: " + this.serverTime);
 
-
+            this.is_in_guild = this.getBool();
+            if (this.is_in_guild){
+                this.id_guild = this.getInt();
+                this.name_guild = this.getString();
+                this.id_logo_guild = this.getInt();
+                this.last_time_ask_for_troops = this.getInt();
+            }
             //get level troop
             //gv.user.troopLevel = {};
             //gv.user.troopLevel.ARM_1 = this.getShort();
@@ -619,6 +625,19 @@ testnetwork.packetMap[gv.CMD.UPGRADE_CONSTRUCTION] = fr.InPacket.extend(
         }
     }
 );
+
+testnetwork.packetMap[gv.CMD.FINISH_TIME_CONSTRUCTION] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
 
 testnetwork.packetMap[gv.CMD.QUICK_FINISH] = fr.InPacket.extend(
     {
@@ -723,6 +742,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
 
         }
         for (var item in troopInfo) {
+
             var obj = troopInfo[item];
             if (obj.status===research_constant.status.busy){
                 research_constant.status.now = obj.status;
@@ -818,7 +838,7 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 var currentCapacity = getTotalCurrentTroopCapacity();
                 if(currentCapacity >= totalCapacity){
                     cc.log("================================= Set  pauseOverCapacityFlag = TRUE");
-                    pauseOverCapacityFlag = true;
+                    temp.pauseOverCapacityFlag = true;
                 }
 
                 var data = {train: true, barrack: barrackObj};

@@ -7,23 +7,23 @@ var lastIndexContructionList = 0;
 var ReducedTempResources = {gold: 0, elixir: 0, darkElixir: 0, coin: 0};
 
 //Add Construction
-var buildingAdd = null;
-var newBuildingAdd = null;
+temp.buildingAdd = null;
+temp.newBuildingAdd = null;
 
 //Upgrade Construction
-var buildingUpgrade = null;
+temp.buildingUpgrade = null;
 
 //Quick Finish Construction
-var buildingQuickFinish = null;
+temp.buildingQuickFinish = null;
 
 //Finish Time Construction
-var buildingFinishTime = null;
+temp.buildingFinishTime = null;
 
 //Cancel Construction
-var buildingCancel = null;
+temp.buildingCancel = null;
 
 //Train Troop
-var trainedBarrackId = null;
-var trainedTroopType = null;
+temp.trainedBarrackId = null;
+temp.trainedTroopType = null;
 //Bao hieu vuot qua capacity: true
-var pauseOverCapacityFlag = false;
+temp.pauseOverCapacityFlag = false;
