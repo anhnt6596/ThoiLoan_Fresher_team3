@@ -207,8 +207,8 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     upgradeConstruction: function(building) {
-        if (buildingUpgrade._name == "WAL_1") {
-            buildingUpgrade.upgradeComplete(true);
+        if (building._name == "WAL_1") {
+            building.upgradeComplete(true);
         } else {
             building.setStatus('upgrade');
             building.startTime = getCurrentServerTime();

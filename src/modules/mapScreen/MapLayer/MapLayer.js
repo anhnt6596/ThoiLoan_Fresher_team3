@@ -311,16 +311,19 @@ var MapLayer = cc.Layer.extend({
         }
         if (this._isMovingObject) {
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
-                this._targetedObject.updatePosition(mapPos);
-                // this.updateContructionList(this._targetedObject);
-                this.createLogicArray(contructionList, obstacleLists);
-                if (this._targetedObject._status !== 'setting') {
-                    LOBBY.showLobby();
-                }
+                this.objectUpdatePosition(mapPos);
             }
         }
         this._startTouch = null;
         this._zoomPoint = null;
+    },
+    objectUpdatePosition: function(mapPos) {
+        this._targetedObject.updatePosition(mapPos);
+        // this.updateContructionList(this._targetedObject);
+        this.createLogicArray(contructionList, obstacleLists);
+        if (this._targetedObject._status !== 'setting') {
+            LOBBY.showLobby();
+        }
     },
     updateContructionList: function(targetedObject) {
         var newContructionList = contructionList.map(function(contruction) {
@@ -470,7 +473,7 @@ var MapLayer = cc.Layer.extend({
                     } else {
                         _.extend(ReducedTempResources, buildingInfo.cost);
                         NETWORK.sendRequestAddConstruction(newBuilding, buildingInfo);
-                        this.suggestNewWal(newBuilding);
+                        // this.suggestNewWal(newBuilding);
                     }
                 } else if (gResources > 0) {
                     if (gv.user.coin < gResources) {

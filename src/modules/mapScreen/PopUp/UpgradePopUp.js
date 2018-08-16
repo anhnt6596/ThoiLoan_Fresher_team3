@@ -77,6 +77,7 @@ var createUpgradePopUp = function() {
         content.push(text3);
     }
     var upgradePopUp = new ui.PopUp('Upgrade', content);
+    upgradePopUp.openAction();
 
     scrollList && scrollList.setContentSize(cc.size(upgradePopUp.frame.width - 50, 200));
 

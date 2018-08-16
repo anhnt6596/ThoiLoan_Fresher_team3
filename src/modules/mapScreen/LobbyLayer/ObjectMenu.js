@@ -78,6 +78,12 @@ var ObjectMenu = cc.Node.extend({
         this.selectLineBtn = selectLineBtn;
         this.addChild(selectLineBtn);
         selectLineBtn.addClickEventListener(this.selectLine.bind(this));
+
+        var rotateBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/rotate_icon.png', 'Rotate');
+        this._listBtn.push(rotateBtn);
+        this.rotateBtn = rotateBtn;
+        this.addChild(rotateBtn);
+        rotateBtn.addClickEventListener(this.rotate.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -87,8 +93,9 @@ var ObjectMenu = cc.Node.extend({
         }
     },
     upgrade: function() {
-        // MAP._targetedObject && MAP._targetedObject.upgrade();
-        MAP._targetedObject && MAP._targetedObject._status === 'complete' && createUpgradePopUp();
+        if (MAP._targetedObject._name === "WAL_1" && wallSelectingArray.length >= 2) {
+            MAP._targetedObject.upgradeAllSelectingWall();
+        } else MAP._targetedObject && MAP._targetedObject._status === 'complete' && createUpgradePopUp();
     },
     remove: function() {
         MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
@@ -149,6 +156,12 @@ var ObjectMenu = cc.Node.extend({
     selectLine: function() {
         if (MAP._targetedObject) {
             MAP._targetedObject.selectLine();
+            this.setUpValidBtn(MAP._targetedObject);
+        }
+    },
+    rotate: function() {
+        if (MAP._targetedObject) {
+            MAP._targetedObject.rotate();
         }
     },
     setUpValidBtn: function(object) {
@@ -163,7 +176,8 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "RES_2")  this._listValidBtn.push(this.collectElixirBtn);
                 if (object._name == "RES_3")  this._listValidBtn.push(this.collectDarkElixirBtn);
                 if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
-                if (object._name == "WAL_1")  this._listValidBtn.push(this.selectLineBtn);
+                if (object._name == "WAL_1" && wallSelectingArray.length === 0)  this._listValidBtn.push(this.selectLineBtn);
+                if (object._name == "WAL_1" && wallSelectingArray.length >= 2)  this._listValidBtn.push(this.rotateBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish
@@ -173,8 +187,8 @@ var ObjectMenu = cc.Node.extend({
         }
         var size = cc.winSize;
         var len = this._listValidBtn.length;
-        var isOdd = false;
-        if (len % 2 == 1) isOdd = true;
+        // var isOdd = false;
+        // if (len % 2 == 1) isOdd = true;
         this._listValidBtn.forEach(function(element, i) {
             element.attr({
                 x: size.width / 2 + 120 * (i - len / 2 + 0.5),

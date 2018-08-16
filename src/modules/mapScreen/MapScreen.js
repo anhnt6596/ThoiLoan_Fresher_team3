@@ -2,6 +2,7 @@
  * Created by GSN on 7/9/2015.
 */
 var MAPSCENE = MAPSCENE || null;
+var CLAN_GUI = CLAN_GUI || null;
 createMapScene = function() {
     var game = new cc.Scene();
     MAPSCENE = game;
@@ -11,5 +12,15 @@ createMapScene = function() {
     game.addChild(mapLayer, 0);
     game.addChild(lobbyLayer, 1);
     // game.addChild(lagScreen, 1);
+
+    // add ClanGUIPopUp
+    var clanGUI = new ClanGUI();
+    game.addChild(clanGUI, 1000);
+    CLAN_GUI = clanGUI;
+
+    clanGUI.attr({
+
+    });
+
     return game;
 }

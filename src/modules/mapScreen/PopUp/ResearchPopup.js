@@ -21,6 +21,7 @@ var ResearchPopUp = ui.PopUp.extend({
         ResearchPOPUP = this,
             this._super("Nhà nghiên cứu", [], 'res/Art/GUIs/research troop/nen 1.png');
         this.init();
+        this.openAction();
     },
     init: function () {
         //console.log("khi open: ");

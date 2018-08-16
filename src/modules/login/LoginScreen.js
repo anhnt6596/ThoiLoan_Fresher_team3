@@ -60,6 +60,7 @@ var LoginScreen = cc.Layer.extend({
         this.addChild(btnLogin);
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
         //btnLogin.addClickEventListener(this.loginTrucTiep.bind(this));
+        // btnLogin.addClickEventListener(this.vaoClanPopup.bind(this));
 
 
         this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
@@ -70,6 +71,17 @@ var LoginScreen = cc.Layer.extend({
     loginTrucTiep: function(){
         setUserResourcesCapacity();
         cc.director.runScene(createMapScene());
+    },
+    vaoClanPopup: function() {
+        var createScene = function() {
+            var game = new cc.Scene();
+            var clanGUI = new ClanGUI();
+            game.addChild(clanGUI, 1000);
+            CLAN_GUI = clanGUI;
+            clanGUI.openAction();
+            return game;
+        }
+        cc.director.runScene(createScene());
     },
     onSelectLogin:function(sender)
     {

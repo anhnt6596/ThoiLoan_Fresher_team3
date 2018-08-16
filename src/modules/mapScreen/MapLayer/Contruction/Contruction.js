@@ -411,10 +411,16 @@ var Contruction = cc.Class.extend({
             temp.buildingFinishTime = this;
         }
         this._level = this._level + 1;
+
+        // cho tuong thanh
+        this.greenBG = null;
+        this.redBG = null;
+
         this.buildingImg && MAP.removeChild(this.buildingImg);
         this.buildingImg = null;
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;
+
         this.addBuildingImg();
         this.levelText.setString('cấp ' + this._level);
         this.presentImg();

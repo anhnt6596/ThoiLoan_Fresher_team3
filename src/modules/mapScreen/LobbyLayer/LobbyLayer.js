@@ -85,33 +85,7 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
-        var l = ["ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_2", "ARM_2", "ARM_3", "ARM_4"];
-        var createNewTroop = function(type) {
-            switch (type) {
-                case "ARM_1":
-                    var troop = new Warrior(armyCampRefs[0]);
-                    break;
-                case "ARM_2":
-                    var troop = new Archer(armyCampRefs[0]);
-                    break;
-                case "ARM_3":
-                    var troop = new Goblin(armyCampRefs[0]);
-                    break;
-                case "ARM_4":
-                    var troop = new Giant(armyCampRefs[0]);
-                    break;
-                default:
-                    break;
-            }
-            troop && troop.appear(MAP._targetedObject);
-        };
-        if (MAP._targetedObject) {
-            var r = randomInt(0,8);
-            createNewTroop(l[r]);
-            //var troop = new Warrior(armyCampRefs[0]); // truyen vao object Army camp
-            //troop.appear(MAP._targetedObject); // truyen vao nha bat dau de no chay ra nha army camp tuong ung, con k co dong nay thi no se xuat hien o AMC ben tren
-        }
-        // NETWORK.sendResearchTroop("ARM_1");
+        CLAN_GUI.openAction();
     },
     onTreasure: function() {
         //createSolidMapArray();
