@@ -7,6 +7,7 @@ var listClanInfo = listClanInfo || [
         level: 2,
         member: 49,
         troophy: 1123,
+        troophyRequire: 0,
     },
     {
         id: 2,
@@ -16,6 +17,7 @@ var listClanInfo = listClanInfo || [
         level: 1,
         member: 30,
         troophy: 500,
+        troophyRequire: 0,
     },
     {
         id: 3,
@@ -25,6 +27,7 @@ var listClanInfo = listClanInfo || [
         level: 10,
         member: 12,
         troophy: 11986,
+        troophyRequire: 0,
     },
     {
         id: 4,
@@ -34,6 +37,7 @@ var listClanInfo = listClanInfo || [
         level: 1,
         member: 49,
         troophy: 2000,
+        troophyRequire: 0,
     },
     {
         id: 5,
@@ -43,6 +47,7 @@ var listClanInfo = listClanInfo || [
         level: 1,
         member: 0,
         troophy: 0,
+        troophyRequire: 0,
     },
     {
         id: 6,
@@ -52,6 +57,7 @@ var listClanInfo = listClanInfo || [
         level: 1,
         member: 0,
         troophy: 0,
+        troophyRequire: 0,
     },
 ];
 
@@ -74,6 +80,7 @@ var SearchClanTab = Tab.extend({
         this.addChild(text1);
 
         var textField = new cc.EditBox(cc.size(240, 40), "res/Art/Bang hoi/slost nen 1.png");
+        this.textField = textField;
         textField.attr({
             y: this.height - 40,
             x: 172,
@@ -121,20 +128,13 @@ var SearchClanTab = Tab.extend({
         });
         this.addChild(text3);
 
-        var searchBtn = ccui.Button('res/Art/Bang hoi/POPUP_0000_Group-3.png');
+        var searchBtn = ui.optionButton("Tìm kiếm", 'res/Art/Bang hoi/POPUP_0000_Group-3.png');
         searchBtn.attr({
             x: this.width - 85,
             y: this.height - 40,
         });
         this.addChild(searchBtn);
         searchBtn.addClickEventListener(this.searchAction.bind(this));
-
-        var text4 = new cc.LabelBMFont("Tìm kiếm", 'res/Art/Fonts/soji_16.fnt');
-        text4.attr({
-            x: searchBtn.width / 2,
-            y: searchBtn.height / 2,
-        });
-        searchBtn.addChild(text4);
     },
     initListClan: function() {
         var scrollView = new ccui.ScrollView();
@@ -166,7 +166,7 @@ var SearchClanTab = Tab.extend({
             scrollView.addChild(clanItem);
             scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
 
-            clanItem.addClickEventListener(() => self.openClanInfo(clan.id));
+            clanItem.addClickEventListener(() => self.openClanInfo(clan));
         });
     },
     checkSearchByName: function() {
@@ -178,11 +178,107 @@ var SearchClanTab = Tab.extend({
         else { this.checkBoxSearchByCode.setSelected(true); }
     },
     searchAction: function() {
-        cc.log("Searching...");
+        var searchText = this.textField.getString();
+        var searchType = 0;
+        if (this.checkBoxSearchByName.isSelected()) searchType = 0;
+        else if (this.checkBoxSearchByCode.isSelected()) searchType = 1;
+
+        cc.log("Searching... " + searchText + "Search type: " + searchType);
+
+        this.closeClanInfo();
+        this.closeMemberScrollView();
+
         this.pushClanItem(this.scrollView, listClanInfo);
         listClanInfo.pop();
     },
-    openClanInfo: function(id) {
-        cc.log("Id clan: " + id);
+    openClanInfo: function(clan) {
+        this.closeClanInfo();
+        this.hideListClan();
+
+        cc.log("Id clan: " + clan.id);
+        var clanInfo = new ClanInfo(clan);
+        this.clanInfo = clanInfo;
+        clanInfo.attr({
+            x: this.width / 2,
+            y: this.height - 65,
+            anchorY: 1,
+        });
+        this.addChild(clanInfo);
+
+        var closeBtn = ui.optionButton("Đóng", "res/Art/Bang hoi/button _xem lai.png");
+        closeBtn.attr({
+            x: clanInfo.width - 250,
+            y: clanInfo.height / 2 - 25,
+        });
+        clanInfo.addChild(closeBtn);
+        closeBtn.addClickEventListener(this.closeClanInfo.bind(this));
+
+        var memberBtn = ui.optionButton("Thành viên", "res/Art/Bang hoi/button _xem lai.png");
+        memberBtn.attr({
+            x: clanInfo.width - 250,
+            y: clanInfo.height / 2 + 25,
+        });
+        clanInfo.addChild(memberBtn);
+        memberBtn.addClickEventListener(() => this.openClanMemberList(clan.id));
+    },
+    closeClanInfo: function() {
+        this.clanInfo && this.removeChild(this.clanInfo);
+        this.clanInfo = null;
+        this.showListClan();
+    },
+    showListClan: function() { // thực chất là đóng 
+        this.scrollView && this.scrollView.setVisible(true);
+    },
+    hideListClan: function() {
+        this.scrollView && this.scrollView.setVisible(false);
+    },
+    openClanMemberList: function(clanId) {
+        this.closeClanInfo();
+        this.hideListClan();
+        var memberScrollView = new ccui.ScrollView();
+        this.memberScrollView = memberScrollView;
+        memberScrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+        memberScrollView.setTouchEnabled(true);
+        memberScrollView.setBounceEnabled(true);
+        memberScrollView.setContentSize(cc.size(700, 315));
+        memberScrollView.attr({
+            anchorY: 1,
+            x: 0,
+            y: this.height - 70,
+        });
+
+        memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+        this.addChild(memberScrollView);
+        
+        this.pushMemberItem();
+    },
+    pushMemberItem: function() {
+        var self = this;
+        this.memberScrollView && this.memberScrollView.removeAllChildren();
+        clanMember.forEach(function(member, i) {
+            var clanItem = new MemberItemList(member, i + 1);
+            var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
+            clanItem.attr({
+                x: self.scrollView.width / 2,
+                y: (calc - i - 1) * 62,
+                anchorY: 0,
+            });
+            self.memberScrollView.addChild(clanItem);
+            self.memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+
+            clanItem.addClickEventListener(() => self.clickMember(member));
+        });
+    },
+    closeMemberScrollView: function() {
+        this.memberScrollView && this.removeChild(this.memberScrollView);
+        this.memberScrollView = null;
+    },
+    showTab: function () {
+        this.closeClanInfo();
+        this.closeMemberScrollView();
+        this.setVisible(true);
+    },
+    clickMember: function(member) {
+        cc.log("Click..." + member.name);
     }
 });

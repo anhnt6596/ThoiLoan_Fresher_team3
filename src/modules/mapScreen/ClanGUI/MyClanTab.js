@@ -16,7 +16,7 @@ var MyClanTab = Tab.extend({
         this.init();
     },
     init: function() {
-        this.initClanInfo();
+        this.initClanInfo()
     },
     initClanInfo: function() {
         var clanInfo = new ClanInfo(myClanInfo);
@@ -26,5 +26,13 @@ var MyClanTab = Tab.extend({
             anchorY: 1,
         });
         this.addChild(clanInfo);
+
+        var memberBtn = ui.optionButton("Thành viên", "res/Art/Bang hoi/button _xem lai.png");
+        memberBtn.attr({
+            x: clanInfo.width - 230,
+            y: clanInfo.height / 2 + 25,
+        });
+        clanInfo.addChild(memberBtn);
+        memberBtn.addClickEventListener(() => CLAN_GUI_HEADER.selectTabAction(2));
     },
 });

@@ -1,7 +1,7 @@
 var ClanInfo = cc.Sprite.extend({
     ctor: function(clanInfo) {
         this._super("res/Art/Bang hoi/NEN NHO _BANG HOI CUA TOI.png");
-        this.init(myClanInfo);
+        this.init(clanInfo);
     },
     init: function(clanInfo) {
         var icon = new cc.Sprite("res/Art/Bang hoi/bieu tuong tren map/" + clanInfo.iconType + ".png");
@@ -12,6 +12,7 @@ var ClanInfo = cc.Sprite.extend({
         this.addChild(icon);
 
         this.initInfoTable(clanInfo);
+        this.initButton();
     },
     initInfoTable: function(clanInfo) {
         var infoTable = new cc.Sprite();
@@ -106,5 +107,28 @@ var ClanInfo = cc.Sprite.extend({
             color: new cc.color(76, 4, 17, 255)
         });
         infoTable.addChild(troophyRequireText);
-    }
+    },
+    initButton: function() {
+        var joinButton = new ui.optionButton("Gia nhập", "res/Art/Bang hoi/button _xem lai.png");
+        joinButton.attr({
+            x: this.width - 70,
+            y: this.height / 2 + 25,
+        });
+        this.addChild(joinButton);
+        joinButton.addClickEventListener(this.joinAction.bind(this));
+
+        var outButton = new ui.optionButton("Rời bang", "res/Art/Bang hoi/button _ tra thu.png");
+        outButton.attr({
+            x: this.width - 70,
+            y: this.height / 2 - 25,
+        });
+        this.addChild(outButton);
+        outButton.addClickEventListener(this.outAction.bind(this));
+    },
+    joinAction: function() {
+        cc.log("join");
+    },
+    outAction: function() {
+        cc.log("quit");
+    },
 });

@@ -1,3 +1,6 @@
+var CLAN_GUI_HEADER = CLAN_GUI_HEADER || null;
+var isHaveClan = false;
+
 var ClanGUI = ui.PopUp.extend({
     _listTab: null,
     ctor: function() {
@@ -6,10 +9,16 @@ var ClanGUI = ui.PopUp.extend({
     },
     init: function() {
         this.initContent();
-        this.initHeader();
+        this.initHeader(isHaveClan ? 1 : 5);
+        // setTimeout(() => {
+        //     isHaveClan = true;
+        //     CLAN_GUI_HEADER && this.removeChild(CLAN_GUI_HEADER);
+        //     this.initHeader();
+        // }, 5000);
     },
-    initHeader: function() {
-        var header = new Header(this, 1); // truyền số nào thì tab bắt đầu là theo số đấy
+    initHeader: function(tabNumber) {
+        var header = new Header(this, tabNumber); // truyền số nào thì tab bắt đầu là theo số đấy. Nếu muốn chuyển tab tự động thì chạy header.selectTabAction(sttTab);
+        CLAN_GUI_HEADER = header;
         header.attr({
             anchorX: 0.5,
             anchorX: 0.5,
@@ -20,12 +29,22 @@ var ClanGUI = ui.PopUp.extend({
     },
     initContent: function() {
         var tab1 = new MyClanTab(1);
+        tab1.setVisible(false);
         this.addChild(tab1, 999);
         var tab2 = new ClanMemberTab(2);
+        tab2.setVisible(false);
         this.addChild(tab2, 999);
         var tab3 = new SearchClanTab(3);
+        tab3.setVisible(false);
         this.addChild(tab3, 999);
-        this._listTab = [tab1, tab2, tab3];
+        var tab4 = new CreateClanTab(4);
+        tab4.setVisible(false);
+        this.addChild(tab4, 999);
+        var tab5 = new JoinClanTab(5);
+        tab5.setVisible(false);
+        this.addChild(tab5, 999);
+
+        this._listTab = [tab1, tab2, tab3, tab4, tab5];
     },
     selectTabAction: function(tabNumber) {
         this._listTab && this._listTab.forEach(function(tab) {

@@ -1,7 +1,77 @@
+var clanMember = [
+    {
+        id: 1,
+        name: "Điêu Linh Vương",
+        donateTroop: 100,
+        requestTroop: 1,
+        troophy: 169,
+    },
+    {
+        id: 1,
+        name: "Duy Tả Sứ",
+        donateTroop: 2,
+        requestTroop: 99,
+        troophy: 8678,
+    },
+    {
+        id: 1,
+        name: "Đoàn Hữu Sứ",
+        donateTroop: 1,
+        requestTroop: 98,
+        troophy: 73,
+    },
+    {
+        id: 1,
+        name: "Thần Điêu Đại Hiệp",
+        donateTroop: 0,
+        requestTroop: 999,
+        troophy: 38,
+    },
+];
+
 var ClanMemberTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
-        var img = new cc.Sprite('res/Art/Bang hoi/next 1.png');
-        this.addChild(img);
+        this.init();
+    },
+    init: function() {
+        this.initListMember();
+        this.pushClanMember();
+    },
+    initListMember: function() {
+        var scrollView = new ccui.ScrollView();
+        this.scrollView = scrollView;
+        scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+        scrollView.setTouchEnabled(true);
+        scrollView.setBounceEnabled(true);
+        scrollView.setContentSize(cc.size(700, 315));
+        scrollView.attr({
+            anchorY: 1,
+            x: 0,
+            y: this.height - 70,
+        });
+
+        scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+        this.addChild(scrollView);
+    },
+    pushClanMember: function() {
+        var self = this;
+        this.scrollView.removeAllChildren();
+        clanMember.forEach(function(member, i) {
+            var clanItem = new MemberItemList(member, i + 1);
+            var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
+            clanItem.attr({
+                x: self.scrollView.width / 2,
+                y: (calc - i - 1) * 62,
+                anchorY: 0,
+            });
+            self.scrollView.addChild(clanItem);
+            self.scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+
+            clanItem.addClickEventListener(() => self.clickMember(member));
+        });
+    },
+    clickMember: function(member) {
+        cc.log("Click..." + member.name);
     }
 });
