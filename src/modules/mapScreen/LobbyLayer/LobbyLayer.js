@@ -32,7 +32,7 @@ var LobbyLayer = cc.Layer.extend({
 
         var btnGuild = ccui.Button('res/Art/GUIs/train_troop_gui/forward.png', 'res/Art/GUIs/train_troop_gui/forward.png');
         btnGuild.setPosition(btnGuild.width/2, size.height/2);
-        btnGuild.addClickEventListener(this.onGuild.bind(this));
+        btnGuild.addClickEventListener(this.onInteractiveGuild.bind(this));
         this.addChild(btnGuild);
     },
     initBar: function() {
@@ -95,7 +95,7 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendResearchComplete("ARM_1");
     },
 
-    onGuild: function() {
+    onInteractiveGuild: function() {
         var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
         bg.setAnchorPoint(0, 0);
         bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
@@ -107,15 +107,81 @@ var LobbyLayer = cc.Layer.extend({
         layer.setAnchorPoint(0, 0);
         bg.addChild(layer);
 
+
+        var messageScrollView = this.createMessageScroll();
+        this.getParent().addChild(messageScrollView, 100, 19);
+
+        var memberScrollView = this.createMemberScroll();
+        this.getParent().addChild(memberScrollView, 101, 20);
+
         var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
         prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(this.onCloseGuild.bind(this));
+        prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
         this.getParent().addChild(prevBtn, 21, 18);
     },
 
-    onCloseGuild: function() {
+    onCloseInteractiveGuild: function() {
         this.getParent().removeChildByTag(17);
         this.getParent().removeChildByTag(18);
+        this.getParent().removeChildByTag(19);
+        this.getParent().removeChildByTag(20);
+    },
+
+    createMessageScroll: function() {
+        var scrollView = new ccui.ScrollView();
+        scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+        scrollView.setTouchEnabled(true);
+        scrollView.setContentSize(cc.size(cc.winSize.width*2/5, cc.winSize.height));
+        scrollView.setBounceEnabled(true);
+        scrollView.setPosition(0, 0);
+        //scrollView.setPropagateTouchEvents(false);
+
+
+        for(var i = 0; i < 30; i++){
+            var nodeContainer = new ccui.Widget();
+            nodeContainer.setPosition(0, 0);
+            scrollView.addChild(nodeContainer);
+
+            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/soji_20.fnt');
+            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/fista_20_non.fnt');
+            var amountLabel = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafki ' + i, 'res/Art/Fonts/fista_20_non.fnt');
+            amountLabel.setAnchorPoint(0, 0);
+            amountLabel.setPosition(10, 100*i + 10);
+            nodeContainer.addNode(amountLabel);
+
+
+            var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
+            btn.setAnchorPoint(0, 0);
+            btn.setPosition(50, amountLabel.y - btn.height - 5);
+            nodeContainer.addNode(btn);
+
+            //scrollView.addChild(amountLabel);
+        }
+
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, 30 * 100));
+        return scrollView;
+
+
+    },
+
+    createMemberScroll: function() {
+        var scrollView = new ccui.ScrollView();
+        scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+        scrollView.setTouchEnabled(true);
+        scrollView.setContentSize(cc.size(cc.winSize.width/5, cc.winSize.height));
+        scrollView.setBounceEnabled(true);
+        scrollView.setPosition(cc.winSize.width*2/5, 0);
+        //scrollView.setPropagateTouchEvents(false);
+
+        for(var i = 0; i < 20; i++){
+            var amountLabel = new cc.LabelBMFont('Member thu ' + i, 'res/Art/Fonts/soji_12.fnt');
+            amountLabel.setAnchorPoint(0, 0);
+            amountLabel.setPosition(10, 50*i + 10);
+            scrollView.addChild(amountLabel);
+        }
+
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, 20 * 50));
+        return scrollView;
     },
 
     hideLobby: function() {

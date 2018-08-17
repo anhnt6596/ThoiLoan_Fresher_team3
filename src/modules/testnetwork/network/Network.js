@@ -672,5 +672,26 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
+    },
+
+    sendNewMessage: function (type, content) {
+        var pk = this.gameClient.getOutPacket(CmdSendNewMessage);
+        pk.pack(type, content);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND NEW MESSAGE==========================================');
+    },
+
+    sendGiveTroop: function (idUserGet, troopType, level) {
+        var pk = this.gameClient.getOutPacket(CmdSendGiveTroop);
+        pk.pack(idUserGet, troopType, level);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GIVE TROOP==========================================');
+    },
+
+    sendGetInteractionGuild: function () {
+        var pk = this.gameClient.getOutPacket(CmdSendGetInteractionGuild);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GET INTERACTION GUILD==========================================');
     }
 });

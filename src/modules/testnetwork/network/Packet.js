@@ -35,6 +35,12 @@ gv.CMD.CANCEL_TRAIN_TROOP = 7003;
 gv.CMD.QUICK_FINISH_TRAIN_TROOP = 7004;
 gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
 
+gv.CMD.NEW_MESSAGE = 8001;
+gv.CMD.GIVE_TROOP_GUILD = 8002;
+gv.CMD.GET_INTERACTION_GUILD = 8003;
+
+
+
 testnetwork = testnetwork||{};
 testnetwork.packetMap = {};
 
@@ -432,6 +438,60 @@ CmdSendDoHarvest = fr.OutPacket.extend(
         }
     }
 );
+
+
+CmdSendNewMessage = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.NEW_MESSAGE);
+        },
+        pack:function(type, content){
+            this.packHeader();
+            this.putShort(type);
+            this.putString(content);
+            this.updateSize();
+        }
+    }
+);
+
+
+CmdSendGiveTroop = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.GIVE_TROOP_GUILD);
+        },
+        pack:function(idUserGet, troopType, level){
+            this.packHeader();
+            this.putInt(idUserGet);
+            this.putString(troopType);
+            this.putShort(level);
+            this.updateSize();
+        }
+    }
+);
+
+
+CmdSendGetInteractionGuild = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.GET_INTERACTION_GUILD);
+        },
+        pack:function(){
+            this.packHeader();
+            this.updateSize();
+        }
+    }
+);
+
 
 
 /**
@@ -893,6 +953,57 @@ testnetwork.packetMap[gv.CMD.FINISH_TIME_TRAIN_TROOP] = fr.InPacket.extend(
         readData:function(){
             this.validate  = this.getShort();
             //Neu server tra ve false thi phai gui lai get BarrackQueueInfo
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.NEW_MESSAGE] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.typeResponse  = this.getShort();       //validate or toAll
+            if(this.typeResponse == RESPONSE_VALIDATE){
+                this.validateValue = this.getShort();
+            }else if(this.typeResponse == RESPONSE_TO_ALL){
+                this.messageType = this.getShort();
+                this.idUserSend = this.getInt();
+                this.usernameSend = this.getString();
+                this.contentMessage = this.getString();
+            }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.typeResponse  = this.getShort();                   //validate or toAll
+            if(this.typeResponse == RESPONSE_VALIDATE){
+                this.validateValue = this.getShort();
+            }else if(this.typeResponse == RESPONSE_TO_ALL){
+                this.idUserGet = this.getInt();
+                this.capacityGet = this.getShort();
+
+            }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+
         }
     }
 );
