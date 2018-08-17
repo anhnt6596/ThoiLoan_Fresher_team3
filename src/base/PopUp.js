@@ -48,9 +48,18 @@ ui.PopUp = cc.Sprite.extend({
         content.forEach(function(element) {
             self.addChild(element, 2)
         });
-        this.openAction(size.width / this.frame.width * 0.8);
+        // this.openAction(size.width / this.frame.width * 0.8);
+        this.attr({
+            x: 1000000,
+        });
     },
     openAction: function(scale) {
+         var size = cc.winSize;
+        this.attr({
+            x: size.width / 2,
+            y: size.height / 2,
+        });
+        if (scale === undefined) scale = size.width / this.frame.width * 0.8;
         this.runAction(ui.BounceEff(scale));
     },
     close: function() {

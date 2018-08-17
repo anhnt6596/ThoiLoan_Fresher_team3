@@ -7,6 +7,7 @@ var mapLogicArray = mapLogicArray || [];
 var armyCampRefs = armyCampRefs || [];
 var storageBuildingRefs = storageBuildingRefs || [];
 var barrackRefs = barrackRefs || [];
+var wallRefs = wallRefs || [];
 
 var rootMapPos = {
     x: 2100,
@@ -47,9 +48,9 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_4_anims.plist');
         this.initBackGround();
         this.initMovingTool();
+        this.createLogicArray(contructionList, obstacleLists);
         this.initContructions(contructionList);
         this.initObstacles(obstacleLists);
-        this.createLogicArray(contructionList, obstacleLists);
         createSolidMapArray(); // tạo mảng di chuyển lính trên map
         
         this.scale = 0.75;
@@ -88,6 +89,12 @@ var MapLayer = cc.Layer.extend({
             if (newBuilding._name === "AMC_1" && newBuilding._status !== "pending")  armyCampRefs.push(newBuilding);
             if (newBuilding instanceof StorageBuilding && newBuilding._status !== "pending") storageBuildingRefs.push(newBuilding);
             if (newBuilding._name === "BAR_1")  barrackRefs.push(newBuilding);
+            if (newBuilding instanceof Wall) wallRefs.push(newBuilding);
+        });
+        // cập nhật hình ảnh hiển thị cho tất cả tường
+        wallRefs.forEach(function(wall) {
+            if (wall._id === this._id) wall.updatePresentImg(mapPos);
+            else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
         });
     },
     initObstacles: function(obstacles) {
@@ -263,7 +270,19 @@ var MapLayer = cc.Layer.extend({
         var tempX = this._targetedObject.tempX;
         var tempY = this._targetedObject.tempY;
         var size = this._targetedObject._width;
-        var isOnObject = mapPos.x >= tempX && mapPos.x <= tempX + size && mapPos.y >= tempY && mapPos.y <= tempY + size;
+        var isOnObject = mapPos.x >= tempX && mapPos.x <= tempX + size - 1 && mapPos.y >= tempY && mapPos.y <= tempY + size - 1;
+
+        var checkClickInListSelectingWall = 0;
+        var self = this;
+        if (wallSelectingArray.length >= 1 && self._targetedObject._name === "WAL_1") {
+            wallSelectingArray.forEach(function(wall) {
+                var tempX = wall.tempX;
+                var tempY = wall.tempY;
+                if (mapPos.x == tempX && mapPos.y == tempY) checkClickInListSelectingWall += 1;
+            });
+        }
+        if (checkClickInListSelectingWall > 0) return true;
+
         return isOnObject;
     },
     onTouchMoved: function(touch, event) {
@@ -292,19 +311,19 @@ var MapLayer = cc.Layer.extend({
         }
         if (this._isMovingObject) {
             if (this._targetedObject && this._targetedObject.checkNewPosition(mapPos)) {
-                this._targetedObject.updatePosition(mapPos);
-                this.updateContructionList(this._targetedObject);
-                this.createLogicArray(contructionList, obstacleLists);
-                if (this._targetedObject._status !== 'setting') {
-                    LOBBY.showLobby();
-                }
-            } else {
-                // this._targetedObject.returnLastPosition();
+                this.objectUpdatePosition(mapPos);
             }
-            // this._isMovingObject = false;
         }
         this._startTouch = null;
         this._zoomPoint = null;
+    },
+    objectUpdatePosition: function(mapPos) {
+        this._targetedObject.updatePosition(mapPos);
+        // this.updateContructionList(this._targetedObject);
+        this.createLogicArray(contructionList, obstacleLists);
+        if (this._targetedObject._status !== 'setting') {
+            LOBBY.showLobby();
+        }
     },
     updateContructionList: function(targetedObject) {
         var newContructionList = contructionList.map(function(contruction) {
@@ -378,8 +397,11 @@ var MapLayer = cc.Layer.extend({
             case 'LAB_1':
                 newBuilding = new Labratory(buildingInfo);
                 break;
-            case 'DEF_1': case 'WAL_1':
+            case 'DEF_1':
                 newBuilding = new Cannon(buildingInfo);
+                break;
+            case 'WAL_1':
+                newBuilding = new Wall(buildingInfo);
                 break;
             default:
                 break;
@@ -448,14 +470,15 @@ var MapLayer = cc.Layer.extend({
                             popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
                             cc.director.getRunningScene().addChild(popup, 2000000);
                         }
-                    }else{
+                    } else {
                         _.extend(ReducedTempResources, buildingInfo.cost);
                         NETWORK.sendRequestAddConstruction(newBuilding, buildingInfo);
+                        // this.suggestNewWal(newBuilding);
                     }
-                } else if(gResources > 0){
-                    if(gv.user.coin < gResources){
+                } else if (gResources > 0) {
+                    if (gv.user.coin < gResources) {
                         showPopupNotEnoughG('build');
-                    }else{
+                    } else {
                         data = {type:getLackingResources(buildingInfo.cost), building:buildingInfo, newBuilding:newBuilding, g:gResources};
                         popup = new ShowBuildPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
                         cc.director.getRunningScene().addChild(popup, 2000000);
@@ -467,6 +490,30 @@ var MapLayer = cc.Layer.extend({
         }.bind(this));
 
         this.setVXbtn(this._targetedObject);
+    },
+
+    suggestNewWal: function(newBuilding) {
+        var self = this; // hàm của Duy, ko tái sử dụng đc nên phải copy sang
+        if (newBuilding._name === "WAL_1") {
+            setTimeout(function() {
+                var id = gv.user.largestId;
+                cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
+                var buildingInfo = {
+                    _id: id,
+                    name: "WAL_1",
+                    level: 1,
+                    posX: newBuilding._posX + 1,
+                    posY: newBuilding._posY,
+                    width: 1,
+                    height: 1,
+                    buildTime: 0,
+                    status: 'pending',
+                    cost: { gold: config.building.WAL_1[1].gold, elixir: 0, darkElixir: 0, coin: 0 }
+                };
+                gv.user.largestId += 1;
+                self.buildNewContruction(buildingInfo);
+            }, 20);
+        }
     },
 
     updateMapWhenValidatedBuild:function(newBuilding, buildingInfo){

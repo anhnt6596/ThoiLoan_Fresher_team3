@@ -85,33 +85,7 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
-        var l = ["ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_1", "ARM_2", "ARM_2", "ARM_3", "ARM_4"];
-        var createNewTroop = function(type) {
-            switch (type) {
-                case "ARM_1":
-                    var troop = new Warrior(armyCampRefs[0]);
-                    break;
-                case "ARM_2":
-                    var troop = new Archer(armyCampRefs[0]);
-                    break;
-                case "ARM_3":
-                    var troop = new Goblin(armyCampRefs[0]);
-                    break;
-                case "ARM_4":
-                    var troop = new Giant(armyCampRefs[0]);
-                    break;
-                default:
-                    break;
-            }
-            troop && troop.appear(MAP._targetedObject);
-        };
-        if (MAP._targetedObject) {
-            var r = randomInt(0,8);
-            createNewTroop(l[r]);
-            //var troop = new Warrior(armyCampRefs[0]); // truyen vao object Army camp
-            //troop.appear(MAP._targetedObject); // truyen vao nha bat dau de no chay ra nha army camp tuong ung, con k co dong nay thi no se xuat hien o AMC ben tren
-        }
-        // NETWORK.sendResearchTroop("ARM_1");
+        CLAN_GUI.openAction();
     },
     onTreasure: function() {
         //createSolidMapArray();
@@ -162,17 +136,32 @@ var LobbyLayer = cc.Layer.extend({
         scrollView.setPosition(0, 0);
         //scrollView.setPropagateTouchEvents(false);
 
-        for(var i = 0; i < 40; i++){
+
+        for(var i = 0; i < 30; i++){
+            var nodeContainer = new ccui.Widget();
+            nodeContainer.setPosition(0, 0);
+            scrollView.addChild(nodeContainer);
+
             //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/soji_20.fnt');
             //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/fista_20_non.fnt');
-            var amountLabel = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafkiam', 'res/Art/Fonts/fista_20_non.fnt');
+            var amountLabel = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafki ' + i, 'res/Art/Fonts/fista_20_non.fnt');
             amountLabel.setAnchorPoint(0, 0);
-            amountLabel.setPosition(10, 50*i + 10);
-            scrollView.addChild(amountLabel);
+            amountLabel.setPosition(10, 100*i + 10);
+            nodeContainer.addNode(amountLabel);
+
+
+            var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
+            btn.setAnchorPoint(0, 0);
+            btn.setPosition(50, amountLabel.y - btn.height - 5);
+            nodeContainer.addNode(btn);
+
+            //scrollView.addChild(amountLabel);
         }
 
-        scrollView.setInnerContainerSize(cc.size(scrollView.width, 40 * 50));
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, 30 * 100));
         return scrollView;
+
+
     },
 
     createMemberScroll: function() {
