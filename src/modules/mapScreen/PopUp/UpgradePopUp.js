@@ -270,6 +270,9 @@ var showNextBuildingImg = function(info) {
         case 'STO_3':
             buildingImg = new cc.Sprite(res.building.dark_elixir_storage[nextLevel][3]);
             break;
+        case 'CLC_1':
+            buildingImg = new cc.Sprite(res.building.clanCastle[nextLevel]);
+            break;
         case 'WAL_1':
             buildingImg = new cc.Sprite(res.building.wall[nextLevel][3]);
             break;
@@ -329,6 +332,10 @@ var showNextBuildingInfo = function(info) {
             listInfo.push('capacity');
             listInfo.push('hitpoints');
             break;
+        case 'CLC_1':
+            listInfo.push('troopCapacity');
+            listInfo.push('hitpoints');
+            break;
         case 'RES_1':
         case 'RES_2':
         case 'RES_3':
@@ -382,7 +389,7 @@ var showNextBuildingInfo = function(info) {
 };
 
 var icons = {
-    troop_capacity: 'res/Art/GUIs/upgrade_building_gui/small/TroopCapacity_Icon.png',
+    troopCapacity: 'res/Art/GUIs/upgrade_building_gui/small/TroopCapacity_Icon.png',
     capacityGold: 'res/Art/GUIs/upgrade_building_gui/small/Gold_Capacity_Icon.png',
     capacityElixir: 'res/Art/GUIs/upgrade_building_gui/small/Elixir_Capacity_Icon.png',
     capacityDarkElixir: 'res/Art/GUIs/upgrade_building_gui/small/DarkElixir_Capacity_Icon.png',
@@ -393,7 +400,7 @@ var icons = {
 };
 
 var capacityforeachbuilding = {
-    AMC_1: 'troop_capacity',
+    AMC_1: 'troopCapacity',
     STO_1: 'capacityGold',
     STO_2: 'capacityElixir',
     STO_3: 'capacityDarkElixir',

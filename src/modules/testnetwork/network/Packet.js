@@ -557,16 +557,16 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
 
                 if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
-                       _id: this._id,
-                       name: this.name,
-                       level: this.level,
-                       posX: this.posX,
-                       posY: this.posY,
+                        _id: this._id,
+                        name: this.name,
+                        level: this.level,
+                        posX: this.posX,
+                        posY: this.posY,
                         status: this.status,
                         startTime: this.startTime,
-                        buildTime: config.building[this.name][this.level].buildTime,
-                       width: config.building[this.name][1].width,
-                       height: config.building[this.name][1].height,
+                        buildTime: this.level > 0 ? config.building[this.name][this.level].buildTime : 0,
+                        width: config.building[this.name][1].width,
+                        height: config.building[this.name][1].height,
                     };
                     contructionList.push(contruction);
                 }
@@ -634,7 +634,8 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
                 this.id_guild = this.getInt();
                 this.name_guild = this.getString();
                 this.id_logo_guild = this.getInt();
-                this.last_time_ask_for_troops = this.getInt();
+                this.last_time_ask_for_troops = this.getLong();
+                this.last_time_out_guild = this.getLong();
             }
             //get level troop
             //gv.user.troopLevel = {};

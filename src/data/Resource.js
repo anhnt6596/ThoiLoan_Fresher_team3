@@ -494,6 +494,15 @@ res.building = {
             buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0002.png',
             buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0003.png',
         ],
+    ],
+    clanCastle: [
+        buildingsDir + 'clan_castle/CLC_1_0/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_1/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_2/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_3/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_4/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_5/idle/image0000.png',
+        buildingsDir + 'clan_castle/CLC_1_6/idle/image0000.png',
     ]
 };
 
@@ -539,6 +548,10 @@ name.building = {
     TOW_1: {
         vi: 'Nhà chính',
         en: 'TownHall'
+    },
+    CLC_1: {
+        vi: 'Nhà Bang Hội',
+        en: 'Clan Castle'
     },
     BDH_1: {
         vi: 'Nhà thợ xây',

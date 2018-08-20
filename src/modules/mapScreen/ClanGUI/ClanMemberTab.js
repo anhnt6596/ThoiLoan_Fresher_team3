@@ -68,10 +68,18 @@ var ClanMemberTab = Tab.extend({
             self.scrollView.addChild(clanItem);
             self.scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
 
-            clanItem.addClickEventListener(() => self.clickMember(member));
+            clanItem.addClickEventListener((item) => self.clickMember(item, member));
         });
     },
-    clickMember: function(member) {
+    clickMember: function(clanItem, member) {
         cc.log("Click..." + member.name);
+        var listOption = ["visit", "kick"];
+        var memberMenu = new MemberMenu(listOption, member);
+        this.addChild(memberMenu);
+        memberMenu.attr({
+            x: 500,
+            //y: clanItem.getWorldPosition().y * 315 / this.height - 42,
+            y: clanItem.getWorldPosition().y * 295 / this.height - 20,
+        });
     }
 });
