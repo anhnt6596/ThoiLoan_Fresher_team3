@@ -69,6 +69,13 @@ testnetwork.Connector = cc.Class.extend({
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
                     MAP.updateMapWhenValidatedBuild(temp.newBuildingAdd, temp.buildingAdd);
+                    // eo hieu gi
+                    if (temp.newBuildingAdd._name === "WAL_1") {
+                        wallRefs.push(temp.newBuildingAdd);
+                        wallRefs.forEach(function(element) {
+                            element.updatePresentImg();
+                        });
+                    }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
                     showPopupNotEnoughG('server_denied_build');
@@ -200,37 +207,41 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     upgradeConstruction: function(building) {
-        building.setStatus('upgrade');
-        building.startTime = getCurrentServerTime();
-        var cur = (getCurrentServerTime() - building.startTime)/1000;
-        var max = config.building[building._name][building._level+1].buildTime;
-        building.addTimeBar(cur, max);
-        building.countDown(cur, max);
-        building.buildTime = max;
+        if (building._name == "WAL_1") {
+            building.upgradeComplete(true);
+        } else {
+            building.setStatus('upgrade');
+            building.startTime = getCurrentServerTime();
+            var cur = (getCurrentServerTime() - building.startTime)/1000;
+            var max = config.building[building._name][building._level+1].buildTime;
+            building.addTimeBar(cur, max);
+            building.countDown(cur, max);
+            building.buildTime = max;
 
-        for(var item in contructionList){
-            if(contructionList[item]._id == building._id){
-                contructionList[item].status = 'upgrade';
-                contructionList[item].startTime = building.startTime;
-                contructionList[item].buildTime = max;
-                break;
+            for(var item in contructionList){
+                if(contructionList[item]._id == building._id){
+                    contructionList[item].status = 'upgrade';
+                    contructionList[item].startTime = building.startTime;
+                    contructionList[item].buildTime = max;
+                    break;
+                }
             }
-        }
 
-        updateBuilderNumber();
-        reduceUserResources(ReducedTempResources);
-        resetReducedTempResources();
-        console.log("ten nha = "+ building._name);
-        if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
-            cc.log("cho phep upgrade");
-            building.onCollectResource(true);
-        }
+            updateBuilderNumber();
+            reduceUserResources(ReducedTempResources);
+            resetReducedTempResources();
+            console.log("ten nha = "+ building._name);
+            if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
+                cc.log("cho phep upgrade");
+                building.onCollectResource(true);
+            }
 
-        if(building._name == "BAR_1"){
-            //Cap nhat startTime cho barrack
-            barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
-            //Dung countdown cua barrack nay
-            barrackQueueList[building._id].flagCountDown = false;
+            if(building._name == "BAR_1"){
+                //Cap nhat startTime cho barrack
+                barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
+                //Dung countdown cua barrack nay
+                barrackQueueList[building._id].flagCountDown = false;
+            }
         }
     },
 
@@ -661,5 +672,26 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
+    },
+
+    sendNewMessage: function (type, content) {
+        var pk = this.gameClient.getOutPacket(CmdSendNewMessage);
+        pk.pack(type, content);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND NEW MESSAGE==========================================');
+    },
+
+    sendGiveTroop: function (idUserGet, troopType, level) {
+        var pk = this.gameClient.getOutPacket(CmdSendGiveTroop);
+        pk.pack(idUserGet, troopType, level);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GIVE TROOP==========================================');
+    },
+
+    sendGetInteractionGuild: function () {
+        var pk = this.gameClient.getOutPacket(CmdSendGetInteractionGuild);
+        pk.pack();
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GET INTERACTION GUILD==========================================');
     }
 });

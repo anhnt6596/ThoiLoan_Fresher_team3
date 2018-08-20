@@ -65,7 +65,7 @@ var TrainPopup = TinyPopup.extend({
 
         this.initQueue();
         this.init4PositionsInQueue();
-        //this.initNavigation(width, height);
+        this.initNavigation(width, height);
 
         for (var i = 0; i < 4; i++) {
             var a = i + 1;
@@ -481,34 +481,21 @@ var TrainPopup = TinyPopup.extend({
     },
 
     onNext: function() {
-
         var children = this.getChildren();
         for(var i in children){
             children[i].retain();
         }
         this.getParent().removeChild(this);
 
-
-        //var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
-        //var self = this;
-        //this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
-        //    self.getParent().removeChild(self);
-        //}, this)));
-        //
-        //var children = this.getChildren();
-        //cc.log("=========================== RETAIN CHILDREN ============================");
-        //for(var i in children){
-        //    //if(children[i].tag != 1711){
-        //    //    cc.log("============= children tag: " + children[i].tag);
-        //    children[i].retain();
-        //    //}
-        //}
-
         cc.log("========================= NEXT BARRACK: " + this.getNextBarrack(this._id)._id);
 
         var data = {train: true, barrack: this.getNextBarrack(this._id)};
         var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
         cc.director.getRunningScene().addChild(popup, 200);
+
+        //for(var i = 0; i < barrackRefs.length; i++){
+        //    cc.log("==================================== barrack: id " + barrackRefs[i]._id + ', thu: ' + i);
+        //}
     },
 
     onPrev: function() {
@@ -524,13 +511,15 @@ var TrainPopup = TinyPopup.extend({
     },
 
     getNextBarrack: function(currentIdBarrack) {
-        for(var k in barrackRefs){
+        for(var k = 0; k < barrackRefs.length; k++){
             if(barrackRefs[k]._id == currentIdBarrack){
-                if(!barrackRefs[k + 1]){
-                    cc.log("============================= BARRACK[0] la: " + barrackRefs[0]._id);
-                    return barrackRefs[0];
-                }else{
+                cc.log("======================== BARRACK[k + 1]: " + barrackRefs[k + 1]);
+                if(barrackRefs[k + 1]){
+                    cc.log("============================= Co NEXT");
                     return barrackRefs[k + 1];
+                }else{
+                    cc.log("============================= Ve 0");
+                    return barrackRefs[0];
                 }
             }
         }

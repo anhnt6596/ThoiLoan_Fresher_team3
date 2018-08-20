@@ -459,40 +459,40 @@ res.building = {
             buildingsDir + 'wall/WAL_1_1/WAL_1_1/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_2/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_2/WAL_1_2/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_2/WAL_1_2/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_2/WAL_1_2/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_2/WAL_1_2/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_3/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_3/WAL_1_3/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_3/WAL_1_3/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_3/WAL_1_3/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_3/WAL_1_3/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_4/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_4/WAL_1_4/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_4/WAL_1_4/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_4/WAL_1_4/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_4/WAL_1_4/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_5/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_5/WAL_1_5/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_5/WAL_1_5/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_5/WAL_1_5/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_5/WAL_1_5/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_6/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_6/WAL_1_6/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_6/WAL_1_6/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_6/WAL_1_6/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_6/WAL_1_6/idle/image0003.png',
         ],
         [
-            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0000.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0001.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0002.png',
-            buildingsDir + 'wall/WAL_1_1/WAL_1_7/idle/image0003.png',
+            buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0000.png',
+            buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0001.png',
+            buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0002.png',
+            buildingsDir + 'wall/WAL_1_7/WAL_1_7/idle/image0003.png',
         ],
     ]
 };
@@ -726,20 +726,20 @@ var SOLID_MAP_VALUE = {
     SIZE: 80,
     GROUND: 0,
     SOLID_1: 1,
-    SOLID_2: 2,
+    SOLID_2: 2
 };
 
 var SOUND = true;
 
 var ZOOM_SCALE = {
     MAX: 2,
-    MIN: 0.4,
+    MIN: 0.4
 };
            
 var time = {
     BONUS_TIME: 2,
-    DeltaTime: 0,   //Client - Server
-}
+    DeltaTime: 0   //Client - Server
+};
 
 
 var research_constant = {
@@ -758,3 +758,12 @@ var research_constant = {
     used_open : false
 };
 
+var RESPONSE_VALIDATE = 1;
+var RESPONSE_TO_ALL = 2;
+var MESSAGE_NORMAL = 1;
+var MESSAGE_ASK_TROOP = 2;
+
+var MAX_MESSAGES_QUEUE = 100;
+var MAX_TROOP_AMOUNT_USER_CAN_GIVE = 5;
+var TIME_REQUEST_TROOP = 1200;              //second
+var ID_CLC_BUILDING = 4;              //second
