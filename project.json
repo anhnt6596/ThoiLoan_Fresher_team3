@@ -51,6 +51,7 @@
         "src/modules/mainmenu/ScreenMenu.js",
         "src/modules/testnetwork/network/Network.js",
         "src/modules/testnetwork/network/Packet.js",
+        "src/modules/testnetwork/network/ClanPacket.js",
         "src/modules/testnetwork/ScreenNetwork.js",
         "src/modules/test/ScreenTest.js",
         "src/modules/loading/LoadingScreen.js",
