@@ -133,7 +133,7 @@ var Wall = Building.extend({
         })
         : wallSelectingArray = [];
     },
-    wallSelectInLine: function() {
+    wallSelectInLine: function() { // set hình ảnh, trạng thái
         var act = new cc.FadeOut(0.2);
         MAP.arrows[this._width].runAction(act);
 

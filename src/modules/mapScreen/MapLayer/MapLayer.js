@@ -403,6 +403,9 @@ var MapLayer = cc.Layer.extend({
             case 'WAL_1':
                 newBuilding = new Wall(buildingInfo);
                 break;
+            case 'CLC_1':
+                newBuilding = new ClanCastle(buildingInfo);
+                break;
             default:
                 break;
         }

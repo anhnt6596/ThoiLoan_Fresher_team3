@@ -29,6 +29,18 @@ gv.CMD.RESEARCH_TROOP = 4002;
 gv.CMD.RESEARCH_TROOP_COMPLETE = 4003;
 gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE = 4004;
 
+gv.CMD.CREATE_GUILD = 5001;
+gv.CMD.ADD_MEMBER = 5002;
+gv.CMD.REMOVE_MEMBER = 5003;
+gv.CMD.ADD_REQUEST_MEMBER = 5004;    
+gv.CMD.DENY_REQUEST_MEMBER = 5005;
+gv.CMD.SEARCH_GUILD_INFO = 5006;    
+gv.CMD.GET_GUILD_INFO = 5007;
+gv.CMD.EDIT_GUILD_INFO = 5008;
+gv.CMD.SET_GUILD_LEADER = 5009;
+gv.CMD.SET_GUILD_MODERATOR = 5010;
+gv.CMD.SET_GUILD_MEMBER = 5011;
+
 gv.CMD.GET_BARRACK_QUEUE_INFO = 7001;
 gv.CMD.TRAIN_TROOP = 7002;
 gv.CMD.CANCEL_TRAIN_TROOP = 7003;
@@ -557,16 +569,16 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
 
                 if (config.building[this.name] && this.status!=="destroy") {
                     var contruction = {
-                       _id: this._id,
-                       name: this.name,
-                       level: this.level,
-                       posX: this.posX,
-                       posY: this.posY,
+                        _id: this._id,
+                        name: this.name,
+                        level: this.level,
+                        posX: this.posX,
+                        posY: this.posY,
                         status: this.status,
                         startTime: this.startTime,
-                        buildTime: config.building[this.name][this.level].buildTime,
-                       width: config.building[this.name][1].width,
-                       height: config.building[this.name][1].height,
+                        buildTime: this.level > 0 ? config.building[this.name][this.level].buildTime : 0,
+                        width: config.building[this.name][1].width,
+                        height: config.building[this.name][1].height,
                     };
                     contructionList.push(contruction);
                 }
@@ -634,7 +646,8 @@ testnetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
                 this.id_guild = this.getInt();
                 this.name_guild = this.getString();
                 this.id_logo_guild = this.getInt();
-                this.last_time_ask_for_troops = this.getInt();
+                this.last_time_ask_for_troops = this.getLong();
+                this.last_time_out_guild = this.getLong();
             }
             //get level troop
             //gv.user.troopLevel = {};

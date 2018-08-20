@@ -1,5 +1,5 @@
 var CLAN_GUI_HEADER = CLAN_GUI_HEADER || null;
-var isHaveClan = false;
+var isHaveClan = true;
 
 var ClanGUI = ui.PopUp.extend({
     _listTab: null,
@@ -9,7 +9,7 @@ var ClanGUI = ui.PopUp.extend({
     },
     init: function() {
         this.initContent();
-        this.initHeader(isHaveClan ? 1 : 5);
+        this.initHeader(gv.user.is_in_guild ? 1 : 5);
         // setTimeout(() => {
         //     isHaveClan = true;
         //     CLAN_GUI_HEADER && this.removeChild(CLAN_GUI_HEADER);

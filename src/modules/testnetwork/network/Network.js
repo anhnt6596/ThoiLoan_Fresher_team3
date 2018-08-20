@@ -530,6 +530,13 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
+        
+        gv.user.is_in_guild = packet.is_in_guild;
+        gv.user.id_guild = packet.id_guild || -1,
+        gv.user.name_guild = packet.name_guild || "",
+        gv.user.id_logo_guild = packet.id_logo_guild || 1,
+        gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
+        gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
         cc.log("========================================== Gold: " + gv.user.gold);
         cc.log("========================================== Elixir: " + gv.user.elixir);
         cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
