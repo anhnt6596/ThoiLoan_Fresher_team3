@@ -5,6 +5,7 @@ var myClanInfo = {
     status: 1,
     level: 100,
     member: 49,
+    description: "vì tương lai",
     troophy: 100000,
     troophyRequire: 0,
 };
@@ -20,6 +21,7 @@ var MyClanTab = Tab.extend({
     },
     initClanInfo: function() {
         var clanInfo = new ClanInfo(myClanInfo);
+        this.clanInfo = clanInfo;
         clanInfo.attr({
             x: this.width / 2,
             y: this.height - 20,
@@ -34,5 +36,29 @@ var MyClanTab = Tab.extend({
         });
         clanInfo.addChild(memberBtn);
         memberBtn.addClickEventListener(() => CLAN_GUI_HEADER.selectTabAction(2));
+
+        var editBtn = ui.optionButton("Sửa", "res/Art/Bang hoi/button _xem lai.png");
+        editBtn.attr({
+            x: clanInfo.width - 230,
+            y: clanInfo.height / 2 - 25,
+        });
+        clanInfo.addChild(editBtn);
+        editBtn.addClickEventListener(this.edit.bind(this));
     },
+    edit: function() {
+        var editView = new EditClanView(myClanInfo, true);
+        this.editView = editView;
+        editView.attr({
+            x: this.width / 2,
+            y: this.height / 2,
+            width: this.width,
+            height: this.height,
+        });
+        this.addChild(editView);
+        this.clanInfo.setVisible(false);
+    },
+    cancelEdit: function() {
+        this.removeChild(this.editView);
+        this.clanInfo.setVisible(true);
+    }
 });

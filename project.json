@@ -117,6 +117,7 @@
         "src/modules/mapScreen/ClanGUI/JoinClanTab.js",
         "src/modules/mapScreen/ClanGUI/MemberItemList.js",
         "src/modules/mapScreen/ClanGUI/MemberMenu.js",
+        "src/modules/mapScreen/ClanGUI/EditClanView.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js",
         "src/modules/shop/ShopItemInfo.js",
