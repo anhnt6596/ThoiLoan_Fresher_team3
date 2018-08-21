@@ -1,42 +1,47 @@
-var clanMember = [
-    {
-        id: 1,
-        name: "Điêu Linh Vương",
-        donateTroop: 100,
-        requestTroop: 1,
-        troophy: 169,
-    },
-    {
-        id: 1,
-        name: "Duy Tả Sứ",
-        donateTroop: 2,
-        requestTroop: 99,
-        troophy: 8678,
-    },
-    {
-        id: 1,
-        name: "Đoàn Hữu Sứ",
-        donateTroop: 1,
-        requestTroop: 98,
-        troophy: 73,
-    },
-    {
-        id: 1,
-        name: "Thần Điêu Đại Hiệp",
-        donateTroop: 0,
-        requestTroop: 999,
-        troophy: 38,
-    },
-];
+// var clanMember = [
+//     {
+//         id: 1,
+//         name: "Điêu Linh Vương",
+//         donateTroop: 100,
+//         requestTroop: 1,
+//         troophy: 169,
+//     },
+//     {
+//         id: 1,
+//         name: "Duy Tả Sứ",
+//         donateTroop: 2,
+//         requestTroop: 99,
+//         troophy: 8678,
+//     },
+//     {
+//         id: 1,
+//         name: "Đoàn Hữu Sứ",
+//         donateTroop: 1,
+//         requestTroop: 98,
+//         troophy: 73,
+//     },
+//     {
+//         id: 1,
+//         name: "Thần Điêu Đại Hiệp",
+//         donateTroop: 0,
+//         requestTroop: 999,
+//         troophy: 38,
+//     },
+// ];
+
+var myClanMember = myClanMember || [];
+var requestMyClanMember = false; // cờ để bắt xem lấy thông tin clan mình hay clan khác
 
 var ClanMemberTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
         this.init();
+        myClanInfo === null && gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+        requestMyClanMember = true;
     },
     init: function() {
         this.initListMember();
-        this.pushClanMember();
+        // this.pushClanMember();
     },
     initListMember: function() {
         var scrollView = new ccui.ScrollView();
@@ -57,7 +62,7 @@ var ClanMemberTab = Tab.extend({
     pushClanMember: function() {
         var self = this;
         this.scrollView.removeAllChildren();
-        clanMember.forEach(function(member, i) {
+        myClanMember.forEach(function(member, i) {
             var clanItem = new MemberItemList(member, i + 1);
             var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
             clanItem.attr({
@@ -81,5 +86,10 @@ var ClanMemberTab = Tab.extend({
             //y: clanItem.getWorldPosition().y * 315 / this.height - 42,
             y: clanItem.getWorldPosition().y * 295 / this.height - 20,
         });
+    },
+    showTab: function() {
+        // gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+        // requestMyClanMember = true;
+        this.setVisible(true);
     }
 });

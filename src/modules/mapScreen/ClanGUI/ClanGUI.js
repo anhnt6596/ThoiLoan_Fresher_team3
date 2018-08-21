@@ -17,6 +17,7 @@ var ClanGUI = ui.PopUp.extend({
         // }, 5000);
     },
     initHeader: function(tabNumber) {
+        // CLAN_GUI_HEADER && this.removeChild(CLAN_GUI_HEADER);
         var header = new Header(this, tabNumber); // truyền số nào thì tab bắt đầu là theo số đấy. Nếu muốn chuyển tab tự động thì chạy header.selectTabAction(sttTab);
         CLAN_GUI_HEADER = header;
         header.attr({
@@ -29,12 +30,15 @@ var ClanGUI = ui.PopUp.extend({
     },
     initContent: function() {
         var tab1 = new MyClanTab(1);
+        this.TAB1 = tab1;
         tab1.setVisible(false);
         this.addChild(tab1, 999);
         var tab2 = new ClanMemberTab(2);
+        this.TAB2 = tab2;
         tab2.setVisible(false);
         this.addChild(tab2, 999);
         var tab3 = new SearchClanTab(3);
+        this.TAB3 = tab3;
         tab3.setVisible(false);
         this.addChild(tab3, 999);
         var tab4 = new CreateClanTab(4);

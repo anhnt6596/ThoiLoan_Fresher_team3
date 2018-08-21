@@ -2,6 +2,7 @@ var ClanInfo = cc.Sprite.extend({
     ctor: function(clanInfo) {
         this._super("res/Art/Bang hoi/NEN NHO _BANG HOI CUA TOI.png");
         this.init(clanInfo);
+        this.clanInfo = clanInfo;
     },
     init: function(clanInfo) {
         var icon = new cc.Sprite("res/Art/Bang hoi/bieu tuong tren map/" + clanInfo.iconType + ".png");
@@ -126,7 +127,9 @@ var ClanInfo = cc.Sprite.extend({
         outButton.addClickEventListener(this.outAction.bind(this));
     },
     joinAction: function() {
-        cc.log("join");
+        cc.log("join" + this.clanInfo.id);
+        if (gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
+        else NETWORK.sendAddRequestMember(this.clanInfo.id);
     },
     outAction: function() {
         cc.log("quit");

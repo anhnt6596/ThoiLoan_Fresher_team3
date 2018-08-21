@@ -203,9 +203,69 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE:
                 cc.log("RESEARCH COMPLETEEEEEEEEEEEEEEEE");
                 break;
+            case gv.CMD.CREATE_GUILD:
+                this.processCreateGuild(packet);
+                break;
+            case gv.CMD.GET_GUILD_INFO:
+                this.processGetGuildInfo(packet);
+                break;
+            case gv.CMD.GET_GUILD_LISTMEMBER_INFO:
+                this.processGetListMemberClan(packet);
+                break;
         }
     },
-
+    processGetListMemberClan: function(data) {
+        if (requestMyClanMember) {
+            myClanMember = data.listUser;
+            cc.log("...... " + data.listUser.length);
+            requestMyClanMember = false;
+            CLAN_GUI.TAB2.pushClanMember();
+        } else {
+            clanMember = data.listUser;
+            CLAN_GUI.TAB3.pushMemberItem();
+        }
+    },
+    processGetGuildInfo: function(data) {
+        if (data.id === gv.user.id_guild) {
+            myClanInfo = {
+                id: data.id,
+                name: data.name,
+                iconType: data.iconType,
+                status: data.status,
+                level: data.level,
+                member: data.member,
+                description: data.description,
+                troophy: data.troophy,
+                troophyRequire: data.troophyRequire,
+            }
+        }
+        CLAN_GUI.TAB1.initClanInfo();
+    },
+    processCreateGuild: function(data) {
+        if (data.validate) {
+            gv.user.is_in_guild = true;
+            gv.user.id_guild = data.id;
+            myClanInfo = {
+                id: data.id,
+                name: data.name,
+                iconType: data.iconType,
+                status: data.status,
+                level: data.level,
+                member: 0,
+                description: data.description,
+                troophy: data.troophy,
+                troophyRequire: data.troophyRequire,
+                description: data.description,
+            };
+            CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+            CLAN_GUI.initHeader(1);
+            CLAN_GUI.TAB1.initClanInfo();
+            this.getGuildListMemberInfo(data.id);
+            requestMyClanMember = true;
+        } else {
+            cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
+        }
+    },
     upgradeConstruction: function(building) {
         if (building._name == "WAL_1") {
             building.upgradeComplete(true);
@@ -700,5 +760,35 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack();
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GET INTERACTION GUILD==========================================');
-    }
+    },
+    sendCreateGuild: function(data) {
+        var pk = this.gameClient.getOutPacket(CmdSendCreateGuild);
+        pk.pack(data);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND CREATE GUIDE==========================================');
+    },
+    sendGetGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendGetGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GUIDE INFO ' + data + '==========================================');
+    },
+    sendAddRequestMember: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendAddRequestMember);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND ADD REQUEST MEMBER==========================================');
+    },
+    getGuildListMemberInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdGetGuildListMemberInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================GetGuildListMemberInfo==========================================');
+    },
 });

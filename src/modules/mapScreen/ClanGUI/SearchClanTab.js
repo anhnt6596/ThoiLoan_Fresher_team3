@@ -61,6 +61,8 @@ var listClanInfo = listClanInfo || [
     },
 ];
 
+var clanMember = clanMember || [];
+
 var SearchClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
@@ -250,7 +252,8 @@ var SearchClanTab = Tab.extend({
         memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
         this.addChild(memberScrollView);
         
-        this.pushMemberItem();
+        NETWORK.getGuildListMemberInfo(clanId);
+        // this.pushMemberItem(); // chuyển vào chạy trong network khi bắt đc danh sách
     },
     pushMemberItem: function() {
         var self = this;

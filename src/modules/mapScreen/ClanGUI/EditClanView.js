@@ -3,7 +3,7 @@ var EditClanView = cc.Sprite.extend({
     clanStatus: 0,
     minTroophy: 0,
     iconType: 1,
-    cost: 40000,
+    createCost: 40000,
     ctor: function(myClanInfo = null,isEdit = false) {
         this._super();
         this.width = 700;
@@ -174,7 +174,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(minTroophyText);
         //dòng 6
         if (!this.isEdit) {
-            var createButton = new ui.optionButton(formatNumber(this.cost), "res/Art/Bang hoi/POPUP_0000_Group-3.png");
+            var createButton = new ui.optionButton(formatNumber(this.createCost), "res/Art/Bang hoi/POPUP_0000_Group-3.png");
             createButton.attr({
                 x: this.width / 2,
                 y: this.height - 340,
@@ -260,25 +260,28 @@ var EditClanView = cc.Sprite.extend({
         this.selectView.setVisible(false);
     },
     createAction: function() {
-        var createClanInfo = {
+        var data = {
             name: this.clanName.getString(),
             iconType: this.iconType,
             description: this.clanDescription.getString(),
-            clanStatus: this.clanStatus,
-            minTroophy: this.minTroophy,
+            status: this.clanStatus,
+            requireTroophy: this.minTroophy,
         };
-        cc.log("Create..." + createClanInfo.name + createClanInfo.iconType + createClanInfo.description + createClanInfo.clanStatus + createClanInfo.minTroophy);
+        cc.log("Create..." + data.name + "/" + data.iconType + "/" + data.description + "/" + data.status + "/" + data.requireTroophy);
+        // NETWORK.sendCreateGuild(data);
+        if(!this.checkReqName(data.name)) return;
+        this.checkGoldReq(this.createCost, () => NETWORK.sendCreateGuild(data));
     },
     editAction: function() {
-        var createClanInfo = {
+        var data = {
             id: this.myClanInfo.id,
             name: this.clanName.getString(),
             iconType: this.iconType,
             description: this.clanDescription.getString(),
-            clanStatus: this.clanStatus,
-            minTroophy: this.minTroophy,
+            status: this.clanStatus,
+            requireTroophy: this.minTroophy,
         };
-        cc.log("Create..." + createClanInfo.id + createClanInfo.name + createClanInfo.iconType + createClanInfo.description + createClanInfo.clanStatus + createClanInfo.minTroophy);
+        cc.log("Create..." + data.name + "/" + data.iconType + "/" + data.description + "/" + data.status + "/" + data.requireTroophy);
     },
     cancelAction: function() {
         this.getParent().cancelEdit();
@@ -303,5 +306,54 @@ var EditClanView = cc.Sprite.extend({
 
         this.minTroophy = myClanInfo.troophyRequire;
         this.minTroophyText.setString(this.minTroophy.toString());
+    },
+    checkGoldReq: function(reqGold = 0, action) {
+        if (gv.user.gold < reqGold) {
+            var req = {
+                gold: reqGold - gv.user.gold,
+            }
+            var g = calculateReqG(req);
+            var btn = new ui.optionButton(g.toString(), "res/Art/GUIs/pop_up/button.png", "res/Art/GUIs/pop_up/button2.png");
+            var g_icon = new cc.Sprite("res/Art/GUIs/pop_up/G.png");
+            var popUp = new ui.PopUp("Yêu cầu dùng coin", [btn, g_icon]);
+            btn.attr({ x: popUp.width / 2, y: -135, });
+            g_icon.attr({ x: popUp.width / 2 + 45, y: -135, });
+            MAPSCENE.addChild(popUp, 1000);
+            popUp.openAction(1);
+            btn.addClickEventListener(() => {
+                popUp.close();
+                this.checkGReq(g, action);
+            });
+        } else {
+            action();
+        }
+    },
+    checkGReq: function(reqG, action) {
+        if (gv.user.coin < reqG) {
+            var popUp = new ui.PopUp("Không đủ coin để xài, vui lòng hack", []);
+            MAPSCENE.addChild(popUp, 1000);
+            popUp.openAction(0.95);
+        } else {
+            action();
+        }
+    },
+    checkReqName: function(text) {
+        var name = text.trim();
+        var len = name.length;
+        if (len < 3 || len > 15) {
+            var popUp = new ui.PopUp("Tên không hợp lệ", []);
+            MAPSCENE.addChild(popUp, 1000);
+            popUp.openAction(1);
+            return false;
+        }
+        return true;
     }
 });
+
+var calculateReqG = function(req) {
+    var g = 0;
+    if (req.gold) g += req.gold;
+    if (req.elixir) g += req.elixir;
+    if (req.darkElixir) g += req.elixir;
+    return g;
+}

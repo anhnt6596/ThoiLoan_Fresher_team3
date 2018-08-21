@@ -1,25 +1,16 @@
-var myClanInfo = {
-    id: 6969,
-    name: "Hiệp Khách Hành",
-    iconType: 21,
-    status: 1,
-    level: 100,
-    member: 49,
-    description: "vì tương lai",
-    troophy: 100000,
-    troophyRequire: 0,
-};
-
+var myClanInfo = myClanInfo || null;
 
 var MyClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
-        this.init();
+        myClanInfo === null && gv.user.is_in_guild && NETWORK.sendGetGuildInfo(gv.user.id_guild);
+        // this.init();
     },
     init: function() {
-        this.initClanInfo()
+        this.initClanInfo();
     },
     initClanInfo: function() {
+        this.clanInfo && this.removeChild(this.clanInfo);
         var clanInfo = new ClanInfo(myClanInfo);
         this.clanInfo = clanInfo;
         clanInfo.attr({
@@ -56,6 +47,10 @@ var MyClanTab = Tab.extend({
         });
         this.addChild(editView);
         this.clanInfo.setVisible(false);
+    },
+    showTab: function() {
+        // myClanInfo !== null && this.initClanInfo();
+        this.setVisible(true);
     },
     cancelEdit: function() {
         this.removeChild(this.editView);
