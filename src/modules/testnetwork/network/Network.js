@@ -203,9 +203,101 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.RESEARCH_TROOP_QUICK_COMPLETE:
                 cc.log("RESEARCH COMPLETEEEEEEEEEEEEEEEE");
                 break;
+            case gv.CMD.CREATE_GUILD:
+                this.processCreateGuild(packet);
+                break;
+            case gv.CMD.GET_GUILD_INFO:
+                this.processGetGuildInfo(packet);
+                break;
+            case gv.CMD.GET_GUILD_LISTMEMBER_INFO:
+                this.processGetListMemberClan(packet);
+                break;
+            case gv.CMD.SEARCH_GUILD_INFO:
+                this.processSearchClan(packet);
+                break;
+            case gv.CMD.ADD_REQUEST_MEMBER:
+                this.processAddRequestMember(packet);
+                break;
+            case gv.CMD.EDIT_GUILD_INFO:
+                this.processEditGuildInfo(packet);
+                break;
         }
     },
+    processEditGuildInfo: function(data) {
+        if (data.validate) {
+            myClanInfo = extend(myClanInfo, temp.editGuildData);
+            CLAN_GUI.TAB1.initClanInfo();
+        }
+    },
+    processAddRequestMember: function(data) {
+        if (data.validate) {
+            gv.user.is_in_guild = true;
+            gv.user.id_guild = temp.reqJoinClanId;
+            
+            CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+            CLAN_GUI.initHeader(1);
 
+            requestMyClanMember = true;
+            this.sendGetGuildInfo(temp.reqJoinClanId);
+            this.getGuildListMemberInfo(temp.reqJoinClanId);
+        }
+    },
+    processSearchClan: function(data) {
+        listClanInfo = data.listClan;
+        CLAN_GUI.TAB3.pushClanItem();
+    },
+    processGetListMemberClan: function(data) {
+        if (requestMyClanMember) {
+            myClanMember = data.listUser;
+            cc.log("...... " + data.listUser.length);
+            requestMyClanMember = false;
+            CLAN_GUI.TAB2.pushClanMember();
+        } else {
+            clanMember = data.listUser;
+            CLAN_GUI.TAB3.pushMemberItem();
+        }
+    },
+    processGetGuildInfo: function(data) {
+        if (data.id === gv.user.id_guild) {
+            myClanInfo = {
+                id: data.id,
+                name: data.name,
+                iconType: data.iconType,
+                status: data.status,
+                level: data.level,
+                member: data.member,
+                description: data.description,
+                troophy: data.troophy,
+                troophyRequire: data.troophyRequire,
+            }
+        }
+        CLAN_GUI.TAB1.initClanInfo();
+    },
+    processCreateGuild: function(data) {
+        if (data.validate) {
+            gv.user.is_in_guild = true;
+            gv.user.id_guild = data.id;
+            myClanInfo = {
+                id: data.id,
+                name: data.name,
+                iconType: data.iconType,
+                status: data.status,
+                level: data.level,
+                member: 0,
+                description: data.description,
+                troophy: data.troophy,
+                troophyRequire: data.troophyRequire,
+                description: data.description,
+            };
+            CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+            CLAN_GUI.initHeader(1);
+            CLAN_GUI.TAB1.initClanInfo();
+            this.getGuildListMemberInfo(data.id);
+            requestMyClanMember = true;
+        } else {
+            cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
+        }
+    },
     upgradeConstruction: function(building) {
         if (building._name == "WAL_1") {
             building.upgradeComplete(true);
@@ -530,6 +622,13 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
+        
+        gv.user.is_in_guild = packet.is_in_guild;
+        gv.user.id_guild = packet.id_guild || -1,
+        gv.user.name_guild = packet.name_guild || "",
+        gv.user.id_logo_guild = packet.id_logo_guild || 1,
+        gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
+        gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
         cc.log("========================================== Gold: " + gv.user.gold);
         cc.log("========================================== Elixir: " + gv.user.elixir);
         cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
@@ -693,5 +792,51 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack();
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GET INTERACTION GUILD==========================================');
-    }
+    },
+    sendCreateGuild: function(data) {
+        var pk = this.gameClient.getOutPacket(CmdSendCreateGuild);
+        pk.pack(data);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND CREATE GUIDE==========================================');
+    },
+    sendGetGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendGetGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND GUIDE INFO ' + data + '==========================================');
+    },
+    sendAddRequestMember: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendAddRequestMember);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND ADD REQUEST MEMBER==========================================');
+    },
+    getGuildListMemberInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdGetGuildListMemberInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================GetGuildListMemberInfo==========================================');
+    },
+    searchGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSearchGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SearchGuildInfo==========================================');
+    },
+    sendEditGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendEditGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SendEditGuildInfo==========================================');
+    },
 });

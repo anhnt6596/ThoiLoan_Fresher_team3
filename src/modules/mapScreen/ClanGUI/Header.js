@@ -31,8 +31,7 @@ var Header = cc.Sprite.extend({
         flag5.onUnselect();
         flag5.setVisible(false);
         this.addChild(flag5, 1000);
-        
-        if (isHaveClan) this._listTab = [flag1, flag2, flag3];
+        if (gv.user.is_in_guild) this._listTab = [flag1, flag2, flag3];
         else this._listTab = [flag5, flag4, flag3];
         
         this._listTab.forEach(function(flag, i) {

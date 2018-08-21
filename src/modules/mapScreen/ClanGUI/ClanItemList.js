@@ -28,7 +28,7 @@ var ClanItemList = ccui.Button.extend({
         });
         this.addChild(nameText);
 
-        var t = this.clan.status === 1 ? "Mở" : "Đóng";
+        var t = this.clan.status === 1 ? "Đóng" : "Mở";
         var statusText = new cc.LabelTTF(t, "Calibri", 16);
         statusText.attr({
             x: 114,

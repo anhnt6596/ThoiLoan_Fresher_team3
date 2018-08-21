@@ -49,6 +49,10 @@ var Contruction = cc.Class.extend({
         if (this instanceof CollectorBuilding && (this.full_bg && this.collect_bg) ) {
             MAP._targetedObject = null;
             this.collect();
+        } else if (this._name === "CLC_1" && this._level === 0) {
+            this.upgrade();
+            this.removeTarget();
+            MAP._targetedObject = null;
         } else {
             this.onTarget();
         }
@@ -57,6 +61,10 @@ var Contruction = cc.Class.extend({
         var coor = this.xyOnMap(this._posX, this._posY);
         cc.log('targeted pos' + this._posX + '/' + this._posY);
         var act = new cc.FadeIn(0.2);
+        this.buildingImg.runAction(ui.BounceEff());
+        this.buildingImg.runAction(ui.targettingEff().repeatForever());
+        this.onTargetSound();
+        LOBBY.showObjectMenu(MAP._targetedObject);
         MAP.arrows[this._width].attr({
             x: coor.x,
             y: coor.y,
@@ -87,10 +95,6 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
-        this.buildingImg.runAction(ui.BounceEff());
-        this.buildingImg.runAction(ui.targettingEff().repeatForever());
-        this.onTargetSound();
-        LOBBY.showObjectMenu(MAP._targetedObject);
     },
     collect: function() {
         // để rỗng
@@ -116,13 +120,14 @@ var Contruction = cc.Class.extend({
         LOBBY.hideObjectMenu();
     },
     moving: function(mapPos) {
+        // if (this._name === "CLC_1" && this._level === 0) return;
         var coor = this.xyOnMap(mapPos.x, mapPos.y);
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         this.setImgCoor(coor); // đặt lại vị trí
         // setzOrder
         var newZ = this.caluclateZOrder(mapPos);
-        cc.log("NewZ: " + newZ);
+        // cc.log("NewZ: " + newZ);
         MAP.reorderChild(this.buildingImg, newZ);
         // đặt tọa độ, hiển thị nền xanh đỏ
         if (this.checkNewPosition(mapPos)) {
@@ -267,6 +272,7 @@ var Contruction = cc.Class.extend({
             case 'RES_1':
             case 'RES_3':
             case 'LAB_1':
+            case 'CLC_1':
                 this.squareShadow(3);
                 break
             case 'STO_1':

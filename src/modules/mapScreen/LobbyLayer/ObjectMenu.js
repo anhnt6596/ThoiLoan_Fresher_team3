@@ -84,6 +84,12 @@ var ObjectMenu = cc.Node.extend({
         this.rotateBtn = rotateBtn;
         this.addChild(rotateBtn);
         rotateBtn.addClickEventListener(this.rotate.bind(this));
+        
+        var clanBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/clan_button.png', 'Clan');
+        this._listBtn.push(clanBtn);
+        this.clanBtn = clanBtn;
+        this.addChild(clanBtn);
+        clanBtn.addClickEventListener(this.clan.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -164,6 +170,9 @@ var ObjectMenu = cc.Node.extend({
             MAP._targetedObject.rotate();
         }
     },
+    clan: function() {
+        CLAN_GUI.openAction();
+    },
     setUpValidBtn: function(object) {
         this.hideAll();
         this._listValidBtn = [];
@@ -178,6 +187,7 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length === 0)  this._listValidBtn.push(this.selectLineBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length >= 2)  this._listValidBtn.push(this.rotateBtn);
+                if (object._name == "CLC_1")  this._listValidBtn.push(this.clanBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish

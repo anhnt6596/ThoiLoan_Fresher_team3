@@ -4,9 +4,17 @@ var MemberItemList = ccui.Button.extend({
         this.member = member;
         this.i = i;
         this.init();
+        if(member.id === gv.user.id) this.setColor(new cc.color(220, 230, 247, 255));
     },
     init: function() {
-        var text1 = new cc.LabelBMFont(this.i + ".", 'res/Art/Fonts/soji_20.fnt');
+        var starIcon = new cc.Sprite("res/Art/Bang hoi/sao sao.png");
+        starIcon.attr({
+            x: 35,
+            y: this.height / 2,
+        });
+        this.addChild(starIcon);
+
+        var text1 = new cc.LabelBMFont(this.i.toString(), 'res/Art/Fonts/soji_20.fnt');
         text1.attr({
             x: 35,
             y: this.height / 2,
@@ -20,13 +28,36 @@ var MemberItemList = ccui.Button.extend({
         // });
         // this.addChild(clanIcon);
         
-        var nameText = new cc.LabelBMFont(this.member.name, 'res/Art/Fonts/soji_20.fnt');
+        var nameText = new cc.LabelBMFont(this.member.name, 'res/Art/Fonts/soji_16.fnt');
         nameText.attr({
             x: 90,
-            y: this.height / 2,
+            y: this.height / 2 + 10,
             anchorX: 0,
         });
         this.addChild(nameText);
+
+        var p;
+        switch (this.member.position) {
+            case 0:
+                p = "Thành viên"
+                break;
+            case 1:
+                p = "Bang phó"
+                break;
+            case 2:
+                p = "Bang chủ"
+                break;
+            default:
+                break;
+        }
+        var positionText = new cc.LabelTTF(p, "Calibri", 18);
+        positionText.attr({
+            x: 93,
+            y: this.height / 2 - 10,
+            anchorX: 0,
+            color: new cc.color(142, 8, 8, 255)
+        });
+        this.addChild(positionText);
 
         var donateTroopLabel = new cc.LabelTTF("Lính đã cho", "Calibri", 18);
         donateTroopLabel.attr({

@@ -1,42 +1,50 @@
-var clanMember = [
-    {
-        id: 1,
-        name: "Điêu Linh Vương",
-        donateTroop: 100,
-        requestTroop: 1,
-        troophy: 169,
-    },
-    {
-        id: 1,
-        name: "Duy Tả Sứ",
-        donateTroop: 2,
-        requestTroop: 99,
-        troophy: 8678,
-    },
-    {
-        id: 1,
-        name: "Đoàn Hữu Sứ",
-        donateTroop: 1,
-        requestTroop: 98,
-        troophy: 73,
-    },
-    {
-        id: 1,
-        name: "Thần Điêu Đại Hiệp",
-        donateTroop: 0,
-        requestTroop: 999,
-        troophy: 38,
-    },
-];
+// var clanMember = [
+//     {
+//         id: 1,
+//         name: "Điêu Linh Vương",
+//         donateTroop: 100,
+//         requestTroop: 1,
+//         troophy: 169,
+//     },
+//     {
+//         id: 1,
+//         name: "Duy Tả Sứ",
+//         donateTroop: 2,
+//         requestTroop: 99,
+//         troophy: 8678,
+//     },
+//     {
+//         id: 1,
+//         name: "Đoàn Hữu Sứ",
+//         donateTroop: 1,
+//         requestTroop: 98,
+//         troophy: 73,
+//     },
+//     {
+//         id: 1,
+//         name: "Thần Điêu Đại Hiệp",
+//         donateTroop: 0,
+//         requestTroop: 999,
+//         troophy: 38,
+//     },
+// ];
+var youreBoss = false;
+var youreViceboss = false;
+var myClanMember = myClanMember || [];
+var requestMyClanMember = false; // cờ để bắt xem lấy thông tin clan mình hay clan khác
 
 var ClanMemberTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
         this.init();
+        if (myClanInfo === null && gv.user.is_in_guild) {
+            NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+            requestMyClanMember = true;
+        }
     },
     init: function() {
         this.initListMember();
-        this.pushClanMember();
+        // this.pushClanMember();
     },
     initListMember: function() {
         var scrollView = new ccui.ScrollView();
@@ -57,7 +65,7 @@ var ClanMemberTab = Tab.extend({
     pushClanMember: function() {
         var self = this;
         this.scrollView.removeAllChildren();
-        clanMember.forEach(function(member, i) {
+        myClanMember.forEach(function(member, i) {
             var clanItem = new MemberItemList(member, i + 1);
             var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
             clanItem.attr({
@@ -68,10 +76,31 @@ var ClanMemberTab = Tab.extend({
             self.scrollView.addChild(clanItem);
             self.scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
 
-            clanItem.addClickEventListener(() => self.clickMember(member));
+            clanItem.addClickEventListener((item) => self.clickMember(item, member));
+            if (member.position === 2 && member.id === gv.user.id) youreBoss = true;
+            else if (member.position === 1 && member.id === gv.user.id) youreViceboss = true;
         });
     },
-    clickMember: function(member) {
+    clickMember: function(clanItem, member) {
         cc.log("Click..." + member.name);
+        var listOption;
+        if (youreBoss || youreViceboss) {
+            listOption = ["visit", "kick"];
+        } else {
+            listOption = ["visit"];
+        }
+        if (member.id === gv.user.id) return;
+        var memberMenu = new MemberMenu(listOption, member);
+        this.addChild(memberMenu);
+        memberMenu.attr({
+            x: 500,
+            //y: clanItem.getWorldPosition().y * 315 / this.height - 42,
+            y: clanItem.getWorldPosition().y * 295 / this.height - 20,
+        });
+    },
+    showTab: function() {
+        // gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+        // requestMyClanMember = true;
+        this.setVisible(true);
     }
 });

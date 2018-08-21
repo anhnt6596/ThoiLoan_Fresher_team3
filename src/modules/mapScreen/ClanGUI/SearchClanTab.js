@@ -61,6 +61,8 @@ var listClanInfo = listClanInfo || [
     },
 ];
 
+var clanMember = clanMember || [];
+
 var SearchClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
@@ -152,8 +154,9 @@ var SearchClanTab = Tab.extend({
         scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
         this.addChild(scrollView);
     },
-    pushClanItem: function(scrollView, listClanInfo) {
+    pushClanItem: function() {
         var self = this;
+        scrollView = this.scrollView;
         scrollView.removeAllChildren();
         listClanInfo.forEach(function(clan, i) {
             var clanItem = new ClanItemList(clan, i + 1);
@@ -179,17 +182,18 @@ var SearchClanTab = Tab.extend({
     },
     searchAction: function() {
         var searchText = this.textField.getString();
-        var searchType = 0;
-        if (this.checkBoxSearchByName.isSelected()) searchType = 0;
-        else if (this.checkBoxSearchByCode.isSelected()) searchType = 1;
+        var searchType = 1;
+        if (this.checkBoxSearchByName.isSelected()) searchType = 1;
+        else if (this.checkBoxSearchByCode.isSelected()) searchType = 0;
 
         cc.log("Searching... " + searchText + "Search type: " + searchType);
 
         this.closeClanInfo();
         this.closeMemberScrollView();
 
-        this.pushClanItem(this.scrollView, listClanInfo);
-        listClanInfo.pop();
+        NETWORK.searchGuildInfo({ type: searchType, text: searchText });
+        // this.pushClanItem();
+        // listClanInfo.pop();
     },
     openClanInfo: function(clan) {
         this.closeClanInfo();
@@ -250,7 +254,8 @@ var SearchClanTab = Tab.extend({
         memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
         this.addChild(memberScrollView);
         
-        this.pushMemberItem();
+        NETWORK.getGuildListMemberInfo(clanId);
+        // this.pushMemberItem(); // chuyển vào chạy trong network khi bắt đc danh sách
     },
     pushMemberItem: function() {
         var self = this;
