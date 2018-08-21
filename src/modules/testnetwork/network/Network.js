@@ -182,7 +182,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    this.finishTimeTroopTrain(temp.trainedBarrackId, temp.trainedTroopType);
+                    this.finishTimeTroopTrain(packet.idBarrack, packet.troopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_finish_time_train_troop');
@@ -658,7 +658,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeTrainTroop);
         pk.pack(idBarrack, typeTroop, remainTroop);
         this.gameClient.sendPacket(pk);
-        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
+        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================:  ' + idBarrack);
     },
 
     sendQuickFinishTrainTroop: function(idBarrack) {

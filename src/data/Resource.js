@@ -758,8 +758,11 @@ var research_constant = {
     used_open : false
 };
 
+//type Response
 var RESPONSE_VALIDATE = 1;
 var RESPONSE_TO_ALL = 2;
+
+//type message
 var MESSAGE_NORMAL = 1;
 var MESSAGE_ASK_TROOP = 2;
 
