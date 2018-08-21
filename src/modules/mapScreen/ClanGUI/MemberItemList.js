@@ -4,6 +4,7 @@ var MemberItemList = ccui.Button.extend({
         this.member = member;
         this.i = i;
         this.init();
+        if(member.id === gv.user.id) this.setColor(new cc.color(220, 230, 247, 255));
     },
     init: function() {
         var text1 = new cc.LabelBMFont(this.i + ".", 'res/Art/Fonts/soji_20.fnt');

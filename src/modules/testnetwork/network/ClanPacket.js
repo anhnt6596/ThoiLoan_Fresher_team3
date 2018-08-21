@@ -15,6 +15,26 @@ gv.CMD.GET_GUILD_LISTMEMBER_INFO = 5010;
 
 testnetwork = testnetwork||{};
 
+CmdSearchGuildInfo = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.SEARCH_GUILD_INFO);
+        },
+        pack:function(data){  //type = 0 : search theo id
+                                        //type = 1: search theo name
+            this.packHeader();
+
+            this.putShort(data.type);
+            this.putString(data.text);
+            
+            this.updateSize();
+        }
+    }
+);
+
 CmdGetGuildListMemberInfo = fr.OutPacket.extend(
     {
         ctor:function()
@@ -22,7 +42,6 @@ CmdGetGuildListMemberInfo = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.GET_GUILD_LISTMEMBER_INFO);
-            cc.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
         },
         pack:function(id){
             this.packHeader();
@@ -227,6 +246,32 @@ testnetwork.packetMap[gv.CMD.GET_GUILD_LISTMEMBER_INFO] = fr.InPacket.extend(
                 var position = this.getShort();
                 var troophy = this.getInt();
                 this.listUser.push({ id, name, donateTroop, requestTroop, position, troophy });
+            }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.SEARCH_GUILD_INFO] = fr.InPacket.extend(
+    {
+        ctor: function()
+        {
+            this._super();
+        },
+        readData: function(){
+            this.listClan = [];
+            this.length = this.getInt();
+            for(var i=0; i<this.length; i++){
+                var clan = {
+                    id: this.getInt(),
+                    name: this.getString(),
+                    iconType: this.getInt(),
+                    status: this.getShort(),
+                    level: this.getInt(),
+                    member: this.getInt(),
+                    troophy: this.getInt(),
+                    troophyRequire: this.getInt(),
+                };
+            this.listClan.push(clan);
             }
         }
     }

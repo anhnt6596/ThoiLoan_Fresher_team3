@@ -36,8 +36,10 @@ var ClanMemberTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
         this.init();
-        myClanInfo === null && gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
-        requestMyClanMember = true;
+        if (myClanInfo === null && gv.user.is_in_guild) {
+            NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+            requestMyClanMember = true;
+        }
     },
     init: function() {
         this.initListMember();

@@ -212,7 +212,14 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_GUILD_LISTMEMBER_INFO:
                 this.processGetListMemberClan(packet);
                 break;
+            case gv.CMD.SEARCH_GUILD_INFO:
+                this.processSearchClan(packet);
+                break;
         }
+    },
+    processSearchClan: function(data) {
+        listClanInfo = data.listClan;
+        CLAN_GUI.TAB3.pushClanItem();
     },
     processGetListMemberClan: function(data) {
         if (requestMyClanMember) {
@@ -790,5 +797,13 @@ testnetwork.Connector = cc.Class.extend({
         
         this.gameClient.sendPacket(pk);
         cc.log('=======================================GetGuildListMemberInfo==========================================');
+    },
+    searchGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSearchGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SearchGuildInfo==========================================');
     },
 });

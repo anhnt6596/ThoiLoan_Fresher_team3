@@ -92,7 +92,7 @@ var ClanInfo = cc.Sprite.extend({
         });
         infoTable.addChild(memberText);
 
-        var t = clanInfo.status === 1 ? "Mở" : "Đóng";
+        var t = clanInfo.status === 1 ? "Đóng" : "Mở";
         var statusText = new cc.LabelTTF(t, "Calibri", 16);
         statusText.attr({
             x: 180,
