@@ -22,10 +22,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ScreenNetwork.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ScreenNetwork.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/testnetwork/ScreenNetwork.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-0.52397263">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClanPacket.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ClanPacket.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.5530822">
-              <caret line="106" column="37" selection-start-line="106" selection-start-column="37" selection-end-line="106" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="87" column="33" selection-start-line="87" selection-start-column="33" selection-end-line="87" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -74,8 +74,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="817" />
-    <option name="y" value="178" />
+    <option name="x" value="464" />
+    <option name="y" value="208" />
     <option name="width" value="1179" />
     <option name="height" value="744" />
   </component>
@@ -283,15 +283,15 @@
       <option name="number" value="Default" />
       <updated>1531651079715</updated>
       <workItem from="1531651081000" duration="159000" />
-      <workItem from="1534737440260" duration="4078000" />
+      <workItem from="1534737440260" duration="4563000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4237000" />
+    <option name="totallyTimeSpent" value="4722000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="817" y="178" width="1179" height="744" extended-state="0" />
+    <frame x="464" y="208" width="1179" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -329,14 +329,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modules/testnetwork/ScreenNetwork.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/Packet.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="11.931034">
@@ -347,8 +339,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5530822">
-          <caret line="106" column="37" selection-start-line="106" selection-start-column="37" selection-end-line="106" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="87" column="33" selection-start-line="87" selection-start-column="33" selection-end-line="87" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/testnetwork/ScreenNetwork.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.52397263">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -16,29 +16,6 @@ gv.CMD.SET_GUILD_MEMBER = 5011;
 
 testnetwork = testnetwork||{};
 
-CmdSendCreateGuild = fr.OutPacket.extend(
-    {
-
-        ctor:function()
-        {
-            this._super();
-            this.initData(100);
-            this.setCmdId(gv.CMD.CREATE_GUILD);
-        },
-        pack:function(name, logo_id, status, require_danh_vong, description){
-            this.packHeader();
-            
-            this.putString(name);
-            this.putInt(logo_id);
-            this.putShort(status);
-            this.putInt(require_danh_vong);
-            this.putString(description);
-
-            this.updateSize();
-        }
-    }
-);
-
 CmdSendAddMember = fr.OutPacket.extend(
     {
         ctor:function()
@@ -56,17 +33,17 @@ CmdSendAddMember = fr.OutPacket.extend(
         }
     }
 );
-CmdSendGetGuildInfo = fr.OutPacket.extend(
+CmdDenyRequestMember = fr.OutPacket.extend(
     {
         ctor:function()
         {
             this._super();
             this.initData(100);
-            this.setCmdId(gv.CMD.GET_GUILD_INFO);
+            this.setCmdId(gv.CMD.ADD_MEMBER);
         },
         pack:function(id){
             this.packHeader();
-            //id_guild
+
             this.putInt(id);
 
             this.updateSize();
@@ -95,20 +72,28 @@ CmdSendEditGuildInfo = fr.OutPacket.extend(
         }
     }
 );
-
-
-testnetwork.packetMap[gv.CMD.CREATE_GUILD] = fr.InPacket.extend(
+CmdSearchGuildInfo = fr.OutPacket.extend(
     {
         ctor:function()
         {
             this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.SEARCH_GUILD_INFO);
         },
-        readData:function(){
-            this.validate  = this.getShort();
-            //Neu server tra ve false thi phai gui lai get BarrackQueueInfo
+        pack:function(type, id, name){  //type = 0 : search theo id
+                                        //type = 1: search theo name
+            this.packHeader();
+
+            this.putShort(type);
+            this.putInt(id);
+            this.putString(name);
+            
+            this.updateSize();
         }
     }
 );
+
+
 testnetwork.packetMap[gv.CMD.ADD_MEMBER] = fr.InPacket.extend(
     {
         ctor:function()
@@ -127,22 +112,6 @@ testnetwork.packetMap[gv.CMD.ADD_MEMBER] = fr.InPacket.extend(
         }
     }
 );
-testnetwork.packetMap[gv.CMD.GET_GUILD_INFO] = fr.InPacket.extend(
-    {
-        ctor:function()
-        {
-            this._super();
-        },
-        readData:function(){
-            this.id  = this.getInt();
-            this.name = this.getString();
-            this.status = this.getShort();
-            this.level  = this.getInt();
-            this.troophy  = this.getInt();
-            this.troophyRequire  = this.getInt();
-        }
-    }
-);
 
 testnetwork.packetMap[gv.CMD.EDIT_GUILD_INFO] = fr.InPacket.extend(
     {
@@ -153,6 +122,33 @@ testnetwork.packetMap[gv.CMD.EDIT_GUILD_INFO] = fr.InPacket.extend(
         readData: function(){
             
             this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.SEARCH_GUILD_INFO] = fr.InPacket.extend(
+    {
+        ctor: function()
+        {
+            this._super();
+        },
+        readData: function(){
+            this.listSearchClanInfo = listSearchClanInfo || null;
+            this.validate  = this.getShort();
+            this.number_of_guild = this.getInt();
+            for(var i=0; i<this.number_of_guild; i++){
+                var guild = {
+                    id: this.getInt(),
+                    name: this.getString(),
+                    iconType: this.getInt(),
+                    status: this.getShort(),
+                    level: this.getInt(),
+                    member: this.getInt(),
+                    troophy: this.getInt(),
+                    troophyRequire: this.getInt(),
+                };
+            this.listSearchClanInfo.push(guild);
+            }
         }
     }
 );
