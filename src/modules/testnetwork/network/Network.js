@@ -215,6 +215,31 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.SEARCH_GUILD_INFO:
                 this.processSearchClan(packet);
                 break;
+            case gv.CMD.ADD_REQUEST_MEMBER:
+                this.processAddRequestMember(packet);
+                break;
+            case gv.CMD.EDIT_GUILD_INFO:
+                this.processEditGuildInfo(packet);
+                break;
+        }
+    },
+    processEditGuildInfo: function(data) {
+        if (data.validate) {
+            myClanInfo = extend(myClanInfo, temp.editGuildData);
+            CLAN_GUI.TAB1.initClanInfo();
+        }
+    },
+    processAddRequestMember: function(data) {
+        if (data.validate) {
+            gv.user.is_in_guild = true;
+            gv.user.id_guild = temp.reqJoinClanId;
+            
+            CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+            CLAN_GUI.initHeader(1);
+
+            requestMyClanMember = true;
+            this.sendGetGuildInfo(temp.reqJoinClanId);
+            this.getGuildListMemberInfo(temp.reqJoinClanId);
         }
     },
     processSearchClan: function(data) {
@@ -805,5 +830,13 @@ testnetwork.Connector = cc.Class.extend({
         
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SearchGuildInfo==========================================');
+    },
+    sendEditGuildInfo: function(data) {
+        cc.log("NETWORK ID " + data);
+        var pk = this.gameClient.getOutPacket(CmdSendEditGuildInfo);
+        pk.pack(data);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SendEditGuildInfo==========================================');
     },
 });

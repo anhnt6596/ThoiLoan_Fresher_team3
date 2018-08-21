@@ -138,15 +138,15 @@ CmdSendEditGuildInfo = fr.OutPacket.extend(
             this.initData(100);
             this.setCmdId(gv.CMD.EDIT_GUILD_INFO);
         },
-        pack:function(id, name, logo_id, status, require_danh_vong, description){
+        pack:function(data){
             this.packHeader();
 
-            this.putInt(id);
-            this.putString(name);
-            this.putInt(logo_id);
-            this.putShort(status);
-            this.putInt(require_danh_vong);
-            this.putString(description);
+            this.putInt(data.id);
+            this.putString(data.name);
+            this.putInt(data.iconType);
+            this.putShort(data.status);
+            this.putInt(data.requireTroophy);
+            this.putString(data.description);
 
             this.updateSize();
         }
@@ -273,6 +273,18 @@ testnetwork.packetMap[gv.CMD.SEARCH_GUILD_INFO] = fr.InPacket.extend(
                 };
             this.listClan.push(clan);
             }
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
+    {
+        ctor: function()
+        {
+            this._super();
+        },
+        readData: function(){
+            this.validate = this.getShort();
         }
     }
 );
