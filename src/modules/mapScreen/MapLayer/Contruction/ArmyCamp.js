@@ -62,5 +62,5 @@ var ArmyCamp = Building.extend({
 
     updateArmyCampCapacity: function() {
         temp.pauseOverCapacityFlag = false;
-    },
+    }
 });

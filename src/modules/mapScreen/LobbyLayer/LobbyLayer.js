@@ -96,6 +96,7 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onInteractiveGuild: function() {
+        var size = cc.winSize;
         var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
         bg.setAnchorPoint(0, 0);
         bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
@@ -106,6 +107,15 @@ var LobbyLayer = cc.Layer.extend({
         var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
         layer.setAnchorPoint(0, 0);
         bg.addChild(layer);
+
+
+        var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        textField.setPosition(textField.width/2, size.height - textField.height/2);
+        textField.setPlaceHolder("  uuid");
+        this.getParent().addChild(textField, 1111, 21);
+
+        var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
+        this.getParent().addChild(btnSend, 1111, 22);
 
 
         var messageScrollView = this.createMessageScroll();
@@ -125,6 +135,8 @@ var LobbyLayer = cc.Layer.extend({
         this.getParent().removeChildByTag(18);
         this.getParent().removeChildByTag(19);
         this.getParent().removeChildByTag(20);
+        this.getParent().removeChildByTag(21);
+        this.getParent().removeChildByTag(22);
     },
 
     createMessageScroll: function() {
