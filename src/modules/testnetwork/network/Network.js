@@ -182,7 +182,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    this.finishTimeTroopTrain(packet.idBarrack, packet.troopType);
+                    this.finishTimeTroopTrain(temp.trainedBarrackId, temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_finish_time_train_troop');
@@ -358,7 +358,7 @@ testnetwork.Connector = cc.Class.extend({
                 troophyRequire: data.troophyRequire,
                 description: data.description,
             };
-            CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+            // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
             CLAN_GUI.initHeader(1);
             CLAN_GUI.TAB1.initClanInfo();
             this.getGuildListMemberInfo(data.id);
@@ -826,7 +826,7 @@ testnetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendFinishTimeTrainTroop);
         pk.pack(idBarrack, typeTroop, remainTroop);
         this.gameClient.sendPacket(pk);
-        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================:  ' + idBarrack);
+        cc.log('=======================================SEND FINISH TIME TRAIN TROOP==========================================');
     },
 
     sendQuickFinishTrainTroop: function(idBarrack) {
@@ -910,5 +910,12 @@ testnetwork.Connector = cc.Class.extend({
         
         this.gameClient.sendPacket(pk);
         cc.log('=======================================sendRemoveMember==========================================');
+    },
+    sendSetGuildMemberPosition: function(id, position) {
+        var pk = this.gameClient.getOutPacket(CmdSetGuildMemberPosition);
+        pk.pack(id, position);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================sendSetGuildMemberPosition==========================================');
     },
 });
