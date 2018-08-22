@@ -55,8 +55,15 @@ var MemberMenu = ccui.Button.extend({
                         y: self.height - i * 50 - 60,
                     });
                     break;
-                case "promotion":
-                    var promotionBtn = self.addPromotionBtn();
+                case "promotion1":
+                    var promotionBtn = self.addPromotion1Btn();
+                    promotionBtn.attr({
+                        x: self.width / 2 + 10,
+                        y: self.height - i * 50 - 60,
+                    });
+                    break;
+                case "promotion2":
+                    var promotionBtn = self.addPromotion2Btn();
                     promotionBtn.attr({
                         x: self.width / 2 + 10,
                         y: self.height - i * 50 - 60,
@@ -65,6 +72,13 @@ var MemberMenu = ccui.Button.extend({
                 case "add_friend":
                     var friendBtn = self.addFriendBtn();
                     friendBtn.attr({
+                        x: self.width / 2 + 10,
+                        y: self.height - i * 50 - 60,
+                    });
+                    break;
+                case "demotion":
+                    var demotionBtn = self.addDemoteBtn();
+                    demotionBtn.attr({
                         x: self.width / 2 + 10,
                         y: self.height - i * 50 - 60,
                     });
@@ -85,9 +99,16 @@ var MemberMenu = ccui.Button.extend({
         this.addChild(visitBtn);
         return visitBtn;
     },
-    addPromotionBtn: function() {
-        var promotionBtn = ui.optionButton("Thăng chức", res.clan.bubbleButton);
+    addPromotion1Btn: function() {
+        var promotionBtn = ui.optionButton("Thăng lên\n Bang Phó", res.clan.bubbleButton);
         this.addChild(promotionBtn);
+        promotionBtn.addClickEventListener(this.promoteAction1.bind(this));
+        return promotionBtn;
+    },
+    addPromotion2Btn: function() {
+        var promotionBtn = ui.optionButton("Thăng lên\n Bang Chủ", res.clan.bubbleButton);
+        this.addChild(promotionBtn);
+        promotionBtn.addClickEventListener(this.promoteAction2.bind(this));
         return promotionBtn;
     },
     addFriendBtn: function() {
@@ -95,9 +116,27 @@ var MemberMenu = ccui.Button.extend({
         this.addChild(friendBtn);
         return friendBtn;
     },
+    addDemoteBtn: function() {
+        var demotionBtn = ui.optionButton("Giáng cấp", res.clan.bubbleButton);
+        this.addChild(demotionBtn);
+        promotionBtn.addClickEventListener(this.demoteAction.bind(this));
+        return demotionBtn;
+    },
     kickAction: function() {
         cc.log("kick user ten là " + this.member.name + " id la " + this.member.id);
         NETWORK.sendRemoveMember(this.member.id);
+        this.getParent().removeChild(this);
+    },
+    promoteAction1: function() {
+        NETWORK.sendSetGuildMemberPosition(this.member.id, 1);
+        this.getParent().removeChild(this);
+    },
+    promoteAction2: function() {
+        NETWORK.sendSetGuildMemberPosition(this.member.id, 2);
+        this.getParent().removeChild(this);
+    },
+    demoteAction: function() {
+        NETWORK.sendSetGuildMemberPosition(this.member.id, 0);
         this.getParent().removeChild(this);
     },
     addEventListener: function() {

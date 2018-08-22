@@ -15,6 +15,24 @@ gv.CMD.GET_GUILD_LISTMEMBER_INFO = 5010;
 
 testnetwork = testnetwork||{};
 
+CmdSetGuildMemberPosition = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.SET_GUILD_POSITION);
+        },
+        pack:function(id, position){
+            this.packHeader();
+
+            this.putInt(id);
+            this.putShort(position);
+            this.updateSize();
+        }
+    }
+);
+
 CmdRemoveMember = fr.OutPacket.extend(
     {
         ctor:function()
