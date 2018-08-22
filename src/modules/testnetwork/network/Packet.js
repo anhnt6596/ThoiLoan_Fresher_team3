@@ -1018,9 +1018,13 @@ testnetwork.packetMap[gv.CMD.NEW_MESSAGE] = fr.InPacket.extend(
                 this.validateValue = this.getShort();
             }else if(this.typeResponse == RESPONSE_TO_ALL){
                 this.messageType = this.getShort();
+                cc.log("Loai message: " + this.messageType);
                 this.idUserSend = this.getInt();
+                cc.log("Id sender: " + this.idUserSend);
                 this.usernameSend = this.getString();
+                cc.log("Username sender: " + this.usernameSend);
                 this.contentMessage = this.getString();
+                cc.log("Content Message: " + this.contentMessage);
             }
         }
     }
@@ -1047,6 +1051,7 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
 
 var troopGuildList = [];
 var messageList = [];
+var memberListOnline = [];
 
 testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
     {
@@ -1056,22 +1061,62 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
         },
         readData:function(){
             this.lastRequestTroopTimeStamp = this.getLong();
+            cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
+
             this.sizeTroopGuildList = this.getInt();
+            cc.log("=============== Troop Guild List Size: " + this.sizeTroopGuildList);
 
             for(var i = 0; i < this.sizeTroopGuildList; i++) {
+                cc.log("=============== Troop thu " + (i+1));
                 this.typeTroop = this.getString();
+                cc.log("=============== Type Troop: " + this.typeTroop);
                 troopGuildList[this.typeTroop] = {};
                 this.levelTroop = this.getShort();
+                cc.log("=============== Level Troop: " + this.levelTroop);
+
                 troopGuildList[this.typeTroop].level = this.levelTroop;
             }
 
             this.sizeMessageList = this.getInt();
+            cc.log("=============== Message List Size: " + this.sizeMessageList);
+
             for(var j = 0; j < this.sizeMessageList; j++) {
+                cc.log("=============== Message thu " + (j+1));
                 this.typeMessage = this.getShort();
+                cc.log("=============== Type Message: " + this.typeMessage);
                 this.id_user = this.getInt();
+                cc.log("=============== User ID send: " + this.id_user);
+
+                this.usernameSend = this.getString();
+                cc.log("=============== Username Sender: " + this.usernameSend);
+
                 this.content = this.getString();
+                cc.log("=============== Message Content: " + this.content);
+
                 this.timeStamp = this.getLong();
-                messageList[j] = {typeMessage: this.typeMessage, userId: this.id_user, content: this.content, timeStamp: this.timeStamp};
+                cc.log("=============== Message timeStamp: " + this.timeStamp);
+
+                messageList[j] = {typeMessage: this.typeMessage, userId: this.id_user, usernameSend: this.usernameSend, content: this.content, timeStamp: this.timeStamp};
+            }
+
+
+
+            this.sizeMemberList = this.getInt();
+            cc.log("=============== Message List Size: " + this.sizeMemberList);
+
+            for(var k = 0; k < this.sizeMemberList; k++) {
+                cc.log("=============== Member thu " + (k+1));
+                this.idUser = this.getInt();
+                cc.log("=============== User ID: " + this.idUser);
+
+                this.username = this.getString();
+                cc.log("=============== Username: " + this.username);
+
+                this.valueOnline = this.getShort();
+                cc.log("=============== Value online: " + this.valueOnline);
+
+                memberListOnline[k] = {idUser: this.idUser, username: this.username, valueOnline: this.valueOnline};
+
             }
         }
     }

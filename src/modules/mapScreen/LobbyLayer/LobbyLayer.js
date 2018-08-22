@@ -96,38 +96,59 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onInteractiveGuild: function() {
-        var size = cc.winSize;
-        var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
-        bg.setAnchorPoint(0, 0);
-        bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
-        bg.setColor(cc.color(0,255,0,255));
-        bg.setZoomScale(0);
-        this.getParent().addChild(bg, 20, 17);
+        if(!temp.getListMessageFirst){
+            temp.getListMessageFirst = true;
+            NETWORK.sendGetInteractionGuild();
+        }else{
+            var size = cc.winSize;
+            var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
+            bg.setAnchorPoint(0, 0);
+            bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
+            bg.setColor(cc.color(0,255,0,255));
+            bg.setZoomScale(0);
+            this.getParent().addChild(bg, 20, 17);
 
-        var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
-        layer.setAnchorPoint(0, 0);
-        bg.addChild(layer);
-
-
-        var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-        textField.setPosition(textField.width/2, size.height - textField.height/2);
-        textField.setPlaceHolder("  uuid");
-        this.getParent().addChild(textField, 1111, 21);
-
-        var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
-        this.getParent().addChild(btnSend, 1111, 22);
+            var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
+            layer.setAnchorPoint(0, 0);
+            bg.addChild(layer);
 
 
-        var messageScrollView = this.createMessageScroll();
-        this.getParent().addChild(messageScrollView, 100, 19);
+            var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+            textField.setPosition(textField.width/2, size.height - textField.height/2);
+            //textField.setPlaceHolder("  Enter your message");
+            this.textField = textField;
+            this.getParent().addChild(textField, 1111, 21);
 
-        var memberScrollView = this.createMemberScroll();
-        this.getParent().addChild(memberScrollView, 101, 20);
+            var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
+            btnSend.addClickEventListener(this.sendMessage.bind(this));
+            this.getParent().addChild(btnSend, 1111, 22);
 
-        var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
-        prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
-        this.getParent().addChild(prevBtn, 21, 18);
+
+            var messageScrollView = this.createMessageScroll();
+            this.getParent().addChild(messageScrollView, 100, 19);
+
+            var memberScrollView = this.createMemberScroll();
+            this.getParent().addChild(memberScrollView, 101, 20);
+
+            var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+            prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
+            prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
+            this.getParent().addChild(prevBtn, 21, 18);
+        }
+
+
+    },
+
+    sendMessage: function() {
+        var content = this.textField.getString();
+        content = content.trim();
+        cc.log(content);
+        if(temp.enableSendMessageFlag){
+            temp.enableSendMessageFlag = false;
+            temp.messageContent = content;
+            temp.messageType = MESSAGE_NORMAL;
+            NETWORK.sendNewMessage(MESSAGE_NORMAL, content);
+        }
     },
 
     onCloseInteractiveGuild: function() {
@@ -143,37 +164,48 @@ var LobbyLayer = cc.Layer.extend({
         var scrollView = new ccui.ScrollView();
         scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
         scrollView.setTouchEnabled(true);
-        scrollView.setContentSize(cc.size(cc.winSize.width*2/5, cc.winSize.height));
+        scrollView.setContentSize(cc.size(cc.winSize.width*2/5, cc.winSize.height - 70));
         scrollView.setBounceEnabled(true);
         scrollView.setPosition(0, 0);
         //scrollView.setPropagateTouchEvents(false);
 
 
-        for(var i = 0; i < 30; i++){
+        for(var i = 1; i <= messageList.length; i++){
+            var item = messageList[i-1];
+
             var nodeContainer = new ccui.Widget();
             nodeContainer.setPosition(0, 0);
             scrollView.addChild(nodeContainer);
 
-            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/soji_20.fnt');
-            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/fista_20_non.fnt');
-            var amountLabel = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafki ' + i, 'res/Art/Fonts/fista_20_non.fnt');
-            amountLabel.setAnchorPoint(0, 0);
-            amountLabel.setPosition(10, 100*i + 10);
-            nodeContainer.addNode(amountLabel);
+            var content = new cc.LabelBMFont(item.content, 'res/Art/Fonts/fista_20_non.fnt');
+            content.setAnchorPoint(0, 0);
+            content.setPosition(10, 150*i - 80);
+            content.color = cc.color(0, 255, 0, 255);
+            nodeContainer.addNode(content);
 
 
-            var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
-            btn.setAnchorPoint(0, 0);
-            btn.setPosition(50, amountLabel.y - btn.height - 5);
-            nodeContainer.addNode(btn);
+            var sender = new cc.LabelBMFont(item.usernameSend, 'res/Art/Fonts/fista_20_non.fnt');
+            sender.setAnchorPoint(0, 0);
+            sender.setPosition(content.x, content.y + 30);
+            nodeContainer.addNode(sender);
 
-            //scrollView.addChild(amountLabel);
+
+            var timeStamp = new cc.LabelBMFont(timeToReadable((getCurrentServerTime() - item.timeStamp) / 1000) + " before", 'res/Art/Fonts/fista_20_non.fnt');
+            timeStamp.setAnchorPoint(0, 0);
+            timeStamp.setPosition(scrollView.width - timeStamp.width/2 - 80, sender.y);
+            nodeContainer.addNode(timeStamp);
+
+            if(item.typeMessage == MESSAGE_ASK_TROOP) {
+                var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
+                btn.setAnchorPoint(0, 0);
+                btn.setPosition(50, content.y - btn.height - 5);
+                nodeContainer.addNode(btn);
+            }
         }
 
-        scrollView.setInnerContainerSize(cc.size(scrollView.width, 30 * 100));
+
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, messageList.length * 150 + 10));
         return scrollView;
-
-
     },
 
     createMemberScroll: function() {
@@ -185,14 +217,30 @@ var LobbyLayer = cc.Layer.extend({
         scrollView.setPosition(cc.winSize.width*2/5, 0);
         //scrollView.setPropagateTouchEvents(false);
 
-        for(var i = 0; i < 20; i++){
-            var amountLabel = new cc.LabelBMFont('Member thu ' + i, 'res/Art/Fonts/soji_12.fnt');
+        for(var i = 1; i <= memberListOnline.length; i++){
+            var item = memberListOnline[i-1];
+
+            var amountLabel = new cc.LabelBMFont(item.username, 'res/Art/Fonts/soji_20.fnt');
             amountLabel.setAnchorPoint(0, 0);
             amountLabel.setPosition(10, 50*i + 10);
             scrollView.addChild(amountLabel);
+
+            var btnOnline;
+            if(item.valueOnline == ONLINE){
+                btnOnline = new ccui.Button('res/Art/Bang hoi/Untitled-1.pngsdva.png', 'res/Art/Bang hoi/Untitled-1.pngsdva.png');
+
+            }else if(item.valueOnline == OFFLINE){
+                btnOnline = new ccui.Button('res/Art/Bang hoi/Untitled-1.pngsdva.png', 'res/Art/Bang hoi/Untitled-1.pngsdva.png');
+                btnOnline.color = cc.color(255, 0, 0, 255);
+            }
+
+            btnOnline.setAnchorPoint(0, 0);
+            btnOnline.setPosition(cc.winSize.width/5 - 50, amountLabel.y);
+            scrollView.addChild(btnOnline, 12000);
         }
 
-        scrollView.setInnerContainerSize(cc.size(scrollView.width, 20 * 50));
+
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, memberListOnline.length * 50));
         return scrollView;
     },
 

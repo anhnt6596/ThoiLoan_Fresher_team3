@@ -779,6 +779,10 @@ var RESPONSE_TO_ALL = 2;
 var MESSAGE_NORMAL = 1;
 var MESSAGE_ASK_TROOP = 2;
 
+//type member
+var ONLINE = 1;
+var OFFLINE = 2;
+
 var MAX_MESSAGES_QUEUE = 100;
 var MAX_TROOP_AMOUNT_USER_CAN_GIVE = 5;
 var TIME_REQUEST_TROOP = 1200;              //second
