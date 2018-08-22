@@ -22,16 +22,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ResearchPopup.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ResearchPopup.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/mapScreen/PopUp/ResearchPopup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8458904">
+            <state vertical-scroll-proportion="0.0">
               <caret line="288" column="18" selection-start-line="288" selection-start-column="18" selection-end-line="288" selection-end-column="18" />
               <folding>
                 <element signature="e#4171#9349#0" expanded="false" />
                 <element signature="e#9386#10362#0" expanded="false" />
                 <element signature="e#21423#23100#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Network.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/Network.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.59246576">
+              <caret line="863" column="43" selection-start-line="863" selection-start-column="41" selection-end-line="863" selection-end-column="43" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MemberMenu.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/mapScreen/ClanGUI/MemberMenu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="74" column="40" selection-start-line="74" selection-start-column="40" selection-end-line="74" selection-end-column="40" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
+              <caret line="17" column="25" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -89,8 +109,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="464" />
-    <option name="y" value="208" />
+    <option name="x" value="223" />
+    <option name="y" value="145" />
     <option name="width" value="1179" />
     <option name="height" value="744" />
   </component>
@@ -242,6 +262,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mapScreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ClanGUI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -369,15 +411,15 @@
       <option name="number" value="Default" />
       <updated>1531651079715</updated>
       <workItem from="1531651081000" duration="159000" />
-      <workItem from="1534737440260" duration="6448000" />
+      <workItem from="1534737440260" duration="7194000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6607000" />
+    <option name="totallyTimeSpent" value="7353000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="464" y="208" width="1179" height="744" extended-state="0" />
+    <frame x="223" y="145" width="1179" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -431,14 +473,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/testnetwork/ScreenNetwork.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -449,13 +483,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/mapScreen/PopUp/ResearchPopup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8458904">
+        <state vertical-scroll-proportion="0.0">
           <caret line="288" column="18" selection-start-line="288" selection-start-column="18" selection-end-line="288" selection-end-column="18" />
           <folding>
             <element signature="e#4171#9349#0" expanded="false" />
             <element signature="e#9386#10362#0" expanded="false" />
             <element signature="e#21423#23100#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/mapScreen/ClanGUI/MemberMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="74" column="40" selection-start-line="74" selection-start-column="40" selection-end-line="74" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="25" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/Network.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.59246576">
+          <caret line="863" column="43" selection-start-line="863" selection-start-column="41" selection-end-line="863" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
