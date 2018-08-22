@@ -15,6 +15,24 @@ gv.CMD.GET_GUILD_LISTMEMBER_INFO = 5010;
 
 testnetwork = testnetwork||{};
 
+CmdRemoveMember = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.REMOVE_MEMBER);
+        },
+        pack:function(id){
+            this.packHeader();
+
+            this.putInt(id);
+
+            this.updateSize();
+        }
+    }
+);
+
 CmdSearchGuildInfo = fr.OutPacket.extend(
     {
         ctor:function()
@@ -178,6 +196,7 @@ testnetwork.packetMap[gv.CMD.CREATE_GUILD] = fr.InPacket.extend(
         }
     }
 );
+
 testnetwork.packetMap[gv.CMD.ADD_MEMBER] = fr.InPacket.extend(
     {
         ctor:function()
@@ -288,3 +307,17 @@ testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
         }
     }
 );
+
+testnetwork.packetMap[gv.CMD.REMOVE_MEMBER] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData: function() {
+        this.validate = this.getShort();
+        cc.log("this.validate" + this.validate);
+        if (this.validate) {
+            this.id = this.getInt();
+            cc.log("this.id" + this.id);
+        }
+    }
+});

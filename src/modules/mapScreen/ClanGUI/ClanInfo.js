@@ -128,7 +128,7 @@ var ClanInfo = cc.Sprite.extend({
     },
     joinAction: function() {
         cc.log("join" + this.clanInfo.id);
-        if (gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
+        if (!gv.user.is_in_guild && gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
         else {
             NETWORK.sendAddRequestMember(this.clanInfo.id);
             temp.reqJoinClanId = this.clanInfo.id;
@@ -136,5 +136,8 @@ var ClanInfo = cc.Sprite.extend({
     },
     outAction: function() {
         cc.log("quit");
+        if (gv.user.is_in_guild  && gv.user.id_guild === this.clanInfo.id) {
+            NETWORK.sendRemoveMember(gv.user.id);
+        }
     },
 });
