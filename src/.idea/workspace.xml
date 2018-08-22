@@ -25,8 +25,8 @@
       <file leaf-file-name="ResearchPopup.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/mapScreen/PopUp/ResearchPopup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.23458904">
-              <caret line="279" column="40" selection-start-line="279" selection-start-column="40" selection-end-line="279" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.8458904">
+              <caret line="288" column="18" selection-start-line="288" selection-start-column="18" selection-end-line="288" selection-end-column="18" />
               <folding>
                 <element signature="e#4171#9349#0" expanded="false" />
                 <element signature="e#9386#10362#0" expanded="false" />
@@ -49,8 +49,8 @@
       <file leaf-file-name="Packet.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/Packet.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="11.931034">
-              <caret line="947" column="0" selection-start-line="947" selection-start-column="0" selection-end-line="958" selection-end-column="2" />
+            <state vertical-scroll-proportion="-3.8965516">
+              <caret line="974" column="0" selection-start-line="974" selection-start-column="0" selection-end-line="974" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -60,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="144" column="33" selection-start-line="144" selection-start-column="33" selection-end-line="144" selection-end-column="33" />
+              <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -369,12 +369,12 @@
       <option name="number" value="Default" />
       <updated>1531651079715</updated>
       <workItem from="1531651081000" duration="159000" />
-      <workItem from="1534737440260" duration="5700000" />
+      <workItem from="1534737440260" duration="6448000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5859000" />
+    <option name="totallyTimeSpent" value="6607000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="464" y="208" width="1179" height="744" extended-state="0" />
@@ -425,8 +425,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/Packet.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="11.931034">
-          <caret line="947" column="0" selection-start-line="947" selection-start-column="0" selection-end-line="958" selection-end-column="2" />
+        <state vertical-scroll-proportion="-3.8965516">
+          <caret line="974" column="0" selection-start-line="974" selection-start-column="0" selection-end-line="974" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -434,7 +434,7 @@
     <entry file="file://$PROJECT_DIR$/modules/testnetwork/network/ClanPacket.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="144" column="33" selection-start-line="144" selection-start-column="33" selection-end-line="144" selection-end-column="33" />
+          <caret line="162" column="33" selection-start-line="162" selection-start-column="33" selection-end-line="162" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -449,8 +449,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/mapScreen/PopUp/ResearchPopup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23458904">
-          <caret line="279" column="40" selection-start-line="279" selection-start-column="40" selection-end-line="279" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.8458904">
+          <caret line="288" column="18" selection-start-line="288" selection-start-column="18" selection-end-line="288" selection-end-column="18" />
           <folding>
             <element signature="e#4171#9349#0" expanded="false" />
             <element signature="e#9386#10362#0" expanded="false" />
