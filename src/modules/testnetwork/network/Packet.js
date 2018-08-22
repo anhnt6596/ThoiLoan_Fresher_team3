@@ -1073,6 +1073,7 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
         },
         readData:function(){
             this.lastRequestTroopTimeStamp = this.getLong();
+            gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
             cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
 
             this.sizeTroopGuildList = this.getInt();

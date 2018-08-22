@@ -657,7 +657,16 @@ testnetwork.Connector = cc.Class.extend({
 
     processNewMessage: function() {
         var message = {typeMessage: temp.messageType, userId: gv.user.id, usernameSend: gv.user.name, content: temp.messageContent, timeStamp: getCurrentServerTime()};
+        if(message.typeMessage == MESSAGE_ASK_TROOP) {
+            gv.user.lastRequestTroopTimeStamp = getCurrentServerTime();
+            for(var i in messageList) {
+                if(messageList[i].userId == message.userId){
+                    messageList.splice(i, 1);
+                }
+            }
+        }
         messageList.push(message);
+
         temp.enableSendMessageFlag = true;
         LOBBY.onCloseInteractiveGuild();
         LOBBY.onInteractiveGuild();

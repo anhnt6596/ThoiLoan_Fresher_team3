@@ -39,7 +39,7 @@ var TinyPopup = cc.Node.extend({
             acceptBtn.addClickEventListener(this.ok.bind(this));
 
             this._btnText = new cc.LabelBMFont("20", 'res/Art/Fonts/soji_20.fnt');
-            this._btnText.setPosition(acceptBtn.x - 10, acceptBtn.y);
+            this._btnText.setPosition(acceptBtn.x, acceptBtn.y);
             this.addChild(this._btnText, 202);
 
             var unitG = new cc.Sprite('res/Art/GUIs/pop_up/G.png');
