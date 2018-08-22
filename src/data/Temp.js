@@ -27,3 +27,13 @@ temp.trainedBarrackId = null;
 temp.trainedTroopType = null;
 //Bao hieu vuot qua capacity: true
 temp.pauseOverCapacityFlag = false;
+
+//Lan gui request message dau tien
+temp.getListMessageFirst = false;
+
+//Flag cho phep gui message
+temp.enableSendMessageFlag = true;
+
+//
+temp.messageContent = null;
+temp.messageType = null;

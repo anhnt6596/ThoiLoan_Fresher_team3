@@ -225,51 +225,18 @@ testnetwork.Connector = cc.Class.extend({
                 if(packet.typeResponse == RESPONSE_VALIDATE){
                     if(packet.validateValue) {
                         cc.log("=======================================XAC NHAN SEND NEW MESSAGE tu SERVER=======================================");
-                        //Xu ly o sender
+                        this.processNewMessage();
                     }else{
                         cc.log("=======================================SERVER TU CHOI SEND NEW MESSAGE=======================================");
                         showPopupNotEnoughG('server_denied_send_new_message');
                     }
                 }else if(packet.typeResponse == RESPONSE_TO_ALL){
-                    //hien thi ra
+                    this.processNewMessageToAll(packet);
                     cc.log("=======================================SERVER PHAN HOI CHO MOI NGUOI=======================================");
                 }
                 break;
             case gv.CMD.GET_INTERACTION_GUILD:
-                var size = cc.winSize;
-                var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
-                bg.setAnchorPoint(0, 0);
-                bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
-                bg.setColor(cc.color(0,255,0,255));
-                bg.setZoomScale(0);
-                LOBBY.getParent().addChild(bg, 20, 17);
-
-                var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
-                layer.setAnchorPoint(0, 0);
-                bg.addChild(layer);
-
-
-                var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-                textField.setPosition(textField.width/2, size.height - textField.height/2);
-                //textField.setPlaceHolder("  Enter your message");
-                LOBBY.textField = textField;
-                LOBBY.getParent().addChild(textField, 1111, 21);
-
-                var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
-                btnSend.addClickEventListener(LOBBY.sendMessage.bind(LOBBY));
-                LOBBY.getParent().addChild(btnSend, 1111, 22);
-
-
-                var messageScrollView = LOBBY.createMessageScroll();
-                LOBBY.getParent().addChild(messageScrollView, 100, 19);
-
-                var memberScrollView = LOBBY.createMemberScroll();
-                LOBBY.getParent().addChild(memberScrollView, 101, 20);
-
-                var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
-                prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-                prevBtn.addClickEventListener(LOBBY.onCloseInteractiveGuild.bind(LOBBY));
-                LOBBY.getParent().addChild(prevBtn, 21, 18);
+                this.processInteractiveGuild();
                 break;
             case gv.CMD.REMOVE_MEMBER:
                 this.processRemoveMember(packet);
@@ -660,6 +627,60 @@ testnetwork.Connector = cc.Class.extend({
         var refundResources = {gold:costItem.gold, elixir:costItem.elixir, darkElixir:costItem.darkElixir, coin:costItem.coin};
         increaseUserResources(refundResources);
     },
+
+
+    processNewMessage: function() {
+        var message = {typeMessage: temp.messageType, userId: gv.user.id, usernameSend: gv.user.name, content: temp.messageContent, timeStamp: getCurrentServerTime()};
+        messageList.push(message);
+        temp.enableSendMessageFlag = true;
+        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild();
+    },
+
+    processNewMessageToAll: function(message) {
+        var newMessage = {typeMessage: message.messageType, userId: message.idUserSend, usernameSend: message.usernameSend, content: message.contentMessage, timeStamp: getCurrentServerTime()};
+        messageList.push(newMessage);
+        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild();
+    },
+
+    processInteractiveGuild: function() {
+        var size = cc.winSize;
+        var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
+        bg.setAnchorPoint(0, 0);
+        bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
+        bg.setColor(cc.color(0,255,0,255));
+        bg.setZoomScale(0);
+        LOBBY.getParent().addChild(bg, 20, 17);
+
+        var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
+        layer.setAnchorPoint(0, 0);
+        bg.addChild(layer);
+
+
+        var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        textField.setPosition(textField.width/2, size.height - textField.height/2);
+        //textField.setPlaceHolder("  Enter your message");
+        LOBBY.textField = textField;
+        LOBBY.getParent().addChild(textField, 1111, 21);
+
+        var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
+        btnSend.addClickEventListener(LOBBY.sendMessage.bind(LOBBY));
+        LOBBY.getParent().addChild(btnSend, 1111, 22);
+
+
+        var messageScrollView = LOBBY.createMessageScroll();
+        LOBBY.getParent().addChild(messageScrollView, 100, 19);
+
+        var memberScrollView = LOBBY.createMemberScroll();
+        LOBBY.getParent().addChild(memberScrollView, 101, 20);
+
+        var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+        prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
+        prevBtn.addClickEventListener(LOBBY.onCloseInteractiveGuild.bind(LOBBY));
+        LOBBY.getParent().addChild(prevBtn, 21, 18);
+    },
+
 
     sendGetUserInfo:function()
     {
