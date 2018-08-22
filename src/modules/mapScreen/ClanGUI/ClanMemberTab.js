@@ -85,9 +85,9 @@ var ClanMemberTab = Tab.extend({
         cc.log("Click..." + member.name);
         var listOption;
         if (youreBoss || youreViceboss) {
-            listOption = ["visit", "kick"];
+            listOption = ["visit", "promotion", "kick", "add_friend"];
         } else {
-            listOption = ["visit"];
+            listOption = ["visit", "add_friend"];
         }
         if (member.id === gv.user.id) return;
         var memberMenu = new MemberMenu(listOption, member);
@@ -99,8 +99,8 @@ var ClanMemberTab = Tab.extend({
         });
     },
     showTab: function() {
-        // gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
-        // requestMyClanMember = true;
+        gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
+        requestMyClanMember = true;
         this.setVisible(true);
     }
 });

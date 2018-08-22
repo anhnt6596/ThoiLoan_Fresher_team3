@@ -277,7 +277,7 @@ var ResearchPopUp = ui.PopUp.extend({
         var scrollView = new ccui.ScrollView();
         scrollView.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
         scrollView.setTouchEnabled(true);
-        scrollView.setBounceEnabled(false);
+        scrollView.setBounceEnabled(true);
         //scrollView.setBackGroundImage('res/Art/GUIs/research troop/mieng_trang.png');
 
         //scrollView.setInnerContainerSize(cc.size(2500,2500));

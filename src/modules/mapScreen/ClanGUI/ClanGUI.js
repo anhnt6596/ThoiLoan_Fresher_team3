@@ -17,7 +17,10 @@ var ClanGUI = ui.PopUp.extend({
         // }, 5000);
     },
     initHeader: function(tabNumber) {
-        // CLAN_GUI_HEADER && this.removeChild(CLAN_GUI_HEADER);
+        if (CLAN_GUI_HEADER) {
+            this.removeChild(CLAN_GUI_HEADER);
+            CLAN_GUI_HEADER = null;
+        }
         var header = new Header(this, tabNumber); // truyền số nào thì tab bắt đầu là theo số đấy. Nếu muốn chuyển tab tự động thì chạy header.selectTabAction(sttTab);
         CLAN_GUI_HEADER = header;
         header.attr({
