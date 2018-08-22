@@ -85,9 +85,11 @@ var ClanMemberTab = Tab.extend({
         cc.log("Click..." + member.name);
         var listOption;
         if (youreBoss) {
-            listOption = ["visit", "promotion1", "promotion2", "kick", "add_friend"];
+            if (member.position == 0) listOption = ["visit", "promotion1", "promotion2", "kick", "add_friend"];
+            else if (member.position == 1) listOption = ["visit", "promotion2", "demotion", "kick", "add_friend"];
         } else if (youreViceboss) {
-            youreViceboss
+            if (member.position == 0) listOption = ["visit", "kick", "add_friend"];
+            else listOption = ["visit", "add_friend"];
         } else {
             listOption = ["visit", "add_friend"];
         }

@@ -861,4 +861,11 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log('=======================================sendRemoveMember==========================================');
     },
+    sendSetGuildMemberPosition: function(id, position) {
+        var pk = this.gameClient.getOutPacket(CmdSetGuildMemberPosition);
+        pk.pack(id, position);
+        
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================sendSetGuildMemberPosition==========================================');
+    },
 });
