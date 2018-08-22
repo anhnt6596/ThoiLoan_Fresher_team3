@@ -325,19 +325,21 @@ var EditClanView = cc.Sprite.extend({
             popUp.openAction(1);
             btn.addClickEventListener(() => {
                 popUp.close();
-                this.checkGReq(g, action);
+                this.checkGReq(g, reqGold, action);
             });
         } else {
             action();
+            reduceUserResources({ gold: reqGold });
         }
     },
-    checkGReq: function(reqG, action) {
+    checkGReq: function(reqG, reqGold, action) {
         if (gv.user.coin < reqG) {
             var popUp = new ui.PopUp("Không đủ coin để xài, vui lòng hack", []);
             MAPSCENE.addChild(popUp, 1000);
             popUp.openAction(0.95);
         } else {
             action();
+            reduceUserResources({ gold: reqGold, coin: reqG });
         }
     },
     checkReqName: function(text) {

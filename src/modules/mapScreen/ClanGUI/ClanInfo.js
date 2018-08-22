@@ -1,8 +1,8 @@
 var ClanInfo = cc.Sprite.extend({
     ctor: function(clanInfo) {
         this._super("res/Art/Bang hoi/NEN NHO _BANG HOI CUA TOI.png");
-        this.init(clanInfo);
         this.clanInfo = clanInfo;
+        this.init(clanInfo);
     },
     init: function(clanInfo) {
         var icon = new cc.Sprite("res/Art/Bang hoi/bieu tuong tren map/" + clanInfo.iconType + ".png");
@@ -117,6 +117,7 @@ var ClanInfo = cc.Sprite.extend({
         });
         this.addChild(joinButton);
         joinButton.addClickEventListener(this.joinAction.bind(this));
+        if (gv.user.is_in_guild) joinButton.setEnabled(false);
 
         var outButton = new ui.optionButton("Rời bang", "res/Art/Bang hoi/button _ tra thu.png");
         outButton.attr({
@@ -125,10 +126,11 @@ var ClanInfo = cc.Sprite.extend({
         });
         this.addChild(outButton);
         outButton.addClickEventListener(this.outAction.bind(this));
+        if (!gv.user.is_in_guild || gv.user.id_guild !== this.clanInfo.id) outButton.setEnabled(false);
     },
     joinAction: function() {
         cc.log("join" + this.clanInfo.id);
-        if (!gv.user.is_in_guild && gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
+        if (gv.user.is_in_guild && gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
         else {
             NETWORK.sendAddRequestMember(this.clanInfo.id);
             temp.reqJoinClanId = this.clanInfo.id;

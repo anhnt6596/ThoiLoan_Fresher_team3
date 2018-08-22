@@ -119,7 +119,7 @@ var MemberMenu = ccui.Button.extend({
     addDemoteBtn: function() {
         var demotionBtn = ui.optionButton("Giáng cấp", res.clan.bubbleButton);
         this.addChild(demotionBtn);
-        promotionBtn.addClickEventListener(this.demoteAction.bind(this));
+        demotionBtn.addClickEventListener(this.demoteAction.bind(this));
         return demotionBtn;
     },
     kickAction: function() {
