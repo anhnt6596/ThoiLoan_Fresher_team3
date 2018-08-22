@@ -339,3 +339,15 @@ testnetwork.packetMap[gv.CMD.REMOVE_MEMBER] = fr.InPacket.extend({
         }
     }
 });
+
+testnetwork.packetMap[gv.CMD.SET_GUILD_POSITION] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData: function() {
+        this.validate = this.getShort();
+        cc.log("this.validate" + this.validate);
+        this.id = this.getInt();
+        this.position = this.getShort();
+    }
+});

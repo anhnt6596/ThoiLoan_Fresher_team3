@@ -15,6 +15,8 @@ gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 gv.CMD.CANCEL_CONSTRUCTION = 2005;
 gv.CMD.REMOVE_OBSTACLE = 2006;
 gv.CMD.DO_HARVEST = 2008;
+gv.CMD.MOVE_MULTI_WALL = 2009;
+gv.CMD.UPGRADE_MULTI_WALL = 2010;
 
 
 gv.CMD.GET_SERVER_TIME = 2100;
@@ -142,6 +144,27 @@ CmdSendMove = fr.OutPacket.extend(
     }
 );
 
+CmdSendMoveMultiWall = fr.OutPacket.extend({
+    ctor:function() {
+        this._super();
+        this.initData(100);
+        this.setCmdId(gv.CMD.MOVE_MULTI_WALL);
+
+    },
+    pack:function(list){
+        this.packHeader();
+        this.putInt(list.length);
+        for (var i = 0; i < list.length; i++) {
+            this.putInt(list[i]._id);
+            this.putInt(list[i]._posX);
+            this.putInt(list[i]._posY);
+        }
+        //this.putInt(22);
+        //this.putInt(27);
+        this.updateSize();
+    }
+});
+
 CmdSendAddConstruction = fr.OutPacket.extend(
     {
         ctor:function()
@@ -171,6 +194,25 @@ CmdSendUpgradeConstruction = fr.OutPacket.extend(
         pack:function(id){
             this.packHeader();
             this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendUpgradeMultiWall = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.UPGRADE_MULTI_WALL);
+        },
+        pack:function(list){
+            this.packHeader();
+            this.putInt(list.length);
+            for (var i = 0; i < list.length; i++) {
+                this.putInt(list[i]._id);
+            }
             this.updateSize();
         }
     }
