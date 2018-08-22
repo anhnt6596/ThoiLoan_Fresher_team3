@@ -766,6 +766,18 @@ testnetwork.packetMap[gv.CMD.CANCEL_CONSTRUCTION] = fr.InPacket.extend(
     }
 );
 
+testnetwork.packetMap[gv.CMD.UPGRADE_MULTI_WALL] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
 testnetwork.packetMap[gv.CMD.REMOVE_OBSTACLE] = fr.InPacket.extend(
     {
         ctor:function()
