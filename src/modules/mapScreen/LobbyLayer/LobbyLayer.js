@@ -96,38 +96,49 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onInteractiveGuild: function() {
-        var size = cc.winSize;
-        var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
-        bg.setAnchorPoint(0, 0);
-        bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
-        bg.setColor(cc.color(0,255,0,255));
-        bg.setZoomScale(0);
-        this.getParent().addChild(bg, 20, 17);
+        NETWORK.sendGetInteractionGuild();
 
-        var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
-        layer.setAnchorPoint(0, 0);
-        bg.addChild(layer);
+        //var size = cc.winSize;
+        //var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
+        //bg.setAnchorPoint(0, 0);
+        //bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
+        //bg.setColor(cc.color(0,255,0,255));
+        //bg.setZoomScale(0);
+        //this.getParent().addChild(bg, 20, 17);
+        //
+        //var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
+        //layer.setAnchorPoint(0, 0);
+        //bg.addChild(layer);
+        //
+        //
+        //var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        //textField.setPosition(textField.width/2, size.height - textField.height/2);
+        ////textField.setPlaceHolder("  Enter your message");
+        //this.textField = textField;
+        //this.getParent().addChild(textField, 1111, 21);
+        //
+        //var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
+        //btnSend.addClickEventListener(this.sendMessage.bind(this));
+        //this.getParent().addChild(btnSend, 1111, 22);
+        //
+        //
+        //var messageScrollView = this.createMessageScroll();
+        //this.getParent().addChild(messageScrollView, 100, 19);
+        //
+        //var memberScrollView = this.createMemberScroll();
+        //this.getParent().addChild(memberScrollView, 101, 20);
+        //
+        //var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+        //prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
+        //prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
+        //this.getParent().addChild(prevBtn, 21, 18);
+    },
 
-
-        var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-        textField.setPosition(textField.width/2, size.height - textField.height/2);
-        textField.setPlaceHolder("  uuid");
-        this.getParent().addChild(textField, 1111, 21);
-
-        var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
-        this.getParent().addChild(btnSend, 1111, 22);
-
-
-        var messageScrollView = this.createMessageScroll();
-        this.getParent().addChild(messageScrollView, 100, 19);
-
-        var memberScrollView = this.createMemberScroll();
-        this.getParent().addChild(memberScrollView, 101, 20);
-
-        var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
-        prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
-        this.getParent().addChild(prevBtn, 21, 18);
+    sendMessage: function() {
+        var content = this.textField.getString();
+        content = content.trim();
+        cc.log(content);
+        NETWORK.sendNewMessage(MESSAGE_NORMAL, content);
     },
 
     onCloseInteractiveGuild: function() {
@@ -154,23 +165,36 @@ var LobbyLayer = cc.Layer.extend({
             nodeContainer.setPosition(0, 0);
             scrollView.addChild(nodeContainer);
 
-            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/soji_20.fnt');
-            //var amountLabel = new cc.LabelBMFont('Message thu ' + i, 'res/Art/Fonts/fista_20_non.fnt');
-            var amountLabel = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafki ' + i, 'res/Art/Fonts/fista_20_non.fnt');
-            amountLabel.setAnchorPoint(0, 0);
-            amountLabel.setPosition(10, 100*i + 10);
-            nodeContainer.addNode(amountLabel);
+
+
+            var content = new cc.LabelBMFont('adefafkiamadefafkiamadefafkiamadefafkiamadefafki ' + i, 'res/Art/Fonts/fista_20_non.fnt');
+            content.setAnchorPoint(0, 0);
+            content.setPosition(10, 150*i + 10);
+            nodeContainer.addNode(content);
+
+
+            var sender = new cc.LabelBMFont('Duy Nguyen', 'res/Art/Fonts/fista_20_non.fnt');
+            sender.setAnchorPoint(0, 0);
+            sender.setPosition(content.x, content.y + 50);
+            nodeContainer.addNode(sender);
+
+
+            var timeStamp = new cc.LabelBMFont('2h30m before', 'res/Art/Fonts/fista_20_non.fnt');
+            timeStamp.setAnchorPoint(0, 0);
+            timeStamp.setPosition(scrollView.width - timeStamp.width/2, sender.y);
+            nodeContainer.addNode(timeStamp);
 
 
             var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
             btn.setAnchorPoint(0, 0);
-            btn.setPosition(50, amountLabel.y - btn.height - 5);
+            btn.setPosition(50, content.y - btn.height - 5);
             nodeContainer.addNode(btn);
 
-            //scrollView.addChild(amountLabel);
+            //scrollView.addChild(content);
         }
 
-        scrollView.setInnerContainerSize(cc.size(scrollView.width, 30 * 100));
+
+        scrollView.setInnerContainerSize(cc.size(scrollView.width, 30 * 150 + 10));
         return scrollView;
 
 
