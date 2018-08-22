@@ -3,7 +3,6 @@ var myClanInfo = myClanInfo || null;
 var MyClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
-        myClanInfo === null && gv.user.is_in_guild && NETWORK.sendGetGuildInfo(gv.user.id_guild);
         // this.init();
     },
     init: function() {
@@ -35,6 +34,9 @@ var MyClanTab = Tab.extend({
         });
         clanInfo.addChild(editBtn);
         editBtn.addClickEventListener(this.edit.bind(this));
+        if (!youreBoss) {
+            editBtn.setEnabled(false);
+        }
     },
     edit: function() {
         var editView = new EditClanView(myClanInfo, true);
@@ -50,6 +52,7 @@ var MyClanTab = Tab.extend({
     },
     showTab: function() {
         // myClanInfo !== null && this.initClanInfo();
+        gv.user.is_in_guild && NETWORK.sendGetGuildInfo(gv.user.id_guild);
         this.setVisible(true);
     },
     cancelEdit: function() {

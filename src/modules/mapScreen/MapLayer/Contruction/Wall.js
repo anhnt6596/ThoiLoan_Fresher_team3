@@ -69,7 +69,7 @@ var Wall = Building.extend({
             img.setOpacity(0);
         });
         this.buildingImage[iShow].setOpacity(255);
-        cc.log("=========>>>>>>>>>>>>>id: " + this._id + " level:  " + this._level + " isShow: " + iShow + " topLeftID: ");
+        // cc.log("=========>>>>>>>>>>>>>id: " + this._id + " level:  " + this._level + " isShow: " + iShow + " topLeftID: ");
     },
     selectLine: function() {
         var self = this;
@@ -284,8 +284,18 @@ var Wall = Building.extend({
                 wall.updatePositionWall(pos);
                 });
             }
+            // goi ham cap nhat vi tri cho nhieu tuong
+            NETWORK.sendMoveMultiWall(wallSelectingArray);
         } else {
             this.updatePositionWall(mapPos);
+            try {
+                temp.lastMoveBuilding = this;
+                if(this._status !== 'setting' && (this._oldX !== this.tempX || this._oldY !== this.tempY)) {
+                    NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+                }
+            } catch (error) {
+                cc.log('network error!');
+            }
         }
         // this.resetSelectingArray();
     },
@@ -374,16 +384,16 @@ var Wall = Building.extend({
         this.afterUpdatePosionAction(mapPos);
         
         if (wallSelectingArray.length === 0) {
-            try {
-                temp.lastMoveBuilding = this;
-                if(this._status !== 'setting' && (this._oldX !== this.tempX || this._oldY !== this.tempY)) {
-                    NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-                }
-            } catch (error) {
-                cc.log('network error!');
-            }
+            // try {
+            //     temp.lastMoveBuilding = this;
+            //     if(this._status !== 'setting' && (this._oldX !== this.tempX || this._oldY !== this.tempY)) {
+            //         NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
+            //     }
+            // } catch (error) {
+            //     cc.log('network error!');
+            // }
         } else {
-            // goi ham cap nhat vi tri cho nhieu tuong
+            
         }
     },
     rotate: function() {
@@ -425,6 +435,8 @@ var Wall = Building.extend({
             MAP.objectUpdatePosition(mapPos);}
     },
     upgradeAllSelectingWall: function() {
-        cc.log("Upgrade Multi Wall");
+        // duynd6
+        // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu 
+        NETWORK.upgradeMultiWall(wallSelectingArray);
     }
 });

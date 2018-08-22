@@ -224,11 +224,19 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.REMOVE_MEMBER:
                 this.processRemoveMember(packet);
                 break;
+            case gv.CMD.SET_GUILD_POSITION:
+                this.processSetGuildPosition(packet);
+                break;
+        }
+    },
+    processSetGuildPosition: function(data) {
+        if (data.validate) {
+            requestMyClanMember = true;
+            this.getGuildListMemberInfo(gv.user.id_guild);
         }
     },
     processRemoveMember: function(data) {
         if (data.validate) {
-            cc.log("www" + data.id + "===" + gv.user.id);
             if (data.id === gv.user.id) {
                 var popup = new ui.PopUp("Bạn đã bị đuổi khỏi Bang");
                 MAPSCENE.addChild(popup, 1000);
@@ -237,8 +245,8 @@ testnetwork.Connector = cc.Class.extend({
                 CLAN_GUI.initHeader(5);
                 cc.log("AAAAAAAAAAAAAAAAAAAAA");
             } else if (gv.user.is_in_guild) {
-                this.getGuildListMemberInfo(gv.user.id_guild);
                 requestMyClanMember = true;
+                this.getGuildListMemberInfo(gv.user.id_guild);
             }
         }
     },
@@ -663,6 +671,12 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id, x, y);
         this.gameClient.sendPacket(pk);
     },
+    sendMoveMultiWall: function(list) {
+        var pk = this.gameClient.getOutPacket(CmdSendMoveMultiWall);
+        pk.pack(list);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================sendMoveMultiWall=======================================" + list.length);
+    },
     sendAddConstruction:function(type,x,y){
         cc.log("sendAddConstruction" +type+" "+x+ " "+y);
         var pk = this.gameClient.getOutPacket(CmdSendAddConstruction);
@@ -681,6 +695,12 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id);
         this.gameClient.sendPacket(pk);
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
+    },
+    upgradeMultiWall: function(list){
+        var pk = this.gameClient.getOutPacket(CmdSendUpgradeMultiWall);
+        pk.pack(list);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================upgradeMultiWall=======================================" + list.length);
     },
     sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);

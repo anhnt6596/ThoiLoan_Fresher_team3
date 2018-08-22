@@ -38,8 +38,8 @@ var ClanMemberTab = Tab.extend({
         this._super(tabNumber);
         this.init();
         if (myClanInfo === null && gv.user.is_in_guild) {
-            NETWORK.getGuildListMemberInfo(gv.user.id_guild);
             requestMyClanMember = true;
+            NETWORK.getGuildListMemberInfo(gv.user.id_guild);
         }
     },
     init: function() {
@@ -103,8 +103,8 @@ var ClanMemberTab = Tab.extend({
         });
     },
     showTab: function() {
-        gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
         requestMyClanMember = true;
+        gv.user.is_in_guild && NETWORK.getGuildListMemberInfo(gv.user.id_guild);
         this.setVisible(true);
     }
 });
