@@ -75,6 +75,7 @@ testnetwork.Connector = cc.Class.extend({
                         wallRefs.forEach(function(element) {
                             element.updatePresentImg();
                         });
+                        MAP.suggestNewWal(temp.newBuildingAdd);
                     }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
