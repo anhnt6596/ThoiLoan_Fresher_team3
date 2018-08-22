@@ -22,6 +22,7 @@ var MapLayer = cc.Layer.extend({
     _isBuilding: false,
     mapWidth: 4200,
     mapHeight: 3200,
+    lastSuggestWallDirection: 0,
     ctor: function(userInfo) {
         this._super();
         MAP = this;
@@ -62,7 +63,7 @@ var MapLayer = cc.Layer.extend({
             }
         }
     },
-    setMapPositionToObject: function(town) {
+    setMapPositionToObject: function(town) { // đưa màn hình đến nhà mới
         var size = cc.winSize;
         var mapPosition;
         var xy = town.xyOnMap(town._posX, town._posY);
@@ -431,7 +432,7 @@ var MapLayer = cc.Layer.extend({
         newBuilding.setStatus('setting');
         this._targetedObject && this._targetedObject.removeTarget();
         this._targetedObject = newBuilding;
-        this.setMapPositionToObject(newBuilding);
+        this.setMapPositionToObject(newBuilding); // đưa màn hình đến nhà mới
         newBuilding.onTarget();
         // contructionList.push(buildingInfo);
         // objectRefs.push(newBuilding);
@@ -476,7 +477,6 @@ var MapLayer = cc.Layer.extend({
                     } else {
                         _.extend(ReducedTempResources, buildingInfo.cost);
                         NETWORK.sendRequestAddConstruction(newBuilding, buildingInfo);
-                        // this.suggestNewWal(newBuilding);
                     }
                 } else if (gResources > 0) {
                     if (gv.user.coin < gResources) {
@@ -497,25 +497,61 @@ var MapLayer = cc.Layer.extend({
 
     suggestNewWal: function(newBuilding) {
         var self = this; // hàm của Duy, ko tái sử dụng đc nên phải copy sang
+        var count = 0;
+        var nextPos;
+        do {
+            switch (this.lastSuggestWallDirection) {
+                case 0:
+                    nextPos = {
+                        x: newBuilding._posX + 1,
+                        y: newBuilding._posY
+                    }
+                    break;
+                    case 1:
+                    nextPos = {
+                        x: newBuilding._posX,
+                        y: newBuilding._posY + 1
+                    }
+                    break;
+                    case 2:
+                    nextPos = {
+                        x: newBuilding._posX - 1,
+                        y: newBuilding._posY
+                    }
+                    break;
+                    case 3:
+                    nextPos = {
+                        x: newBuilding._posX,
+                        y: newBuilding._posY - 1
+                    }
+                    break;
+                default:
+                    return;
+            }
+            if (mapLogicArray[nextPos.x][nextPos.y] === MAPVALUE.UNUSED || count >= 4) break;
+            else {
+                this.lastSuggestWallDirection += 1;
+                if (this.lastSuggestWallDirection >= 4) this.lastSuggestWallDirection = 0;
+            }
+            count += 1;
+        } while (count < 4);
         if (newBuilding._name === "WAL_1") {
-            setTimeout(function() {
-                var id = gv.user.largestId;
-                cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
-                var buildingInfo = {
-                    _id: id,
-                    name: "WAL_1",
-                    level: 1,
-                    posX: newBuilding._posX + 1,
-                    posY: newBuilding._posY,
-                    width: 1,
-                    height: 1,
-                    buildTime: 0,
-                    status: 'pending',
-                    cost: { gold: config.building.WAL_1[1].gold, elixir: 0, darkElixir: 0, coin: 0 }
-                };
-                gv.user.largestId += 1;
-                self.buildNewContruction(buildingInfo);
-            }, 20);
+            var id = gv.user.largestId;
+            cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
+            var buildingInfo = {
+                _id: id,
+                name: "WAL_1",
+                level: 1,
+                posX: nextPos.x,
+                posY: nextPos.y,
+                width: 1,
+                height: 1,
+                buildTime: 0,
+                status: 'pending',
+                cost: { gold: config.building.WAL_1[1].gold, elixir: 0, darkElixir: 0, coin: 0 }
+            };
+            gv.user.largestId += 1;
+            self.buildNewContruction(buildingInfo);
         }
     },
 

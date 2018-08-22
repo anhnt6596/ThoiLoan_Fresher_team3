@@ -65,6 +65,7 @@ var Wall = Building.extend({
             if(wall._id === topLeftBuildingId) iShow += 2;
             if(wall._id === topRightBuildingId) iShow += 1;
         });
+        if (iShow > 3) iShow = 3;
         this.buildingImage.forEach(function(img) {
             img.setOpacity(0);
         });
