@@ -1,7 +1,7 @@
 var EditClanView = cc.Sprite.extend({
     _status: ["Mở", "Đóng", "Xác nhận"],
     clanStatus: 0,
-    minTroophy: 0,
+    requireTroophy: 0,
     iconType: 1,
     createCost: 40000,
     ctor: function(myClanInfo = null,isEdit = false) {
@@ -155,7 +155,7 @@ var EditClanView = cc.Sprite.extend({
             y: this.height - 285,
         });
         clanView.addChild(leftButton1);
-        leftButton1.addClickEventListener(this.prevMinTroophy.bind(this));
+        leftButton1.addClickEventListener(this.prevrequireTroophy.bind(this));
 
         var rightButton1 = new ccui.Button("res/Art/Bang hoi/next 1.png");
         rightButton1.attr({ 
@@ -163,15 +163,15 @@ var EditClanView = cc.Sprite.extend({
             y: this.height - 285,
         });
         clanView.addChild(rightButton1);
-        rightButton1.addClickEventListener(this.nextMinTroophy.bind(this));
+        rightButton1.addClickEventListener(this.nextrequireTroophy.bind(this));
 
-        var minTroophyText = new cc.LabelBMFont(this.minTroophy.toString(), 'res/Art/Fonts/soji_16.fnt');
-        this.minTroophyText = minTroophyText;
-        minTroophyText.attr({
+        var requireTroophyText = new cc.LabelBMFont(this.requireTroophy.toString(), 'res/Art/Fonts/soji_16.fnt');
+        this.requireTroophyText = requireTroophyText;
+        requireTroophyText.attr({
             x: this.width / 2,
             y: this.height - 285,
         });
-        clanView.addChild(minTroophyText);
+        clanView.addChild(requireTroophyText);
         //dòng 6
         if (!this.isEdit) {
             var createButton = new ui.optionButton(formatNumber(this.createCost), "res/Art/Bang hoi/POPUP_0000_Group-3.png");
@@ -209,13 +209,13 @@ var EditClanView = cc.Sprite.extend({
         if (this.clanStatus > 2) this.clanStatus = 0;
         this.statusText.setString(this._status[this.clanStatus]);
     },
-    prevMinTroophy: function() {
-        this.minTroophy <= 0 ? this.minTroophy = 600 : this.minTroophy -= 200;
-        this.minTroophyText.setString(this.minTroophy.toString());
+    prevrequireTroophy: function() {
+        this.requireTroophy <= 0 ? this.requireTroophy = 600 : this.requireTroophy -= 200;
+        this.requireTroophyText.setString(this.requireTroophy.toString());
     },
-    nextMinTroophy: function() {
-        this.minTroophy >= 600 ? this.minTroophy = 0 : this.minTroophy += 200;
-        this.minTroophyText.setString(this.minTroophy.toString());
+    nextrequireTroophy: function() {
+        this.requireTroophy >= 600 ? this.requireTroophy = 0 : this.requireTroophy += 200;
+        this.requireTroophyText.setString(this.requireTroophy.toString());
     },
     selectClanIcon: function() {
         this.clanView.setVisible(false);
@@ -265,7 +265,7 @@ var EditClanView = cc.Sprite.extend({
             iconType: this.iconType,
             description: this.clanDescription.getString(),
             status: this.clanStatus,
-            requireTroophy: this.minTroophy,
+            requireTroophy: this.requireTroophy,
         };
         cc.log("Create..." + data.name + "/" + data.iconType + "/" + data.description + "/" + data.status + "/" + data.requireTroophy);
         // NETWORK.sendCreateGuild(data);
@@ -279,8 +279,11 @@ var EditClanView = cc.Sprite.extend({
             iconType: this.iconType,
             description: this.clanDescription.getString(),
             status: this.clanStatus,
-            requireTroophy: this.minTroophy,
+            requireTroophy: this.requireTroophy,
         };
+        NETWORK.sendEditGuildInfo(data);
+        this.cancelAction();
+        temp.editGuildData = data;
         cc.log("Create..." + data.name + "/" + data.iconType + "/" + data.description + "/" + data.status + "/" + data.requireTroophy);
     },
     cancelAction: function() {
@@ -304,8 +307,8 @@ var EditClanView = cc.Sprite.extend({
         this.clanStatus = myClanInfo.status;
         this.statusText.setString(this._status[this.clanStatus]);
 
-        this.minTroophy = myClanInfo.troophyRequire;
-        this.minTroophyText.setString(this.minTroophy.toString());
+        this.requireTroophy = myClanInfo.troophyRequire;
+        this.requireTroophyText.setString(this.requireTroophy.toString());
     },
     checkGoldReq: function(reqGold = 0, action) {
         if (gv.user.gold < reqGold) {

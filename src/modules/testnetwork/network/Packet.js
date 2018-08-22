@@ -849,6 +849,7 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.n = this.getInt();
+            cc.log("================================= Current Time: " + getCurrentServerTime());
             cc.log("================================= SO LUONG BARRACK QUEUE INFO: " + this.n);
             for (var i=0; i < this.n; i++){
                 cc.log("================================= BARRACK thu : " + (i+1));
@@ -896,7 +897,10 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                 var barrackObj = getObjBuildingById(this.idBarrack);
 
                 var totalCapacity = getTotalCapacityAMCs();
+                cc.log("================================= totalCapacity: " + totalCapacity);
                 var currentCapacity = getTotalCurrentTroopCapacity();
+                cc.log("================================= currentCapacity: " + currentCapacity);
+
                 if(currentCapacity >= totalCapacity){
                     cc.log("================================= Set  pauseOverCapacityFlag = TRUE");
                     temp.pauseOverCapacityFlag = true;
@@ -953,6 +957,8 @@ testnetwork.packetMap[gv.CMD.FINISH_TIME_TRAIN_TROOP] = fr.InPacket.extend(
         },
         readData:function(){
             this.validate  = this.getShort();
+            this.idBarrack = this.getInt();
+            this.troopType = this.getString();
             //Neu server tra ve false thi phai gui lai get BarrackQueueInfo
         }
     }
@@ -997,6 +1003,9 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
     }
 );
 
+var troopGuildList = [];
+var messageList = [];
+
 testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
     {
         ctor:function()
@@ -1004,7 +1013,24 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
+            this.lastRequestTroopTimeStamp = this.getLong();
+            this.sizeTroopGuildList = this.getInt();
 
+            for(var i = 0; i < this.sizeTroopGuildList; i++) {
+                this.typeTroop = this.getString();
+                troopGuildList[this.typeTroop] = {};
+                this.levelTroop = this.getShort();
+                troopGuildList[this.typeTroop].level = this.levelTroop;
+            }
+
+            this.sizeMessageList = this.getInt();
+            for(var j = 0; j < this.sizeMessageList; j++) {
+                this.typeMessage = this.getShort();
+                this.id_user = this.getInt();
+                this.content = this.getString();
+                this.timeStamp = this.getLong();
+                messageList[j] = {typeMessage: this.typeMessage, userId: this.id_user, content: this.content, timeStamp: this.timeStamp};
+            }
         }
     }
 );

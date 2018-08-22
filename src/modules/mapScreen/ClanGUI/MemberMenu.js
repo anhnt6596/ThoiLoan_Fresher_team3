@@ -19,7 +19,7 @@ var MemberMenu = ccui.Button.extend({
         else if (size > 5) size = 5;
         this._super(res.clan.bubble[size - 2], res.clan.bubble[size - 2]);
         this.attr({
-            anchorY: 0.5 + (3 - size) * 0.1
+            anchorY: 0.5 - (3 - size) * 0.05,
         });
         this.addClickEventListener(this.clickInside.bind(this));
         this.addEventListener();
@@ -55,6 +55,20 @@ var MemberMenu = ccui.Button.extend({
                         y: self.height - i * 50 - 60,
                     });
                     break;
+                case "promotion":
+                    var promotionBtn = self.addPromotionBtn();
+                    promotionBtn.attr({
+                        x: self.width / 2 + 10,
+                        y: self.height - i * 50 - 60,
+                    });
+                    break;
+                case "add_friend":
+                    var friendBtn = self.addFriendBtn();
+                    friendBtn.attr({
+                        x: self.width / 2 + 10,
+                        y: self.height - i * 50 - 60,
+                    });
+                    break;
                 default:
                     break;
             }
@@ -71,8 +85,20 @@ var MemberMenu = ccui.Button.extend({
         this.addChild(visitBtn);
         return visitBtn;
     },
+    addPromotionBtn: function() {
+        var promotionBtn = ui.optionButton("Thăng chức", res.clan.bubbleButton);
+        this.addChild(promotionBtn);
+        return promotionBtn;
+    },
+    addFriendBtn: function() {
+        var friendBtn = ui.optionButton("Thêm bạn", res.clan.bubbleButton);
+        this.addChild(friendBtn);
+        return friendBtn;
+    },
     kickAction: function() {
         cc.log("kick user ten là " + this.member.name + " id la " + this.member.id);
+        NETWORK.sendRemoveMember(this.member.id);
+        this.getParent().removeChild(this);
     },
     addEventListener: function() {
         this.listener = cc.eventManager.addListener({

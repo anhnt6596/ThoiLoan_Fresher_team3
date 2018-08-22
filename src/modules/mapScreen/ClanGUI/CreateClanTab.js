@@ -1,7 +1,7 @@
 var CreateClanTab = Tab.extend({
     _status: ["Mở", "Đóng", "Xác nhận"],
     clanStatus: 0,
-    minTroophy: 0,
+    requireTroophy: 0,
     iconType: 1,
     cost: 40000,
     ctor: function(tabNumber) {

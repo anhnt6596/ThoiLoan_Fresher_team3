@@ -15,6 +15,24 @@ gv.CMD.GET_GUILD_LISTMEMBER_INFO = 5010;
 
 testnetwork = testnetwork||{};
 
+CmdRemoveMember = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.REMOVE_MEMBER);
+        },
+        pack:function(id){
+            this.packHeader();
+
+            this.putInt(id);
+
+            this.updateSize();
+        }
+    }
+);
+
 CmdSearchGuildInfo = fr.OutPacket.extend(
     {
         ctor:function()
@@ -138,15 +156,15 @@ CmdSendEditGuildInfo = fr.OutPacket.extend(
             this.initData(100);
             this.setCmdId(gv.CMD.EDIT_GUILD_INFO);
         },
-        pack:function(id, name, logo_id, status, require_danh_vong, description){
+        pack:function(data){
             this.packHeader();
 
-            this.putInt(id);
-            this.putString(name);
-            this.putInt(logo_id);
-            this.putShort(status);
-            this.putInt(require_danh_vong);
-            this.putString(description);
+            this.putInt(data.id);
+            this.putString(data.name);
+            this.putInt(data.iconType);
+            this.putShort(data.status);
+            this.putInt(data.requireTroophy);
+            this.putString(data.description);
 
             this.updateSize();
         }
@@ -178,6 +196,7 @@ testnetwork.packetMap[gv.CMD.CREATE_GUILD] = fr.InPacket.extend(
         }
     }
 );
+
 testnetwork.packetMap[gv.CMD.ADD_MEMBER] = fr.InPacket.extend(
     {
         ctor:function()
@@ -276,3 +295,29 @@ testnetwork.packetMap[gv.CMD.SEARCH_GUILD_INFO] = fr.InPacket.extend(
         }
     }
 );
+
+testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
+    {
+        ctor: function()
+        {
+            this._super();
+        },
+        readData: function(){
+            this.validate = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.REMOVE_MEMBER] = fr.InPacket.extend({
+    ctor: function() {
+        this._super();
+    },
+    readData: function() {
+        this.validate = this.getShort();
+        cc.log("this.validate" + this.validate);
+        if (this.validate) {
+            this.id = this.getInt();
+            cc.log("this.id" + this.id);
+        }
+    }
+});
