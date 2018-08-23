@@ -41,6 +41,7 @@ var TroopGive = ccui.Button.extend({
         var currentAmount = new cc.LabelBMFont(troopInfo[this._name].population, 'res/Art/Fonts/fista_24_non.fnt');
         currentAmount.setPosition(this.x + this.width/2, -currentAmount.height/2 - 5);
         currentAmount.setColor(new cc.color(255, 0, 255, 255));
+        this.currentAmount = currentAmount;
         this.addChild(currentAmount, 109);
     },
 

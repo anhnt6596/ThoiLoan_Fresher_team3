@@ -1058,7 +1058,9 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
                 this.validateValue = this.getShort();
             }else if(this.typeResponse == RESPONSE_TO_ALL){
                 this.idUserGet = this.getInt();
-                this.capacityGet = this.getShort();
+                //this.capacityGet = this.getShort();
+                this.troopType = this.getString();
+
             }
         }
     }
@@ -1086,11 +1088,10 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 cc.log("=============== Troop thu " + (i+1));
                 this.typeTroop = this.getString();
                 cc.log("=============== Type Troop: " + this.typeTroop);
-                troopGuildList[this.typeTroop] = {};
                 this.levelTroop = this.getShort();
                 cc.log("=============== Level Troop: " + this.levelTroop);
 
-                troopGuildList[this.typeTroop].level = this.levelTroop;
+                troopGuildList[i] = {typeTroop: this.typeTroop, level: this.levelTroop};
             }
 
             this.sizeMessageList = this.getInt();

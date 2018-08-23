@@ -257,7 +257,7 @@ var LobbyLayer = cc.Layer.extend({
         cc.log("Click donate " + this.userSend);
 
         var popup = new PopupGiveTroop(this.userSend);
-        cc.director.getRunningScene().addChild(popup, 2222);
+        cc.director.getRunningScene().addChild(popup, 2222, 171);
     },
 
     createMemberScroll: function() {
@@ -319,7 +319,6 @@ var LobbyLayer = cc.Layer.extend({
 
         // set ko disable mac dinh
         this.objectMenu.enableCollectorBtn();
-
 
         // disable mot so button o day nhe'
         var tartgetedObj = MAP._targetedObject;

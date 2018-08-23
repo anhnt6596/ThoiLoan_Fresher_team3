@@ -197,16 +197,26 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length === 0)  this._listValidBtn.push(this.selectLineBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length >= 2)  this._listValidBtn.push(this.rotateBtn);
-                if (object._name == "CLC_1") {
-                    this._listValidBtn.push(this.clanBtn);
-                    var condition = getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp >= TIME_REQUEST_TROOP;
-                    if(gv.user.last_time_ask_for_troops && condition){
-                        this._listValidBtn.push(this.requestTroopBtn);
-                    }
-                }
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish
+            }
+            if (object._name == "CLC_1") {
+                this._listValidBtn.push(this.clanBtn);
+                var condition1 = gv.user.lastRequestTroopTimeStamp && (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp) >= TIME_REQUEST_TROOP;
+                var capacityGuild = getCurrentGuildCapacity();
+                var capacityTroopGuild = getTotalCapacityTroopGuild();
+                var condition2 = (capacityTroopGuild < capacityGuild);
+
+                if(condition2){
+                    cc.log("========================== capacityTroopGuild < capacityGuild");
+                }else{
+                    cc.log("========================== capacityTroopGuild >= capacityGuild");
+                }
+
+                if (condition1 && condition2) {
+                    this._listValidBtn.push(this.requestTroopBtn);
+                }
             }
         } else if (object instanceof Obstacle) {
             this._listValidBtn.push(this.removeBtn);

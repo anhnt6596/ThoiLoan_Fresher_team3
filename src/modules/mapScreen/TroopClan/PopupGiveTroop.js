@@ -26,6 +26,7 @@ var PopupGiveTroop = ccui.Button.extend({
                 troop.idUserGet = idUserGet;
                 troop.level = item.level;
                 troop.type = item.type;
+                troop.tagTroopGive = j;
                 troop.addClickEventListener(this.giveTroop.bind(troop));
                 cc.director.getRunningScene().addChild(troop, 2223, j);
                 this.listTroopTag.push(j);
@@ -35,13 +36,13 @@ var PopupGiveTroop = ccui.Button.extend({
     },
 
     giveTroop: function() {
-        cc.log("========================= GIVE TROOP");
-        cc.log("========================= idUserGet: " + this.idUserGet);
-        cc.log("========================= type: " + this.type);
-        cc.log("========================= level: " + this.level);
+        if(troopInfo[this.type].population <= 0){
+            return;
+        }
 
         temp.idUserGetTroop = this.idUserGet;
         temp.typeTroopGive = this.type;
+        temp.tagTroopGive = this.tagTroopGive;
         NETWORK.sendGiveTroop(this.idUserGet, this.type, this.level);
     },
 
@@ -75,5 +76,20 @@ var PopupGiveTroop = ccui.Button.extend({
     },
     clickInside: function() {
 
+    },
+
+    removeAll: function() {
+        for(var i in this.listTroopTag){
+            cc.log("=================== REMOVE: " + i);
+
+            var child = cc.director.getRunningScene().getChildByTag(this.listTroopTag[i]);
+            if(child){
+                child.retain();
+            }
+
+            cc.director.getRunningScene().removeChildByTag(this.listTroopTag[i]);
+
+        }
+        this.getParent().removeChild(this);
     }
 });

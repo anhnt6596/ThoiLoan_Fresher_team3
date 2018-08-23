@@ -339,28 +339,94 @@ var MapLayer = cc.Layer.extend({
     },
     targetObject: function(mapPos) {
         LOBBY.showLobby();
+        var oldTarget = this._targetedObject;
         var self = this;
+        var haveObjectInTarget = false;
         mapPos.x < MAPVALUE.MAPSIZE && mapPos.x >= 0 && mapPos.y < MAPVALUE.MAPSIZE && mapPos.y >= 0 && (function() {
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
             cc.log('target_id: ' + target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
                 // cc.log('bool ' + objectRefs[i].info._id == target_id);
-                if (objectRefs[i].info && objectRefs[i].info._id >= 0 && objectRefs[i].info._id == target_id) {
+                if (objectRefs[i] && objectRefs[i]._id >= 0 && objectRefs[i]._id == target_id) {
                     var newTarget = objectRefs[i];
-                    if (newTarget === self._targetedObject) {
-                        break; // nếu chọn object cũ thì thôi
+                    var checktargetMultiWall = self.isTargetMultiWall(oldTarget, newTarget);
+                    if (newTarget === self._targetedObject) { // nếu chọn object cũ thì thôi
+                        haveObjectInTarget = true;
+                        break;
+                    } if (checktargetMultiWall.status) { // chọn tường trong hàng thì chọn cả hàng
+                        wallRefs.forEach(function(wall) {
+                            wall.removeTarget();
+                        });
+                        wallSelectingArray = checktargetMultiWall.listWall;
+                        wallSelectingArray.forEach(function(wall) {
+                            wall.wallSelectInLine();
+                        });
+                        LOBBY.showObjectMenu(self._targetedObject);
+                        haveObjectInTarget = true;
+                        break;
                     } else {    // chọn object mới thì remove object cũ, target object mới và đặt zOrder cao.
                         self._targetedObject && self._targetedObject.removeTarget();
                         self._targetedObject = objectRefs[i];
                         self._targetedObject.onTargeting();
+                        haveObjectInTarget = true;
                         break;
                     }
-                } else {
-                    self._targetedObject && self._targetedObject.removeTarget(); // nếu bấm ra ngoài thì bỏ chọn
-                    self._targetedObject = null;
                 }
             }
+            if (!haveObjectInTarget) { // nếu không bấm vào object nào thì thì bỏ chọn
+                self._targetedObject && self._targetedObject.removeTarget();
+                self._targetedObject = null;
+            }
         })();
+    },
+    isTargetMultiWall: function(oldTarget, newTarget) {
+        var result = {
+            status: false,
+            listWall: [],
+        }
+        cc.log("oldTarget: " + oldTarget);
+        if (!(oldTarget instanceof Wall)) return false;
+        if (!(newTarget instanceof Wall)) return false;
+        if (oldTarget._posX !== newTarget._posX && oldTarget._posY !== newTarget._posY) return false;
+        if (oldTarget._posX === newTarget._posX) {
+            if (oldTarget._posY > newTarget._posY) {
+                for (var i = newTarget._posY; i <= oldTarget._posY; i++) {
+                    var check = checkHasWallInPos(newTarget._posX, i); // trả về status và wall
+                    if (check.status) {
+                        result.listWall.push(check.wall);
+                    }
+                    else return result;
+                }
+            } else if (oldTarget._posY < newTarget._posY) {
+                for (var i = newTarget._posY; i >= oldTarget._posY; i--) {
+                    var check = checkHasWallInPos(newTarget._posX, i);
+                    if (check.status) {
+                        result.listWall.push(check.wall);
+                    }
+                    else return result;
+                }
+            }
+        } else if (oldTarget._posY === newTarget._posY) {
+            if (oldTarget._posX > newTarget._posX) {
+                for (var i = newTarget._posX; i <= oldTarget._posX; i++) {
+                    var check = checkHasWallInPos(i, newTarget._posY);
+                    if (check.status) {
+                        result.listWall.push(check.wall);
+                    }
+                    else return result;
+                }
+            } else if (oldTarget._posX < newTarget._posX) {
+                for (var i = newTarget._posX; i >= oldTarget._posX; i--) {
+                    var check = checkHasWallInPos(i, newTarget._posY);
+                    if (check.status) {
+                        result.listWall.push(check.wall);
+                    }
+                    else return result;
+                }
+            }
+        }
+        result.status = true;
+        return result;
     },
     createBuilding: function(buildingInfo) {
         var newBuilding;
@@ -499,6 +565,15 @@ var MapLayer = cc.Layer.extend({
         var self = this; // hàm của Duy, ko tái sử dụng đc nên phải copy sang
         var count = 0;
         var nextPos;
+        if (mapLogicArray[newBuilding._posX + 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 2;
+        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY + 1] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 3;
+        } else if (mapLogicArray[newBuilding._posX - 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 0;
+        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY - 1] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 1;
+        }
         do {
             switch (this.lastSuggestWallDirection) {
                 case 0:
