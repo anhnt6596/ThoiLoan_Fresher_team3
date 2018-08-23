@@ -259,20 +259,22 @@ var SearchClanTab = Tab.extend({
     },
     pushMemberItem: function() {
         var self = this;
-        this.memberScrollView && this.memberScrollView.removeAllChildren();
-        clanMember.forEach(function(member, i) {
-            var clanItem = new MemberItemList(member, i + 1);
-            var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
-            clanItem.attr({
-                x: self.scrollView.width / 2,
-                y: (calc - i - 1) * 62,
-                anchorY: 0,
-            });
-            self.memberScrollView.addChild(clanItem);
-            self.memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+        if (this.memberScrollView) {
+            this.memberScrollView.removeAllChildren();
+            clanMember.forEach(function(member, i) {
+                var clanItem = new MemberItemList(member, i + 1);
+                var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
+                clanItem.attr({
+                    x: self.scrollView.width / 2,
+                    y: (calc - i - 1) * 62,
+                    anchorY: 0,
+                });
+                self.memberScrollView.addChild(clanItem);
+                self.memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
 
-            clanItem.addClickEventListener(() => self.clickMember(member));
-        });
+                clanItem.addClickEventListener(() => self.clickMember(member));
+            });
+        }
     },
     closeMemberScrollView: function() {
         this.memberScrollView && this.removeChild(this.memberScrollView);

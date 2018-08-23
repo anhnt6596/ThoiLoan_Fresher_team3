@@ -54,17 +54,19 @@ var Wall = Building.extend({
     updatePresentImg: function(pos) {
         if (pos === undefined) {
             pos = {
-                x: this._posX,
-                y: this._posY,
+                x: this.tempX,
+                y: this.tempY,
             };
         }
         var iShow = 0;
-        var topLeftBuildingId = pos.x + 1 <= 39 ? mapLogicArray[pos.x + 1][pos.y] : -1;
-        var topRightBuildingId = pos.y + 1 <= 39 ? mapLogicArray[pos.x][pos.y + 1] : -1;
+        var haveTopLeft = false;
+        var haveTopRight = false;
         wallRefs.forEach(function(wall) {
-            if(wall._id === topLeftBuildingId) iShow += 2;
-            if(wall._id === topRightBuildingId) iShow += 1;
+            if(wall.tempX === (pos.x + 1) && wall.tempY === pos.y) haveTopLeft = true;
+            if(wall.tempX === pos.x && wall.tempY === (pos.y + 1)) haveTopRight = true;
         });
+        if (haveTopLeft) iShow += 2;
+        if (haveTopRight) iShow += 1;
         this.buildingImage.forEach(function(img) {
             img.setOpacity(0);
         });
@@ -76,16 +78,6 @@ var Wall = Building.extend({
         var wallSelectingX = [];
         var wallSelectingY = [];
         cc.log("Select Line");
-        // wallRefs.forEach(function(wall) {
-        //     if (wall._posX === self._posX) {
-        //         wallSelectingX.push(wall);
-        //     }
-        //     if (wall._posY === self._posY) {
-        //         wallSelectingY.push(wall);
-        //     }
-        // });
-        wallSelectingX.push(this);
-        wallSelectingY.push(this);
         var l = true;
         var r = true;
         var u = true;
@@ -98,7 +90,6 @@ var Wall = Building.extend({
             var h_d = 0;
             wallRefs.forEach(function (wall) {
                 if (wall._posX === self._posX) {
-                    cc.log(wall._posY + " & " + self.posY - i)
                     if (wall._posY === self._posY - i && l) {
                         wallSelectingX.push(wall);
                         h_l += 1;
@@ -125,13 +116,16 @@ var Wall = Building.extend({
             d = h_d > 0 ? true : false;
             i += 1;
         }
+        wallSelectingX.push(this);
+        wallSelectingY.push(this); // phải cho tường được chọn vào cuối mảng mới chạy đúng
+
         wallSelectingArray = (wallSelectingX.length >= wallSelectingY.length) ? wallSelectingX : wallSelectingY;
         cc.log(">>>>>>>>>>>>>>><AFdjsnfdhsnhdsbngdhsnfjds: " + wallSelectingArray.length);
-        wallSelectingArray.length >= 2
-        ? wallSelectingArray.forEach(function(wall) {
-            wall.wallSelectInLine();
-        })
-        : wallSelectingArray = [];
+        if (wallSelectingArray.length >= 2) {
+            wallSelectingArray.forEach(function(wall) {
+                wall.wallSelectInLine();
+            });
+        } else wallSelectingArray = [];
     },
     wallSelectInLine: function() { // set hình ảnh, trạng thái
         var act = new cc.FadeOut(0.2);
@@ -177,8 +171,8 @@ var Wall = Building.extend({
         if (wallSelectingArray.length >= 1) {
             wallSelectingArray.forEach(function(wall) {
                 var pos = {
-                    x: mapPos.x + wall._posX - self._posX,
-                    y: mapPos.y + wall._posY - self._posY,
+                    x: mapPos.x + wall.tempX - self.tempX,
+                    y: mapPos.y + wall.tempY - self.tempY,
                 };
                 wall.movingWall(pos);
             });
@@ -209,6 +203,10 @@ var Wall = Building.extend({
                 y: coor.y + 2 * TILE_HEIGHT,
             });
         }
+        // cập nhật hình ảnh tường liên tục
+        wallRefs.forEach(function(element) {
+            element.updatePresentImg();
+        });
     },
     movingWall: function(mapPos) {
         var coor = this.xyOnMap(mapPos.x, mapPos.y);
@@ -351,6 +349,9 @@ var Wall = Building.extend({
             this.buildingImg.runAction(ui.backToDefaultColor());
             LOBBY.hideObjectMenu();
         }
+        wallRefs.forEach(function(element) {
+            element.updatePresentImg();
+        });
     },
     wallRemoveTarget: function() {
         //if (this.grass) this.grass.opacity = 255;
@@ -429,14 +430,119 @@ var Wall = Building.extend({
                     wall.redBG && wall.redBG.attr({ opacity: 230, });
                 });
             }
+            wallRefs.forEach(function(element) {
+                element.updatePresentImg();
+            });
         }
         if (this.checkNewPosition(mapPos)) {
-            cc.log("aaaaaaaaaaaaaaaaaa");
-            MAP.objectUpdatePosition(mapPos);}
+            MAP.objectUpdatePosition(mapPos);
+        }
     },
     upgradeAllSelectingWall: function() {
         // duynd6
-        // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu 
-        NETWORK.upgradeMultiWall(wallSelectingArray);
+        // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu
+
+        var goldCost = 0;
+        var elixirCost = 0;
+        var darkElixirCost = 0;
+
+        for(var i in wallSelectingArray) {
+            var wall = wallSelectingArray[i];
+            goldCost += config.building.WAL_1[wall._level + 1].gold || 0;
+            cc.log("====================== goldCost: " + goldCost);
+            elixirCost += config.building.WAL_1[wall._level + 1].elixir || 0;
+            darkElixirCost += config.building.WAL_1[wall._level + 1].darkElixir || 0;
+        }
+
+        var cost = {gold: goldCost, elixir: elixirCost, darkElixir: darkElixirCost, coin: 0};
+        cc.log("====================== gold: " + cost.gold);
+        cc.log("====================== elixir: " + cost.elixir);
+        cc.log("====================== darkElixir: " + cost.darkElixir);
+        cc.log("====================== coin: " + cost.coin);
+
+        var gResources = checkUserResources(cost);
+        var data;
+        var popup;
+        if(gResources == 0){
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    showPopupNotEnoughG('release_builder');
+                }else{
+                    _.extend(ReducedTempResources, cost);
+                    data = {type:'builder', wallList:wallSelectingArray, cost:cost, g:gBuilder};
+                    popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            } else {
+                _.extend(ReducedTempResources, cost);
+                NETWORK.upgradeMultiWall(wallSelectingArray);
+                // this.suggestNewWal(newBuilding);
+            }
+        } else if (gResources > 0) {
+            if (gv.user.coin < gResources) {
+                showPopupNotEnoughG('upgrade');
+            } else {
+                data = {type:getLackingResources(cost), wallList:wallSelectingArray, g:gResources};
+                popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        } else {
+            showPopupNotEnoughG('upgrade');
+        }
+
+
+        //NETWORK.upgradeMultiWall(wallSelectingArray);
+    }
+});
+
+
+
+
+var UpgradeMultiWalls = TinyPopup.extend({
+    ctor:function(width, height, title, type, data) {
+        this._super(width, height, title, type, data);
+        this.showContent(data)
+    },
+
+    ok: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        if(this._data.type != 'builder'){
+            _.extend(ReducedTempResources, this._data.cost);
+            ReducedTempResources.coin += this._data.g;
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    showPopupNotEnoughG('release_builder');
+                }else{
+                    var data2 = {type:'builder', wallList:wallSelectingArray, g:gBuilder};
+                    var popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data2);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            }else{
+                NETWORK.upgradeMultiWall(this._data.wallList);
+                // MAP.suggestNewWal(this._data.newBuilding);
+            }
+        }else if(this._data.type == 'builder'){
+            ReducedTempResources.coin += this._data.g;
+            finishSmallestRemainingTimeBuilding();
+            NETWORK.upgradeMultiWall(this._data.wallList);
+            // MAP.suggestNewWal(this._data.newBuilding);
+        }
+    },
+
+    close: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        resetReducedTempResources();
     }
 });

@@ -456,3 +456,30 @@ var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2
 var calculateDistance = function(a, b) {
     return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 };
+
+var checkHasWallInPos = function(x, y) {
+    var result = {
+        status: false,
+        wall: null,
+    };
+    for (var i = 0; i < wallRefs.length; i++) {
+        var wall = wallRefs[i];
+        if (wall._posX == x && wall._posY == y)  {
+            cc.log(wall._posY);
+            // cc.log("có tường ở giữa")
+            result = {
+                status: true,
+                wall: wall,
+            }
+            return result;
+        }
+    }
+    result.status = false;
+    return result;
+}
+
+var numberInRange = function(x, a, b) {
+    if (x < a) return false;
+    if (x > b) return false;
+    return true;
+}

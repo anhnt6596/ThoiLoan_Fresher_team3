@@ -75,6 +75,7 @@ testnetwork.Connector = cc.Class.extend({
                         wallRefs.forEach(function(element) {
                             element.updatePresentImg();
                         });
+                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) MAP.suggestNewWal(temp.newBuildingAdd);
                     }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
@@ -115,6 +116,15 @@ testnetwork.Connector = cc.Class.extend({
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL=======================================");
                     showPopupNotEnoughG('server_denied_cancel');
+                }
+                break;
+            case gv.CMD.UPGRADE_MULTI_WALL:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN UPGRADE MULTI WALL tu SERVER=======================================");
+                    this.processUpgradeMultiWalls(temp.listWall);
+                }else {
+                    cc.log("=======================================SERVER TU CHOI UPGRADE MULTI WALL=======================================");
+                    showPopupNotEnoughG('server_denied_upgrade_multi_wall');
                 }
                 break;
             case gv.CMD.REMOVE_OBSTACLE:
@@ -260,7 +270,7 @@ testnetwork.Connector = cc.Class.extend({
                 popup.openAction();
                 gv.user.is_in_guild = false;
                 CLAN_GUI.initHeader(5);
-                cc.log("AAAAAAAAAAAAAAAAAAAAA");
+                CLANCASTLE.addClanIcon();
             } else if (gv.user.is_in_guild) {
                 requestMyClanMember = true;
                 this.getGuildListMemberInfo(gv.user.id_guild);
@@ -271,13 +281,13 @@ testnetwork.Connector = cc.Class.extend({
         if (data.validate) {
             myClanInfo = extend(myClanInfo, temp.editGuildData);
             CLAN_GUI.TAB1.initClanInfo();
+            CLANCASTLE.addClanIcon();
         }
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
             gv.user.is_in_guild = true;
             gv.user.id_guild = temp.reqJoinClanId;
-            
             // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
             CLAN_GUI.initHeader(1);
 
@@ -314,6 +324,7 @@ testnetwork.Connector = cc.Class.extend({
                 troophy: data.troophy,
                 troophyRequire: data.troophyRequire,
             }
+            CLANCASTLE.addClanIcon();
         }
         CLAN_GUI.TAB1.initClanInfo();
     },
@@ -338,6 +349,8 @@ testnetwork.Connector = cc.Class.extend({
             CLAN_GUI.TAB1.initClanInfo();
             this.getGuildListMemberInfo(data.id);
             requestMyClanMember = true;
+
+            CLANCASTLE.addClanIcon();
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
         }
@@ -405,6 +418,14 @@ testnetwork.Connector = cc.Class.extend({
         else if (building._status == 'pending') building.cancelBuild();
     },
 
+    processUpgradeMultiWalls: function(listWall) {
+        listWall.forEach(function(wall) {
+            wall.upgradeComplete(false);
+        });
+
+        temp.listWall = null;
+    },
+
     createTroopAfterSVResponseSuccess: function(type, barrack) {
         var armyCamp = armyCampRefs[0];
         armyCampRefs.forEach(function(element) {
@@ -426,8 +447,7 @@ testnetwork.Connector = cc.Class.extend({
             var troopType = troopInfo[item];
             if (troopType.population > 0) {
                 for (var i = 0; i < troopType.population; i++) {
-                    this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
-                    
+                    var troop = this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
                     curAMCindex += 1;
                     if (curAMCindex >= numAMC) curAMCindex = 0;
                 }
@@ -640,7 +660,16 @@ testnetwork.Connector = cc.Class.extend({
 
     processNewMessage: function() {
         var message = {typeMessage: temp.messageType, userId: gv.user.id, usernameSend: gv.user.name, content: temp.messageContent, timeStamp: getCurrentServerTime()};
+        if(message.typeMessage == MESSAGE_ASK_TROOP) {
+            gv.user.lastRequestTroopTimeStamp = getCurrentServerTime();
+            for(var i in messageList) {
+                if(messageList[i].userId == message.userId){
+                    messageList.splice(i, 1);
+                }
+            }
+        }
         messageList.push(message);
+
         temp.enableSendMessageFlag = true;
         LOBBY.onCloseInteractiveGuild();
         LOBBY.onInteractiveGuild();
@@ -769,6 +798,7 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
     },
     upgradeMultiWall: function(list){
+        temp.listWall = list;
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeMultiWall);
         pk.pack(list);
         this.gameClient.sendPacket(pk);
