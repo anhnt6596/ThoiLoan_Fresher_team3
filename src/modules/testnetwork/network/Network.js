@@ -373,6 +373,11 @@ testnetwork.Connector = cc.Class.extend({
         if (building._name == "WAL_1") {
             building.upgradeComplete(true);
         } else {
+            if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
+                cc.log("cho phep upgrade");
+                building.onCollectResource(true);
+            }
+            
             building.setStatus('upgrade');
             building.startTime = getCurrentServerTime();
             var cur = (getCurrentServerTime() - building.startTime)/1000;
@@ -394,11 +399,7 @@ testnetwork.Connector = cc.Class.extend({
             reduceUserResources(ReducedTempResources);
             resetReducedTempResources();
             console.log("ten nha = "+ building._name);
-            if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
-                cc.log("cho phep upgrade");
-                building.onCollectResource(true);
-            }
-
+            
             if(building._name == "BAR_1"){
                 //Cap nhat startTime cho barrack
                 barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;

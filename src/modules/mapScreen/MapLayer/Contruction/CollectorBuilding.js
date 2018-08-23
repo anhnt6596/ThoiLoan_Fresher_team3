@@ -101,7 +101,7 @@ var CollectorBuilding = Building.extend({
     onCollectResource: function (is_upgrade) {
         console.log("Thu hoach resource "+this._name+" id="+this._id);
         if (!is_upgrade) {
-            NETWORK.sendDoHarvest(this._id);
+            NETWORK.sendDoHarvest(this._id); //Neu dang upgrade thi khong can gui goi tin thu hoac, server tu xu li thu hoach
         }
 
         var time_sx = (getCurrentServerTime() - this.startTime)/1000;
