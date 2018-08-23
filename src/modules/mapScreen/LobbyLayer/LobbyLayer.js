@@ -284,7 +284,6 @@ var LobbyLayer = cc.Layer.extend({
         // set ko disable mac dinh
         this.objectMenu.enableCollectorBtn();
 
-
         // disable mot so button o day nhe'
         var tartgetedObj = MAP._targetedObject;
         //console.log("san luong = " +tartgetedObj.productivity.sanluong);

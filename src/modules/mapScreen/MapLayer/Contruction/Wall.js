@@ -54,18 +54,19 @@ var Wall = Building.extend({
     updatePresentImg: function(pos) {
         if (pos === undefined) {
             pos = {
-                x: this._posX,
-                y: this._posY,
+                x: this.tempX,
+                y: this.tempY,
             };
         }
         var iShow = 0;
-        var topLeftBuildingId = pos.x + 1 <= 39 ? mapLogicArray[pos.x + 1][pos.y] : -1;
-        var topRightBuildingId = pos.y + 1 <= 39 ? mapLogicArray[pos.x][pos.y + 1] : -1;
+        var haveTopLeft = false;
+        var haveTopRight = false;
         wallRefs.forEach(function(wall) {
-            if(wall._id === topLeftBuildingId) iShow += 2;
-            if(wall._id === topRightBuildingId) iShow += 1;
+            if(wall.tempX === (pos.x + 1) && wall.tempY === pos.y) haveTopLeft = true;
+            if(wall.tempX === pos.x && wall.tempY === (pos.y + 1)) haveTopRight = true;
         });
-        if (iShow > 3) iShow = 3;
+        if (haveTopLeft) iShow += 2;
+        if (haveTopRight) iShow += 1;
         this.buildingImage.forEach(function(img) {
             img.setOpacity(0);
         });
@@ -77,16 +78,6 @@ var Wall = Building.extend({
         var wallSelectingX = [];
         var wallSelectingY = [];
         cc.log("Select Line");
-        // wallRefs.forEach(function(wall) {
-        //     if (wall._posX === self._posX) {
-        //         wallSelectingX.push(wall);
-        //     }
-        //     if (wall._posY === self._posY) {
-        //         wallSelectingY.push(wall);
-        //     }
-        // });
-        wallSelectingX.push(this);
-        wallSelectingY.push(this);
         var l = true;
         var r = true;
         var u = true;
@@ -99,7 +90,6 @@ var Wall = Building.extend({
             var h_d = 0;
             wallRefs.forEach(function (wall) {
                 if (wall._posX === self._posX) {
-                    cc.log(wall._posY + " & " + self.posY - i)
                     if (wall._posY === self._posY - i && l) {
                         wallSelectingX.push(wall);
                         h_l += 1;
@@ -126,13 +116,16 @@ var Wall = Building.extend({
             d = h_d > 0 ? true : false;
             i += 1;
         }
+        wallSelectingX.push(this);
+        wallSelectingY.push(this); // phải cho tường được chọn vào cuối mảng mới chạy đúng
+
         wallSelectingArray = (wallSelectingX.length >= wallSelectingY.length) ? wallSelectingX : wallSelectingY;
         cc.log(">>>>>>>>>>>>>>><AFdjsnfdhsnhdsbngdhsnfjds: " + wallSelectingArray.length);
-        wallSelectingArray.length >= 2
-        ? wallSelectingArray.forEach(function(wall) {
-            wall.wallSelectInLine();
-        })
-        : wallSelectingArray = [];
+        if (wallSelectingArray.length >= 2) {
+            wallSelectingArray.forEach(function(wall) {
+                wall.wallSelectInLine();
+            });
+        } else wallSelectingArray = [];
     },
     wallSelectInLine: function() { // set hình ảnh, trạng thái
         var act = new cc.FadeOut(0.2);
@@ -178,8 +171,8 @@ var Wall = Building.extend({
         if (wallSelectingArray.length >= 1) {
             wallSelectingArray.forEach(function(wall) {
                 var pos = {
-                    x: mapPos.x + wall._posX - self._posX,
-                    y: mapPos.y + wall._posY - self._posY,
+                    x: mapPos.x + wall.tempX - self.tempX,
+                    y: mapPos.y + wall.tempY - self.tempY,
                 };
                 wall.movingWall(pos);
             });
@@ -210,6 +203,10 @@ var Wall = Building.extend({
                 y: coor.y + 2 * TILE_HEIGHT,
             });
         }
+        // cập nhật hình ảnh tường liên tục
+        wallRefs.forEach(function(element) {
+            element.updatePresentImg();
+        });
     },
     movingWall: function(mapPos) {
         var coor = this.xyOnMap(mapPos.x, mapPos.y);
@@ -428,11 +425,11 @@ var Wall = Building.extend({
                 wallSelectingArray.forEach(function(wall) {
                     wall.greenBG && wall.greenBG.attr({ opacity: 0, });
                     wall.redBG && wall.redBG.attr({ opacity: 230, });
+                    wall.updatePresentImg();
                 });
             }
         }
         if (this.checkNewPosition(mapPos)) {
-            cc.log("aaaaaaaaaaaaaaaaaa");
             MAP.objectUpdatePosition(mapPos);}
     },
     upgradeAllSelectingWall: function() {
