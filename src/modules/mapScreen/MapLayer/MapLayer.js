@@ -14,7 +14,7 @@ var rootMapPos = {
     y: 560
 };
 
-//var listTroopRefs = listTroopRefs || [];
+var listTroopRefs = listTroopRefs || [];
 
 var MapLayer = cc.Layer.extend({
     _targetedObject: null,
@@ -564,14 +564,25 @@ var MapLayer = cc.Layer.extend({
     suggestNewWal: function(newBuilding) {
         var self = this; // hàm của Duy, ko tái sử dụng đc nên phải copy sang
         var count = 0;
-        var nextPos;
-        if (mapLogicArray[newBuilding._posX + 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+        if (
+            numberInRange(newBuilding._posX + 1, 0, 39)
+            && mapLogicArray[newBuilding._posX + 1][newBuilding._posY] !== MAPVALUE.UNUSED
+        ) {
             this.lastSuggestWallDirection = 2;
-        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY + 1] !== MAPVALUE.UNUSED) {
+        } else if (
+            numberInRange(newBuilding._posY + 1, 0, 39)
+            && mapLogicArray[newBuilding._posX][newBuilding._posY + 1] !== MAPVALUE.UNUSED
+        ) {
             this.lastSuggestWallDirection = 3;
-        } else if (mapLogicArray[newBuilding._posX - 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+        } else if (
+            numberInRange(newBuilding._posX - 1, 0, 39)
+            && mapLogicArray[newBuilding._posX - 1][newBuilding._posY] !== MAPVALUE.UNUSED
+        ) {
             this.lastSuggestWallDirection = 0;
-        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY - 1] !== MAPVALUE.UNUSED) {
+        } else if (
+            numberInRange(newBuilding._posY - 1, 0, 39)
+            && mapLogicArray[newBuilding._posX][newBuilding._posY - 1] !== MAPVALUE.UNUSED
+        ) {
             this.lastSuggestWallDirection = 1;
         }
         do {
@@ -603,7 +614,12 @@ var MapLayer = cc.Layer.extend({
                 default:
                     return;
             }
-            if (mapLogicArray[nextPos.x][nextPos.y] === MAPVALUE.UNUSED || count >= 4) break;
+            if (
+                numberInRange(nextPos.x, 0, 39)
+                && numberInRange(nextPos.y, 0, 39)
+                && mapLogicArray[nextPos.x][nextPos.y] === MAPVALUE.UNUSED
+                || count >= 4
+            ) break;
             else {
                 this.lastSuggestWallDirection += 1;
                 if (this.lastSuggestWallDirection >= 4) this.lastSuggestWallDirection = 0;

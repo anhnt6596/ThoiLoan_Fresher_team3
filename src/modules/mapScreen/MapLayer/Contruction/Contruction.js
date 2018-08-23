@@ -232,14 +232,14 @@ var Contruction = cc.Class.extend({
         MAP.updateContructionList(this);
         MAP.createLogicArray(contructionList, obstacleLists);
         if (this._name === "AMC_1") this.armyRun();
-        // if(this._name === "WAL_1") {
-        //     setTimeout(function() {
-        //         wallRefs.forEach(function(wall) {
-        //             if (wall._id === this._id) wall.updatePresentImg(mapPos);
-        //             else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
-        //         });
-        //     }, 0);
-        // }
+        if(this._name === "WAL_1") {
+            setTimeout(function() {
+                wallRefs.forEach(function(wall) {
+                    if (wall._id === this._id) wall.updatePresentImg(mapPos);
+                    else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
+                });
+            }, 0);
+        }
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;

@@ -33,7 +33,8 @@ var ArmyCamp = Building.extend({
     },
     addArmy: function(troop) {
         this._listArmy.push(troop);
-        // listTroopRefs.push(troop);
+        listTroopRefs.push(troop);
+        // cc.log("listTroopRefs.length" + listTroopRefs.length);
         // cc.log(">>>>>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>> length: " + armyCampRefs[0]._listArmy.length + ' & ' + armyCampRefs[1]._listArmy.length);
         this.calculatePopulation();
     },
@@ -62,5 +63,13 @@ var ArmyCamp = Building.extend({
 
     updateArmyCampCapacity: function() {
         temp.pauseOverCapacityFlag = false;
+    },
+
+    removeTroop: function(troop) {
+        var index = this._listArmy.indexOf(troop);
+        if (index > -1) {
+            this._listArmy.splice(index, 1);
+        }
+        this.calculatePopulation();
     }
 });

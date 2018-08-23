@@ -93,6 +93,7 @@ var LobbyLayer = cc.Layer.extend({
         //    element.moveTo(objectRefs[0]);
         //});
         // NETWORK.sendResearchComplete("ARM_1");
+        donateTroopShowAnims("ARM_1");
     },
 
     onInteractiveGuild: function() {

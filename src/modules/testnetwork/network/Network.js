@@ -446,8 +446,7 @@ testnetwork.Connector = cc.Class.extend({
             var troopType = troopInfo[item];
             if (troopType.population > 0) {
                 for (var i = 0; i < troopType.population; i++) {
-                    this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
-                    
+                    var troop = this.createNewTroop_1(troopType.type, armyCampRefs[curAMCindex]);
                     curAMCindex += 1;
                     if (curAMCindex >= numAMC) curAMCindex = 0;
                 }
