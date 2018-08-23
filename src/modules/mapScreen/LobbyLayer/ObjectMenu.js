@@ -90,6 +90,12 @@ var ObjectMenu = cc.Node.extend({
         this.clanBtn = clanBtn;
         this.addChild(clanBtn);
         clanBtn.addClickEventListener(this.clan.bind(this));
+
+        var requestTroopBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/request_troop_button.png', 'Request');
+        this._listBtn.push(requestTroopBtn);
+        this.requestTroopBtn = requestTroopBtn;
+        this.addChild(requestTroopBtn);
+        requestTroopBtn.addClickEventListener(this.requestTroop.bind(this));
     },
     onInfo: function() {
         if(MAP._targetedObject){
@@ -173,6 +179,10 @@ var ObjectMenu = cc.Node.extend({
     clan: function() {
         CLAN_GUI.openAction();
     },
+    requestTroop: function() {
+        var popup = new RequestTroop(cc.winSize.width/2, cc.winSize.height/1.5, "Request troop from your clan ", false, null);
+        cc.director.getRunningScene().addChild(popup, 200);
+    },
     setUpValidBtn: function(object) {
         this.hideAll();
         this._listValidBtn = [];
@@ -191,7 +201,13 @@ var ObjectMenu = cc.Node.extend({
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish
             }
-            if (object._name == "CLC_1") this._listValidBtn.push(this.clanBtn);
+            if (object._name == "CLC_1") {
+                this._listValidBtn.push(this.clanBtn);
+                var condition = gv.user.lastRequestTroopTimeStamp && (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp) >= TIME_REQUEST_TROOP;
+                if (condition) {
+                    this._listValidBtn.push(this.requestTroopBtn);
+                }
+            }
         } else if (object instanceof Obstacle) {
             this._listValidBtn.push(this.removeBtn);
         }

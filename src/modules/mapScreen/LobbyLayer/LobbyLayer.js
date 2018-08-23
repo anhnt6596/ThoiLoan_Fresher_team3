@@ -142,7 +142,9 @@ var LobbyLayer = cc.Layer.extend({
     sendMessage: function() {
         var content = this.textField.getString();
         content = content.trim();
-        cc.log(content);
+        if(!content){
+            return;
+        }
         if(temp.enableSendMessageFlag){
             temp.enableSendMessageFlag = false;
             temp.messageContent = content;
@@ -195,17 +197,31 @@ var LobbyLayer = cc.Layer.extend({
             timeStamp.setPosition(scrollView.width - timeStamp.width/2 - 80, sender.y);
             nodeContainer.addNode(timeStamp);
 
-            if(item.typeMessage == MESSAGE_ASK_TROOP) {
-                var btn = new ccui.Button('res/Art/GUIs/Main_Gui/setting.png', 'res/Art/GUIs/Main_Gui/setting.png');
+            if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId != gv.user.id) {
+                var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
                 btn.setAnchorPoint(0, 0);
                 btn.setPosition(50, content.y - btn.height - 5);
+                btn.addClickEventListener(this.donateTroop.bind(btn));
+                btn.userSend = item.userId;
                 nodeContainer.addNode(btn);
+
+                var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
+                label.setAnchorPoint(0, 0);
+                label.setPosition(btn.x + 30, btn.y + 20);
+                nodeContainer.addNode(label);
             }
         }
 
 
         scrollView.setInnerContainerSize(cc.size(scrollView.width, messageList.length * 150 + 10));
         return scrollView;
+    },
+
+    donateTroop: function() {
+        cc.log("Click donate " + this.userSend);
+
+        var popup = new PopupGiveTroop();
+        cc.director.getRunningScene().addChild(popup, 2222);
     },
 
     createMemberScroll: function() {

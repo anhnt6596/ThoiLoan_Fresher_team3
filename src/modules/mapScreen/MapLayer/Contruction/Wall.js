@@ -437,7 +437,109 @@ var Wall = Building.extend({
     },
     upgradeAllSelectingWall: function() {
         // duynd6
-        // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu 
-        NETWORK.upgradeMultiWall(wallSelectingArray);
+        // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu
+
+        var goldCost = 0;
+        var elixirCost = 0;
+        var darkElixirCost = 0;
+
+        for(var i in wallSelectingArray) {
+            var wall = wallSelectingArray[i];
+            goldCost += config.building.WAL_1[wall._level + 1].gold || 0;
+            cc.log("====================== goldCost: " + goldCost);
+            elixirCost += config.building.WAL_1[wall._level + 1].elixir || 0;
+            darkElixirCost += config.building.WAL_1[wall._level + 1].darkElixir || 0;
+        }
+
+        var cost = {gold: goldCost, elixir: elixirCost, darkElixir: darkElixirCost, coin: 0};
+        cc.log("====================== gold: " + cost.gold);
+        cc.log("====================== elixir: " + cost.elixir);
+        cc.log("====================== darkElixir: " + cost.darkElixir);
+        cc.log("====================== coin: " + cost.coin);
+
+        var gResources = checkUserResources(cost);
+        var data;
+        var popup;
+        if(gResources == 0){
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    showPopupNotEnoughG('release_builder');
+                }else{
+                    _.extend(ReducedTempResources, cost);
+                    data = {type:'builder', wallList:wallSelectingArray, cost:cost, g:gBuilder};
+                    popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            } else {
+                _.extend(ReducedTempResources, cost);
+                NETWORK.upgradeMultiWall(wallSelectingArray);
+                // this.suggestNewWal(newBuilding);
+            }
+        } else if (gResources > 0) {
+            if (gv.user.coin < gResources) {
+                showPopupNotEnoughG('upgrade');
+            } else {
+                data = {type:getLackingResources(cost), wallList:wallSelectingArray, g:gResources};
+                popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to buy resources", false, data);
+                cc.director.getRunningScene().addChild(popup, 2000000);
+            }
+        } else {
+            showPopupNotEnoughG('upgrade');
+        }
+
+
+        //NETWORK.upgradeMultiWall(wallSelectingArray);
+    }
+});
+
+
+
+
+var UpgradeMultiWalls = TinyPopup.extend({
+    ctor:function(width, height, title, type, data) {
+        this._super(width, height, title, type, data);
+        this.showContent(data)
+    },
+
+    ok: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        if(this._data.type != 'builder'){
+            _.extend(ReducedTempResources, this._data.cost);
+            ReducedTempResources.coin += this._data.g;
+            if(!checkIsFreeBuilder()){
+                var gBuilder = getGToReleaseBuilder();
+                if(gv.user.coin < gBuilder){
+                    showPopupNotEnoughG('release_builder');
+                }else{
+                    var data2 = {type:'builder', wallList:wallSelectingArray, g:gBuilder};
+                    var popup = new UpgradeMultiWalls(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data2);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            }else{
+                NETWORK.upgradeMultiWall(this._data.wallList);
+                // MAP.suggestNewWal(this._data.newBuilding);
+            }
+        }else if(this._data.type == 'builder'){
+            ReducedTempResources.coin += this._data.g;
+            finishSmallestRemainingTimeBuilding();
+            NETWORK.upgradeMultiWall(this._data.wallList);
+            // MAP.suggestNewWal(this._data.newBuilding);
+        }
+    },
+
+    close: function() {
+        var act1 = new cc.ScaleTo(0.1, 1.4, 1.4);
+        var self = this;
+        this.runAction(new cc.Sequence(act1, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        resetReducedTempResources();
     }
 });

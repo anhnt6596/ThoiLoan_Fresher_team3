@@ -118,6 +118,15 @@ testnetwork.Connector = cc.Class.extend({
                     showPopupNotEnoughG('server_denied_cancel');
                 }
                 break;
+            case gv.CMD.UPGRADE_MULTI_WALL:
+                if (packet.validate) {
+                    cc.log("=======================================XAC NHAN UPGRADE MULTI WALL tu SERVER=======================================");
+                    this.processUpgradeMultiWalls(temp.listWall);
+                }else {
+                    cc.log("=======================================SERVER TU CHOI UPGRADE MULTI WALL=======================================");
+                    showPopupNotEnoughG('server_denied_upgrade_multi_wall');
+                }
+                break;
             case gv.CMD.REMOVE_OBSTACLE:
                 if(packet.validate) {
 
@@ -408,6 +417,14 @@ testnetwork.Connector = cc.Class.extend({
         else if (building._status == 'pending') building.cancelBuild();
     },
 
+    processUpgradeMultiWalls: function(listWall) {
+        listWall.forEach(function(wall) {
+            wall.upgradeComplete(false);
+        });
+
+        temp.listWall = null;
+    },
+
     createTroopAfterSVResponseSuccess: function(type, barrack) {
         var armyCamp = armyCampRefs[0];
         armyCampRefs.forEach(function(element) {
@@ -643,7 +660,16 @@ testnetwork.Connector = cc.Class.extend({
 
     processNewMessage: function() {
         var message = {typeMessage: temp.messageType, userId: gv.user.id, usernameSend: gv.user.name, content: temp.messageContent, timeStamp: getCurrentServerTime()};
+        if(message.typeMessage == MESSAGE_ASK_TROOP) {
+            gv.user.lastRequestTroopTimeStamp = getCurrentServerTime();
+            for(var i in messageList) {
+                if(messageList[i].userId == message.userId){
+                    messageList.splice(i, 1);
+                }
+            }
+        }
         messageList.push(message);
+
         temp.enableSendMessageFlag = true;
         LOBBY.onCloseInteractiveGuild();
         LOBBY.onInteractiveGuild();
@@ -772,6 +798,7 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
     },
     upgradeMultiWall: function(list){
+        temp.listWall = list;
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeMultiWall);
         pk.pack(list);
         this.gameClient.sendPacket(pk);

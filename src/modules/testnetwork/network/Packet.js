@@ -766,6 +766,18 @@ testnetwork.packetMap[gv.CMD.CANCEL_CONSTRUCTION] = fr.InPacket.extend(
     }
 );
 
+testnetwork.packetMap[gv.CMD.UPGRADE_MULTI_WALL] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
 testnetwork.packetMap[gv.CMD.REMOVE_OBSTACLE] = fr.InPacket.extend(
     {
         ctor:function()
@@ -1061,6 +1073,7 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
         },
         readData:function(){
             this.lastRequestTroopTimeStamp = this.getLong();
+            gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
             cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
 
             this.sizeTroopGuildList = this.getInt();

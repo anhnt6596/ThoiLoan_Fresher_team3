@@ -22,6 +22,9 @@ temp.buildingFinishTime = null;
 //Cancel Construction
 temp.buildingCancel = null;
 
+//Upgrade Multi Walls
+temp.listWall = null;
+
 //Train Troop
 temp.trainedBarrackId = null;
 temp.trainedTroopType = null;

@@ -785,5 +785,5 @@ var OFFLINE = 2;
 
 var MAX_MESSAGES_QUEUE = 100;
 var MAX_TROOP_AMOUNT_USER_CAN_GIVE = 5;
-var TIME_REQUEST_TROOP = 1200;              //second
-var ID_CLC_BUILDING = 4;              //second
+var TIME_REQUEST_TROOP = 1200000;              //ms
+var ID_CLC_BUILDING = 4;
