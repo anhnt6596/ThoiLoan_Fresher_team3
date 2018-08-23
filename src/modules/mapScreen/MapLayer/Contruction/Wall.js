@@ -349,6 +349,9 @@ var Wall = Building.extend({
             this.buildingImg.runAction(ui.backToDefaultColor());
             LOBBY.hideObjectMenu();
         }
+        wallRefs.forEach(function(element) {
+            element.updatePresentImg();
+        });
     },
     wallRemoveTarget: function() {
         //if (this.grass) this.grass.opacity = 255;
@@ -425,12 +428,15 @@ var Wall = Building.extend({
                 wallSelectingArray.forEach(function(wall) {
                     wall.greenBG && wall.greenBG.attr({ opacity: 0, });
                     wall.redBG && wall.redBG.attr({ opacity: 230, });
-                    wall.updatePresentImg();
                 });
             }
+            wallRefs.forEach(function(element) {
+                element.updatePresentImg();
+            });
         }
         if (this.checkNewPosition(mapPos)) {
-            MAP.objectUpdatePosition(mapPos);}
+            MAP.objectUpdatePosition(mapPos);
+        }
     },
     upgradeAllSelectingWall: function() {
         // duynd6

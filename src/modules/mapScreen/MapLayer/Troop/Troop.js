@@ -68,6 +68,14 @@ var Troop = cc.Sprite.extend({
             this.runStep();
         }
     },
+    moveToWorldGate: function() {
+        this._moveToWorldGate = true;
+        this._finalDestination = {
+            x: 2905,
+            y: 1158,
+        };
+        this.runStep();
+    },
     runStep: function() {
         if (
             (this.x !== this._finalDestination.x || this.y !== this._finalDestination.y)
@@ -88,7 +96,7 @@ var Troop = cc.Sprite.extend({
             var lastStatus = this._status;
             this._status = "running";
             this._direction = this.calculateDirection(nextSubDestination);
-            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 4;
+            var moveTime = calculateDistance(nextSubDestination, this) / this._moveSpeed / 6;
             var moveAction = new cc.MoveTo(moveTime, cc.p(nextSubDestination.x, nextSubDestination.y));
             var sequence = new cc.Sequence(moveAction, new cc.CallFunc(this.runStep, this));
             this.stopAllActions();
@@ -98,10 +106,24 @@ var Troop = cc.Sprite.extend({
                 this.runningEff();
             }
         } else {
-            this._lastDirection = 0;
-            this._status = "standing";
-            this.setZOrder();
-            this.standingEff();
+            if(this._moveToWorldGate) {
+                var nextDes = { x: 4195, y: 240 };
+                var moveTime = calculateDistance(this, nextDes) / this._moveSpeed / 6;
+                var moveAction = new cc.MoveTo(moveTime, cc.p(nextDes.x, nextDes.y));
+                this._direction = 2;
+                this.runningEff();
+                this.runAction(moveAction);
+                var self = this;
+                setTimeout(function() {
+                    // self.setVisible(false);
+                    MAP.removeChild(self);
+                }, moveTime*1000);
+            } else {
+                this._lastDirection = 0;
+                this._status = "standing";
+                this.setZOrder();
+                this.standingEff();
+            }
         }
     },
     calculateDirection: function(destination) {
@@ -267,6 +289,18 @@ var Troop = cc.Sprite.extend({
         return { x: x, y: y };
     },
 });
+
+function donateTroopShowAnims(troopType) { // ARM_1
+    for (var i = 0; i < listTroopRefs.length; i++) {
+        var troop = listTroopRefs[i];
+        if (troop._type === troopType) {
+            troop._buildingContain.removeTroop(troop);
+            troop.moveToWorldGate();
+            listTroopRefs.splice(i, 1);
+            break;
+        }
+    }
+}
 
 // function indexOfMin(arr) {
 //     if (arr.length === 0) {

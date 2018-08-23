@@ -497,3 +497,9 @@ var checkHasWallInPos = function(x, y) {
     result.status = false;
     return result;
 }
+
+var numberInRange = function(x, a, b) {
+    if (x < a) return false;
+    if (x > b) return false;
+    return true;
+}
