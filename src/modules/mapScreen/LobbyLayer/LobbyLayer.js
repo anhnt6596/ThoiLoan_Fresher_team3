@@ -96,6 +96,8 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onInteractiveGuild: function() {
+        //Neu chua gia nhap guild nao thi show giao dien Join, neu chua xay nha Guild thi hien popup xay guild
+
         if(!temp.getListMessageFirst){
             temp.getListMessageFirst = true;
             NETWORK.sendGetInteractionGuild();
@@ -135,8 +137,6 @@ var LobbyLayer = cc.Layer.extend({
             prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
             this.getParent().addChild(prevBtn, 21, 18);
         }
-
-
     },
 
     sendMessage: function() {
@@ -197,19 +197,55 @@ var LobbyLayer = cc.Layer.extend({
             timeStamp.setPosition(scrollView.width - timeStamp.width/2 - 80, sender.y);
             nodeContainer.addNode(timeStamp);
 
-            if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId != gv.user.id) {
-                var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
-                btn.setAnchorPoint(0, 0);
-                btn.setPosition(50, content.y - btn.height - 5);
-                btn.addClickEventListener(this.donateTroop.bind(btn));
-                btn.userSend = item.userId;
-                nodeContainer.addNode(btn);
+            if(item.typeMessage == MESSAGE_ASK_TROOP) {
 
-                var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
-                label.setAnchorPoint(0, 0);
-                label.setPosition(btn.x + 30, btn.y + 20);
-                nodeContainer.addNode(label);
+                var timeBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_train_bar.png');
+                timeBar.setAnchorPoint(0, 0);
+                timeBar.setPosition(100, content.y - 50);
+
+                nodeContainer.addChild(timeBar);
+
+                var processBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/train_bar.png');
+                this._processBar = processBar;
+                processBar.setAnchorPoint(0, 0);
+                timeBar.addChild(processBar);
+
+                var cur = item.currentCapacityGot;
+                var max = item.guildCapacityAtTime;
+
+                var ratio = cur / max;
+                processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
+
+                var timeText = new cc.LabelBMFont(cur + "/" + max, 'res/Art/Fonts/soji_12.fnt');
+                this._timeText = timeText;
+                timeBar.addChild(timeText);
+                timeText.setPosition(-timeBar.width/2, timeText.height/2);
+
+
+                //this._timeText.setString(t);
+
+
+
+                if(item.userId != gv.user.id){
+                    var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
+                    btn.setAnchorPoint(0, 0);
+                    btn.setPosition(200, content.y - btn.height - 5);
+                    btn.addClickEventListener(this.donateTroop.bind(btn));
+                    btn.userSend = item.userId;
+                    nodeContainer.addNode(btn);
+
+                    var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
+                    label.setAnchorPoint(0, 0);
+                    label.setPosition(btn.x + 30, btn.y + 20);
+                    nodeContainer.addNode(label);
+                }
             }
+
+            var line = new cc.Sprite('res/Art/Bang hoi/q.png');
+            line.setAnchorPoint(0, 0);
+            line.scaleX = (cc.winSize.width*2/5 - 40) / line.width;
+            line.setPosition(content.x, content.y - 70);
+            nodeContainer.addNode(line);
         }
 
 
@@ -220,7 +256,7 @@ var LobbyLayer = cc.Layer.extend({
     donateTroop: function() {
         cc.log("Click donate " + this.userSend);
 
-        var popup = new PopupGiveTroop();
+        var popup = new PopupGiveTroop(this.userSend);
         cc.director.getRunningScene().addChild(popup, 2222);
     },
 

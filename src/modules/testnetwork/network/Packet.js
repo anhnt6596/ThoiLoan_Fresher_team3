@@ -1037,6 +1037,10 @@ testnetwork.packetMap[gv.CMD.NEW_MESSAGE] = fr.InPacket.extend(
                 cc.log("Username sender: " + this.usernameSend);
                 this.contentMessage = this.getString();
                 cc.log("Content Message: " + this.contentMessage);
+                this.currentCapacityTroop = this.getInt();
+                cc.log("Current Capacity Troop: " + this.currentCapacityTroop);
+                this.guildCapacityAtTime = this.getInt();
+                cc.log("Guild Capacity At Time: " + this.guildCapacityAtTime);
             }
         }
     }
@@ -1055,7 +1059,6 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
             }else if(this.typeResponse == RESPONSE_TO_ALL){
                 this.idUserGet = this.getInt();
                 this.capacityGet = this.getShort();
-
             }
         }
     }
@@ -1109,7 +1112,21 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 this.timeStamp = this.getLong();
                 cc.log("=============== Message timeStamp: " + this.timeStamp);
 
-                messageList[j] = {typeMessage: this.typeMessage, userId: this.id_user, usernameSend: this.usernameSend, content: this.content, timeStamp: this.timeStamp};
+                this.currentCapacityTroop = this.getInt();
+                cc.log("Current Capacity Troop: " + this.currentCapacityTroop);
+
+                this.guildCapacityAtTime = this.getInt();
+                cc.log("Guild Capacity At Time: " + this.guildCapacityAtTime);
+
+                messageList[j] = {
+                    typeMessage: this.typeMessage,
+                    userId: this.id_user,
+                    usernameSend: this.usernameSend,
+                    content: this.content,
+                    timeStamp: this.timeStamp,
+                    currentCapacityGot: this.currentCapacityTroop,
+                    guildCapacityAtTime: this.guildCapacityAtTime
+                };
             }
 
 

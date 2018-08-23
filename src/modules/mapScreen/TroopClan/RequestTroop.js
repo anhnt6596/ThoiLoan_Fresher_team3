@@ -21,6 +21,7 @@ var RequestTroop = TinyPopup.extend({
 
         temp.messageContent = content;
         temp.messageType = MESSAGE_ASK_TROOP;
+        temp.guildCapacityAtTime = getCurrentGuildCapacity();
         NETWORK.sendNewMessage(MESSAGE_ASK_TROOP, content);
 
     },

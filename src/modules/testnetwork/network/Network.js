@@ -242,7 +242,21 @@ testnetwork.Connector = cc.Class.extend({
                     }
                 }else if(packet.typeResponse == RESPONSE_TO_ALL){
                     this.processNewMessageToAll(packet);
-                    cc.log("=======================================SERVER PHAN HOI CHO MOI NGUOI=======================================");
+                    cc.log("=======================================SERVER PHAN HOI NEW MESSAGE CHO MOI NGUOI=======================================");
+                }
+                break;
+            case gv.CMD.GIVE_TROOP_GUILD:
+                if(packet.typeResponse == RESPONSE_VALIDATE){
+                    if(packet.validateValue) {
+                        cc.log("=======================================XAC NHAN GIVE TROOP GUILD tu SERVER=======================================");
+                        this.processGiveTroop();
+                    }else{
+                        cc.log("=======================================SERVER TU CHOI GIVE TROOP GUILD=======================================");
+                        showPopupNotEnoughG('server_denied_give_troop_guild');
+                    }
+                }else if(packet.typeResponse == RESPONSE_TO_ALL){
+                    this.processGiveTroopToAll(packet);
+                    cc.log("=======================================SERVER PHAN HOI GIVE TROOP CHO MOI NGUOI=======================================");
                 }
                 break;
             case gv.CMD.GET_INTERACTION_GUILD:
@@ -654,13 +668,55 @@ testnetwork.Connector = cc.Class.extend({
         increaseUserResources(refundResources);
     },
 
+    processGiveTroop: function() {
+        for(var i in messageList) {
+            var item = messageList[i];
+            if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId == temp.idUserGetTroop) {
+                item.currentCapacityGot += config.troopBase[temp.typeTroopGive].housingSpace;
+
+                if(item.currentCapacityGot == item.guildCapacityAtTime){
+                    messageList.splice(i, 1);
+                }
+
+                troopInfo[temp.typeTroopGive].population--;
+                break;
+            }
+        }
+        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild();
+    },
+
+    processGiveTroopToAll: function(message) {
+        for(var i in messageList) {
+            var item = messageList[i];
+            if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId == message.idUserGet) {
+                item.currentCapacityGot += message.capacityGet;
+
+                if(item.currentCapacityGot == item.guildCapacityAtTime){
+                    messageList.splice(i, 1);
+                }
+
+                break;
+            }
+        }
+        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild();
+    },
 
     processNewMessage: function() {
-        var message = {typeMessage: temp.messageType, userId: gv.user.id, usernameSend: gv.user.name, content: temp.messageContent, timeStamp: getCurrentServerTime()};
+        var message = {
+            typeMessage: temp.messageType,
+            userId: gv.user.id,
+            usernameSend: gv.user.name,
+            content: temp.messageContent,
+            timeStamp: getCurrentServerTime(),
+            currentCapacityGot: 0,
+            guildCapacityAtTime: temp.guildCapacityAtTime
+        };
         if(message.typeMessage == MESSAGE_ASK_TROOP) {
             gv.user.lastRequestTroopTimeStamp = getCurrentServerTime();
             for(var i in messageList) {
-                if(messageList[i].userId == message.userId){
+                if(messageList[i].userId == message.userId && messageList[i].typeMessage == MESSAGE_ASK_TROOP){
                     messageList.splice(i, 1);
                 }
             }
@@ -673,7 +729,22 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     processNewMessageToAll: function(message) {
-        var newMessage = {typeMessage: message.messageType, userId: message.idUserSend, usernameSend: message.usernameSend, content: message.contentMessage, timeStamp: getCurrentServerTime()};
+        var newMessage = {
+            typeMessage: message.messageType,
+            userId: message.idUserSend,
+            usernameSend: message.usernameSend,
+            content: message.contentMessage,
+            timeStamp: getCurrentServerTime(),
+            currentCapacityGot: message.currentCapacityTroop,
+            guildCapacityAtTime: message.guildCapacityAtTime
+        };
+        if(message.typeMessage == MESSAGE_ASK_TROOP) {
+            for(var i in messageList) {
+                if(messageList[i].userId == message.userId && messageList[i].typeMessage == MESSAGE_ASK_TROOP){
+                    messageList.splice(i, 1);
+                }
+            }
+        }
         messageList.push(newMessage);
         LOBBY.onCloseInteractiveGuild();
         LOBBY.onInteractiveGuild();

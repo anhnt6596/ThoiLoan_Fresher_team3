@@ -339,6 +339,17 @@ var getCurrentLevelTownHall = function(){
     }
 };
 
+var getCurrentGuildCapacity = function() {
+    var levelCLC = 1;
+    for(var k in contructionList){
+        if(contructionList[k].name == 'CLC_1'){
+            levelCLC = contructionList[k].level;
+            break;
+        }
+    }
+    return config.building.CLC_1[levelCLC].troopCapacity;
+};
+
 var updateBuilderNumber = function(){
     gv.user.allBuilder = checkBuilder();
     var a = checkPendingBuilding();

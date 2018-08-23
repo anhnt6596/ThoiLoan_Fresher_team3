@@ -129,6 +129,10 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later";
             title = "Server denied to send new message";
             break;
+        case 'server_denied_give_troop_guild':
+            data.content = "Please try again later";
+            title = "Server denied to give troop guild";
+            break;
         case 'server_denied_upgrade_multi_wall':
             data.content = "Please try again later";
             title = "Server denied to upgrade multi wall";
