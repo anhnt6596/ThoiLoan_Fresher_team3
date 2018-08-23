@@ -75,7 +75,7 @@ testnetwork.Connector = cc.Class.extend({
                         wallRefs.forEach(function(element) {
                             element.updatePresentImg();
                         });
-                        MAP.suggestNewWal(temp.newBuildingAdd);
+                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) MAP.suggestNewWal(temp.newBuildingAdd);
                     }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
@@ -261,7 +261,7 @@ testnetwork.Connector = cc.Class.extend({
                 popup.openAction();
                 gv.user.is_in_guild = false;
                 CLAN_GUI.initHeader(5);
-                cc.log("AAAAAAAAAAAAAAAAAAAAA");
+                CLANCASTLE.addClanIcon();
             } else if (gv.user.is_in_guild) {
                 requestMyClanMember = true;
                 this.getGuildListMemberInfo(gv.user.id_guild);
@@ -272,13 +272,13 @@ testnetwork.Connector = cc.Class.extend({
         if (data.validate) {
             myClanInfo = extend(myClanInfo, temp.editGuildData);
             CLAN_GUI.TAB1.initClanInfo();
+            CLANCASTLE.addClanIcon();
         }
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
             gv.user.is_in_guild = true;
             gv.user.id_guild = temp.reqJoinClanId;
-            
             // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
             CLAN_GUI.initHeader(1);
 
@@ -315,6 +315,7 @@ testnetwork.Connector = cc.Class.extend({
                 troophy: data.troophy,
                 troophyRequire: data.troophyRequire,
             }
+            CLANCASTLE.addClanIcon();
         }
         CLAN_GUI.TAB1.initClanInfo();
     },
@@ -339,6 +340,8 @@ testnetwork.Connector = cc.Class.extend({
             CLAN_GUI.TAB1.initClanInfo();
             this.getGuildListMemberInfo(data.id);
             requestMyClanMember = true;
+
+            CLANCASTLE.addClanIcon();
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
         }

@@ -187,11 +187,11 @@ var ObjectMenu = cc.Node.extend({
                 if (object._name == "BAR_1")  this._listValidBtn.push(this.trainBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length === 0)  this._listValidBtn.push(this.selectLineBtn);
                 if (object._name == "WAL_1" && wallSelectingArray.length >= 2)  this._listValidBtn.push(this.rotateBtn);
-                if (object._name == "CLC_1")  this._listValidBtn.push(this.clanBtn);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
                 this._listValidBtn.push(this.cancelBtn);        // cancel tiếp theo
                 this._listValidBtn.push(this.quickFinishBtn);   // quick finish
             }
+            if (object._name == "CLC_1") this._listValidBtn.push(this.clanBtn);
         } else if (object instanceof Obstacle) {
             this._listValidBtn.push(this.removeBtn);
         }

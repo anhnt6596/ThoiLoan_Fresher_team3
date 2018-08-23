@@ -499,6 +499,15 @@ var MapLayer = cc.Layer.extend({
         var self = this; // hàm của Duy, ko tái sử dụng đc nên phải copy sang
         var count = 0;
         var nextPos;
+        if (mapLogicArray[newBuilding._posX + 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 2;
+        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY + 1] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 3;
+        } else if (mapLogicArray[newBuilding._posX - 1][newBuilding._posY] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 0;
+        } else if (mapLogicArray[newBuilding._posX][newBuilding._posY - 1] !== MAPVALUE.UNUSED) {
+            this.lastSuggestWallDirection = 1;
+        }
         do {
             switch (this.lastSuggestWallDirection) {
                 case 0:
