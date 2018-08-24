@@ -306,8 +306,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
@@ -337,8 +337,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
@@ -360,25 +360,27 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
-            cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
-            gv.user.is_in_guild = true;
-            gv.user.id_guild = temp.reqJoinClanId;
-            // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
-            CLAN_GUI.initHeader(1);
-            
-            if (temp.reqJoinClanId !== undefined) {
-                requestMyClanMember = true;
-                this.getGuildListMemberInfo(temp.reqJoinClanId);
-                this.sendGetGuildInfo(temp.reqJoinClanId);
-            }
+            if (youAreRequest) {
+                cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
+                youAreRequest = false;
+                gv.user.is_in_guild = true;
+                gv.user.id_guild = temp.reqJoinClanId;
+                // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+                CLAN_GUI.initHeader(1);
 
+                requestMyClanMember = true;
+                if (temp.reqJoinClanId !== undefined) {
+                    this.getGuildListMemberInfo(temp.reqJoinClanId);
+                    this.sendGetGuildInfo(temp.reqJoinClanId);
+                }
+            }
             var mess =  {
                 typeMessage: MESSAGE_NORMAL,
                 userId: -1,
@@ -389,8 +391,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            LOBBY.onCloseInteractiveGuild();
             LOBBY.onInteractiveGuild();
+            LOBBY.onCloseInteractiveGuild();
 
         }
     },
@@ -470,8 +472,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
