@@ -367,17 +367,20 @@ testnetwork.Connector = cc.Class.extend({
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
-            cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
-            gv.user.is_in_guild = true;
-            gv.user.id_guild = temp.reqJoinClanId;
-            // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
-            CLAN_GUI.initHeader(1);
+            if (youAreRequest) {
+                cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
+                youAreRequest = false;
+                gv.user.is_in_guild = true;
+                gv.user.id_guild = temp.reqJoinClanId;
+                // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
+                CLAN_GUI.initHeader(1);
 
-            requestMyClanMember = true;
-            this.sendGetGuildInfo(temp.reqJoinClanId);
-            this.getGuildListMemberInfo(temp.reqJoinClanId);
-
-
+                requestMyClanMember = true;
+                if (temp.reqJoinClanId !== undefined) {
+                    this.getGuildListMemberInfo(temp.reqJoinClanId);
+                    this.sendGetGuildInfo(temp.reqJoinClanId);
+                }
+            }
             var mess =  {
                 typeMessage: MESSAGE_NORMAL,
                 userId: -1,
@@ -390,7 +393,6 @@ testnetwork.Connector = cc.Class.extend({
             messageList.push(mess);
             LOBBY.onCloseInteractiveGuild();
             LOBBY.onInteractiveGuild();
-
         }
     },
     processSearchClan: function(data) {
