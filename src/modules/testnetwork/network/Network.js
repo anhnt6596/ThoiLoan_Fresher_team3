@@ -372,10 +372,12 @@ testnetwork.Connector = cc.Class.extend({
             gv.user.id_guild = temp.reqJoinClanId;
             // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
             CLAN_GUI.initHeader(1);
-
-            requestMyClanMember = true;
-            this.sendGetGuildInfo(temp.reqJoinClanId);
-            this.getGuildListMemberInfo(temp.reqJoinClanId);
+            
+            if (temp.reqJoinClanId !== undefined) {
+                requestMyClanMember = true;
+                this.getGuildListMemberInfo(temp.reqJoinClanId);
+                this.sendGetGuildInfo(temp.reqJoinClanId);
+            }
 
 
             var mess =  {
