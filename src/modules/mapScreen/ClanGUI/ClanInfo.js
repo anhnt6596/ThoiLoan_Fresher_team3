@@ -12,6 +12,14 @@ var ClanInfo = cc.Sprite.extend({
         });
         this.addChild(icon);
 
+        var idText = new cc.LabelTTF("ID: " + clanInfo.id, "Calibri", 20);
+        idText.attr({
+            x: 56,
+            y: this.height / 2 - 42,
+            color: new cc.color(76, 4, 17, 255)
+        });
+        this.addChild(idText);
+
         this.initInfoTable(clanInfo);
         this.initButton();
     },
@@ -132,8 +140,8 @@ var ClanInfo = cc.Sprite.extend({
         cc.log("join" + this.clanInfo.id);
         if (gv.user.is_in_guild && gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
         else {
-            NETWORK.sendAddRequestMember(this.clanInfo.id);
             temp.reqJoinClanId = this.clanInfo.id;
+            NETWORK.sendAddRequestMember(this.clanInfo.id);
         }
     },
     outAction: function() {

@@ -75,7 +75,11 @@ testnetwork.Connector = cc.Class.extend({
                         wallRefs.forEach(function(element) {
                             element.updatePresentImg();
                         });
-                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) MAP.suggestNewWal(temp.newBuildingAdd);
+                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) {
+                            setTimeout(function() {
+                                MAP.suggestNewWal(temp.newBuildingAdd);
+                            }, 50);
+                        }
                     }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
@@ -272,6 +276,8 @@ testnetwork.Connector = cc.Class.extend({
     },
     processSetGuildPosition: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN SET GUILD POSITION tu SERVER=======================================");
+
             requestMyClanMember = true;
             this.getGuildListMemberInfo(gv.user.id_guild);
 
@@ -300,10 +306,15 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            LOBBY.onCloseInteractiveGuild();
+            LOBBY.onInteractiveGuild();
+
         }
     },
     processRemoveMember: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN REMOVE MEMBER tu SERVER=======================================");
+
             if (data.id === gv.user.id) {
                 var popup = new ui.PopUp("Bạn đã bị đuổi khỏi Bang");
                 MAPSCENE.addChild(popup, 1000);
@@ -326,10 +337,15 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            LOBBY.onCloseInteractiveGuild();
+            LOBBY.onInteractiveGuild();
+
         }
     },
     processEditGuildInfo: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN EDIT GUILD INFO tu SERVER=======================================");
+
             myClanInfo = extend(myClanInfo, temp.editGuildData);
             CLAN_GUI.TAB1.initClanInfo();
             CLANCASTLE.addClanIcon();
@@ -344,10 +360,14 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            LOBBY.onCloseInteractiveGuild();
+            LOBBY.onInteractiveGuild();
+
         }
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
             gv.user.is_in_guild = true;
             gv.user.id_guild = temp.reqJoinClanId;
             // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
@@ -370,11 +390,20 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            LOBBY.onCloseInteractiveGuild();
+            LOBBY.onInteractiveGuild();
+
         }
     },
     processSearchClan: function(data) {
-        listClanInfo = data.listClan;
-        CLAN_GUI.TAB3.pushClanItem();
+        if (searchSuggestClan) {
+            suggestClanList = data.listClan;
+            CLAN_GUI.TAB5.pushClanItem();
+            searchSuggestClan = false;
+        } else {
+            listClanInfo = data.listClan;
+            CLAN_GUI.TAB3.pushClanItem();
+        }
     },
     processGetListMemberClan: function(data) {
         if (requestMyClanMember) {
@@ -406,7 +435,10 @@ testnetwork.Connector = cc.Class.extend({
     },
     processCreateGuild: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN CREATE GUILD tu SERVER=======================================");
+
             gv.user.is_in_guild = true;
+            gv.user.lastRequestTroopTimeStamp = 0;
             gv.user.id_guild = data.id;
             myClanInfo = {
                 id: data.id,
@@ -439,6 +471,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            LOBBY.onCloseInteractiveGuild();
+            LOBBY.onInteractiveGuild();
 
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
@@ -937,7 +971,10 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.gold = packet.gold;
         gv.user.elixir = packet.elixir;
         gv.user.darkElixir = packet.darkElixir;
-        
+
+        gv.user.lastRequestTroopTimeStamp = packet.last_time_ask_for_troops;
+        cc.log(" ================ DUY: lastRequestTroopTimeStamp" + gv.user.lastRequestTroopTimeStamp);
+
         gv.user.is_in_guild = packet.is_in_guild;
         gv.user.id_guild = packet.id_guild || -1,
         gv.user.name_guild = packet.name_guild || "",

@@ -59,7 +59,7 @@ var ClanMemberTab = Tab.extend({
             y: this.height - 70,
         });
 
-        scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+        scrollView.setInnerContainerSize(cc.size(700, myClanMember.length * 62));
         this.addChild(scrollView);
     },
     pushClanMember: function() {
@@ -67,14 +67,14 @@ var ClanMemberTab = Tab.extend({
         this.scrollView.removeAllChildren();
         myClanMember.forEach(function(member, i) {
             var clanItem = new MemberItemList(member, i + 1);
-            var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
+            var calc = myClanMember.length < 5 ? 5 : myClanMember.length;
             clanItem.attr({
                 x: self.scrollView.width / 2,
                 y: (calc - i - 1) * 62,
                 anchorY: 0,
             });
             self.scrollView.addChild(clanItem);
-            self.scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+            self.scrollView.setInnerContainerSize(cc.size(700, myClanMember.length * 62));
 
             clanItem.addClickEventListener((item) => self.clickMember(item, member));
             if (member.position === 2 && member.id === gv.user.id) youreBoss = true;

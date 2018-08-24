@@ -15,7 +15,7 @@ var TopCenterBar = cc.Sprite.extend({
                 break;
             case 'army':
                 title = "Army";
-                value = "không";
+                value = getTotalCurrentTroopCapacity() + '/' + getTotalCapacityAMCs();
                 leftIconRes = 'res/Art/GUIs/Main_Gui/army_icon.png';
                 break;
             case 'shield':
@@ -58,7 +58,7 @@ var TopCenterBar = cc.Sprite.extend({
                 value = userInfo.freeBuilder + '/' + userInfo.allBuilder;;
                 break;
             case 'army':
-                value = "không";
+                value = getTotalCurrentTroopCapacity() + '/' + getTotalCapacityAMCs();
                 break;
             case 'shield':
                 value = "không";

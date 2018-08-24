@@ -94,6 +94,7 @@ var LobbyLayer = cc.Layer.extend({
         //});
         // NETWORK.sendResearchComplete("ARM_1");
         donateTroopShowAnims("ARM_1");
+        // receiveTroopShowAnims("ARM_2", 4);
     },
 
     onInteractiveGuild: function() {
@@ -223,7 +224,6 @@ var LobbyLayer = cc.Layer.extend({
                 if(item.userId != gv.user.id){
                     //Neu van cho the cho
                     if(!userGotList[item.userId] || userGotList[item.userId] < MAX_TROOP_AMOUNT_USER_CAN_GIVE){
-                        cc.log("====================== TH1 =================");
                         var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
                         btn.setAnchorPoint(0, 0);
                         btn.setPosition(200, content.y - btn.height - 5);
@@ -236,8 +236,6 @@ var LobbyLayer = cc.Layer.extend({
                         label.setPosition(btn.x + 30, btn.y + 20);
                         nodeContainer.addNode(label);
                     }else{
-                        cc.log("====================== TH2 =================");
-
                         var labelThank = new cc.LabelBMFont("  Thank you for donated", 'res/Art/Fonts/fista_20_non.fnt');
                         labelThank.setAnchorPoint(0, 0);
                         labelThank.setPosition(200, content.y - labelThank.height - 5);

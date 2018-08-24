@@ -159,7 +159,7 @@ CmdSendGetGuildInfo = fr.OutPacket.extend(
         pack:function(id){
             this.packHeader();
             //id_guild
-            cc.log("a>>>>>>>>>>>>>>>>>>>>ID: " + id)
+            cc.log("a>>>>>>>>>>>>>>>>>>>>ID: " + id);
             this.putInt(id);
 
             this.updateSize();

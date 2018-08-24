@@ -1,5 +1,6 @@
 var CLANCASTLE = CLANCASTLE || null;
 var ClanCastle = Building.extend({
+    _listArmy: [],
     ctor: function(info) {
         CLANCASTLE = this;
         this._super(info);
@@ -33,6 +34,26 @@ var ClanCastle = Building.extend({
                 scale: 1.2
             });
             this.buildingImg.addChild(icon);
+        }
+    },
+    addArmy: function(troop) {
+        this._listArmy.push(troop);
+        // listTroopRefs.push(troop);
+        // this.calculatePopulation();
+    },
+    armyRun: function() {
+        createSolidMapArray();
+        this._listArmy.forEach(element => {
+            element.receiveFromClanAnims();
+        });
+    },
+    removeTroop: function(troop) {
+        cc.log("Remove")
+
+        var index = this._listArmy.indexOf(troop);
+        if (index > -1) {
+            this._listArmy.splice(index, 1);
+            cc.log("Remove complete")
         }
     }
 });
