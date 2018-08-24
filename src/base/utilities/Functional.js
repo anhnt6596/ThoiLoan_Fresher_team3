@@ -339,6 +339,17 @@ var getCurrentLevelTownHall = function(){
     }
 };
 
+var getCurrentGuildCapacity = function() {
+    var levelCLC = 1;
+    for(var k in contructionList){
+        if(contructionList[k].name == 'CLC_1'){
+            levelCLC = contructionList[k].level;
+            break;
+        }
+    }
+    return config.building.CLC_1[levelCLC].troopCapacity;
+};
+
 var updateBuilderNumber = function(){
     gv.user.allBuilder = checkBuilder();
     var a = checkPendingBuilding();
@@ -449,6 +460,15 @@ var getTotalCurrentTroopCapacity = function(){
         total += troopInfo[i].population * config.troopBase[i].housingSpace;
     }
     return total;
+};
+
+var getTotalCapacityTroopGuild = function(){
+    var totalCapacity = 0;
+    for(var i in troopGuildList){
+        var item = troopGuildList[i];
+        totalCapacity += config.troopBase[item.typeTroop].housingSpace;
+    }
+    return totalCapacity;
 };
 
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];

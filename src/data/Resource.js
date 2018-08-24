@@ -775,6 +775,10 @@ var research_constant = {
 var RESPONSE_VALIDATE = 1;
 var RESPONSE_TO_ALL = 2;
 
+//value Validate Give Troop;
+var SUCCESS = 1;
+var GIVE_OVER_MAX = 2;
+
 //type message
 var MESSAGE_NORMAL = 1;
 var MESSAGE_ASK_TROOP = 2;

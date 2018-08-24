@@ -54,6 +54,7 @@ var ResearchPopUp = ui.PopUp.extend({
         }
         console.log("lab_level "+ this.lab_level);
 
+        
         this.initInfoResearch();
         this.initScrollBar();
 
@@ -65,7 +66,7 @@ var ResearchPopUp = ui.PopUp.extend({
             console.log(obj.type+" status: "+obj.status);
             if (obj.status === research_constant.status.busy){
 
-                var countDownDate =config.troop[obj.type][obj.level+1].researchTime*1000;
+                var countDownDate = config.troop[obj.type][obj.level+1].researchTime*1000;
                 var now = getCurrentServerTime();
                 console.log(obj.type+" startTime= "+obj.startTime+ "currentTime="+now);
                 var distance = countDownDate - (now - obj.startTime);
@@ -537,8 +538,16 @@ var ResearchPopUp = ui.PopUp.extend({
         }
     }
     ,
-    onSelectItem:function(type)
-    {
+    onSelectItem:function(type) {
+        var level = troopInfo[type].level;
+        var countDownDate = config.troop[type][level + 1].researchTime * 1000;
+        var data = {_level: troopInfo[type].level + 1, itemName: type, countDownDate: countDownDate};
+        var popup = new TroopResearchInfo(cc.winSize.width * 3 / 4, cc.winSize.height * 5.7 / 6, name.troop[type].vi + ' nâng lên cấp ' + (troopInfo[type].level + 1), true, data);
+        cc.director.getRunningScene().addChild(popup, 1500);
+
+    },
+    onResearchItem: function(type) {
+
         var elixir_rq = this.getResourceRequire(type, troopInfo[type].level+1, "researchElixir");
         var dark_elixir_rq = this.getResourceRequire(type, troopInfo[type].level+1, "researchDarkElixir");
 

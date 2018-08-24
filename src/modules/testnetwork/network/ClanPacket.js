@@ -159,7 +159,7 @@ CmdSendGetGuildInfo = fr.OutPacket.extend(
         pack:function(id){
             this.packHeader();
             //id_guild
-            cc.log("a>>>>>>>>>>>>>>>>>>>>ID: " + id)
+            cc.log("a>>>>>>>>>>>>>>>>>>>>ID: " + id);
             this.putInt(id);
 
             this.updateSize();
@@ -322,6 +322,7 @@ testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
         },
         readData: function(){
             this.validate = this.getShort();
+            this.id = this.getInt();
         }
     }
 );

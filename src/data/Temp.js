@@ -40,3 +40,10 @@ temp.enableSendMessageFlag = true;
 //
 temp.messageContent = null;
 temp.messageType = null;
+temp.guildCapacityAtTime = null;
+
+temp.idUserGetTroop = null;
+temp.typeTroopGive = null;
+temp.tagTroopGive = null;
+
+//temp.overMaxTroopGive = [];

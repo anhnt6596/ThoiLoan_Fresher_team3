@@ -1037,6 +1037,10 @@ testnetwork.packetMap[gv.CMD.NEW_MESSAGE] = fr.InPacket.extend(
                 cc.log("Username sender: " + this.usernameSend);
                 this.contentMessage = this.getString();
                 cc.log("Content Message: " + this.contentMessage);
+                this.currentCapacityTroop = this.getInt();
+                cc.log("Current Capacity Troop: " + this.currentCapacityTroop);
+                this.guildCapacityAtTime = this.getInt();
+                cc.log("Guild Capacity At Time: " + this.guildCapacityAtTime);
             }
         }
     }
@@ -1054,8 +1058,10 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
                 this.validateValue = this.getShort();
             }else if(this.typeResponse == RESPONSE_TO_ALL){
                 this.idUserGet = this.getInt();
-                this.capacityGet = this.getShort();
-
+                //this.capacityGet = this.getShort();
+                this.troopType = this.getString();
+                this.levelTroop = this.getInt();
+                this.idUserGive = this.getInt();
             }
         }
     }
@@ -1064,6 +1070,7 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
 var troopGuildList = [];
 var messageList = [];
 var memberListOnline = [];
+var userGotList = {};
 
 testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
     {
@@ -1072,9 +1079,9 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            this.lastRequestTroopTimeStamp = this.getLong();
-            gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
-            cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
+            //this.lastRequestTroopTimeStamp = this.getLong();
+            //gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
+            //cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
 
             this.sizeTroopGuildList = this.getInt();
             cc.log("=============== Troop Guild List Size: " + this.sizeTroopGuildList);
@@ -1083,11 +1090,10 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 cc.log("=============== Troop thu " + (i+1));
                 this.typeTroop = this.getString();
                 cc.log("=============== Type Troop: " + this.typeTroop);
-                troopGuildList[this.typeTroop] = {};
                 this.levelTroop = this.getShort();
                 cc.log("=============== Level Troop: " + this.levelTroop);
 
-                troopGuildList[this.typeTroop].level = this.levelTroop;
+                troopGuildList[i] = {typeTroop: this.typeTroop, level: this.levelTroop};
             }
 
             this.sizeMessageList = this.getInt();
@@ -1109,7 +1115,21 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 this.timeStamp = this.getLong();
                 cc.log("=============== Message timeStamp: " + this.timeStamp);
 
-                messageList[j] = {typeMessage: this.typeMessage, userId: this.id_user, usernameSend: this.usernameSend, content: this.content, timeStamp: this.timeStamp};
+                this.currentCapacityTroop = this.getInt();
+                cc.log("Current Capacity Troop: " + this.currentCapacityTroop);
+
+                this.guildCapacityAtTime = this.getInt();
+                cc.log("Guild Capacity At Time: " + this.guildCapacityAtTime);
+
+                messageList[j] = {
+                    typeMessage: this.typeMessage,
+                    userId: this.id_user,
+                    usernameSend: this.usernameSend,
+                    content: this.content,
+                    timeStamp: this.timeStamp,
+                    currentCapacityGot: this.currentCapacityTroop,
+                    guildCapacityAtTime: this.guildCapacityAtTime
+                };
             }
 
 
@@ -1129,8 +1149,22 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 cc.log("=============== Value online: " + this.valueOnline);
 
                 memberListOnline[k] = {idUser: this.idUser, username: this.username, valueOnline: this.valueOnline};
-
             }
+
+
+            this.sizeUserGotList = this.getInt();
+            cc.log("=============== User Got List Size: " + this.sizeUserGotList);
+
+            for(var d = 0; d < this.sizeUserGotList; d++) {
+                cc.log("=============== User Got thu " + (d+1));
+                this.idUserGot = this.getInt();
+                cc.log("=============== User Got ID: " + this.idUserGot);
+                this.amountGot = this.getInt();
+                cc.log("=============== Amount Got: " + this.amountGot);
+
+                userGotList[this.idUserGot] = this.amountGot;
+            }
+
         }
     }
 );
