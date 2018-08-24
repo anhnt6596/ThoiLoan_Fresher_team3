@@ -188,8 +188,11 @@ var ObjectMenu = cc.Node.extend({
         this._listValidBtn = [];
         if (object instanceof Contruction) {
             this._listValidBtn.push(this.infoBtn);              // info đầu tiên
-            if (object._status == 'complete' && object._name !== 'BDH_1') { // nếu trang thái hoàn thành thì thêm nút upgrade và các nút khác tùy tên
-                this._listValidBtn.push(this.upgradeBtn);
+            if (
+                object._status == 'complete'
+                && object._name !== 'BDH_1'
+            ) { // nếu trang thái hoàn thành thì thêm nút upgrade và các nút khác tùy tên
+                if (!(object._name === 'LAB_1' && research_constant.troop)) this._listValidBtn.push(this.upgradeBtn);
                 if (object._name == "LAB_1")  this._listValidBtn.push(this.researchBtn);
                 if (object._name == "RES_1")  this._listValidBtn.push(this.collectGoldBtn);
                 if (object._name == "RES_2")  this._listValidBtn.push(this.collectElixirBtn);

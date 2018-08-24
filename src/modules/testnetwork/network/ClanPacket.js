@@ -321,8 +321,11 @@ testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
             this._super();
         },
         readData: function(){
+            console.log("Nhan goi tin ADD_REQUEST member");
             this.validate = this.getShort();
+            cc.log("this.validate" + this.validate);
             this.id = this.getInt();
+            cc.log("this.id" + this.id);
         }
     }
 );
@@ -332,12 +335,10 @@ testnetwork.packetMap[gv.CMD.REMOVE_MEMBER] = fr.InPacket.extend({
         this._super();
     },
     readData: function() {
+        console.log("Nhan goi tin remove member");
         this.validate = this.getShort();
         cc.log("this.validate" + this.validate);
-        if (this.validate) {
-            this.id = this.getInt();
-            cc.log("this.id" + this.id);
-        }
+        this.id = this.getInt();
     }
 });
 
