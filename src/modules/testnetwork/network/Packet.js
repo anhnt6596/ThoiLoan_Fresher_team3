@@ -1079,9 +1079,9 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            this.lastRequestTroopTimeStamp = this.getLong();
-            gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
-            cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
+            //this.lastRequestTroopTimeStamp = this.getLong();
+            //gv.user.lastRequestTroopTimeStamp = this.lastRequestTroopTimeStamp;
+            //cc.log("=============== Last Request Troop Time Stamp: " + this.lastRequestTroopTimeStamp);
 
             this.sizeTroopGuildList = this.getInt();
             cc.log("=============== Troop Guild List Size: " + this.sizeTroopGuildList);

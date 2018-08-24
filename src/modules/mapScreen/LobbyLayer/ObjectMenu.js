@@ -203,15 +203,16 @@ var ObjectMenu = cc.Node.extend({
             }
             if (object._name == "CLC_1") {
                 this._listValidBtn.push(this.clanBtn);
-                var condition1 = gv.user.lastRequestTroopTimeStamp && (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp) >= TIME_REQUEST_TROOP;
+                var condition1 = gv.user.is_in_guild && ((getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp) >= TIME_REQUEST_TROOP);
                 var capacityGuild = getCurrentGuildCapacity();
                 var capacityTroopGuild = getTotalCapacityTroopGuild();
                 var condition2 = (capacityTroopGuild < capacityGuild);
 
-                if(condition2){
-                    cc.log("========================== capacityTroopGuild < capacityGuild");
+                if(condition1){
+                    cc.log("========================== condition1 true");
                 }else{
-                    cc.log("========================== capacityTroopGuild >= capacityGuild");
+                    cc.log("========================== condition1 false");
+                    cc.log("=================== lastRequestTroopTimeStamp " + gv.user.lastRequestTroopTimeStamp);
                 }
 
                 if (condition1 && condition2) {
