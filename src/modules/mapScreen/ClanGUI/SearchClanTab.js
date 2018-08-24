@@ -1,65 +1,4 @@
-var listClanInfo = listClanInfo || [
-    {
-        id: 1,
-        name: "Thiên Long Bát Bộ",
-        iconType: 1,
-        status: 1,
-        level: 2,
-        member: 49,
-        troophy: 1123,
-        troophyRequire: 0,
-    },
-    {
-        id: 2,
-        name: "Anh Hùng Xạ Điêu",
-        iconType: 2,
-        status: 1,
-        level: 1,
-        member: 30,
-        troophy: 500,
-        troophyRequire: 0,
-    },
-    {
-        id: 3,
-        name: "Thần Điêu Đại Hiệp",
-        iconType: 3,
-        status: 1,
-        level: 10,
-        member: 12,
-        troophy: 11986,
-        troophyRequire: 0,
-    },
-    {
-        id: 4,
-        name: "Ỷ Thiên Đồ Long Ký",
-        iconType: 4,
-        status: 1,
-        level: 1,
-        member: 49,
-        troophy: 2000,
-        troophyRequire: 0,
-    },
-    {
-        id: 5,
-        name: "Tiếu Ngạo Giang Hồ",
-        iconType: 5,
-        status: 0,
-        level: 1,
-        member: 0,
-        troophy: 0,
-        troophyRequire: 0,
-    },
-    {
-        id: 6,
-        name: "Lộc Đỉnh Ký",
-        iconType: 6,
-        status: 0,
-        level: 1,
-        member: 0,
-        troophy: 0,
-        troophyRequire: 0,
-    },
-];
+ var listClanInfo = listClanInfo || [];
 
 var clanMember = clanMember || [];
 
@@ -251,7 +190,7 @@ var SearchClanTab = Tab.extend({
             y: this.height - 70,
         });
 
-        memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+        memberScrollView.setInnerContainerSize(cc.size(700, clanMember.length * 62));
         this.addChild(memberScrollView);
         
         NETWORK.getGuildListMemberInfo(clanId);
@@ -263,14 +202,14 @@ var SearchClanTab = Tab.extend({
             this.memberScrollView.removeAllChildren();
             clanMember.forEach(function(member, i) {
                 var clanItem = new MemberItemList(member, i + 1);
-                var calc = listClanInfo.length < 5 ? 5 : listClanInfo.length;
+                var calc = clanMember.length < 5 ? 5 : clanMember.length;
                 clanItem.attr({
                     x: self.scrollView.width / 2,
                     y: (calc - i - 1) * 62,
                     anchorY: 0,
                 });
                 self.memberScrollView.addChild(clanItem);
-                self.memberScrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+                self.memberScrollView.setInnerContainerSize(cc.size(700, clanMember.length * 62));
 
                 clanItem.addClickEventListener(() => self.clickMember(member));
             });

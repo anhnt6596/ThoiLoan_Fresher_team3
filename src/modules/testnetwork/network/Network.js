@@ -75,7 +75,11 @@ testnetwork.Connector = cc.Class.extend({
                         wallRefs.forEach(function(element) {
                             element.updatePresentImg();
                         });
-                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) MAP.suggestNewWal(temp.newBuildingAdd);
+                        if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) {
+                            setTimeout(function() {
+                                MAP.suggestNewWal(temp.newBuildingAdd);
+                            }, 50);
+                        }
                     }
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
@@ -390,8 +394,14 @@ testnetwork.Connector = cc.Class.extend({
         }
     },
     processSearchClan: function(data) {
-        listClanInfo = data.listClan;
-        CLAN_GUI.TAB3.pushClanItem();
+        if (searchSuggestClan) {
+            suggestClanList = data.listClan;
+            CLAN_GUI.TAB5.pushClanItem();
+            searchSuggestClan = false;
+        } else {
+            listClanInfo = data.listClan;
+            CLAN_GUI.TAB3.pushClanItem();
+        }
     },
     processGetListMemberClan: function(data) {
         if (requestMyClanMember) {
