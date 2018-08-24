@@ -274,6 +274,32 @@ testnetwork.Connector = cc.Class.extend({
         if (data.validate) {
             requestMyClanMember = true;
             this.getGuildListMemberInfo(gv.user.id_guild);
+
+            var pos;
+            switch(data.position) {
+                case 0:
+                    pos = "Member";
+                    break;
+                case 1:
+                    pos = "Moderator";
+                    break;
+                case 2:
+                    pos = "Leader";
+                    break;
+                default:
+                    pos = "Member";
+            }
+
+            var mess =  {
+                typeMessage: MESSAGE_NORMAL,
+                userId: -1,
+                usernameSend: "SYSTEM",
+                content: "Fresher_" + data.id + " becomes to " + pos,
+                timeStamp: getCurrentServerTime(),
+                currentCapacityGot: 0,
+                guildCapacityAtTime: 0
+            };
+            messageList.push(mess);
         }
     },
     processRemoveMember: function(data) {
@@ -289,6 +315,17 @@ testnetwork.Connector = cc.Class.extend({
                 requestMyClanMember = true;
                 this.getGuildListMemberInfo(gv.user.id_guild);
             }
+
+            var mess =  {
+                typeMessage: MESSAGE_NORMAL,
+                userId: -1,
+                usernameSend: "SYSTEM",
+                content: "Fresher_" + data.id + " has been removed",
+                timeStamp: getCurrentServerTime(),
+                currentCapacityGot: 0,
+                guildCapacityAtTime: 0
+            };
+            messageList.push(mess);
         }
     },
     processEditGuildInfo: function(data) {
@@ -296,6 +333,17 @@ testnetwork.Connector = cc.Class.extend({
             myClanInfo = extend(myClanInfo, temp.editGuildData);
             CLAN_GUI.TAB1.initClanInfo();
             CLANCASTLE.addClanIcon();
+
+            var mess =  {
+                typeMessage: MESSAGE_NORMAL,
+                userId: -1,
+                usernameSend: "SYSTEM",
+                content: "Clan description has changed!",
+                timeStamp: getCurrentServerTime(),
+                currentCapacityGot: 0,
+                guildCapacityAtTime: 0
+            };
+            messageList.push(mess);
         }
     },
     processAddRequestMember: function(data) {
@@ -308,6 +356,18 @@ testnetwork.Connector = cc.Class.extend({
             requestMyClanMember = true;
             this.sendGetGuildInfo(temp.reqJoinClanId);
             this.getGuildListMemberInfo(temp.reqJoinClanId);
+
+
+            var mess =  {
+                typeMessage: MESSAGE_NORMAL,
+                userId: -1,
+                usernameSend: "SYSTEM",
+                content: "Fresher_" + data.id + " has joined!",
+                timeStamp: getCurrentServerTime(),
+                currentCapacityGot: 0,
+                guildCapacityAtTime: 0
+            };
+            messageList.push(mess);
         }
     },
     processSearchClan: function(data) {
@@ -366,6 +426,18 @@ testnetwork.Connector = cc.Class.extend({
 
             CLANCASTLE.addClanIcon();
             LOBBY.showObjectMenu();
+
+            var mess =  {
+                typeMessage: MESSAGE_NORMAL,
+                userId: -1,
+                usernameSend: "SYSTEM",
+                content: gv.user.name + " has created this clan!",
+                timeStamp: getCurrentServerTime(),
+                currentCapacityGot: 0,
+                guildCapacityAtTime: 0
+            };
+            messageList.push(mess);
+
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
         }

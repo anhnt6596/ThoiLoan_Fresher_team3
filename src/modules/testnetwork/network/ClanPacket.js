@@ -322,6 +322,7 @@ testnetwork.packetMap[gv.CMD.ADD_REQUEST_MEMBER] = fr.InPacket.extend(
         },
         readData: function(){
             this.validate = this.getShort();
+            this.id = this.getInt();
         }
     }
 );
