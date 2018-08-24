@@ -94,6 +94,7 @@ var LobbyLayer = cc.Layer.extend({
         //});
         // NETWORK.sendResearchComplete("ARM_1");
         donateTroopShowAnims("ARM_1");
+        // receiveTroopShowAnims("ARM_2", 4);
     },
 
     onInteractiveGuild: function() {
@@ -136,8 +137,6 @@ var LobbyLayer = cc.Layer.extend({
             prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
             this.getParent().addChild(prevBtn, 21, 18);
         }
-
-
     },
 
     sendMessage: function() {

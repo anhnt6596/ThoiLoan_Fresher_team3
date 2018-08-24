@@ -1,3 +1,68 @@
+var searchSuggestClan = false;
+
+var suggestClanList = suggestClanList || [
+        {
+            id: 1,
+            name: "Thiên Long Bát Bộ",
+            iconType: 1,
+            status: 1,
+            level: 2,
+            member: 49,
+            troophy: 1123,
+            troophyRequire: 0,
+        },
+        {
+            id: 2,
+            name: "Anh Hùng Xạ Điêu",
+            iconType: 2,
+            status: 1,
+            level: 1,
+            member: 30,
+            troophy: 500,
+            troophyRequire: 0,
+        },
+        {
+            id: 3,
+            name: "Thần Điêu Đại Hiệp",
+            iconType: 3,
+            status: 1,
+            level: 10,
+            member: 12,
+            troophy: 11986,
+            troophyRequire: 0,
+        },
+        {
+            id: 4,
+            name: "Ỷ Thiên Đồ Long Ký",
+            iconType: 4,
+            status: 1,
+            level: 1,
+            member: 49,
+            troophy: 2000,
+            troophyRequire: 0,
+        },
+        {
+            id: 5,
+            name: "Tiếu Ngạo Giang Hồ",
+            iconType: 5,
+            status: 0,
+            level: 1,
+            member: 0,
+            troophy: 0,
+            troophyRequire: 0,
+        },
+        {
+            id: 6,
+            name: "Lộc Đỉnh Ký",
+            iconType: 6,
+            status: 0,
+            level: 1,
+            member: 0,
+            troophy: 0,
+            troophyRequire: 0,
+        },
+];
+
 var JoinClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
@@ -22,21 +87,21 @@ var JoinClanTab = Tab.extend({
         scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
         this.addChild(scrollView);
         
-        this.pushClanItem(scrollView, listClanInfo);
+        // this.pushClanItem();
     },
-    pushClanItem: function(scrollView, listClanInfo) {
+    pushClanItem: function() {
         var self = this;
-        scrollView.removeAllChildren();
-        listClanInfo.forEach(function(clan, i) {
+        this.scrollView.removeAllChildren();
+        suggestClanList.forEach(function(clan, i) {
             var clanItem = new ClanItemList(clan, i + 1);
-            var calc = listClanInfo.length < 6 ? 6 : listClanInfo.length;
+            var calc = suggestClanList.length < 6 ? 6 : suggestClanList.length;
             clanItem.attr({
-                x: scrollView.width / 2,
+                x: self.scrollView.width / 2,
                 y: (calc - i - 1) * 62,
                 anchorY: 0,
             });
-            scrollView.addChild(clanItem);
-            scrollView.setInnerContainerSize(cc.size(700, listClanInfo.length * 62));
+            self.scrollView.addChild(clanItem);
+            self.scrollView.setInnerContainerSize(cc.size(700, suggestClanList.length * 62));
 
             clanItem.addClickEventListener(() => self.openClanInfo(clan));
         });
@@ -124,6 +189,8 @@ var JoinClanTab = Tab.extend({
         this.memberScrollView = null;
     },
     showTab: function() {
+        searchSuggestClan = true;
+        NETWORK.searchGuildInfo({ type: 1, text: "" });
         this.closeMemberScrollView();
         this.showListClan();
         this.setVisible(true);

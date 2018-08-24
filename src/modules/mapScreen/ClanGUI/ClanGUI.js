@@ -48,6 +48,7 @@ var ClanGUI = ui.PopUp.extend({
         tab4.setVisible(false);
         this.addChild(tab4, 999);
         var tab5 = new JoinClanTab(5);
+        this.TAB5 = tab5;
         tab5.setVisible(false);
         this.addChild(tab5, 999);
 

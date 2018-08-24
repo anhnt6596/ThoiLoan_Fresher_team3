@@ -231,7 +231,7 @@ var Contruction = cc.Class.extend({
     afterUpdatePosionAction: function(mapPos) {
         MAP.updateContructionList(this);
         MAP.createLogicArray(contructionList, obstacleLists);
-        if (this._name === "AMC_1") this.armyRun();
+        if (this._name === "AMC_1" || this._name === "CLC_1") this.armyRun();
         if(this._name === "WAL_1") {
             setTimeout(function() {
                 wallRefs.forEach(function(wall) {

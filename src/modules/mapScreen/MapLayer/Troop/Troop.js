@@ -26,14 +26,18 @@ var Troop = cc.Sprite.extend({
     _status: "standing",
     _moveSpeed: 1,
     _stopFlag: 0,
-    
-    ctor: function(building, img) {
+    _stepL: 1/8,
+    _moveToWorldGate: false,
+    _moveToClanCastle: false,
+    ctor: function(building, level, img) {
         this._super(img);
-        this._level = troopInfo[this._type].level || 1;
+        if (level !== undefined) this._level = level;
+        else this._level = troopInfo[this._type].level || 1;
         this._housingSpace = config.troopBase[this._type].housingSpace;
         this._buildingContain = building;
         this._buildingContain.addArmy(this);
         this.init();
+        this.intervalRunningInArmyCamp();
     },
     init: function() {
         MAP.addChild(this);
@@ -106,7 +110,7 @@ var Troop = cc.Sprite.extend({
                 this.runningEff();
             }
         } else {
-            if(this._moveToWorldGate) {
+            if(this._moveToWorldGate) { // chạy đến rìa thì chạy nốt qua cầu
                 var nextDes = { x: 4195, y: 240 };
                 var moveTime = calculateDistance(this, nextDes) / this._moveSpeed / 6;
                 var moveAction = new cc.MoveTo(moveTime, cc.p(nextDes.x, nextDes.y));
@@ -118,6 +122,10 @@ var Troop = cc.Sprite.extend({
                     // self.setVisible(false);
                     MAP.removeChild(self);
                 }, moveTime*1000);
+            } else if (this._moveToClanCastle) { // chạy đến nhà clan thì mất xác
+                CLANCASTLE.removeTroop(this);
+                // self.setVisible(false);
+                MAP.removeChild(this);
             } else {
                 this._lastDirection = 0;
                 this._status = "standing";
@@ -147,39 +155,39 @@ var Troop = cc.Sprite.extend({
         var y = this.y;
         switch (direction) {
             case 1:
-                nextSubDestination = { x: this.x, y: this.y - TILE_HEIGHT / 4 }
+                nextSubDestination = { x: this.x, y: this.y - TILE_HEIGHT * this._stepL }
                 break;
             case 2:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y - TILE_HEIGHT / 4 }
+                nextSubDestination = { x: this.x + TILE_WIDTH * this._stepL, y: this.y - TILE_HEIGHT * this._stepL }
                 break;
             case 3:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y }
+                nextSubDestination = { x: this.x + TILE_WIDTH * this._stepL, y: this.y }
                 break;
             case 4:
-                nextSubDestination = { x: this.x + TILE_WIDTH / 4, y: this.y + TILE_HEIGHT / 4 }
+                nextSubDestination = { x: this.x + TILE_WIDTH * this._stepL, y: this.y + TILE_HEIGHT * this._stepL }
                 break;
             case 5:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y - TILE_HEIGHT / 4 }
+                nextSubDestination = { x: this.x - TILE_WIDTH * this._stepL, y: this.y - TILE_HEIGHT * this._stepL }
                 break;
             case 6:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y }
+                nextSubDestination = { x: this.x - TILE_WIDTH * this._stepL, y: this.y }
                 break;
             case 7:
-                nextSubDestination = { x: this.x - TILE_WIDTH / 4, y: this.y + TILE_HEIGHT / 4 }
+                nextSubDestination = { x: this.x - TILE_WIDTH * this._stepL, y: this.y + TILE_HEIGHT * this._stepL }
                 break;
             case 8:
-                nextSubDestination = { x: this.x, y: this.y + TILE_HEIGHT / 4}
+                nextSubDestination = { x: this.x, y: this.y + TILE_HEIGHT * this._stepL}
                 break;
             default:
                 break;
         }
         var distance = calculateDistance(this, this._finalDestination);
         if (
-            Math.abs(this.x - this._finalDestination.x) < TILE_WIDTH / 4
+            Math.abs(this.x - this._finalDestination.x) < TILE_WIDTH * this._stepL
             && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.x = this._finalDestination.x;
         if (
-            Math.abs(this.y - this._finalDestination.y) < TILE_HEIGHT / 4
+            Math.abs(this.y - this._finalDestination.y) < TILE_HEIGHT * this._stepL
             && (!recalc || distance <= DIAGONAL)
         ) nextSubDestination.y = this._finalDestination.y;
         return nextSubDestination;
@@ -231,7 +239,7 @@ var Troop = cc.Sprite.extend({
     },
     setZOrder: function() {
         var mapPos = MAP.calculatePos(this);
-        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 27;
+        var newZ = 1000 - (mapPos.x + mapPos.y) * 10 + 25;
         MAP.reorderChild(this, newZ);
     },
     createSolidMapArray: function() {
@@ -288,6 +296,31 @@ var Troop = cc.Sprite.extend({
         var y = bar.buildingImg.y - bar._height * TILE_HEIGHT / 4;
         return { x: x, y: y };
     },
+    intervalRunningInArmyCamp: function() {
+        var self = this;
+        var nextTime = 1 + 9 * Math.random();
+        setTimeout(function() {
+            if (self._status === "standing") self.runInArmyCamp();
+            self.intervalRunningInArmyCamp();
+        }, nextTime * 1000);
+    },
+    runInArmyCamp: function() {
+        var coor = this.calculateTroopCoorInArmyCamp();
+        this._finalDestination = {
+            x: coor.x,
+            y: coor.y,
+        };
+        this.runStep();
+    },
+    receiveFromClanAnims: function() {
+        createSolidMapArray();
+        this._moveToClanCastle = true;
+        this._finalDestination = {
+            x: CLANCASTLE.buildingImg.x + CLANCASTLE._width * TILE_WIDTH / 4,
+            y: CLANCASTLE.buildingImg.y - CLANCASTLE._height * TILE_HEIGHT / 4,
+        };
+        this.runStep();
+    }
 });
 
 function donateTroopShowAnims(troopType) { // ARM_1
@@ -300,6 +333,32 @@ function donateTroopShowAnims(troopType) { // ARM_1
             break;
         }
     }
+}
+
+function receiveTroopShowAnims(troopType, level = 1) { // ARM_1
+    var troop;
+    switch (troopType) {
+        case "ARM_1":
+            var troop = new Warrior(CLANCASTLE, level);
+            break;
+        case "ARM_2":
+            var troop = new Archer(CLANCASTLE, level);
+            break;
+        case "ARM_3":
+            var troop = new Goblin(CLANCASTLE, level);
+            break;
+        case "ARM_4":
+            var troop = new Giant(CLANCASTLE, level);
+            break;
+        default:
+            break;
+    }
+    troop.attr({
+        x: 2905,
+        y: 1158,
+    });
+    troop.runningEff();
+    troop.receiveFromClanAnims();
 }
 
 // function indexOfMin(arr) {

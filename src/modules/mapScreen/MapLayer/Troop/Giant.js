@@ -1,9 +1,9 @@
 var Giant = Troop.extend({
-    ctor: function(building) {
+    ctor: function(building, level) {
         this._type = "ARM_4";
         this._direction = randomInt(1, 8);
         this._moveSpeed = config.troopBase[this._type].moveSpeed || 12;
-        this._super(building, "res/Art/Map/map_obj_bg/big_shadow_troop.png");
+        this._super(building, level, "res/Art/Map/map_obj_bg/big_shadow_troop.png");
     },
     createTroopImg: function() {
         var troopImg = new cc.Sprite();
@@ -15,7 +15,7 @@ var Giant = Troop.extend({
         return troopImg;
     },
     standingEff: function() {
-        cc.log("================> ", this._direction);
+        // cc.log("================> ", this._direction);
         var startFrame = 0;
         var endFrame = 0;
         var flip = 1;
@@ -50,7 +50,7 @@ var Giant = Troop.extend({
         this.troopImg.runAction(standingAnims.repeatForever());
     },
     runningEff: function() {
-        cc.log("================> ", this._direction);
+        // cc.log("================> ", this._direction);
         var startFrame = 0;
         var endFrame = 0;
         var flip = 1;
