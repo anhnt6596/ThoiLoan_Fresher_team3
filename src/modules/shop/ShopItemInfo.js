@@ -20,13 +20,25 @@ var ItemInfo = TinyPopup.extend({
             if(this.troopGuildListDiff[name]){
                 this.troopGuildListDiff[name] += 1;
             }else{
-                this.troopGuildListDiff[name] = 0;
+                this.troopGuildListDiff[name] = 1;
             }
         }
-        
 
-        new TroopItem(name, this._level);
+        var h = 1;
+        for(var j in this.troopGuildListDiff){
+            var name2 = j.substring(0, 5);
+            cc.log("================= DUY: loai quan: " + name2);
+            var level2 = j.substring(6, 7);
+            cc.log("================= DUY: level: " + level2);
+            cc.log("================= DUY: amount: " + this.troopGuildListDiff[j]);
+
+            var troop = new TroopGuildItem(name2, level2, this.troopGuildListDiff[j]);
+            troop.setPosition(-500 + 150*h, 70);
+            this.addChild(troop, 1000);
+            h++;
+        }
     },
+
 
     showInfoItem:function(width, height, itemName, level){
         var missImage = false;
@@ -256,5 +268,32 @@ var ItemInfo = TinyPopup.extend({
             infoArea.addChild(textInfo, 5);
         });
         return infoArea;
+    }
+});
+
+var TroopGuildItem = ccui.Button.extend({
+    _name:null,
+
+    ctor: function (troopName, level, amount) {
+        this._super('res/Art/GUIs/train_troop_gui/slot.png');
+        this._name = troopName;
+        this.initItem(troopName, level, amount);
+    },
+
+    initItem:function(troopName, level, amount){
+        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        img.setPosition(this.width/2, this.height/2);
+        this.addChild(img, 100);
+
+
+        var levelLabel = new cc.LabelBMFont(level, 'res/Art/Fonts/soji_24.fnt');
+        levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
+        levelLabel.setColor(new cc.color(0, 255, 0, 255));
+        this.addChild(levelLabel, 109);
+
+        var amountLabel = new cc.LabelBMFont(amount, 'res/Art/Fonts/soji_24.fnt');
+        amountLabel.setPosition(amountLabel.width/2 + 5, amountLabel.height/2 + 5);
+        amountLabel.setColor(new cc.color(0, 255, 0, 255));
+        this.addChild(amountLabel, 109);
     }
 });

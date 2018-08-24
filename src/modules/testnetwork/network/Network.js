@@ -379,7 +379,6 @@ testnetwork.Connector = cc.Class.extend({
                 this.sendGetGuildInfo(temp.reqJoinClanId);
             }
 
-
             var mess =  {
                 typeMessage: MESSAGE_NORMAL,
                 userId: -1,
