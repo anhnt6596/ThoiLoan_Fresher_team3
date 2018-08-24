@@ -199,11 +199,9 @@ var LobbyLayer = cc.Layer.extend({
             nodeContainer.addNode(timeStamp);
 
             if(item.typeMessage == MESSAGE_ASK_TROOP) {
-
                 var timeBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/bg_train_bar.png');
                 timeBar.setAnchorPoint(0, 0);
                 timeBar.setPosition(100, content.y - 50);
-
                 nodeContainer.addChild(timeBar);
 
                 var processBar = new cc.Sprite('res/Art/GUIs/train_troop_gui/train_bar.png');
@@ -222,23 +220,30 @@ var LobbyLayer = cc.Layer.extend({
                 timeBar.addChild(timeText);
                 timeText.setPosition(-timeBar.width/2, timeText.height/2);
 
-
-                //this._timeText.setString(t);
-
-
-
                 if(item.userId != gv.user.id){
-                    var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
-                    btn.setAnchorPoint(0, 0);
-                    btn.setPosition(200, content.y - btn.height - 5);
-                    btn.addClickEventListener(this.donateTroop.bind(btn));
-                    btn.userSend = item.userId;
-                    nodeContainer.addNode(btn);
+                    //Neu van cho the cho
+                    if(!userGotList[item.userId] || userGotList[item.userId] < MAX_TROOP_AMOUNT_USER_CAN_GIVE){
+                        cc.log("====================== TH1 =================");
+                        var btn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
+                        btn.setAnchorPoint(0, 0);
+                        btn.setPosition(200, content.y - btn.height - 5);
+                        btn.addClickEventListener(this.donateTroop.bind(btn));
+                        btn.userSend = item.userId;
+                        nodeContainer.addNode(btn);
 
-                    var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
-                    label.setAnchorPoint(0, 0);
-                    label.setPosition(btn.x + 30, btn.y + 20);
-                    nodeContainer.addNode(label);
+                        var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
+                        label.setAnchorPoint(0, 0);
+                        label.setPosition(btn.x + 30, btn.y + 20);
+                        nodeContainer.addNode(label);
+                    }else{
+                        cc.log("====================== TH2 =================");
+
+                        var labelThank = new cc.LabelBMFont("  Thank you for donated", 'res/Art/Fonts/fista_20_non.fnt');
+                        labelThank.setAnchorPoint(0, 0);
+                        labelThank.setPosition(200, content.y - labelThank.height - 5);
+                        labelThank.color = cc.color(0, 255, 0, 255);
+                        nodeContainer.addNode(labelThank);
+                    }
                 }
             }
 

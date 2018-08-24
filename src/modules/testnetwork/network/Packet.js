@@ -1060,7 +1060,8 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
                 this.idUserGet = this.getInt();
                 //this.capacityGet = this.getShort();
                 this.troopType = this.getString();
-
+                this.levelTroop = this.getInt();
+                this.idUserGive = this.getInt();
             }
         }
     }
@@ -1069,6 +1070,7 @@ testnetwork.packetMap[gv.CMD.GIVE_TROOP_GUILD] = fr.InPacket.extend(
 var troopGuildList = [];
 var messageList = [];
 var memberListOnline = [];
+var userGotList = {};
 
 testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
     {
@@ -1147,8 +1149,22 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 cc.log("=============== Value online: " + this.valueOnline);
 
                 memberListOnline[k] = {idUser: this.idUser, username: this.username, valueOnline: this.valueOnline};
-
             }
+
+
+            this.sizeUserGotList = this.getInt();
+            cc.log("=============== User Got List Size: " + this.sizeUserGotList);
+
+            for(var d = 0; d < this.sizeUserGotList; d++) {
+                cc.log("=============== User Got thu " + (d+1));
+                this.idUserGot = this.getInt();
+                cc.log("=============== User Got ID: " + this.idUserGot);
+                this.amountGot = this.getInt();
+                cc.log("=============== Amount Got: " + this.amountGot);
+
+                userGotList[this.idUserGot] = this.amountGot;
+            }
+
         }
     }
 );

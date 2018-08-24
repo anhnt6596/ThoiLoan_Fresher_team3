@@ -365,6 +365,7 @@ testnetwork.Connector = cc.Class.extend({
             requestMyClanMember = true;
 
             CLANCASTLE.addClanIcon();
+            LOBBY.showObjectMenu();
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
         }
@@ -672,20 +673,44 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     processGiveTroop: function() {
+        troopInfo[temp.typeTroopGive].population--;
+        if(userGotList[temp.idUserGetTroop]){
+            userGotList[temp.idUserGetTroop] += 1;
+        }else{
+            userGotList[temp.idUserGetTroop] = 1;
+        }
+
         for(var i in messageList) {
             var item = messageList[i];
             if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId == temp.idUserGetTroop) {
                 item.currentCapacityGot += config.troopBase[temp.typeTroopGive].housingSpace;
 
+                //Neu userGet da nhan full troop
                 if(item.currentCapacityGot == item.guildCapacityAtTime){
                     messageList.splice(i, 1);
                     cc.director.getRunningScene().getChildByTag(171).removeAll();
+
+                    //Cap nhat lai la co the cho quan
+                    if(userGotList[temp.idUserGetTroop]){
+                        userGotList[temp.idUserGetTroop] = 0;
+                    }
                 }else{
+                    if(userGotList[temp.idUserGetTroop] && userGotList[temp.idUserGetTroop] == MAX_TROOP_AMOUNT_USER_CAN_GIVE){
+                        cc.log("========================= MAX =5 ==================");
+                        cc.director.getRunningScene().getChildByTag(171).removeAll();
+                        break;
+                    }
+
                     var troopItem = cc.director.getRunningScene().getChildByTag(temp.tagTroopGive);
-                    troopItem.currentAmount.setString(troopInfo[troopItem._name].population);
+                    if(troopItem){
+                        if(troopInfo[troopItem._name].population == 0){
+                            cc.director.getRunningScene().removeChildByTag(temp.tagTroopGive);
+                        }else{
+                            troopItem.currentAmount.setString(troopInfo[troopItem._name].population);
+                        }
+                    }
                 }
 
-                troopInfo[temp.typeTroopGive].population--;
                 break;
             }
         }
@@ -700,17 +725,22 @@ testnetwork.Connector = cc.Class.extend({
             if(item.typeMessage == MESSAGE_ASK_TROOP && item.userId == message.idUserGet) {
                 item.currentCapacityGot += config.troopBase[message.troopType].housingSpace;
 
+                //Neu userGet da nhan full troop
                 if(item.currentCapacityGot == item.guildCapacityAtTime){
                     messageList.splice(i, 1);
-                }
 
+                    //Cap nhat lai la co the cho quan
+                    if(userGotList[temp.idUserGetTroop]){
+                        userGotList[temp.idUserGetTroop] = 0;
+                    }
+                }
                 break;
             }
         }
 
         //Neu nguoi nhan linh la minh thi tang TroopGuild
         if(message.idUserGet == gv.user.id) {
-            troopGuildList.push({typetroop: message.troopType, level: message.level});
+            troopGuildList.push({typeTroop: message.troopType, level: message.levelTroop});
         }
 
 
@@ -725,7 +755,7 @@ testnetwork.Connector = cc.Class.extend({
             usernameSend: gv.user.name,
             content: temp.messageContent,
             timeStamp: getCurrentServerTime(),
-            currentCapacityGot: 0,
+            currentCapacityGot: getTotalCapacityTroopGuild(),
             guildCapacityAtTime: temp.guildCapacityAtTime
         };
         if(message.typeMessage == MESSAGE_ASK_TROOP) {

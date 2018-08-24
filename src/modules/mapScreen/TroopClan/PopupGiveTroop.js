@@ -16,9 +16,12 @@ var PopupGiveTroop = ccui.Button.extend({
 
     init: function(idUserGet) {
         var j = 1;
+        var isExistTroop = false;
+
         for(var i in troopInfo) {
             var item = troopInfo[i];
             if(item.population > 0){
+                isExistTroop = true;
                 var troop = new TroopGive(item.type);
                 troop.setAnchorPoint(0, 0);
                 troop.setPosition(this.x - 2.7 * troop.width + troop.width * j, this.y);
@@ -32,6 +35,15 @@ var PopupGiveTroop = ccui.Button.extend({
                 this.listTroopTag.push(j);
                 j++;
             }
+        }
+
+        if(!isExistTroop){
+            var label = new cc.LabelBMFont("Train more troops to could be donate!", 'res/Art/Fonts/soji_20.fnt');
+            label.setAnchorPoint(0, 0);
+            label.setPosition(this.x - label.width/2 + 30, this.y);
+            label.color = cc.color(0, 255, 0, 200);
+            cc.director.getRunningScene().addChild(label, 2229, 99);
+            this.listTroopTag.push(99);
         }
     },
 

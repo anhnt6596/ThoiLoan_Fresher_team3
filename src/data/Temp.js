@@ -45,3 +45,5 @@ temp.guildCapacityAtTime = null;
 temp.idUserGetTroop = null;
 temp.typeTroopGive = null;
 temp.tagTroopGive = null;
+
+//temp.overMaxTroopGive = [];
