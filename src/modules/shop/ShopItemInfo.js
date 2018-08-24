@@ -2,7 +2,20 @@ var ItemInfo = TinyPopup.extend({
 
     ctor:function(width, height, title, type, data) {
         this._super(width, height, title, type, data);
-        this.showInfoItem(width, height, data.itemName, data._level);
+
+        if(data.itemName == "CLC_1"){
+            //Hien thi so luong quan hien tai cua guild
+            this.showClanInfo();
+        }else{
+            this.showInfoItem(width, height, data.itemName, data._level);
+        }
+    },
+
+    showClanInfo: function() {
+        for(var i in troopGuildList){
+            var item = troopGuildList[i];
+        }
+        new TroopItem(name, this._level);
     },
 
     showInfoItem:function(width, height, itemName, level){
