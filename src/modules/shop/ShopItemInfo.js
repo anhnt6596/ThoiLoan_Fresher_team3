@@ -1,4 +1,6 @@
 var ItemInfo = TinyPopup.extend({
+    troopGuildListDiff: {},
+    troopGuildArray: [],
 
     ctor:function(width, height, title, type, data) {
         this._super(width, height, title, type, data);
@@ -14,7 +16,15 @@ var ItemInfo = TinyPopup.extend({
     showClanInfo: function() {
         for(var i in troopGuildList){
             var item = troopGuildList[i];
+            var name = item.typeTroop + "_" + item.level;
+            if(this.troopGuildListDiff[name]){
+                this.troopGuildListDiff[name] += 1;
+            }else{
+                this.troopGuildListDiff[name] = 0;
+            }
         }
+        
+
         new TroopItem(name, this._level);
     },
 
@@ -23,7 +33,6 @@ var ItemInfo = TinyPopup.extend({
         for(var d in listBuildingMissImage){
             if(listBuildingMissImage[d] == itemName){
                 missImage = true;
-                cc.log("==============================HERE");
                 break;
             }
         }
