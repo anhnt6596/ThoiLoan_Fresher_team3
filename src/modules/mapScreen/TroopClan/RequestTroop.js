@@ -15,15 +15,14 @@ var RequestTroop = TinyPopup.extend({
 
         var content = this.textField.getString();
         content = content.trim();
-        if(!content){
-            return;
+        if (content.length > MAX_LENGTH_MESSAGE){
+            showPopupNotEnoughG('over_length_message');
+        }else {
+            temp.messageContent = content;
+            temp.messageType = MESSAGE_ASK_TROOP;
+            temp.guildCapacityAtTime = getCurrentGuildCapacity();
+            NETWORK.sendNewMessage(MESSAGE_ASK_TROOP, content);
         }
-
-        temp.messageContent = content;
-        temp.messageType = MESSAGE_ASK_TROOP;
-        temp.guildCapacityAtTime = getCurrentGuildCapacity();
-        NETWORK.sendNewMessage(MESSAGE_ASK_TROOP, content);
-
     },
 
     showContent: function() {
@@ -31,7 +30,9 @@ var RequestTroop = TinyPopup.extend({
         label.setPosition(this._frame.x, this._frame.y + 50);
         this.addChild(label, 200);
 
-        var textField = cc.EditBox.create(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        //var textField = cc.EditBox.create(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        var textField = new cc.EditBox(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        textField.setString("Please give me some troops!");
         textField.setPosition(label.x, label.y - 70);
         this.textField = textField;
         this.addChild(textField, 200);

@@ -441,7 +441,6 @@ var Wall = Building.extend({
     upgradeAllSelectingWall: function() {
         // duynd6
         // wallSelectingArray là mảng chứa tất cả tường cần upgrade, tả sứ check tài nguyên yêu cầu
-
         var goldCost = 0;
         var elixirCost = 0;
         var darkElixirCost = 0;
@@ -490,9 +489,6 @@ var Wall = Building.extend({
         } else {
             showPopupNotEnoughG('upgrade');
         }
-
-
-        //NETWORK.upgradeMultiWall(wallSelectingArray);
     }
 });
 

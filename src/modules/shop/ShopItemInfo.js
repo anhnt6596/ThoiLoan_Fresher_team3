@@ -1,16 +1,50 @@
 var ItemInfo = TinyPopup.extend({
+    troopGuildListDiff: {},
+    troopGuildArray: [],
 
     ctor:function(width, height, title, type, data) {
         this._super(width, height, title, type, data);
+
+        if(data.itemName == "CLC_1"){
+            //Hien thi so luong quan hien tai cua guild
+            this.showClanInfo();
+        }
+
         this.showInfoItem(width, height, data.itemName, data._level);
     },
+
+    showClanInfo: function() {
+        for(var i in troopGuildList){
+            var item = troopGuildList[i];
+            var name = item.typeTroop + "_" + item.level;
+            if(this.troopGuildListDiff[name]){
+                this.troopGuildListDiff[name] += 1;
+            }else{
+                this.troopGuildListDiff[name] = 1;
+            }
+        }
+
+        var h = 1;
+        for(var j in this.troopGuildListDiff){
+            var name2 = j.substring(0, 5);
+            cc.log("================= DUY: loai quan: " + name2);
+            var level2 = j.substring(6, 7);
+            cc.log("================= DUY: level: " + level2);
+            cc.log("================= DUY: amount: " + this.troopGuildListDiff[j]);
+
+            var troop = new TroopGuildItem(name2, level2, this.troopGuildListDiff[j]);
+            troop.setPosition(-450 + 150*h, -100);
+            this.addChild(troop, 1000);
+            h++;
+        }
+    },
+
 
     showInfoItem:function(width, height, itemName, level){
         var missImage = false;
         for(var d in listBuildingMissImage){
             if(listBuildingMissImage[d] == itemName){
                 missImage = true;
-                cc.log("==============================HERE");
                 break;
             }
         }
@@ -150,6 +184,12 @@ var ItemInfo = TinyPopup.extend({
             case 'BDH_1':
                 buildingImg = new cc.Sprite(res.building.builder_hut);
                 break;
+            case 'CLC_1':
+                buildingImg = new cc.Sprite(res.building.clanCastle[level]);
+                break;
+            case 'WAL_1':
+                buildingImg = new cc.Sprite(res.building.wall[level][2]);
+                break;
             case 'LAB_1':
                 buildingImg = new cc.Sprite(res.building.labratory[level]);
                 break;
@@ -234,5 +274,32 @@ var ItemInfo = TinyPopup.extend({
             infoArea.addChild(textInfo, 5);
         });
         return infoArea;
+    }
+});
+
+var TroopGuildItem = ccui.Button.extend({
+    _name:null,
+
+    ctor: function (troopName, level, amount) {
+        this._super('res/Art/GUIs/train_troop_gui/slot.png');
+        this._name = troopName;
+        this.initItem(troopName, level, amount);
+    },
+
+    initItem:function(troopName, level, amount){
+        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        img.setPosition(this.width/2, this.height/2);
+        this.addChild(img, 100);
+
+
+        var levelLabel = new cc.LabelBMFont(level, 'res/Art/Fonts/soji_24.fnt');
+        levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
+        levelLabel.setColor(new cc.color(0, 255, 0, 255));
+        this.addChild(levelLabel, 109);
+
+        var amountLabel = new cc.LabelBMFont(amount, 'res/Art/Fonts/soji_24.fnt');
+        amountLabel.setPosition(amountLabel.width/2 + 5, amountLabel.height/2 + 5);
+        amountLabel.setColor(new cc.color(0, 255, 0, 255));
+        this.addChild(amountLabel, 109);
     }
 });

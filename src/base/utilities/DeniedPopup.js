@@ -37,7 +37,7 @@ var showPopupDisconect = function(){
     var title = "Disconected";
     var popup = new DeniedPopup(cc.winSize.width/2, cc.winSize.height/1.5, title, true, data);
     cc.director.getRunningScene().addChild(popup, 2000000);
-}
+};
 
 
 //Show thong bao khong du G de lam gi do
@@ -136,6 +136,14 @@ var showPopupNotEnoughG = function(type){
         case 'server_denied_upgrade_multi_wall':
             data.content = "Please try again later";
             title = "Server denied to upgrade multi wall";
+            break;
+        case 'over_length_message':
+            data.content = "Maximum message's length is 50 characters";
+            title = "Your message is too long";
+            break;
+        case 'none_length_message':
+            data.content = "Please add more characters to could be send";
+            title = "Your message is nothing";
             break;
         // case 'create_clan_not_enough_gold':
         //     data.content = "";

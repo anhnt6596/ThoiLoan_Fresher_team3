@@ -775,10 +775,6 @@ var research_constant = {
 var RESPONSE_VALIDATE = 1;
 var RESPONSE_TO_ALL = 2;
 
-//value Validate Give Troop;
-var SUCCESS = 1;
-var GIVE_OVER_MAX = 2;
-
 //type message
 var MESSAGE_NORMAL = 1;
 var MESSAGE_ASK_TROOP = 2;
@@ -788,6 +784,7 @@ var ONLINE = 1;
 var OFFLINE = 2;
 
 var MAX_MESSAGES_QUEUE = 100;
+var MAX_LENGTH_MESSAGE = 50;
 var MAX_TROOP_AMOUNT_USER_CAN_GIVE = 5;
 var TIME_REQUEST_TROOP = 1200000;              //ms
-var ID_CLC_BUILDING = 4;
+//var ID_CLC_BUILDING = 0;

@@ -40,6 +40,7 @@ gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
 gv.CMD.NEW_MESSAGE = 8001;
 gv.CMD.GIVE_TROOP_GUILD = 8002;
 gv.CMD.GET_INTERACTION_GUILD = 8003;
+gv.CMD.ONLINE_MESSAGE = 8004
 
 
 
@@ -567,7 +568,7 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
 
 var contructionList = contructionList || [];
 var obstacleLists = obstacleLists || [];
-
+var ID_CLC_BUILDING;
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
         ctor:function()
@@ -584,6 +585,11 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this._id = this.getInt();
                 this.name = this.getString();
                 cc.log("========================name Nha: " + this.name);
+
+                if(this.name == "CLC_1"){
+                    ID_CLC_BUILDING = this._id;
+                }
+
                 cc.log("_id: " + this._id);
                 this.posX = this.getInt();
                 cc.log("posX: " + this.posX);
@@ -1165,6 +1171,21 @@ testnetwork.packetMap[gv.CMD.GET_INTERACTION_GUILD] = fr.InPacket.extend(
                 userGotList[this.idUserGot] = this.amountGot;
             }
 
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.ONLINE_MESSAGE] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.userOnline  = this.getInt();
+            cc.log("=================== User Online: " + this.userOnline);
+            this.valueOnline = this.getShort();
+            cc.log("=================== Value Online: " + this.valueOnline);
         }
     }
 );

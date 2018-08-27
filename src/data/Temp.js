@@ -46,4 +46,9 @@ temp.idUserGetTroop = null;
 temp.typeTroopGive = null;
 temp.tagTroopGive = null;
 
+temp.isOpenMessageBox = false;
+
+//Flag request troop
+temp.statusRequest = false;
+
 //temp.overMaxTroopGive = [];
