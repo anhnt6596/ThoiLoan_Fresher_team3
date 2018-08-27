@@ -85,7 +85,7 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
-        CLAN_GUI.openAction();
+        // CLAN_GUI.openAction();
     },
     onTreasure: function() {
         //createSolidMapArray();
@@ -93,7 +93,7 @@ var LobbyLayer = cc.Layer.extend({
         //    element.moveTo(objectRefs[0]);
         //});
         // NETWORK.sendResearchComplete("ARM_1");
-        donateTroopShowAnims("ARM_1");
+        // donateTroopShowAnims("ARM_1");
         // receiveTroopShowAnims("ARM_2", 4);
     },
 

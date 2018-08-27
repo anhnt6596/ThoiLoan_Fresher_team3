@@ -12,8 +12,6 @@ var CollectorBuilding = Building.extend({
         this.full_bg && this.full_bg.setVisible(false);
     },
     setCollectIcon: function() {
-        //cc.log(this._
-        // level+"= level");
         if (this._status === 'complete' && this.startTime) {
             var time_sx = (getCurrentServerTime() - this.startTime)/1000;
             //cc.log("============================start time: " +this.startTime);
