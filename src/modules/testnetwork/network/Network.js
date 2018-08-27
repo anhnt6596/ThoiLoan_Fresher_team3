@@ -491,7 +491,7 @@ testnetwork.Connector = cc.Class.extend({
         if (building._name == "WAL_1") {
             building.upgradeComplete(true);
         } else {
-            if (building._name===('RES_1'||'RES_2'||'RES_3') ) {
+            if (building._name==='RES_1'||building._name==='RES_2'||building._name==='RES_3' ) {
                 cc.log("cho phep upgrade");
                 building.onCollectResource(true);
             }
