@@ -306,8 +306,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
@@ -337,8 +337,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
@@ -360,8 +360,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         }
     },
@@ -391,8 +391,9 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            LOBBY.onCloseInteractiveGuild();
             LOBBY.onInteractiveGuild();
+            LOBBY.onCloseInteractiveGuild();
+
         }
     },
     processSearchClan: function(data) {
@@ -472,8 +473,8 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
+            //LOBBY.onInteractiveGuild();
             LOBBY.onCloseInteractiveGuild();
-            LOBBY.onInteractiveGuild();
 
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");

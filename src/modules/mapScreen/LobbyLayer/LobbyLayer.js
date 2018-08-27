@@ -99,6 +99,9 @@ var LobbyLayer = cc.Layer.extend({
 
     onInteractiveGuild: function() {
         //Neu chua gia nhap guild nao thi show giao dien Join, neu chua xay nha Guild thi hien popup xay guild
+        if(!gv.user.is_in_guild){
+            return;
+        }
 
         if(!temp.getListMessageFirst){
             temp.getListMessageFirst = true;
