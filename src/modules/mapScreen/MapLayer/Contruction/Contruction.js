@@ -42,7 +42,15 @@ var Contruction = cc.Class.extend({
                 this.addTimeBar(cur, max);
                 this.countDown(cur, max);
             }
+        }
 
+        if(temp.statusRequest && this._name == "CLC_1"){
+            var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
+            var max = TIME_REQUEST_TROOP/1000;
+            if(!this.timeBar){
+                this.addTimeBar(cur, max);
+                this.countDown(cur, max);
+            }
         }
     },
     onTargeting: function() {
@@ -542,14 +550,23 @@ var Contruction = cc.Class.extend({
     },
 
     addTimeBar: function(cur, max) {
-        var upgradeBarrier = new cc.Sprite('res/Art/Map/map_obj_bg/upgrading.png');
-        this.upgradeBarrier = upgradeBarrier;
-        upgradeBarrier.attr({
-            x: this.buildingImg.width / 2,
-            y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
-            scale: this._width * 3 / 4
-        });
-        this.buildingImg.addChild(upgradeBarrier, 1000);
+        cc.log("==================== DUY statusRequest: " + temp.statusRequest);
+
+        if(temp.statusRequest && this._name == "CLC_1"){
+            //de trong
+            cc.log("=============== HIEN THI REQUEST ==========================");
+        }else{
+            cc.log("=============== KHONG HIEN THI REQUEST ==========================");
+            var upgradeBarrier = new cc.Sprite('res/Art/Map/map_obj_bg/upgrading.png');
+            this.upgradeBarrier = upgradeBarrier;
+            upgradeBarrier.attr({
+                x: this.buildingImg.width / 2,
+                y: this.buildingImg.height / 2 - TILE_WIDTH / 2,
+                scale: this._width * 3 / 4
+            });
+            this.buildingImg.addChild(upgradeBarrier, 1000);
+        }
+
 
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
@@ -663,6 +680,27 @@ var Contruction = cc.Class.extend({
         //Chay 1 lan
         tick();
     },
+
+
+    countDownRequest: function(cur, max){
+        var tick = () => {
+            setTimeout(() => {
+                cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
+            max = TIME_REQUEST_TROOP/1000;
+            if (cur >= max) {
+                this.timeBar && MAP.removeChild(this.timeBar);
+                this.timeBar = null;
+                return;
+            } else {
+                this.updateTimeBar(cur, max);
+                tick();
+            }
+        }, 1000);
+    }
+    //Chay 1 lan
+    tick();
+    },
+
     onTargetSound: function() {
         if (SOUND) {
             switch (this._name) {

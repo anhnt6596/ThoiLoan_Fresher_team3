@@ -154,10 +154,9 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.GET_TROOP_INFO:
                 cc.log("=======================================SERVER phan hoi TROOP INFO=======================================");
-                if(sendTroopInfoFlag == false){
                     this.sendGetBarrackQueueInfo();
                     fr.getCurrentScreen().onFinishGameInfo();
-                }else{
+                    LOBBY.update(gv.user);
                     this.divideTroopToArmyCamp();
                     for (var item in troopInfo) {
                         var obj = troopInfo[item];
@@ -165,15 +164,12 @@ testnetwork.Connector = cc.Class.extend({
                             research_constant.status.now = obj.status;
                             research_constant.troop = obj;
                         }
-                        cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
+                        //cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
                     }
-                }
+                //}
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
-                //Cap nhat lai population cua linh sau khi kiem tra barrack queue info --> cai tien: chi can yeu cau population
-                sendTroopInfoFlag = true;
-                this.sendGetTroopInfo();
                 break;
             case gv.CMD.TRAIN_TROOP:
                 if (packet.validate) {
@@ -235,6 +231,12 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.EDIT_GUILD_INFO:
                 this.processEditGuildInfo(packet);
                 break;
+            case gv.CMD.REMOVE_MEMBER:
+                this.processRemoveMember(packet);
+                break;
+            case gv.CMD.SET_GUILD_POSITION:
+                this.processSetGuildPosition(packet);
+                break;
             case gv.CMD.NEW_MESSAGE:
                 if(packet.typeResponse == RESPONSE_VALIDATE){
                     if(packet.validateValue) {
@@ -266,11 +268,9 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.GET_INTERACTION_GUILD:
                 this.processInteractiveGuild();
                 break;
-            case gv.CMD.REMOVE_MEMBER:
-                this.processRemoveMember(packet);
-                break;
-            case gv.CMD.SET_GUILD_POSITION:
-                this.processSetGuildPosition(packet);
+            case gv.CMD.ONLINE_MESSAGE:
+                cc.log("=======================================SERVER SEND ONLINE MEMBER=======================================");
+                this.processOnlineMessage(packet);
                 break;
         }
     },
@@ -306,9 +306,7 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            //LOBBY.onInteractiveGuild();
-            LOBBY.onCloseInteractiveGuild();
-
+            updateMessageBox();
         }
     },
     processRemoveMember: function(data) {
@@ -322,24 +320,32 @@ testnetwork.Connector = cc.Class.extend({
                 gv.user.is_in_guild = false;
                 CLAN_GUI.initHeader(5);
                 CLANCASTLE.addClanIcon();
+
+                messageList = [];
+                memberListOnline = [];
+                memberListOnline[0] = {idUser: gv.user.id, username: gv.user.name, valueOnline: ONLINE};
             } else if (gv.user.is_in_guild) {
                 requestMyClanMember = true;
                 this.getGuildListMemberInfo(gv.user.id_guild);
+
+                var mess =  {
+                    typeMessage: MESSAGE_NORMAL,
+                    userId: -1,
+                    usernameSend: "SYSTEM",
+                    content: "Fresher_" + data.id + " has been removed",
+                    timeStamp: getCurrentServerTime(),
+                    currentCapacityGot: 0,
+                    guildCapacityAtTime: 0
+                };
+                messageList.push(mess);
+                for(var i in memberListOnline) {
+                    if(memberListOnline[i].idUser == data.id){
+                        memberListOnline.splice(i, 1);
+                    }
+                }
+
+                updateMessageBox();
             }
-
-            var mess =  {
-                typeMessage: MESSAGE_NORMAL,
-                userId: -1,
-                usernameSend: "SYSTEM",
-                content: "Fresher_" + data.id + " has been removed",
-                timeStamp: getCurrentServerTime(),
-                currentCapacityGot: 0,
-                guildCapacityAtTime: 0
-            };
-            messageList.push(mess);
-            //LOBBY.onInteractiveGuild();
-            LOBBY.onCloseInteractiveGuild();
-
         }
     },
     processEditGuildInfo: function(data) {
@@ -360,15 +366,15 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            //LOBBY.onInteractiveGuild();
-            LOBBY.onCloseInteractiveGuild();
-
+            updateMessageBox();
         }
     },
     processAddRequestMember: function(data) {
         if (data.validate) {
+            cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
+
             if (youAreRequest) {
-                cc.log("=======================================XAC NHAN ADD REQUEST MEMBER tu SERVER=======================================");
+                gv.user.lastRequestTroopTimeStamp = 0;
                 youAreRequest = false;
                 gv.user.is_in_guild = true;
                 gv.user.id_guild = temp.reqJoinClanId;
@@ -391,9 +397,9 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            LOBBY.onInteractiveGuild();
-            LOBBY.onCloseInteractiveGuild();
-
+            temp.statusRequest = true;
+            memberListOnline.push({idUser: data.id, username: ("Fresher_" + data.id), valueOnline: ONLINE});
+            updateMessageBox();
         }
     },
     processSearchClan: function(data) {
@@ -472,13 +478,14 @@ testnetwork.Connector = cc.Class.extend({
                 guildCapacityAtTime: 0
             };
             messageList.push(mess);
-            //LOBBY.onInteractiveGuild();
-            LOBBY.onCloseInteractiveGuild();
+            temp.statusRequest = true;
+            updateMessageBox();
 
         } else {
             cc.log("Có lỗi xảy ra, rảnh thì làm popUp");
         }
     },
+
     upgradeConstruction: function(building) {
         if (building._name == "WAL_1") {
             building.upgradeComplete(true);
@@ -487,7 +494,7 @@ testnetwork.Connector = cc.Class.extend({
                 cc.log("cho phep upgrade");
                 building.onCollectResource(true);
             }
-            
+
             building.setStatus('upgrade');
             building.startTime = getCurrentServerTime();
             var cur = (getCurrentServerTime() - building.startTime)/1000;
@@ -509,7 +516,7 @@ testnetwork.Connector = cc.Class.extend({
             reduceUserResources(ReducedTempResources);
             resetReducedTempResources();
             console.log("ten nha = "+ building._name);
-            
+
             if(building._name == "BAR_1"){
                 //Cap nhat startTime cho barrack
                 barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
@@ -609,9 +616,8 @@ testnetwork.Connector = cc.Class.extend({
             }
         }
         this.createTroopAfterSVResponseSuccess(troopType, start);
-
-
         troopInfo[troopType].population++;
+        LOBBY.update(gv.user);
         var here = barrackQueueList[id];
 
         cc.log("=================================== id luc xac nhan finish time: " + id);
@@ -626,6 +632,8 @@ testnetwork.Connector = cc.Class.extend({
             here._amountItemInQueue--;
             BARRACK[id]._itemInQueue[troopType].setPosition(-1000, -1000);
             BARRACK[id]._troopList[troopType]._currentPosition = -1;
+            BARRACK[id]._startTime = getCurrentServerTime();
+            here._startTime = getCurrentServerTime();
             //Het item trong queue
             if(BARRACK[id]._amountItemInQueue == 0){
                 BARRACK[id]._timeBar.visible = false;
@@ -652,13 +660,19 @@ testnetwork.Connector = cc.Class.extend({
         var currentCapacity = getTotalCurrentTroopCapacity();
         BARRACK[id].str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
         BARRACK[id].upadateQuickFinishTimeAndCost();
+
+        //update label
+        var totalAfterTrain = getTotalCurrentTroopCapacity();
+        for(var i in barrackQueueList){
+            totalAfterTrain += barrackQueueList[i]._totalTroopCapacity;
+        }
+        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
     },
 
     quickFinishTroopTrain: function(id) {
         //Tru tien
         reduceUserResources(ReducedTempResources);
         resetReducedTempResources();
-
 
         //An tat ca, reset queue, troop
         var here = barrackQueueList[id];
@@ -693,8 +707,8 @@ testnetwork.Connector = cc.Class.extend({
 
             TRAIN_POPUP._timeBar.visible = false;
             TRAIN_POPUP._statusCountDown = false;
-
         }
+        LOBBY.update(gv.user);
 
         TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
         TRAIN_POPUP.enableItemDisplay();
@@ -744,6 +758,15 @@ testnetwork.Connector = cc.Class.extend({
 
         TRAIN_POPUP.updateAmount(TRAIN_POPUP._itemDisplay[troopType]);
         TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+
+        //update label
+        var totalCapacity = getTotalCapacityAMCs();
+        var totalAfterTrain = getTotalCurrentTroopCapacity();
+        for(var i in barrackQueueList){
+            totalAfterTrain += barrackQueueList[i]._totalTroopCapacity;
+        }
+        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
+
         cc.log("========================================= total time: " + TRAIN_POPUP.getTotalTimeQuickFinish());
         TRAIN_POPUP.upadateQuickFinishTimeAndCost();
     },
@@ -771,6 +794,15 @@ testnetwork.Connector = cc.Class.extend({
         }
         TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
         TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._totalTroopCapacity+"/"+TRAIN_POPUP._queueLength + ")");
+
+        //update label
+        var totalCapacity = getTotalCapacityAMCs();
+        var totalAfterTrain = getTotalCurrentTroopCapacity();
+        for(var i in barrackQueueList){
+            totalAfterTrain += barrackQueueList[i]._totalTroopCapacity;
+        }
+        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
+
         TRAIN_POPUP.enableItemDisplay();
         TRAIN_POPUP.upadateQuickFinishTimeAndCost();
 
@@ -783,6 +815,7 @@ testnetwork.Connector = cc.Class.extend({
 
     processGiveTroop: function() {
         troopInfo[temp.typeTroopGive].population--;
+        LOBBY.update(gv.user);
         if(userGotList[temp.idUserGetTroop]){
             userGotList[temp.idUserGetTroop] += 1;
         }else{
@@ -824,8 +857,8 @@ testnetwork.Connector = cc.Class.extend({
             }
         }
 
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
+        donateTroopShowAnims(temp.typeTroopGive);
     },
 
     processGiveTroopToAll: function(message) {
@@ -850,11 +883,9 @@ testnetwork.Connector = cc.Class.extend({
         //Neu nguoi nhan linh la minh thi tang TroopGuild
         if(message.idUserGet == gv.user.id) {
             troopGuildList.push({typeTroop: message.troopType, level: message.levelTroop});
+            receiveTroopShowAnims(message.troopType, message.levelTroop);
         }
-
-
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
     },
 
     processNewMessage: function() {
@@ -874,12 +905,16 @@ testnetwork.Connector = cc.Class.extend({
                     messageList.splice(i, 1);
                 }
             }
+            var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
+            var max = TIME_REQUEST_TROOP / 1000;
+            if(!objectRefs[ID_CLC_BUILDING].timeBar){
+                objectRefs[ID_CLC_BUILDING].addTimeBar(cur, max);
+                objectRefs[ID_CLC_BUILDING].countDownRequest(cur, max);
+            }
         }
         messageList.push(message);
-
         temp.enableSendMessageFlag = true;
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
     },
 
     processNewMessageToAll: function(message) {
@@ -900,45 +935,21 @@ testnetwork.Connector = cc.Class.extend({
             }
         }
         messageList.push(newMessage);
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
     },
 
     processInteractiveGuild: function() {
-        var size = cc.winSize;
-        var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
-        bg.setAnchorPoint(0, 0);
-        bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
-        bg.setColor(cc.color(0,255,0,255));
-        bg.setZoomScale(0);
-        LOBBY.getParent().addChild(bg, 20, 17);
+        LOBBY.onInteractiveGuild();
+        updateMessageBox();
+    },
 
-        var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
-        layer.setAnchorPoint(0, 0);
-        bg.addChild(layer);
-
-
-        var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-        textField.setPosition(textField.width/2, size.height - textField.height/2);
-        //textField.setPlaceHolder("  Enter your message");
-        LOBBY.textField = textField;
-        LOBBY.getParent().addChild(textField, 1111, 21);
-
-        var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
-        btnSend.addClickEventListener(LOBBY.sendMessage.bind(LOBBY));
-        LOBBY.getParent().addChild(btnSend, 1111, 22);
-
-
-        var messageScrollView = LOBBY.createMessageScroll();
-        LOBBY.getParent().addChild(messageScrollView, 100, 19);
-
-        var memberScrollView = LOBBY.createMemberScroll();
-        LOBBY.getParent().addChild(memberScrollView, 101, 20);
-
-        var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
-        prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(LOBBY.onCloseInteractiveGuild.bind(LOBBY));
-        LOBBY.getParent().addChild(prevBtn, 21, 18);
+    processOnlineMessage: function(packet) {
+        for(var i in memberListOnline) {
+            if(packet.userOnline == memberListOnline[i].idUser){
+                memberListOnline[i].valueOnline = packet.valueOnline;
+            }
+        }
+        updateMessageBox();
     },
 
 
@@ -974,14 +985,19 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.darkElixir = packet.darkElixir;
 
         gv.user.lastRequestTroopTimeStamp = packet.last_time_ask_for_troops;
+        if(getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp < TIME_REQUEST_TROOP){
+            temp.statusRequest = true;
+            cc.log(" =========================== status request = true ");
+        }
+
         cc.log(" ================ DUY: lastRequestTroopTimeStamp" + gv.user.lastRequestTroopTimeStamp);
 
         gv.user.is_in_guild = packet.is_in_guild;
         gv.user.id_guild = packet.id_guild || -1,
-        gv.user.name_guild = packet.name_guild || "",
-        gv.user.id_logo_guild = packet.id_logo_guild || 1,
-        gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
-        gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
+            gv.user.name_guild = packet.name_guild || "",
+            gv.user.id_logo_guild = packet.id_logo_guild || 1,
+            gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
+            gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
         cc.log("========================================== Gold: " + gv.user.gold);
         cc.log("========================================== Elixir: " + gv.user.elixir);
         cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
@@ -1169,49 +1185,49 @@ testnetwork.Connector = cc.Class.extend({
         cc.log("NETWORK ID " + data);
         var pk = this.gameClient.getOutPacket(CmdSendGetGuildInfo);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND GUIDE INFO ' + data + '==========================================');
     },
     sendAddRequestMember: function(data) {
         var pk = this.gameClient.getOutPacket(CmdSendAddRequestMember);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND ADD REQUEST MEMBER==========================================');
     },
     getGuildListMemberInfo: function(data) {
         var pk = this.gameClient.getOutPacket(CmdGetGuildListMemberInfo);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================GetGuildListMemberInfo==========================================');
     },
     searchGuildInfo: function(data) {
         var pk = this.gameClient.getOutPacket(CmdSearchGuildInfo);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SearchGuildInfo==========================================');
     },
     sendEditGuildInfo: function(data) {
         var pk = this.gameClient.getOutPacket(CmdSendEditGuildInfo);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SendEditGuildInfo==========================================');
     },
     sendRemoveMember: function(data) {
         var pk = this.gameClient.getOutPacket(CmdRemoveMember);
         pk.pack(data);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================sendRemoveMember==========================================');
     },
     sendSetGuildMemberPosition: function(id, position) {
         var pk = this.gameClient.getOutPacket(CmdSetGuildMemberPosition);
         pk.pack(id, position);
-        
+
         this.gameClient.sendPacket(pk);
         cc.log('=======================================sendSetGuildMemberPosition==========================================');
     },

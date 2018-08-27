@@ -36,9 +36,7 @@ var TrainPopup = TinyPopup.extend({
         this._width = width;
         this._height = height;
         this._id = data.barrack._id;
-        //if(!BARRACK[this._id]){
-            BARRACK[this._id] = this;
-        //}
+        BARRACK[this._id] = this;
         this._level = data.barrack._level;
         this._super(width, height, title, type, data);
 
@@ -50,18 +48,6 @@ var TrainPopup = TinyPopup.extend({
         this._startTime = barrackQueueList[this._id]._startTime;
         this._troopList = barrackQueueList[this._id]._troopList;
 
-
-        //for(var k in this._troopList){
-        //    cc.log("============================== TROOP: " + k);
-        //    cc.log("============================== name: " + this._troopList[k]._name);
-        //    cc.log("============================== amount: " + this._troopList[k]._amount);
-        //    cc.log("============================== currentPosition: " + this._troopList[k]._currentPosition);
-        //    cc.log("============================== _housingSpace: " + this._troopList[k]._housingSpace);
-        //    cc.log("============================== _trainingTime: " + this._troopList[k]._trainingTime);
-        //    cc.log("============================== _level: " + this._troopList[k]._level);
-        //    cc.log("============================== _trainingDarkElixir: " + this._troopList[k]._trainingDarkElixir);
-        //    cc.log("============================== _trainingElixir: " + this._troopList[k]._trainingElixir);
-        //}
 
         this.initQueue();
         this.init4PositionsInQueue();
@@ -469,8 +455,12 @@ var TrainPopup = TinyPopup.extend({
 
     showTextTotalTroop: function() {
         var totalCapacity = getTotalCapacityAMCs();
-        var currentCapacity = getTotalCurrentTroopCapacity();
-        var str = new cc.LabelBMFont('Total troops after training: ' + currentCapacity +'/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');
+        var totalAfterTrain = getTotalCurrentTroopCapacity();
+        for(var i in barrackQueueList){
+            totalAfterTrain += barrackQueueList[i]._totalTroopCapacity;
+        }
+
+        var str = new cc.LabelBMFont('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');
         str.setPosition(-1*this._width/4, this._height*this._frame.scaleY/9);
         this.str = str;
         this.addChild(str, 2, 5);
