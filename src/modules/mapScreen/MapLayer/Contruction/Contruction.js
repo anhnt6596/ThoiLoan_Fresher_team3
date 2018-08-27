@@ -200,7 +200,6 @@ var Contruction = cc.Class.extend({
         });
     },
     updatePosition: function(mapPos) {
-        //if (this.tempX !== this._posX && this.tempX !== this._posY) {
         var eff = ui.landingEffect();
         this.buildingImg.runAction(eff);
         this.onPlaceSound();
@@ -213,12 +212,12 @@ var Contruction = cc.Class.extend({
         try {
             temp.lastMoveBuilding = this;
             if(this._status !== 'setting' && (this._oldX !== this._posX || this._oldY !== this._posY)) {
-                cc.log('sendMove>>>>>>>>>>>>>>>before');
-                cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
-                cc.log('sendMove>>>>>>>>>>>>>>>mapPos.x' + mapPos.x);
+                // cc.log('sendMove>>>>>>>>>>>>>>>before');
+                // cc.log('sendMove>>>>>>>>>>>>>>>this.info._id' + this.info._id);
+                // cc.log('sendMove>>>>>>>>>>>>>>>mapPos.x' + mapPos.x);
                 //cc.log('sendMove>>>>>>>>>>>>>>>mapPos.y' + mapPos.y);
                 NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-                cc.log('sendMove>>>>>>>>>>>>>>>after');
+                // cc.log('sendMove>>>>>>>>>>>>>>>after');
             }
         } catch (error) {
             cc.log('network error!');

@@ -421,6 +421,7 @@ testnetwork.Connector = cc.Class.extend({
         } else {
             clanMember = data.listUser;
             CLAN_GUI.TAB3.pushMemberItem();
+            CLAN_GUI.TAB5.pushMemberItem();
         }
     },
     processGetGuildInfo: function(data) {
