@@ -46,6 +46,75 @@ var Barrack = Building.extend({
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
+            //Hien thi timebar ben ngoai
+            if(!this.timeBar){
+                this.addTimeBarTrain(0, 20);
+            }
         }
-    }
+    },
+
+    addTimeBarTrain: function(cur, max) {
+
+        var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
+        this.timeBar = timeBar;
+        var coor = this.xyOnMap(this._posX, this._posY);
+        timeBar.attr({
+            x: coor.x,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
+        });
+        MAP.addChild(timeBar, 1100);
+
+        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        this.processBar = processBar;
+        processBar.attr({
+            anchorX: 0,
+            anchorY: 0
+        });
+        timeBar.addChild(processBar);
+
+        var ratio = cur / max;
+
+        processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
+
+        //var t = timeToString(max - cur);
+        var t = timeToReadable(max - cur);
+        var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
+        this.timeText = timeText;
+        timeText.attr({
+            x: timeBar.width / 2,
+            y: 42
+        });
+        timeBar.addChild(timeText);
+
+        timeBar.visible = false;
+    },
+
+    updateTimeBar: function(cur, max) {
+        if(BARRACK[this._id] && !BARRACK[this._id]._statusCountDown && (objectRefs[this._id]._status != 'upgrade')){
+            if(this.timeBar){
+                MAP.removeChild(this.timeBar);
+                this.timeBar = null;
+                cc.log("======================= DAY 1 ======================");
+                return;
+            }
+        }
+
+        var condition = BARRACK[this._id] && BARRACK[this._id]._statusCountDown && BARRACK[this._id].wait && (objectRefs[this._id]._status != 'upgrade');
+        if(condition){
+            MAP.removeChild(this.timeBar);
+            this.timeBar = null;
+            cc.log("======================= DAY 2 ======================");
+
+            return;
+        }
+
+        if (this.timeBar) {
+            this.timeBar.visible = true;
+            var ratio = cur / max;
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
+            this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
+            this.timeText.setString(t);
+        }
+    },
 });

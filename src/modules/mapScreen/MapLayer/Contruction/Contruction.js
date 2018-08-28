@@ -549,9 +549,8 @@ var Contruction = cc.Class.extend({
     },
 
     addTimeBar: function(cur, max) {
-        cc.log("==================== DUY statusRequest: " + temp.statusRequest);
-
         if(temp.statusRequest && this._name == "CLC_1"){
+        //if(temp.statusRequest && this._name == "CLC_1"){
             //de trong
             cc.log("=============== HIEN THI REQUEST ==========================");
         }else{
@@ -645,6 +644,10 @@ var Contruction = cc.Class.extend({
         // de trong
     },
 
+    addTimeBarTrain: function(cur, max) {
+        // de trong
+    },
+
     updateListBuildingRef: function() {
         if (this._name === "AMC_1") armyCampRefs.push(this);
         if (this instanceof StorageBuilding) storageBuildingRefs.push(this);
@@ -686,7 +689,7 @@ var Contruction = cc.Class.extend({
             setTimeout(() => {
                 cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             max = TIME_REQUEST_TROOP/1000;
-            if (cur >= max) {
+            if (cur >= max || !this.timeBar) {
                 this.timeBar && MAP.removeChild(this.timeBar);
                 this.timeBar = null;
                 return;

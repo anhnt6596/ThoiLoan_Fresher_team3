@@ -483,6 +483,23 @@ var getTotalCapacityTroopGuild = function(){
     return totalCapacity;
 };
 
+var getIdGuildBuilding = function() {
+    for(var k in contructionList){
+        var build = contructionList[k];
+        if(build.name == 'CLC_1'){
+            return build._id;
+        }
+    }
+};
+
+var getBarrackObjectById = function(id) {
+    for(var i in barrackRefs){
+        if(barrackRefs[i]._id == id){
+            return barrackRefs[i];
+        }
+    }
+};
+
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];
 
 var calculateDistance = function(a, b) {

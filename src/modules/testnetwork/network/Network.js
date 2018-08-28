@@ -166,7 +166,6 @@ testnetwork.Connector = cc.Class.extend({
                         }
                         //cc.log('troopInfo.'+obj.type+'.population', troopInfo[item].population);
                     }
-                //}
                 break;
             case gv.CMD.GET_BARRACK_QUEUE_INFO:
                 cc.log("=======================================SERVER phan hoi BARRACK QUEUE INFO=======================================");
@@ -324,10 +323,27 @@ testnetwork.Connector = cc.Class.extend({
                 messageList = [];
                 memberListOnline = [];
                 memberListOnline[0] = {idUser: gv.user.id, username: gv.user.name, valueOnline: ONLINE};
+                temp.getListMessageFirst = false;
+                LOBBY.onCloseInteractiveGuild();
+
+                //Remove timebar
+                var guildId = getIdGuildBuilding();
+                if(objectRefs[guildId].timeBar){
+                    MAP.removeChild(objectRefs[guildId].timeBar);
+                    objectRefs[guildId].timeBar = null;
+                }
             } else if (gv.user.is_in_guild) {
                 requestMyClanMember = true;
                 this.getGuildListMemberInfo(gv.user.id_guild);
 
+                //Xoa tin nhan xin quan cua nguoi bi kick
+                for(var i in messageList) {
+                    if (messageList[i].userId == data.id && messageList[i].typeMessage == MESSAGE_ASK_TROOP) {
+                        messageList.splice(i, 1);
+                    }
+                }
+
+                //Thong bao co nguoi bi kick
                 var mess =  {
                     typeMessage: MESSAGE_NORMAL,
                     userId: -1,
@@ -343,7 +359,6 @@ testnetwork.Connector = cc.Class.extend({
                         memberListOnline.splice(i, 1);
                     }
                 }
-
                 updateMessageBox();
             }
         }
@@ -498,6 +513,19 @@ testnetwork.Connector = cc.Class.extend({
 
             building.setStatus('upgrade');
             building.startTime = getCurrentServerTime();
+
+            if(building._name == "BAR_1"){
+                //Cap nhat startTime cho barrack
+                barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
+                //Dung countdown cua barrack nay
+                barrackQueueList[building._id].flagCountDown = false;
+                if(building.timeBar){
+                    MAP.removeChild(building.timeBar);
+                    building.timeBar = null;
+                }
+            }
+
+
             var cur = (getCurrentServerTime() - building.startTime)/1000;
             var max = config.building[building._name][building._level+1].buildTime;
             building.addTimeBar(cur, max);
@@ -517,13 +545,6 @@ testnetwork.Connector = cc.Class.extend({
             reduceUserResources(ReducedTempResources);
             resetReducedTempResources();
             console.log("ten nha = "+ building._name);
-
-            if(building._name == "BAR_1"){
-                //Cap nhat startTime cho barrack
-                barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
-                //Dung countdown cua barrack nay
-                barrackQueueList[building._id].flagCountDown = false;
-            }
         }
     },
 
@@ -640,6 +661,11 @@ testnetwork.Connector = cc.Class.extend({
                 BARRACK[id]._timeBar.visible = false;
                 cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
                 BARRACK[id]._statusCountDown = false;
+
+                if(getBarrackObjectById(id).timeBar){
+                    MAP.removeChild(getBarrackObjectById(id).timeBar);
+                    getBarrackObjectById(id).timeBar = null;
+                }
                 return;
                 //Con item trong queue
             }else{
@@ -717,6 +743,10 @@ testnetwork.Connector = cc.Class.extend({
         var totalCapacity = getTotalCapacityAMCs();
         var currentCapacity = getTotalCurrentTroopCapacity();
         TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
+        if(getBarrackObjectById(id).timeBar){
+            MAP.removeChild(getBarrackObjectById(id).timeBar);
+            getBarrackObjectById(id).timeBar = null;
+        }
     },
 
     trainTroopCompleted: function(troopType) {
@@ -785,7 +815,10 @@ testnetwork.Connector = cc.Class.extend({
                 TRAIN_POPUP._isShowTimeBar = false;
                 if(TRAIN_POPUP._timeBar) TRAIN_POPUP._timeBar.visible = false;
                 TRAIN_POPUP._statusCountDown = false;
-
+                if(getBarrackObjectById(temp.trainedBarrackId).timeBar){
+                    MAP.removeChild(getBarrackObjectById(temp.trainedBarrackId).timeBar);
+                    getBarrackObjectById(temp.trainedBarrackId).timeBar = null;
+                }
                 cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
             }else{
                 TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList[troopType]._currentPosition);
@@ -908,9 +941,10 @@ testnetwork.Connector = cc.Class.extend({
             }
             var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             var max = TIME_REQUEST_TROOP / 1000;
-            if(!objectRefs[ID_CLC_BUILDING].timeBar){
-                objectRefs[ID_CLC_BUILDING].addTimeBar(cur, max);
-                objectRefs[ID_CLC_BUILDING].countDownRequest(cur, max);
+            var guildId = getIdGuildBuilding();
+            if(!objectRefs[guildId].timeBar){
+                objectRefs[guildId].addTimeBar(cur, max);
+                objectRefs[guildId].countDownRequest(cur, max);
             }
         }
         messageList.push(message);
