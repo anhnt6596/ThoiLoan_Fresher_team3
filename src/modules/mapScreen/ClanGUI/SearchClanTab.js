@@ -20,7 +20,7 @@ var SearchClanTab = Tab.extend({
         });
         this.addChild(text1);
 
-        var textField = new cc.EditBox(cc.size(240, 40), "res/Art/Bang hoi/slost nen 1.png");
+        var textField = new cc.EditBox(cc.size(240, 40), res.clan.textBg1);
         this.textField = textField;
         textField.attr({
             y: this.height - 40,
@@ -31,7 +31,7 @@ var SearchClanTab = Tab.extend({
         textField.setFontColor(new cc.Color(0,0,0,255));
         this.addChild(textField);
         
-        var checkBoxSearchByName = new ccui.CheckBox("res/Art/Bang hoi/Untitled-1.png", "res/Art/Bang hoi/Untitled-1.pngsdva.png", "res/Art/Bang hoi/Untitled-1.pngsdva.png");
+        var checkBoxSearchByName = new ccui.CheckBox(res.clan.checkBoxBg, res.clan.checkBoxSelect, res.clan.checkBoxSelect);
         this.checkBoxSearchByName = checkBoxSearchByName;
         checkBoxSearchByName.attr({
             x: this.width - 260,
@@ -41,7 +41,7 @@ var SearchClanTab = Tab.extend({
         checkBoxSearchByName.addEventListener(this.checkSearchByName, this);
         checkBoxSearchByName.setSelected(true);
 
-        var checkBoxSearchByCode = new ccui.CheckBox("res/Art/Bang hoi/Untitled-1.png", "res/Art/Bang hoi/Untitled-1.pngsdva.png", "res/Art/Bang hoi/Untitled-1.pngsdva.png");
+        var checkBoxSearchByCode = new ccui.CheckBox(res.clan.checkBoxBg, res.clan.checkBoxSelect, res.clan.checkBoxSelect);
         this.checkBoxSearchByCode = checkBoxSearchByCode;
         checkBoxSearchByCode.attr({
             x: this.width - 260,
@@ -69,7 +69,7 @@ var SearchClanTab = Tab.extend({
         });
         this.addChild(text3);
 
-        var searchBtn = ui.optionButton("Tìm kiếm", 'res/Art/Bang hoi/POPUP_0000_Group-3.png');
+        var searchBtn = ui.optionButton("Tìm kiếm", res.clan.popupBtn);
         searchBtn.attr({
             x: this.width - 85,
             y: this.height - 40,
@@ -148,7 +148,7 @@ var SearchClanTab = Tab.extend({
         });
         this.addChild(clanInfo);
 
-        var closeBtn = ui.optionButton("Đóng", "res/Art/Bang hoi/button _xem lai.png");
+        var closeBtn = ui.optionButton("Đóng", res.clan.greenBtn);
         closeBtn.attr({
             x: clanInfo.width - 250,
             y: clanInfo.height / 2 - 25,
@@ -156,7 +156,7 @@ var SearchClanTab = Tab.extend({
         clanInfo.addChild(closeBtn);
         closeBtn.addClickEventListener(this.closeClanInfo.bind(this));
 
-        var memberBtn = ui.optionButton("Thành viên", "res/Art/Bang hoi/button _xem lai.png");
+        var memberBtn = ui.optionButton("Thành viên", res.clan.greenBtn);
         memberBtn.attr({
             x: clanInfo.width - 250,
             y: clanInfo.height / 2 + 25,

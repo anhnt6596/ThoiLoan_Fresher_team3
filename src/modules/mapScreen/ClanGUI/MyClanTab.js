@@ -19,7 +19,7 @@ var MyClanTab = Tab.extend({
         });
         this.addChild(clanInfo);
 
-        var memberBtn = ui.optionButton("Thành viên", "res/Art/Bang hoi/button _xem lai.png");
+        var memberBtn = ui.optionButton("Thành viên", res.clan.greenBtn);
         memberBtn.attr({
             x: clanInfo.width - 230,
             y: clanInfo.height / 2 + 25,
@@ -27,7 +27,7 @@ var MyClanTab = Tab.extend({
         clanInfo.addChild(memberBtn);
         memberBtn.addClickEventListener(() => CLAN_GUI_HEADER.selectTabAction(2));
 
-        var editBtn = ui.optionButton("Sửa", "res/Art/Bang hoi/button _xem lai.png");
+        var editBtn = ui.optionButton("Sửa", res.clan.greenBtn);
         editBtn.attr({
             x: clanInfo.width - 230,
             y: clanInfo.height / 2 - 25,

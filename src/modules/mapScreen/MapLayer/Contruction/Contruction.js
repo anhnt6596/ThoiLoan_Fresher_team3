@@ -318,7 +318,7 @@ var Contruction = cc.Class.extend({
     },
     addNameText: function() {
         var bd_name = name.building[this._name] ? name.building[this._name].en : 'unknown';
-        var nameText = new cc.LabelBMFont(bd_name, 'res/Art/Fonts/soji_24.fnt');
+        var nameText = new cc.LabelBMFont(bd_name, res.font_soji[24]);
         this.nameText = nameText;
         var coor = this.xyOnMap(this._posX, this._posY);
         nameText.attr({
@@ -329,7 +329,7 @@ var Contruction = cc.Class.extend({
         });
         MAP.addChild(nameText, 1000);
         
-        var levelText = new cc.LabelBMFont('cấp ' + this._level, 'res/Art/Fonts/soji_16.fnt');
+        var levelText = new cc.LabelBMFont('cấp ' + this._level, res.font_soji[16]);
         this.levelText = levelText;
         levelText.attr({
             x: nameText.width / 2,
@@ -589,7 +589,7 @@ var Contruction = cc.Class.extend({
 
         //var t = timeToString(max - cur);
         var t = timeToReadable(max - cur);
-        var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
+        var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
         this.timeText = timeText;
         timeText.attr({
             x: timeBar.width / 2,

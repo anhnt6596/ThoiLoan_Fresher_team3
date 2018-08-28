@@ -506,6 +506,93 @@ res.building = {
     ]
 };
 
+
+
+var clanDir = "res/Art/Bang hoi/";
+res.clan = {
+    cup1: clanDir + "CUP 1.png",
+    cup2: clanDir + "cup nho.png",
+    cup3: clanDir + "cup.png",
+    greenBtn: clanDir + "button _xem lai.png",
+    redBtn: clanDir + "button _ tra thu.png",
+    myClanBg: clanDir + "NEN NHO _BANG HOI CUA TOI.png",
+    troophyBg: clanDir + "1.png",
+    textBg1: clanDir + "slost nen 1.png",
+    textBg2: clanDir + "slost nen 2.png",
+    nextBtn: clanDir + "next 1.png",
+    prevBtn: clanDir + "next 2.png",
+    popupBtn: clanDir + "POPUP_0000_Group-3.png",
+    tabSelect: clanDir + "o duoi.png",
+    tabUnselect: clanDir + "o duoi 1.png",
+    flagSelect: clanDir + "co 1.png",
+    flagUnselect: clanDir + "co 2.png",
+    checkBoxBg: clanDir + "Untitled-1.png",
+    checkBoxSelect: clanDir + "Untitled-1.pngsdva.png",
+    slost: clanDir + "slost.png",
+    bigStar: clanDir + "sao sao.png",
+    smallStar: clanDir + "sao nho.png",
+    bubble: [
+        clanDir + "POPUP_0002_Layer-4.png",
+        clanDir + "POPUP_0003_Shape-86.png",
+        clanDir + "POPUP_0004_Layer-3.png",
+        clanDir + "POPUP_0005_Layer-2.png",
+    ],
+    bubbleButton: clanDir + "POPUP_0000_Group-3.png",
+
+    mapIconDir: clanDir + "bieu tuong tren map/",
+    iconDir: clanDir + "icon bieu tuong/",
+};
+
+res.font_soji = {
+    "20": 'res/Art/Fonts/soji_20.fnt',
+    "16": 'res/Art/Fonts/soji_16.fnt',
+    "12": 'res/Art/Fonts/soji_12.fnt',
+    "24": 'res/Art/Fonts/soji_24.fnt'
+};
+
+res.gui = {
+    bg_exp: 'res/Art/GUIs/Main_Gui/bg_exp.png',
+    exp_bg_bar: 'res/Art/GUIs/Main_Gui/exp_bg_bar.png',
+    ic_exp: 'res/Art/GUIs/Main_Gui/ic_exp.png',
+    exp_bar: 'res/Art/GUIs/Main_Gui/exp_bar.png',
+    trophy_bg_bar: 'res/Art/GUIs/Main_Gui/trophy_bg_bar.png',
+    ranking: 'res/Art/GUIs/Main_Gui/ranking.png',
+
+    builder_icon: 'res/Art/GUIs/Main_Gui/builder_icon.png',
+    army_icon: 'res/Art/GUIs/Main_Gui/army_icon.png',
+    shield_icon: 'res/Art/GUIs/Main_Gui/shield.png',
+
+    gold_icon: 'res/Art/GUIs/Main_Gui/gold_icon.png',
+    elixir_icon: 'res/Art/GUIs/Main_Gui/elixir_icon.png',
+    dark_elixir_icon: 'res/Art/GUIs/Main_Gui/darkElixir_icon.png',
+    gold_bar: 'res/Art/GUIs/Main_Gui/gold_bar.png',
+    elixir_bar: 'res/Art/GUIs/Main_Gui/elixir_bar.png',
+    dark_elixir_bar: 'res/Art/GUIs/Main_Gui/darkElixir_bar.png',
+    res_bg: 'res/Art/GUIs/Main_Gui/bg_bar_2.png',
+    g_bg: "res/Art/GUIs/Main_Gui/bg_bar_3.png",
+    g_icon: "res/Art/GUIs/Main_Gui/g_icon.png",
+    troophy_bg: 'res/Art/GUIs/Main_Gui/bg_bar_1.png',
+
+    shop_icon: 'res/Art/GUIs/Main_Gui/shop.png',
+    attack_icon: 'res/Art/GUIs/Main_Gui/attack.png',
+    setting_icon: 'res/Art/GUIs/Main_Gui/setting.png',
+    treasure_icon: 'res/Art/GUIs/Main_Gui/kho.png',
+    info_icon: 'res/Art/GUIs/Action_Building_Icon/info_icon.png',
+    upgrade_icon: 'res/Art/GUIs/Action_Building_Icon/upgrade_icon.png',
+    cancel_icon: 'res/Art/GUIs/Action_Building_Icon/cancel_icon.png',
+    quick_finish_icon: 'res/Art/GUIs/Action_Building_Icon/quick_finish.png',
+    remove_icon: 'res/Art/GUIs/Action_Building_Icon/remove_icon.png',
+    research_icon: 'res/Art/GUIs/Action_Building_Icon/research_icon.png',
+    collect_gold_icon: 'res/Art/GUIs/Action_Building_Icon/harvest_gold.png',
+    collect_elixir_icon: 'res/Art/GUIs/Action_Building_Icon/harvest_elixir.png',
+    collect_dark_elixir_icon: 'res/Art/GUIs/Action_Building_Icon/harvest_dark_elixir.png',
+    train_icon: 'res/Art/GUIs/Action_Building_Icon/train_icon.png',
+    select_line_icon: 'res/Art/GUIs/Action_Building_Icon/select_line.png',
+    rotate_icon: 'res/Art/GUIs/Action_Building_Icon/rotate_icon.png',
+    clan_icon: 'res/Art/GUIs/Action_Building_Icon/clan_button.png',
+    request_troop_icon: 'res/Art/GUIs/Action_Building_Icon/request_troop_button.png',
+};
+
 var g_mainmenu = [
     res.loading_png,
     res.flare_jpg,
@@ -522,26 +609,7 @@ var g_mainmenu = [
     res.textureTransparentPack_png
 ];
 
-var g_resources = [
-    "CloseNormal.png",
-    "CloseSelected.png",
-    "config.json",
-    "Default/Button_Disable.png",
-    "Default/Button_Normal.png",
-    "Default/Button_Press.png",
-
-    "favicon.ico",
-    "fonts/diceNumber.fnt",
-    "fonts/diceNumber.png",
-    "fonts/eff_number.fnt",
-    "fonts/eff_number.png",
-    "fonts/number_1.fnt",
-    "fonts/number_1.png",
-    "ipConfig.json",
-    "localize/config.json",
-    "localize/vi.txt",
-    "localize/en.txt",
-];
+var g_resources = [];
 
 var name = name || {};
 name.building = {

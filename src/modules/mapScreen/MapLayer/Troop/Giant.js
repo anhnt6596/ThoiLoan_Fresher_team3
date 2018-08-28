@@ -45,7 +45,7 @@ var Giant = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var standingAnims = ui.makeAnimation(this._type + '_' + this._level + '/idle/image00', startFrame, endFrame, 0.1);
+        var standingAnims = ui.makeAnimation(this._type + '_' + this._level + '/idle/image00', startFrame, endFrame, 0.2);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(standingAnims.repeatForever());
     },
@@ -64,7 +64,7 @@ var Giant = Troop.extend({
                 endFrame = 31;
                 break;
             case 3: case 6:
-                startFrame = 31;
+                startFrame = 32;
                 endFrame = 47;
                 break;
             case 4: case 7:
@@ -72,7 +72,7 @@ var Giant = Troop.extend({
                 endFrame = 63;
                 break;
             case 8:
-                startFrame = 63;
+                startFrame = 64;
                 endFrame = 79;
                 break;
             default:
@@ -80,7 +80,7 @@ var Giant = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var runningAnims = ui.makeAnimation(this._type + '_' + this._level + '/run/image00', startFrame, endFrame, 0.10);
+        var runningAnims = ui.makeAnimation(this._type + '_' + this._level + '/run/image00', startFrame, endFrame, 0.08);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(runningAnims.repeatForever());
     },
