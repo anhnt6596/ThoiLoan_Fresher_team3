@@ -14,19 +14,19 @@ var LobbyLayer = cc.Layer.extend({
     },
     initButton: function() {
         var size = cc.winSize;
-        var btnShop = ui.iconButton(100, size.width - 55, 55, 'res/Art/GUIs/Main_Gui/shop.png', 'SHOP');
+        var btnShop = ui.iconButton(100, size.width - 55, 55, res.gui.shop_icon, 'SHOP');
         this.addChild(btnShop);
         btnShop.addClickEventListener(this.onOpenShop.bind(this));
 
-        var btnAttack = ui.iconButton(103, 55, 55, 'res/Art/GUIs/Main_Gui/attack.png', 'TẤN CÔNG');
+        var btnAttack = ui.iconButton(103, 55, 55, res.gui.attack_icon, 'TẤN CÔNG');
         this.addChild(btnAttack);
         btnAttack.addClickEventListener(this.onAttack.bind(this));
 
-        var btnSetting = ui.iconButton(60, size.width - 35, 135, 'res/Art/GUIs/Main_Gui/setting.png', '');
+        var btnSetting = ui.iconButton(60, size.width - 35, 135, res.gui.setting_icon, '');
         this.addChild(btnSetting);
         btnSetting.addClickEventListener(this.onSetting.bind(this));
 
-        var btnTreasure = ui.iconButton(60, size.width - 35, 195, 'res/Art/GUIs/Main_Gui/kho.png', '');
+        var btnTreasure = ui.iconButton(60, size.width - 35, 195, res.gui.treasure_icon, '');
         this.addChild(btnTreasure);
         btnTreasure.addClickEventListener(this.onTreasure.bind(this));
 

@@ -11,7 +11,7 @@ ui.makeAnimation = function(name, s, e, fps){
     return cc.animate(animation);
 };
 ui.productTextEffect = function (building, type, text) {
-    var textEff = new cc.LabelBMFont(text, 'res/Art/Fonts/soji_24.fnt');
+    var textEff = new cc.LabelBMFont(text, res.font_soji[24]);
     var color;
     switch (type) {
         case "RES_1":

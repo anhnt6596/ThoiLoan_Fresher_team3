@@ -45,7 +45,7 @@ var Goblin = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var standingAnims = ui.makeAnimation(this._type + '_' + this._level + '/idle/image00', startFrame, endFrame, 0.1);
+        var standingAnims = ui.makeAnimation(this._type + '_' + this._level + '/idle/image00', startFrame, endFrame, 0.12);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(standingAnims.repeatForever());
     },
@@ -80,7 +80,7 @@ var Goblin = Troop.extend({
         }
         if ([2, 3, 4].indexOf(this._direction) !== -1) flip = -1;
         this.troopImg.attr({ scaleX: flip });
-        var runningAnims = ui.makeAnimation(this._type + '_' + this._level + '/run/image00', startFrame, endFrame, 0.10);
+        var runningAnims = ui.makeAnimation(this._type + '_' + this._level + '/run/image00', startFrame, endFrame, 0.05);
         this.troopImg.stopAllActions();
         this.troopImg.runAction(runningAnims.repeatForever());
     },

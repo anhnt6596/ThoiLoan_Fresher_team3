@@ -34,7 +34,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(text1);
 
-        var clanName = new cc.EditBox(cc.size(320, 51), "res/Art/Bang hoi/slost nen 1.png");
+        var clanName = new cc.EditBox(cc.size(320, 51), res.clan.textBg1);
         this.clanName = clanName;
         clanName.attr({
             y: this.height - 40,
@@ -62,7 +62,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(text3);
 
-        var icon = new cc.Sprite("res/Art/Bang hoi/icon bieu tuong/" + this.iconType + ".png");
+        var icon = new cc.Sprite(res.clan.iconDir + this.iconType + ".png");
         this.icon = icon;
         icon.attr({ 
             x: this.width / 2 - 60,
@@ -70,7 +70,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(icon);
 
-        var selectIconButton = ui.optionButton("Chọn", "res/Art/Bang hoi/button _xem lai.png");
+        var selectIconButton = ui.optionButton("Chọn", res.clan.greenBtn);
         selectIconButton.attr({
             x: this.width / 2 + 50,
             y: this.height - 90,
@@ -87,7 +87,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(text4);
 
-        var clanDescriptionBG = new cc.Sprite("res/Art/Bang hoi/slost nen 2.png");
+        var clanDescriptionBG = new cc.Sprite(res.clan.textBg2);
         clanDescriptionBG.attr({
             x: this.width / 2,
             y: this.height - 164,
@@ -116,7 +116,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(text5);
 
-        var leftButton = new ccui.Button("res/Art/Bang hoi/next 2.png");
+        var leftButton = new ccui.Button(res.clan.prevBtn);
         leftButton.attr({ 
             x: this.width / 2 - 90,
             y: this.height - 240,
@@ -124,7 +124,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(leftButton);
         leftButton.addClickEventListener(this.prevClanStatus.bind(this));
 
-        var rightButton = new ccui.Button("res/Art/Bang hoi/next 1.png");
+        var rightButton = new ccui.Button(res.clan.nextBtn);
         rightButton.attr({ 
             x: this.width / 2 + 90,
             y: this.height - 240,
@@ -132,7 +132,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(rightButton);
         rightButton.addClickEventListener(this.nextClanStatus.bind(this));
 
-        var statusText = new cc.LabelBMFont(this._status[this.clanStatus], 'res/Art/Fonts/soji_16.fnt');
+        var statusText = new cc.LabelBMFont(this._status[this.clanStatus], res.font_soji[16]);
         this.statusText = statusText;
         statusText.attr({
             x: this.width / 2,
@@ -149,7 +149,7 @@ var EditClanView = cc.Sprite.extend({
         });
         clanView.addChild(text6);
 
-        var leftButton1 = new ccui.Button("res/Art/Bang hoi/next 2.png");
+        var leftButton1 = new ccui.Button(res.clan.prevBtn);
         leftButton1.attr({ 
             x: this.width / 2 - 90,
             y: this.height - 285,
@@ -157,7 +157,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(leftButton1);
         leftButton1.addClickEventListener(this.prevrequireTroophy.bind(this));
 
-        var rightButton1 = new ccui.Button("res/Art/Bang hoi/next 1.png");
+        var rightButton1 = new ccui.Button(res.clan.nextBtn);
         rightButton1.attr({ 
             x: this.width / 2 + 90,
             y: this.height - 285,
@@ -165,7 +165,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(rightButton1);
         rightButton1.addClickEventListener(this.nextrequireTroophy.bind(this));
 
-        var requireTroophyText = new cc.LabelBMFont(this.requireTroophy.toString(), 'res/Art/Fonts/soji_16.fnt');
+        var requireTroophyText = new cc.LabelBMFont(this.requireTroophy.toString(), res.font_soji[16]);
         this.requireTroophyText = requireTroophyText;
         requireTroophyText.attr({
             x: this.width / 2,
@@ -174,7 +174,7 @@ var EditClanView = cc.Sprite.extend({
         clanView.addChild(requireTroophyText);
         //dòng 6
         if (!this.isEdit) {
-            var createButton = new ui.optionButton(formatNumber(this.createCost), "res/Art/Bang hoi/POPUP_0000_Group-3.png");
+            var createButton = new ui.optionButton(formatNumber(this.createCost), res.clan.popupBtn);
             createButton.attr({
                 x: this.width / 2,
                 y: this.height - 340,
@@ -182,7 +182,7 @@ var EditClanView = cc.Sprite.extend({
             clanView.addChild(createButton);
             createButton.addClickEventListener(this.createAction.bind(this));
         } else {
-            var editButton = new ui.optionButton("Sửa", "res/Art/Bang hoi/POPUP_0000_Group-3.png");
+            var editButton = new ui.optionButton("Sửa", res.clan.popupBtn);
             editButton.attr({
                 x: this.width / 2 + 80,
                 y: this.height - 340,
@@ -190,7 +190,7 @@ var EditClanView = cc.Sprite.extend({
             clanView.addChild(editButton);
             editButton.addClickEventListener(this.editAction.bind(this));
 
-            var cancelButton = new ui.optionButton("Hủy", "res/Art/Bang hoi/POPUP_0000_Group-3.png");
+            var cancelButton = new ui.optionButton("Hủy", res.clan.popupBtn);
             cancelButton.attr({
                 x: this.width / 2 - 80,
                 y: this.height - 340,
@@ -230,7 +230,7 @@ var EditClanView = cc.Sprite.extend({
         this.addChild(selectView);
 
         for(var i = 1; i <= 28; i ++) {
-            var icon = new ccui.Button("res/Art/Bang hoi/bieu tuong tren map/" + i + ".png");
+            var icon = new ccui.Button(res.clan.mapIconDir + i + ".png");
             icon.attr({
                 x: 80 + ((i - 1) % 7) * 90,
                 y: this.height - 70 - parseInt((i - 1) / 7) * 90,
@@ -248,7 +248,7 @@ var EditClanView = cc.Sprite.extend({
             this.iconType = type;
             this.icon && this.removeChild(this.icon);
 
-            var icon = new cc.Sprite("res/Art/Bang hoi/icon bieu tuong/" + this.iconType + ".png");
+            var icon = new cc.Sprite(res.clan.iconDir + this.iconType + ".png");
             this.icon = icon;
             icon.attr({ 
                 x: this.width / 2 - 60,
@@ -296,7 +296,7 @@ var EditClanView = cc.Sprite.extend({
 
         this.iconType = myClanInfo.iconType;
         this.icon && this.removeChild(this.icon);
-        var icon = new cc.Sprite("res/Art/Bang hoi/icon bieu tuong/" + this.iconType + ".png");
+        var icon = new cc.Sprite(res,clan.iconDir + this.iconType + ".png");
         this.icon = icon;
         icon.attr({ 
             x: this.width / 2 - 60,

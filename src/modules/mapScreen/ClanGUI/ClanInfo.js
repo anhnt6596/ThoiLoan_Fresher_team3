@@ -1,11 +1,11 @@
 var ClanInfo = cc.Sprite.extend({
     ctor: function(clanInfo) {
-        this._super("res/Art/Bang hoi/NEN NHO _BANG HOI CUA TOI.png");
+        this._super(res.clan.myClanBg);
         this.clanInfo = clanInfo;
         this.init(clanInfo);
     },
     init: function(clanInfo) {
-        var icon = new cc.Sprite("res/Art/Bang hoi/bieu tuong tren map/" + clanInfo.iconType + ".png");
+        var icon = new cc.Sprite(res.clan.mapIconDir + clanInfo.iconType + ".png");
         icon.attr({
             x: 56,
             y: this.height / 2,
@@ -32,7 +32,7 @@ var ClanInfo = cc.Sprite.extend({
         });
         this.addChild(infoTable);
         
-        var nameText = cc.LabelBMFont(clanInfo.name, 'res/Art/Fonts/soji_20.fnt');
+        var nameText = cc.LabelBMFont(clanInfo.name, res.font_soji[20]);
         nameText.attr({
             anchorX: 0,
             y: infoTable.height,
@@ -85,7 +85,7 @@ var ClanInfo = cc.Sprite.extend({
         });
         infoTable.addChild(troophyText, 1);
 
-        var troophyIcon = new cc.Sprite("res/Art/Bang hoi/CUP 1.png");
+        var troophyIcon = new cc.Sprite(res.clan.cup1);
         troophyIcon.attr({
             x: 220,
             y: infoTable.height - 20,
@@ -118,7 +118,7 @@ var ClanInfo = cc.Sprite.extend({
         infoTable.addChild(troophyRequireText);
     },
     initButton: function() {
-        var joinButton = new ui.optionButton("Gia nhập", "res/Art/Bang hoi/button _xem lai.png");
+        var joinButton = new ui.optionButton("Gia nhập", res.clan.greenBtn);
         joinButton.attr({
             x: this.width - 70,
             y: this.height / 2 + 25,
@@ -127,7 +127,7 @@ var ClanInfo = cc.Sprite.extend({
         joinButton.addClickEventListener(this.joinAction.bind(this));
         if (gv.user.is_in_guild) joinButton.setEnabled(false);
 
-        var outButton = new ui.optionButton("Rời bang", "res/Art/Bang hoi/button _ tra thu.png");
+        var outButton = new ui.optionButton("Rời bang", res.clan.redBtn);
         outButton.attr({
             x: this.width - 70,
             y: this.height / 2 - 25,

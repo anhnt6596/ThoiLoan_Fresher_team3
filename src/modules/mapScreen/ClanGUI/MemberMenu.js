@@ -1,15 +1,3 @@
-var res = res || {};
-var clanDir = "res/Art/Bang hoi/";
-res.clan = {
-    bubble: [
-        clanDir + "POPUP_0002_Layer-4.png",
-        clanDir + "POPUP_0003_Shape-86.png",
-        clanDir + "POPUP_0004_Layer-3.png",
-        clanDir + "POPUP_0005_Layer-2.png",
-    ],
-    bubbleButton: clanDir + "POPUP_0000_Group-3.png"
-}
-
 var MemberMenu = ccui.Button.extend({
     ctor: function(listOption, member){
         this.listOption = listOption;

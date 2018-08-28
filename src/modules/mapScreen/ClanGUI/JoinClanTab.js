@@ -1,68 +1,5 @@
 var searchSuggestClan = false;
 
-// var suggestClanList = suggestClanList || [
-//         {
-//             id: 1,
-//             name: "Thiên Long Bát Bộ",
-//             iconType: 1,
-//             status: 1,
-//             level: 2,
-//             member: 49,
-//             troophy: 1123,
-//             troophyRequire: 0,
-//         },
-//         {
-//             id: 2,
-//             name: "Anh Hùng Xạ Điêu",
-//             iconType: 2,
-//             status: 1,
-//             level: 1,
-//             member: 30,
-//             troophy: 500,
-//             troophyRequire: 0,
-//         },
-//         {
-//             id: 3,
-//             name: "Thần Điêu Đại Hiệp",
-//             iconType: 3,
-//             status: 1,
-//             level: 10,
-//             member: 12,
-//             troophy: 11986,
-//             troophyRequire: 0,
-//         },
-//         {
-//             id: 4,
-//             name: "Ỷ Thiên Đồ Long Ký",
-//             iconType: 4,
-//             status: 1,
-//             level: 1,
-//             member: 49,
-//             troophy: 2000,
-//             troophyRequire: 0,
-//         },
-//         {
-//             id: 5,
-//             name: "Tiếu Ngạo Giang Hồ",
-//             iconType: 5,
-//             status: 0,
-//             level: 1,
-//             member: 0,
-//             troophy: 0,
-//             troophyRequire: 0,
-//         },
-//         {
-//             id: 6,
-//             name: "Lộc Đỉnh Ký",
-//             iconType: 6,
-//             status: 0,
-//             level: 1,
-//             member: 0,
-//             troophy: 0,
-//             troophyRequire: 0,
-//         },
-// ];
-
 var JoinClanTab = Tab.extend({
     ctor: function(tabNumber) {
         this._super(tabNumber);
@@ -120,7 +57,7 @@ var JoinClanTab = Tab.extend({
         });
         this.addChild(clanInfo);
 
-        var closeBtn = ui.optionButton("Đóng", "res/Art/Bang hoi/button _xem lai.png");
+        var closeBtn = ui.optionButton("Đóng", res.clan.greenBtn);
         closeBtn.attr({
             x: clanInfo.width - 250,
             y: clanInfo.height / 2 - 25,
@@ -128,7 +65,7 @@ var JoinClanTab = Tab.extend({
         clanInfo.addChild(closeBtn);
         closeBtn.addClickEventListener(this.closeClanInfo.bind(this));
 
-        var memberBtn = ui.optionButton("Thành viên", "res/Art/Bang hoi/button _xem lai.png");
+        var memberBtn = ui.optionButton("Thành viên", res.clan.greenBtn);
         memberBtn.attr({
             x: clanInfo.width - 250,
             y: clanInfo.height / 2 + 25,

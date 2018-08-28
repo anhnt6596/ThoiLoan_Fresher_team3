@@ -98,7 +98,6 @@ var ClanMemberTab = Tab.extend({
         this.addChild(memberMenu);
         memberMenu.attr({
             x: 500,
-            //y: clanItem.getWorldPosition().y * 315 / this.height - 42,
             y: clanItem.getWorldPosition().y * 295 / this.height - 20,
         });
     },

@@ -36,7 +36,7 @@ ui.PopUp = cc.Sprite.extend({
         frame.addChild(closeBtn, 2);
         closeBtn.addClickEventListener(this.close.bind(this));
 
-        var titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_24.fnt');
+        var titleText = new cc.LabelBMFont(title, res.font_soji[24]);
         titleText.attr({
             x: frame.width / 2,
             y: frame.height - 30,
