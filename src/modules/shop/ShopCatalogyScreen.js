@@ -409,11 +409,6 @@ var ShopCatalogyScreen = Popup.extend({
         this.addChild(amountCoin, 3, 3);
     },
 
-    onExit:function(){
-        this._super();
-        cc.log("-----------Exit ShopCatalogyScreen-----------");
-    },
-
     //ghi de ham trong popup
     onCloseCallback:function () {
         this._itemList = [];

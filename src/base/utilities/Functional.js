@@ -366,6 +366,18 @@ var updateGUI = function() {
     LOBBY.update(gv.user);
 };
 
+var updateMessageBox = function() {
+    if(temp.isOpenMessageBox){
+        cc.log("==================================== MESSAGE BOX dang MO =====================");
+        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild();
+    }else{
+        cc.log("==================================== MESSAGE BOX dang DONG =====================");
+        LOBBY.onInteractiveGuild();
+        LOBBY.onCloseInteractiveGuild();
+    }
+};
+
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){

@@ -30,7 +30,7 @@ var LobbyLayer = cc.Layer.extend({
         this.addChild(btnTreasure);
         btnTreasure.addClickEventListener(this.onTreasure.bind(this));
 
-        var btnGuild = ccui.Button('res/Art/GUIs/train_troop_gui/forward.png', 'res/Art/GUIs/train_troop_gui/forward.png');
+        var btnGuild = ccui.Button('res/Art/GUIs/Chat/button chinh.png', 'res/Art/GUIs/Chat/button chinh.png');
         btnGuild.setPosition(btnGuild.width/2, size.height/2);
         btnGuild.addClickEventListener(this.onInteractiveGuild.bind(this));
         this.addChild(btnGuild);
@@ -102,34 +102,51 @@ var LobbyLayer = cc.Layer.extend({
         if(!gv.user.is_in_guild){
             return;
         }
+        temp.isOpenMessageBox = true;
 
         if(!temp.getListMessageFirst){
             temp.getListMessageFirst = true;
             NETWORK.sendGetInteractionGuild();
         }else{
             var size = cc.winSize;
-            var bg = new ccui.Button('res/Art/GUIs/shop_gui/black.jpg');
+            var bg = new ccui.Button('res/Art/GUIs/Chat/nen.png');
             bg.setAnchorPoint(0, 0);
             bg.setScale(cc.winSize.width *3/5 / bg.width, cc.winSize.height / bg.height);
-            bg.setColor(cc.color(0,255,0,255));
             bg.setZoomScale(0);
             this.getParent().addChild(bg, 20, 17);
 
-            var layer = cc.LayerColor.create(cc.color(139,69,19, 128), bg.width, cc.winSize.height);
-            layer.setAnchorPoint(0, 0);
-            bg.addChild(layer);
+            var bgMember = new ccui.Button('res/Art/GUIs/Chat/vc_0004_Layer-80-copy.png');
+            bgMember.setAnchorPoint(0, 0);
+            bgMember.setPosition(cc.winSize.width *2/5 + 10, 0);
+            bgMember.setScale(cc.winSize.width /5 / bgMember.width, cc.winSize.height / bgMember.height);
+            bgMember.setZoomScale(0);
+            this.getParent().addChild(bgMember, 21, 23);
+
+            var headClan = new ccui.Button('res/Art/GUIs/Chat/nen button 2.png');
+            headClan.setPosition(cc.winSize.width *1/5, size.height - headClan.height/2 - 7);
+            headClan.scaleY = 1.4;
+            this.getParent().addChild(headClan, 21, 24);
+
+            var labelCLAN = new cc.LabelBMFont("CLAN", 'res/Art/Fonts/soji_20.fnt');
+            labelCLAN.setPosition(headClan.x, headClan.y - 5);
+            this.getParent().addChild(labelCLAN, 22, 25);
 
 
-            var textField = cc.EditBox.create(cc.size(size.width*1.5/5, size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-            textField.setPosition(textField.width/2, size.height - textField.height/2);
+            var textField = new cc.EditBox(cc.size(size.width*1.5/5, size.height/12),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+            textField.setPosition(textField.width/2, size.height - 140 + textField.height/2);
             //textField.setPlaceHolder("  Enter your message");
             this.textField = textField;
-            this.getParent().addChild(textField, 1111, 21);
+            this.getParent().addChild(textField, 21, 21);
 
-            var btnSend = gv.commonButton(size.width*0.5/5, size.height/10 - 5, textField.x + textField.width/2 + 60, textField.y, "Send");
+            var btnSend = gv.commonButton(size.width*0.5/5, size.height/12 - 5, textField.x + textField.width/2 + 60, textField.y - 2, "Send");
             btnSend.addClickEventListener(this.sendMessage.bind(this));
-            this.getParent().addChild(btnSend, 1111, 22);
+            this.getParent().addChild(btnSend, 21, 22);
 
+            if(gv.user.name_guild){
+                var nameGuildLabel = new cc.LabelBMFont(gv.user.name_guild, 'res/Art/Fonts/soji_20.fnt');
+                nameGuildLabel.setPosition(nameGuildLabel.width/2 + 10, size.height - 160 + textField.height + nameGuildLabel.height);
+                this.getParent().addChild(nameGuildLabel, 24, 26);
+            }
 
             var messageScrollView = this.createMessageScroll();
             this.getParent().addChild(messageScrollView, 100, 19);
@@ -137,10 +154,11 @@ var LobbyLayer = cc.Layer.extend({
             var memberScrollView = this.createMemberScroll();
             this.getParent().addChild(memberScrollView, 101, 20);
 
-            var prevBtn = new ccui.Button('res/Art/GUIs/train_troop_gui/previous.png', 'res/Art/GUIs/train_troop_gui/previous.png');
+            var prevBtn = new ccui.Button('res/Art/GUIs/Chat/button chinh 1.png', 'res/Art/GUIs/Chat/button chinh 1.png');
             prevBtn.setPosition(bg.x + bg.width*bg.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
             prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
             this.getParent().addChild(prevBtn, 21, 18);
+
         }
     },
 
@@ -148,9 +166,10 @@ var LobbyLayer = cc.Layer.extend({
         var content = this.textField.getString();
         content = content.trim();
         if(!content){
-            return;
-        }
-        if(temp.enableSendMessageFlag){
+            //showPopupNotEnoughG('none_length_message');
+        }else if (content.length > MAX_LENGTH_MESSAGE){
+            showPopupNotEnoughG('over_length_message');
+        }else if(temp.enableSendMessageFlag){
             temp.enableSendMessageFlag = false;
             temp.messageContent = content;
             temp.messageType = MESSAGE_NORMAL;
@@ -159,23 +178,30 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onCloseInteractiveGuild: function() {
+        temp.isOpenMessageBox = false;
+
         this.getParent().removeChildByTag(17);
         this.getParent().removeChildByTag(18);
         this.getParent().removeChildByTag(19);
         this.getParent().removeChildByTag(20);
         this.getParent().removeChildByTag(21);
         this.getParent().removeChildByTag(22);
+        this.getParent().removeChildByTag(23);
+        this.getParent().removeChildByTag(24);
+        this.getParent().removeChildByTag(25);
+        this.getParent().removeChildByTag(26);
     },
 
     createMessageScroll: function() {
         var scrollView = new ccui.ScrollView();
         scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
         scrollView.setTouchEnabled(true);
-        scrollView.setContentSize(cc.size(cc.winSize.width*2/5, cc.winSize.height - 70));
+        scrollView.setContentSize(cc.size(cc.winSize.width*2/5, cc.winSize.height - 150));
         scrollView.setBounceEnabled(true);
         scrollView.setPosition(0, 0);
-        //scrollView.setPropagateTouchEvents(false);
+        scrollView.setScrollBarEnabled(false);
 
+        //scrollView.setPropagateTouchEvents(false);
 
         for(var i = 1; i <= messageList.length; i++){
             var item = messageList[i-1];
@@ -255,7 +281,6 @@ var LobbyLayer = cc.Layer.extend({
             nodeContainer.addNode(line);
         }
 
-
         scrollView.setInnerContainerSize(cc.size(scrollView.width, messageList.length * 150 + 10));
         return scrollView;
     },
@@ -271,30 +296,31 @@ var LobbyLayer = cc.Layer.extend({
         var scrollView = new ccui.ScrollView();
         scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
         scrollView.setTouchEnabled(true);
-        scrollView.setContentSize(cc.size(cc.winSize.width/5, cc.winSize.height));
+        scrollView.setContentSize(cc.size(cc.winSize.width/5, cc.winSize.height - 20));
         scrollView.setBounceEnabled(true);
-        scrollView.setPosition(cc.winSize.width*2/5, 0);
+        scrollView.setPosition(cc.winSize.width*2/5, -20);
+        scrollView.setScrollBarEnabled(false);
         //scrollView.setPropagateTouchEvents(false);
 
         for(var i = 1; i <= memberListOnline.length; i++){
             var item = memberListOnline[i-1];
 
-            var amountLabel = new cc.LabelBMFont(item.username, 'res/Art/Fonts/soji_20.fnt');
-            amountLabel.setAnchorPoint(0, 0);
-            amountLabel.setPosition(10, 50*i + 10);
-            scrollView.addChild(amountLabel);
+            var nameLabel = new cc.LabelBMFont(item.username, 'res/Art/Fonts/soji_16.fnt');
+            nameLabel.setAnchorPoint(0, 0);
+            nameLabel.setPosition(20, 40*i + 10);
+            scrollView.addChild(nameLabel);
 
             var btnOnline;
             if(item.valueOnline == ONLINE){
-                btnOnline = new ccui.Button('res/Art/Bang hoi/Untitled-1.pngsdva.png', 'res/Art/Bang hoi/Untitled-1.pngsdva.png');
+                btnOnline = new ccui.Button('res/Art/GUIs/Chat/vc_0001_Shape-84.png', 'res/Art/GUIs/Chat/vc_0001_Shape-84.png');
 
             }else if(item.valueOnline == OFFLINE){
-                btnOnline = new ccui.Button('res/Art/Bang hoi/Untitled-1.pngsdva.png', 'res/Art/Bang hoi/Untitled-1.pngsdva.png');
-                btnOnline.color = cc.color(255, 0, 0, 255);
+                btnOnline = new ccui.Button('res/Art/GUIs/Chat/vc_0000_Layer-4.png', 'res/Art/GUIs/Chat/vc_0000_Layer-4.png');
             }
 
             btnOnline.setAnchorPoint(0, 0);
-            btnOnline.setPosition(cc.winSize.width/5 - 50, amountLabel.y);
+            btnOnline.setScale(1.5);
+            btnOnline.setPosition(cc.winSize.width/5 - 30, nameLabel.y);
             scrollView.addChild(btnOnline, 12000);
         }
 

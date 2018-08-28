@@ -8,9 +8,9 @@ var ItemInfo = TinyPopup.extend({
         if(data.itemName == "CLC_1"){
             //Hien thi so luong quan hien tai cua guild
             this.showClanInfo();
-        }else{
-            this.showInfoItem(width, height, data.itemName, data._level);
         }
+
+        this.showInfoItem(width, height, data.itemName, data._level);
     },
 
     showClanInfo: function() {
@@ -33,7 +33,7 @@ var ItemInfo = TinyPopup.extend({
             cc.log("================= DUY: amount: " + this.troopGuildListDiff[j]);
 
             var troop = new TroopGuildItem(name2, level2, this.troopGuildListDiff[j]);
-            troop.setPosition(-500 + 150*h, 70);
+            troop.setPosition(-450 + 150*h, -100);
             this.addChild(troop, 1000);
             h++;
         }
@@ -183,6 +183,12 @@ var ItemInfo = TinyPopup.extend({
                 break;
             case 'BDH_1':
                 buildingImg = new cc.Sprite(res.building.builder_hut);
+                break;
+            case 'CLC_1':
+                buildingImg = new cc.Sprite(res.building.clanCastle[level]);
+                break;
+            case 'WAL_1':
+                buildingImg = new cc.Sprite(res.building.wall[level][2]);
                 break;
             case 'LAB_1':
                 buildingImg = new cc.Sprite(res.building.labratory[level]);
