@@ -103,6 +103,7 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
+        this.showRange();
     },
     collect: function() {
         // để rỗng
@@ -125,7 +126,14 @@ var Contruction = cc.Class.extend({
         this.tempY = this._posY;
         this.buildingImg.stopAllActions();
         this.buildingImg.runAction(ui.backToDefaultColor());
+        this.hideRange();
         LOBBY.hideObjectMenu();
+    },
+    showRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
+    },
+    hideRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
     },
     moving: function(mapPos) {
         // if (this._name === "CLC_1" && this._level === 0) return;

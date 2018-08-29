@@ -43,10 +43,11 @@ var MapLayer = cc.Layer.extend({
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/BAR_1_effects/BAR_1_effects.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/armycam_1/armycam_1_effect.plist');
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/effects_1.plist');
-        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_1_anims.plist');
-        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_2_anims.plist');
-        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_3_anims.plist');
-        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_4_anims.plist');
+        // cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_1_anims.plist');
+        // cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_2_anims.plist');
+        // cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_3_anims.plist');
+        // cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/ARM_4_anims.plist');
+        cc.spriteFrameCache.addSpriteFrames('res/Art/Troops/troop_imgs.plist');
         this.initBackGround();
         this.initMovingTool();
         this.createLogicArray(contructionList, obstacleLists);

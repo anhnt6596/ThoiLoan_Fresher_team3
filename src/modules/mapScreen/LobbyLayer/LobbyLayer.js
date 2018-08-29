@@ -138,7 +138,11 @@ var LobbyLayer = cc.Layer.extend({
             this.textField = textField;
             this.getParent().addChild(textField, 21, 21);
 
-            var btnSend = gv.commonButton(size.width*0.5/5, size.height/12 - 5, textField.x + textField.width/2 + 60, textField.y - 2, "Send");
+            var btnSend = ui.optionButton("Send", res.clan.greenBtn);
+            btnSend.attr({
+                x: textField.x + textField.width/2 + 60,
+                y: textField.y - 2,
+            });
             btnSend.addClickEventListener(this.sendMessage.bind(this));
             this.getParent().addChild(btnSend, 21, 22);
 
@@ -274,7 +278,7 @@ var LobbyLayer = cc.Layer.extend({
                 }
             }
 
-            var line = new cc.Sprite('res/Art/Bang hoi/q.png');
+            var line = new cc.Sprite('res/Art/Bang hoi/line2.png');
             line.setAnchorPoint(0, 0);
             line.scaleX = (cc.winSize.width*2/5 - 40) / line.width;
             line.setPosition(content.x, content.y - 70);

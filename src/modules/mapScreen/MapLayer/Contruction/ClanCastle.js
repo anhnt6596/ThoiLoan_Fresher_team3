@@ -4,6 +4,9 @@ var ClanCastle = Building.extend({
     ctor: function(info) {
         CLANCASTLE = this;
         this._super(info);
+        var range = new cc.DrawNode();
+        range.drawCircle(new cc.p(this.buildingImg.x, this.buildingImg.x), 300, 50, 50, false, 50, new cc.Color(0, 0, 0, 255));
+        this.buildingImg.addChild(range, 10000000);
     },
     addBuildingImg: function() {
         var dir = res.building.clanCastle[this._level];
@@ -26,7 +29,7 @@ var ClanCastle = Building.extend({
         if (gv.user.is_in_guild) {
             var iconType = myClanInfo && myClanInfo.iconType || 1;
             cc.log("ICON TYPE:" + gv.user.id_logo_guild );
-            var icon = new cc.Sprite("res/Art/Bang hoi/bieu tuong tren map/" + iconType + ".png");
+            var icon = new cc.Sprite(res.clan.mapIconDir + iconType + ".png");
             this.icon = icon;
             icon.attr({
                 x: this.buildingImg.width / 2,

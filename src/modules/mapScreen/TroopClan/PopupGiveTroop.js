@@ -2,7 +2,7 @@ var PopupGiveTroop = ccui.Button.extend({
     listTroopTag:[],
 
     ctor: function(idUserGet){
-        this._super('res/Art/Bang hoi/POPUP_0002_Layer-4.png');
+        this._super(res.clan.bubble2);
         this.setPosition(LOBBY.width/2.5, LOBBY.height/2);
         this.setScaleX(3);
         this.setScaleY(2);
