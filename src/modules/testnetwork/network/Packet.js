@@ -568,7 +568,6 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
 
 var contructionList = contructionList || [];
 var obstacleLists = obstacleLists || [];
-var ID_CLC_BUILDING;
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
         ctor:function()
@@ -585,11 +584,6 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this._id = this.getInt();
                 this.name = this.getString();
                 cc.log("========================name Nha: " + this.name);
-
-                if(this.name == "CLC_1"){
-                    ID_CLC_BUILDING = this._id;
-                }
-
                 cc.log("_id: " + this._id);
                 this.posX = this.getInt();
                 cc.log("posX: " + this.posX);
