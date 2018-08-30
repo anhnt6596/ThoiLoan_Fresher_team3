@@ -28,7 +28,7 @@ var Labratory = Building.extend({
         });
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
 
-        var researching_effect = ui.makeAnimation('researching_', 0, 9, 0.2);
+        var researching_effect = ui.makeAnimation('researching/', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         this.animSprite = animSprite;
         buildingImg.addChild(animSprite, 11);

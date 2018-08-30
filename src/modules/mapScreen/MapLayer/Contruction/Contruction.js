@@ -615,7 +615,7 @@ var Contruction = cc.Class.extend({
         }
     },
     showLevelUpEffect: function() {
-        var lvUpAnims = ui.makeAnimation('construct_levelup_', 0, 6, 0.15);
+        var lvUpAnims = ui.makeAnimation('construct_levelup/', 0, 6, 0.15);
         var lvUpEffSprite = new cc.Sprite();
         MAP.addChild(lvUpEffSprite, 1100);
         lvUpEffSprite.attr({

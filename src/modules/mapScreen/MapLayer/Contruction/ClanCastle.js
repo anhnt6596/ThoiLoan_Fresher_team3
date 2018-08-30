@@ -37,6 +37,13 @@ var ClanCastle = Building.extend({
                 scale: 1.2
             });
             this.buildingImg.addChild(icon);
+            var clanName = new cc.LabelBMFont(gv.user.name_guild + this._level, res.font_soji[24]);
+            clanName.attr({
+                x: this.buildingImg.width / 2,
+                y: this.buildingImg.height / 2,
+                scale: 1.2
+            });
+            this.buildingImg.addChild(clanName);
         }
     },
     addArmy: function(troop) {

@@ -14,7 +14,7 @@ var Barrack = Building.extend({
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
         if (this._level >= 4) {
-            var animsDir = this._level <= 8 ? 'BAR_1_' + this._level + '_effect_' : 'BAR_1_8_effect_';
+            var animsDir = this._level <= 8 ? 'BAR_1_' + this._level + '_effect/' : 'BAR_1_8_effect/';
             var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
             var animSprite = new cc.Sprite();
             buildingImg.addChild(animSprite, 11);

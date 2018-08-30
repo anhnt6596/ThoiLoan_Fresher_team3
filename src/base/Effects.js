@@ -79,7 +79,7 @@ ui.dropCoinEffect = function(building, product) {
                 
                 dropCoinEff.addChild(coinSprite);
                 
-                var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '_', 0, 4, 0.1);
+                var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '/', 0, 4, 0.1);
                 var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
                 var fade_action = cc.FadeOut(1);
             
