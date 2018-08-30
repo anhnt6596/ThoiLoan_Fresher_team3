@@ -25,7 +25,8 @@ var Barrack = Building.extend({
             animSprite.runAction(buildingAnim.repeatForever());
         }
     },
-    updateBarrackQueueList: function() {
+
+    updateAfterBuildComplete: function() {
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         barrackQueueList[this._id] = {};
         barrackQueueList[this._id].flagCountDown = true;
@@ -35,7 +36,8 @@ var Barrack = Building.extend({
         barrackQueueList[this._id]._troopList = {};
         barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
     },
-    updateBarrackQueueListAfterUpgradeComplete: function() {
+
+    updateAfterUpgradeComplete: function() {
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         var troopType = config.building['BAR_1'][this._level].unlockedUnit;
         barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
@@ -50,6 +52,31 @@ var Barrack = Building.extend({
             if(!this.timeBar){
                 this.addTimeBarTrain(0, 20);
             }
+        }
+    },
+
+    updateAfterCancelUpgrade: function() {
+        //Cap nhat startTime cho barrack
+        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+        barrackQueueList[this._id].flagCountDown = true;
+        //Neu chua co linh train thi khong cowntdown
+        if(BARRACK[this._id]){
+            BARRACK[this._id].countDown();
+            //Hien thi timebar ben ngoai
+            if(!this.timeBar){
+                this.addTimeBarTrain(0, 20);
+            }
+        }
+    },
+
+    updateWhenStartUpgrade: function() {
+        //Cap nhat startTime cho barrack
+        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+        //Dung countdown cua barrack nay
+        barrackQueueList[this._id].flagCountDown = false;
+        if(this.timeBar){
+            MAP.removeChild(this.timeBar);
+            this.timeBar = null;
         }
     },
 
@@ -94,7 +121,6 @@ var Barrack = Building.extend({
             if(this.timeBar){
                 MAP.removeChild(this.timeBar);
                 this.timeBar = null;
-                cc.log("======================= DAY 1 ======================");
                 return;
             }
         }
@@ -103,8 +129,6 @@ var Barrack = Building.extend({
         if(condition){
             MAP.removeChild(this.timeBar);
             this.timeBar = null;
-            cc.log("======================= DAY 2 ======================");
-
             return;
         }
 

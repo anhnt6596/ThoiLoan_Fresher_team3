@@ -244,11 +244,15 @@ var ItemInfo = TinyPopup.extend({
                 listInfo.push('capacityDarkElixir');
                 listInfo.push('hitpoints');
                 break;
+            case 'CLC_1':
+                listInfo.push('hitpoints');
+                listInfo.push('troopCapacity');
+                break;
             default:
                 break;
         }
         listInfo.forEach(function(element, i) {
-            var dirName = element == 'capacity' ? capacityforeachbuilding[itemName] : element;
+            var dirName = (element == 'capacity') ? capacityforeachbuilding[itemName] : element;
             var dirName = element == 'productivity' ? productforeachbuilding[itemName] : dirName;
             var icon = new cc.Sprite(icons[dirName]);
             icon.attr({ y: - i * 40 });

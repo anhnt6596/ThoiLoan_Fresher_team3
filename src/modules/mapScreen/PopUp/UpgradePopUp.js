@@ -407,6 +407,7 @@ var capacityforeachbuilding = {
     RES_1: 'capacityGold',
     RES_2: 'capacityElixir',
     RES_3: 'capacityDarkElixir',
+    CLC_1: 'troopCapacity'
 };
 
 var productforeachbuilding = {

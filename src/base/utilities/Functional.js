@@ -378,6 +378,13 @@ var updateMessageBox = function() {
     }
 };
 
+var getLevelGuildBuilding = function() {
+    for(var k in contructionList){
+        if(contructionList[k].name == 'CLC_1'){
+            return contructionList[k].level;
+        }
+    }
+};
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){

@@ -348,7 +348,7 @@ testnetwork.Connector = cc.Class.extend({
                     typeMessage: MESSAGE_NORMAL,
                     userId: -1,
                     usernameSend: "SYSTEM",
-                    content: "Fresher_" + data.id + " has been removed",
+                    content: "Fresher_" + data.id + " has left",
                     timeStamp: getCurrentServerTime(),
                     currentCapacityGot: 0,
                     guildCapacityAtTime: 0
@@ -514,17 +514,7 @@ testnetwork.Connector = cc.Class.extend({
             building.setStatus('upgrade');
             building.startTime = getCurrentServerTime();
 
-            if(building._name == "BAR_1"){
-                //Cap nhat startTime cho barrack
-                barrackQueueList[building._id]._startTime = building.startTime - barrackQueueList[building._id]._startTime;
-                //Dung countdown cua barrack nay
-                barrackQueueList[building._id].flagCountDown = false;
-                if(building.timeBar){
-                    MAP.removeChild(building.timeBar);
-                    building.timeBar = null;
-                }
-            }
-
+            building.updateWhenStartUpgrade();
 
             var cur = (getCurrentServerTime() - building.startTime)/1000;
             var max = config.building[building._name][building._level+1].buildTime;
@@ -544,7 +534,6 @@ testnetwork.Connector = cc.Class.extend({
             updateBuilderNumber();
             reduceUserResources(ReducedTempResources);
             resetReducedTempResources();
-            console.log("ten nha = "+ building._name);
         }
     },
 
