@@ -50,8 +50,9 @@ var createUpgradePopUp = function() {
     var nextBuildingInfo = showNextBuildingInfo(info);
     nextBuildingInfo.attr({
         anchorY: 1,
-        x: -40,
-        y: 160
+        x: -60,
+        y: 160,
+        scale: 1.1,
     });
     content.push(nextBuildingInfo);
     if (MAP._targetedObject._name === "TOW_1") {
@@ -76,7 +77,7 @@ var createUpgradePopUp = function() {
         text3.attr({ y: -15, color: new cc.color(142, 8, 8, 255) });
         content.push(text3);
     }
-    var upgradePopUp = new ui.PopUp('Upgrade', content);
+    var upgradePopUp = new ui.PopUp('Upgrade to level ' + (info._level + 1), content);
     upgradePopUp.openAction();
 
     scrollList && scrollList.setContentSize(cc.size(upgradePopUp.frame.width - 50, 200));

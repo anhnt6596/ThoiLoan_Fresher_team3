@@ -132,6 +132,7 @@ var CollectorBuilding = Building.extend({
             }
         }
         this.collectEffect(this._name, productivity.sanluong);
+        this.playCollectSound();
     },
     collect: function() {
         if (this.full_bg.isVisible()|| this.collect_bg.isVisible() ){
@@ -148,5 +149,21 @@ var CollectorBuilding = Building.extend({
         if (type === "RES_1") ui.dropCoinEffect(this, product);
         else if (type === "RES_2") ui.dropElixirEff(this, product);
         else if (type === "RES_3") ui.dropElixirEff(this, product, 1);
+    },
+    playCollectSound: function() {
+        if (SOUND) {
+            switch (this._name) {
+                case 'RES_1':
+                    cc.audioEngine.playEffect(sRes.collect_gold);
+                    break;
+                case 'RES_2':
+                    cc.audioEngine.playEffect(sRes.collect_elixir);
+                    break;
+                case 'STO_3':
+                    cc.audioEngine.playEffect(sRes.collect_dark_elixir);
+                default:
+                    break;
+            }
+        }
     }
 });

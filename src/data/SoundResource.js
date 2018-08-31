@@ -14,6 +14,12 @@ var sRes = {
     elixirpump_pickup: 'res/Sounds/sfx/elixirpump_pickup.mp3',
     elixirpump_place: 'res/Sounds/sfx/elixirpump_place.mp3',
 
+    darkelixirdrill_pickup: 'res/Sounds/sfx/darkelixirdrill_pickup.mp3',
+    darkelixirdrill_place: 'res/Sounds/sfx/darkelixirdrill_place.mp3',
+
+    elixirpump_pickup: 'res/Sounds/sfx/elixirpump_pickup.mp3',
+    elixirpump_place: 'res/Sounds/sfx/elixirpump_place.mp3',
+
     builderhut_pickup: 'res/Sounds/sfx/builderhut_pickup.mp3',
     builderhut_place: 'res/Sounds/sfx/builderhut_place.mp3',
 
@@ -22,4 +28,16 @@ var sRes = {
 
     cannon_pickup: 'res/Sounds/sfx/cannon_pickup.mp3',
     cannon_place: 'res/Sounds/sfx/cannon_place.mp3',
-}
+
+    wall_pickup: 'res/Sounds/sfx/wall_pickup.mp3',
+    wall_place: 'res/Sounds/sfx/wall_place.mp3',
+
+    
+    collect_gold: 'res/Sounds/sfx/collect_gold.mp3',
+    collect_elixir: 'res/Sounds/sfx/collect_elixir.mp3',
+    collect_dark_elixir: 'res/Sounds/sfx/collect_dark_elixir.mp3',
+    
+    building_finish: 'res/Sounds/sfx/building_finish.mp3',
+    building_contruct: 'res/Sounds/sfx/building_contruct.mp3',
+    // building_contruct: 'res/Sounds/sfx/building_contruct.mp3',
+};
