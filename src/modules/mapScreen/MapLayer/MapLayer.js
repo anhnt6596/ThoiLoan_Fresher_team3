@@ -347,9 +347,9 @@ var MapLayer = cc.Layer.extend({
                         haveObjectInTarget = true;
                         break;
                     } if (checktargetMultiWall.status) { // chọn tường trong hàng thì chọn cả hàng
-                        wallRefs.forEach(function(wall) {
-                            wall.removeTarget();
-                        });
+                        // wallRefs.forEach(function(wall) {
+                        //     wall.removeTarget();
+                        // });
                         wallSelectingArray = checktargetMultiWall.listWall;
                         wallSelectingArray.forEach(function(wall) {
                             wall.wallSelectInLine();
@@ -560,21 +560,25 @@ var MapLayer = cc.Layer.extend({
         if (
             numberInRange(newBuilding._posX + 1, 0, 39)
             && mapLogicArray[newBuilding._posX + 1][newBuilding._posY] !== MAPVALUE.UNUSED
+            && mapLogicArray[newBuilding._posX + 1][newBuilding._posY] < 1000
         ) {
             this.lastSuggestWallDirection = 2;
         } else if (
             numberInRange(newBuilding._posY + 1, 0, 39)
             && mapLogicArray[newBuilding._posX][newBuilding._posY + 1] !== MAPVALUE.UNUSED
+            && mapLogicArray[newBuilding._posX][newBuilding._posY + 1] < 1000
         ) {
             this.lastSuggestWallDirection = 3;
         } else if (
             numberInRange(newBuilding._posX - 1, 0, 39)
             && mapLogicArray[newBuilding._posX - 1][newBuilding._posY] !== MAPVALUE.UNUSED
+            && mapLogicArray[newBuilding._posX - 1][newBuilding._posY] < 1000
         ) {
             this.lastSuggestWallDirection = 0;
         } else if (
             numberInRange(newBuilding._posY - 1, 0, 39)
             && mapLogicArray[newBuilding._posX][newBuilding._posY - 1] !== MAPVALUE.UNUSED
+            && mapLogicArray[newBuilding._posX][newBuilding._posY - 1] < 1000
         ) {
             this.lastSuggestWallDirection = 1;
         }
@@ -621,7 +625,7 @@ var MapLayer = cc.Layer.extend({
         } while (count < 4);
         if (newBuilding._name === "WAL_1") {
             var id = gv.user.largestId;
-            cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
+            // cc.log("================================================= LARGEST ID CURRENT:" + gv.user.largestId);
             var buildingInfo = {
                 _id: id,
                 name: "WAL_1",

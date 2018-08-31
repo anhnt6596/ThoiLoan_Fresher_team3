@@ -81,6 +81,7 @@ testnetwork.Connector = cc.Class.extend({
                             }, 50);
                         }
                     }
+                    if (SOUND) cc.audioEngine.playEffect(sRes.building_contruct);
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
                     showPopupNotEnoughG('server_denied_build');

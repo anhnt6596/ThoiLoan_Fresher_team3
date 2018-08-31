@@ -280,12 +280,14 @@ var Wall = Building.extend({
                     y: mapPos.y + wall.tempY - tempY,
                 };
                 wall.updatePositionWall(pos);
+                MAP.updateContructionList(wall);
                 });
             }
             // goi ham cap nhat vi tri cho nhieu tuong
             NETWORK.sendMoveMultiWall(wallSelectingArray);
         } else {
             this.updatePositionWall(mapPos);
+            MAP.updateContructionList(this);
             try {
                 temp.lastMoveBuilding = this;
                 if(this._status !== 'setting' && (this._oldX !== this.tempX || this._oldY !== this.tempY)) {
@@ -295,6 +297,7 @@ var Wall = Building.extend({
                 cc.log('network error!');
             }
         }
+        MAP.createLogicArray(contructionList, obstacleLists);
         // this.resetSelectingArray();
     },
     reversePosition: function() {
@@ -369,7 +372,7 @@ var Wall = Building.extend({
         this.tempY = this._posY;
         this.buildingImg.stopAllActions();
         this.buildingImg.runAction(ui.backToDefaultColor());
-        LOBBY.hideObjectMenu();
+        // LOBBY.hideObjectMenu();
     },
     updatePositionWall: function(mapPos) {
         //if (this.tempX !== this._posX && this.tempX !== this._posY) {
@@ -382,20 +385,7 @@ var Wall = Building.extend({
         this.tempX = mapPos.x;
         this.tempY = mapPos.y;
         
-        this.afterUpdatePosionAction(mapPos);
-        
-        if (wallSelectingArray.length === 0) {
-            // try {
-            //     temp.lastMoveBuilding = this;
-            //     if(this._status !== 'setting' && (this._oldX !== this.tempX || this._oldY !== this.tempY)) {
-            //         NETWORK.sendMoveConstruction(this.info._id, mapPos.x, mapPos.y); // linhrafa
-            //     }
-            // } catch (error) {
-            //     cc.log('network error!');
-            // }
-        } else {
-            
-        }
+        // this.afterUpdatePosionAction(mapPos);
     },
     rotate: function() {
         var self = this;

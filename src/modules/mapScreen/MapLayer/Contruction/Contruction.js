@@ -247,14 +247,14 @@ var Contruction = cc.Class.extend({
         MAP.updateContructionList(this);
         MAP.createLogicArray(contructionList, obstacleLists);
         if (this._name === "AMC_1" || this._name === "CLC_1") this.armyRun();
-        if(this._name === "WAL_1") {
-            setTimeout(function() {
-                wallRefs.forEach(function(wall) {
-                    if (wall._id === this._id) wall.updatePresentImg(mapPos);
-                    else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
-                });
-            }, 0);
-        }
+        // if(this._name === "WAL_1") {
+        //     setTimeout(function() {
+        //         wallRefs.forEach(function(wall) {
+        //             if (wall._id === this._id) wall.updatePresentImg(mapPos);
+        //             else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
+        //         });
+        //     }, 0);
+        // }
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;
@@ -373,6 +373,7 @@ var Contruction = cc.Class.extend({
         this.levelText.setString('Level: ' + this._level);
         this.presentImg();
         this.showLevelUpEffect();
+        this.playBuildCompleteSound();
         this.setStatus('complete');
         this.setStartTime();
         for(var item in contructionList){
@@ -736,6 +737,12 @@ var Contruction = cc.Class.extend({
                 case 'STO_2':
                     cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
                     break;
+                case 'RES_3':
+                    cc.audioEngine.playEffect(sRes.darkelixirdrill_pickup);
+                    break;
+                case 'STO_3':
+                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                    break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_pickup);
                     break;
@@ -744,6 +751,9 @@ var Contruction = cc.Class.extend({
                     break;
                 case 'DEF_1':
                     cc.audioEngine.playEffect(sRes.cannon_pickup);
+                    break;
+                case 'WAL_1':
+                    cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
                 default:
                     break;
@@ -768,6 +778,12 @@ var Contruction = cc.Class.extend({
                 case 'STO_2':
                     cc.audioEngine.playEffect(sRes.elixirstorage_place);
                     break;
+                case 'RES_3':
+                    cc.audioEngine.playEffect(sRes.darkelixirdrill_place);
+                    break;
+                case 'STO_3':
+                    cc.audioEngine.playEffect(sRes.elixirpump_place);
+                    break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_place);
                     break;
@@ -777,9 +793,15 @@ var Contruction = cc.Class.extend({
                 case 'DEF_1':
                     cc.audioEngine.playEffect(sRes.cannon_place);
                     break;
+                case 'WAL_1':
+                    cc.audioEngine.playEffect(sRes.wall_place);
+                    break;
                 default:
                     break;
             }
         }
+    },
+    playBuildCompleteSound: function() {
+        if (SOUND) cc.audioEngine.playEffect(sRes.building_finish);
     },
 });
