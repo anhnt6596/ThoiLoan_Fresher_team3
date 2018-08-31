@@ -4,6 +4,7 @@
 var MAPSCENE = MAPSCENE || null;
 var CLAN_GUI = CLAN_GUI || null;
 createMapScene = function() {
+    cc.spriteFrameCache.addSpriteFrames('res/Art/building_imgs.plist');
     var game = new cc.Scene();
     MAPSCENE = game;
     var mapLayer = new MapLayer(gv.user);

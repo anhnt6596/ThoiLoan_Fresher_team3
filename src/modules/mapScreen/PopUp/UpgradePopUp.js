@@ -68,7 +68,7 @@ var createUpgradePopUp = function() {
         var unlockedUnit = config.building.BAR_1[info._level+1].unlockedUnit;
         var slot = new cc.Sprite("res/Art/GUIs/train_troop_gui/slot.png");
         slot.attr({ x: 0, y: -80 });
-        var img = new cc.Sprite("res/Art/GUIs/train_troop_gui/icon/" + unlockedUnit + '.png' || "res/Art/GUIs/train_troop_gui/icon/ARM_1.png");
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + unlockedUnit + '.png' || train_troop_constant.img_train_troop_dir + "ARM_1.png");
         img.attr({ anchorX: 0.5, anchorY: 0.5, x: slot.width / 2, y: slot.height / 2 });
         slot.addChild(img);
         content.push(slot);
@@ -183,7 +183,7 @@ var showNextBuildingImg = function(info) {
             break;
         case 'AMC_1':
             buildingImg = new cc.Sprite(res.building.army_camp[nextLevel]);
-            var buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+            var buildingAnim = ui.makeAnimation('armycam_1/', 0, 4, 0.2);
             var animSprite = new cc.Sprite();
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({
@@ -195,7 +195,7 @@ var showNextBuildingImg = function(info) {
         case 'BAR_1':
             buildingImg = new cc.Sprite(res.building.barrack[nextLevel]);
             if (nextLevel >= 4) {
-                var animsDir = nextLevel <= 8 ? 'BAR_1_' + nextLevel + '_effect_' : 'BAR_1_8_effect_';
+                var animsDir = nextLevel <= 8 ? 'BAR_1_' + nextLevel + '_effect/' : 'BAR_1_8_effect/';
                 var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
                 var animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
@@ -213,7 +213,7 @@ var showNextBuildingImg = function(info) {
         case 'RES_1':
             buildingImg = new cc.Sprite(res.building.gold_mine[nextLevel]);
 
-            var goldmineAnim = ui.makeAnimation('RES_1_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var goldmineAnim = ui.makeAnimation('RES_1_' + nextLevel + '_effect/', 0, 9, 0.2);
             var animSprite = new cc.Sprite();
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({
@@ -229,7 +229,7 @@ var showNextBuildingImg = function(info) {
         case 'RES_2':
             buildingImg = new cc.Sprite(res.building.elixir_collector[nextLevel]);
 
-            var elixirCollectorAnim = ui.makeAnimation('RES_2_' + nextLevel + '_effect_', 0, 9, 0.2);
+            var elixirCollectorAnim = ui.makeAnimation('RES_2_' + nextLevel + '_effect/', 0, 9, 0.2);
             var animSprite = new cc.Sprite();
             buildingImg.addChild(animSprite, 11);
             animSprite.attr({

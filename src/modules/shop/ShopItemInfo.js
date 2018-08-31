@@ -94,7 +94,7 @@ var ItemInfo = TinyPopup.extend({
                 break;
             case 'AMC_1':
                 buildingImg = new cc.Sprite(res.building.army_camp[level]);
-                buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+                buildingAnim = ui.makeAnimation('armycam_1/', 0, 4, 0.2);
                 animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
@@ -106,7 +106,7 @@ var ItemInfo = TinyPopup.extend({
             case 'BAR_1':
                 buildingImg = new cc.Sprite(res.building.barrack[level]);
                 if (level >= 4) {
-                    var animsDir = level <= 8 ? 'BAR_1_' + level + '_effect_' : 'BAR_1_8_effect_';
+                    var animsDir = level <= 8 ? 'BAR_1_' + level + '_effect/' : 'BAR_1_8_effect/';
                     buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
                     animSprite = new cc.Sprite();
                     buildingImg.addChild(animSprite, 11);
@@ -124,7 +124,7 @@ var ItemInfo = TinyPopup.extend({
             case 'RES_1':
                 buildingImg = new cc.Sprite(res.building.gold_mine[level]);
 
-                var goldmineAnim = ui.makeAnimation('RES_1_' + level + '_effect_', 0, 9, 0.2);
+                var goldmineAnim = ui.makeAnimation('RES_1_' + level + '_effect/', 0, 9, 0.2);
                 animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
@@ -140,7 +140,7 @@ var ItemInfo = TinyPopup.extend({
             case 'RES_2':
                 buildingImg = new cc.Sprite(res.building.elixir_collector[level]);
 
-                var elixirCollectorAnim = ui.makeAnimation('RES_2_' + level + '_effect_', 0, 9, 0.2);
+                var elixirCollectorAnim = ui.makeAnimation('RES_2_' + level + '_effect/', 0, 9, 0.2);
                 animSprite = new cc.Sprite();
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
@@ -291,7 +291,7 @@ var TroopGuildItem = ccui.Button.extend({
     },
 
     initItem:function(troopName, level, amount){
-        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName+'.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 

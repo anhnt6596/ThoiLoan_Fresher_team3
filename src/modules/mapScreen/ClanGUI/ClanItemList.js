@@ -1,6 +1,6 @@
 var ClanItemList = ccui.Button.extend({
     ctor: function(clan, i) {
-        this._super("res/Art/Bang hoi/slost.png");
+        this._super(res.clan.slost);
         this.clan = clan;
         this.i = i;
         this.init();

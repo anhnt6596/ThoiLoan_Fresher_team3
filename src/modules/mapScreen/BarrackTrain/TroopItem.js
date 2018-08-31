@@ -9,7 +9,7 @@ var TroopItem = ccui.Button.extend({
     },
 
     initItem:function(troopName, barrackLevel){
-        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir +troopName+'.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 
@@ -31,7 +31,7 @@ var TroopItem = ccui.Button.extend({
             cost_label.setPosition(this.width/2, cost.y);
             this.addChild(cost_label, 101);
 
-            var costUnit = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon_elixir.png');
+            var costUnit = new cc.Sprite(train_troop_constant.base_dir + 'icon_elixir.png');
             costUnit.setPosition(this.width - costUnit.width, cost.y);
             this.addChild(costUnit, 101);
         }

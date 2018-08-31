@@ -9,7 +9,7 @@ var TroopGive = ccui.Button.extend({
     },
 
     initItem:function(troopName){
-        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName+'.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 

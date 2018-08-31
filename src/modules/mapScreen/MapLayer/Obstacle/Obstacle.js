@@ -18,7 +18,7 @@ var Obstacle = cc.Class.extend({
         });
         MAP.addChild(grass, Z.BACKGROUND);
 
-        var objImg = new cc.Sprite('res/Art/Buildings/obstacle/' + this._name + '/idle/image0000.png');
+        var objImg = new cc.Sprite('#Buildings/obstacle/' + this._name + '/idle/image0000.png');
         this.objImg = objImg;
         objImg.attr({
             x: coor.x,

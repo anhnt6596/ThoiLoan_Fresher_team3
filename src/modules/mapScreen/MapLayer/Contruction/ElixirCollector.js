@@ -19,7 +19,7 @@ var ElixirCollector = CollectorBuilding.extend({
         });
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
-        var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this._level + '_effect_', 0, 9, 0.2);
+        var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this._level + '_effect/', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
         animSprite.attr({

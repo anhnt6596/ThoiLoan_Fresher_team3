@@ -93,7 +93,7 @@ res.gui = {
     },
 };
 
-var buildingsDir = 'res/Art/Buildings/';
+var buildingsDir = '#Buildings/';
 
 res.building = {
     builder_hut: buildingsDir + 'builder hut/idle/image0000.png',
@@ -510,37 +510,37 @@ res.building = {
 
 var clanDir = "res/Art/Bang hoi/";
 res.clan = {
-    cup1: clanDir + "CUP 1.png",
-    cup2: clanDir + "cup nho.png",
-    cup3: clanDir + "cup.png",
-    greenBtn: clanDir + "button _xem lai.png",
-    redBtn: clanDir + "button _ tra thu.png",
-    myClanBg: clanDir + "NEN NHO _BANG HOI CUA TOI.png",
+    cup1: clanDir + "cup1.png",
+    cup2: clanDir + "cup2.png",
+    cup3: clanDir + "cup3.png",
+    greenBtn: clanDir + "greenBtn.png",
+    redBtn: clanDir + "redBtn.png",
+    myClanBg: clanDir + "myClanBg.png",
     troophyBg: clanDir + "1.png",
-    textBg1: clanDir + "slost nen 1.png",
-    textBg2: clanDir + "slost nen 2.png",
-    nextBtn: clanDir + "next 1.png",
-    prevBtn: clanDir + "next 2.png",
-    popupBtn: clanDir + "POPUP_0000_Group-3.png",
-    tabSelect: clanDir + "o duoi.png",
-    tabUnselect: clanDir + "o duoi 1.png",
-    flagSelect: clanDir + "co 1.png",
-    flagUnselect: clanDir + "co 2.png",
-    checkBoxBg: clanDir + "Untitled-1.png",
-    checkBoxSelect: clanDir + "Untitled-1.pngsdva.png",
+    textBg1: clanDir + "textBg1.png",
+    textBg2: clanDir + "textBg2.png",
+    nextBtn: clanDir + "next.png",
+    prevBtn: clanDir + "prev.png",
+    popupBtn: clanDir + "bubbleBtn.png",
+    tabSelect: clanDir + "tabSelect.png",
+    tabUnselect: clanDir + "tabUnselect.png",
+    flagSelect: clanDir + "flag1.png",
+    flagUnselect: clanDir + "flag2.png",
+    checkBoxBg: clanDir + "checkBoxBg.png",
+    checkBoxSelect: clanDir + "checkBoxSelect.png",
     slost: clanDir + "slost.png",
-    bigStar: clanDir + "sao sao.png",
-    smallStar: clanDir + "sao nho.png",
+    bigStar: clanDir + "star_2.png",
+    smallStar: clanDir + "star_1.png",
     bubble: [
-        clanDir + "POPUP_0002_Layer-4.png",
-        clanDir + "POPUP_0003_Shape-86.png",
-        clanDir + "POPUP_0004_Layer-3.png",
-        clanDir + "POPUP_0005_Layer-2.png",
+        clanDir + "bubble2.png",
+        clanDir + "bubble3.png",
+        clanDir + "bubble4.png",
+        clanDir + "bubble5.png",
     ],
-    bubbleButton: clanDir + "POPUP_0000_Group-3.png",
+    bubbleButton: clanDir + "bubbleBtn.png",
 
-    mapIconDir: clanDir + "bieu tuong tren map/",
-    iconDir: clanDir + "icon bieu tuong/",
+    mapIconDir: clanDir + "map_icon/",
+    iconDir: clanDir + "icon/",
 };
 
 res.font_soji = {
@@ -837,6 +837,11 @@ var research_constant = {
         now: "completed",
     },
     used_open : false
+};
+
+var train_troop_constant = {
+    base_dir: "res/Art/GUIs/train_troop_gui/",
+    img_train_troop_dir: "res/Art/GUIs/train_troop_gui/icon/"
 };
 
 //type Response

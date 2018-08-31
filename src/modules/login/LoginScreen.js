@@ -45,17 +45,13 @@ var LoginScreen = cc.Layer.extend({
         this.uuidEb.setFontColor(new cc.Color(150,150,150,255));
         this.addChild(this.uuidEb);
 
-        var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");
-
-        this.loginText = new cc.LabelBMFont("Login", 'res/Art/Fonts/soji_12.fnt');
-        this.loginText.attr({
-            anchorX: 0.5,
-            anchorY: 0.5,
-            x: btnLogin.getContentSize().width/2,
-            y: btnLogin.getContentSize().height/2,
-            scale: 2
+        //var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");
+        var btnLogin = ui.optionButton("Login", res.clan.greenBtn);
+        btnLogin.attr({
+            x: size.width / 2,
+            y: 120,
+            scale: 1.5
         });
-        btnLogin.addChild(this.loginText);
 
         this.addChild(btnLogin);
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));

@@ -25,7 +25,7 @@ var GoldMine = CollectorBuilding.extend({
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
 
-        var goldmineAnim = ui.makeAnimation('RES_1_' + this._level + '_effect_', 0, 9, 0.2);
+        var goldmineAnim = ui.makeAnimation('RES_1_' + this._level + '_effect/', 0, 9, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
         animSprite.attr({

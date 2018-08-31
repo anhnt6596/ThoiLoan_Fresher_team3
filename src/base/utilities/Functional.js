@@ -499,6 +499,14 @@ var getIdGuildBuilding = function() {
     }
 };
 
+var getBarrackQueueById = function(id) {
+    for(var i = 0; i < barrackQueueList.length; i++) {
+        var barrackQueue = barrackQueueList[i];
+        if(barrackQueue._idBarrack == id) return barrackQueue;
+    }
+    return null;
+};
+
 var getBarrackObjectById = function(id) {
     for(var i in barrackRefs){
         if(barrackRefs[i]._id == id){

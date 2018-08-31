@@ -103,6 +103,7 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
+        this.showRange();
     },
     collect: function() {
         // để rỗng
@@ -125,7 +126,14 @@ var Contruction = cc.Class.extend({
         this.tempY = this._posY;
         this.buildingImg.stopAllActions();
         this.buildingImg.runAction(ui.backToDefaultColor());
+        this.hideRange();
         LOBBY.hideObjectMenu();
+    },
+    showRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
+    },
+    hideRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
     },
     moving: function(mapPos) {
         // if (this._name === "CLC_1" && this._level === 0) return;
@@ -609,7 +617,7 @@ var Contruction = cc.Class.extend({
         }
     },
     showLevelUpEffect: function() {
-        var lvUpAnims = ui.makeAnimation('construct_levelup_', 0, 6, 0.15);
+        var lvUpAnims = ui.makeAnimation('construct_levelup/', 0, 6, 0.15);
         var lvUpEffSprite = new cc.Sprite();
         MAP.addChild(lvUpEffSprite, 1100);
         lvUpEffSprite.attr({

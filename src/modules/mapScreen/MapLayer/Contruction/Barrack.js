@@ -14,7 +14,7 @@ var Barrack = Building.extend({
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
         if (this._level >= 4) {
-            var animsDir = this._level <= 8 ? 'BAR_1_' + this._level + '_effect_' : 'BAR_1_8_effect_';
+            var animsDir = this._level <= 8 ? 'BAR_1_' + this._level + '_effect/' : 'BAR_1_8_effect/';
             var buildingAnim = ui.makeAnimation(animsDir, 0, 5, 0.2);
             var animSprite = new cc.Sprite();
             buildingImg.addChild(animSprite, 11);
@@ -28,23 +28,18 @@ var Barrack = Building.extend({
 
     updateAfterBuildComplete: function() {
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        barrackQueueList[this._id] = {};
-        barrackQueueList[this._id].flagCountDown = true;
-        barrackQueueList[this._id]._amountItemInQueue = 0;
-        barrackQueueList[this._id]._totalTroopCapacity = 0;
-        barrackQueueList[this._id]._startTime = 0;
-        barrackQueueList[this._id]._troopList = {};
-        barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
+        var barrackQueue = new BarrackQueue(this._id, 1, 0);
+        barrackQueue._isFirst = true;
+        barrackQueue.flagCountDown = true;
+        barrackQueueList.push(barrackQueue);
     },
 
     updateAfterUpgradeComplete: function() {
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-        barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
-
+        var barrackQueue = getBarrackQueueById(this._id);
         //Cap nhat startTime cho barrack
-        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-        barrackQueueList[this._id].flagCountDown = true;
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
+        barrackQueue.flagCountDown = true;
+
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
@@ -57,8 +52,10 @@ var Barrack = Building.extend({
 
     updateAfterCancelUpgrade: function() {
         //Cap nhat startTime cho barrack
-        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-        barrackQueueList[this._id].flagCountDown = true;
+        var barrackQueue = getBarrackQueueById(this._id);
+
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
+        barrackQueue.flagCountDown = true;
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
@@ -70,10 +67,11 @@ var Barrack = Building.extend({
     },
 
     updateWhenStartUpgrade: function() {
+        var barrackQueue = getBarrackQueueById(this._id);
         //Cap nhat startTime cho barrack
-        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
         //Dung countdown cua barrack nay
-        barrackQueueList[this._id].flagCountDown = false;
+        barrackQueue.flagCountDown = false;
         if(this.timeBar){
             MAP.removeChild(this.timeBar);
             this.timeBar = null;
