@@ -827,7 +827,7 @@ var research_constant = {
     troop: null,
     time_text_dir : 'res/Art/Fonts/soji_20.fnt',
     research_dir : "res/Art/GUIs/research troop/",
-    img_troop_dir : "res/Art/GUIs/upgrade_troop/small_icon/",
+    img_troop_dir : "res/Art/GUIs/upgrade_troop/icon/",
     nameTroop_font_dir : 'res/Art/Fonts/soji_20.fnt',
     description_dir : 'res/Art/Fonts/fista_20_non.fnt',
     imgG_dir : "res/Art/GUIs/shop_gui/g.png",
