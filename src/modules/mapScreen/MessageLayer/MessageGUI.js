@@ -85,10 +85,13 @@ var MessageGUI = ccui.Button.extend({
         this.textField = textField;
         cc.director.getRunningScene().addChild(textField, 21, 21);
 
-        var btnSend = gv.commonButton(size.width*0.5/5, size.height/12 - 5, textField.x + textField.width/2 + 60, textField.y - 2, "Send");
+        //var btnSend = gv.commonButton(size.width*0.5/5, size.height/12 - 5, textField.x + textField.width/2 + 60, textField.y - 2, "Send");
+        var btnSend = ui.optionButton("Send", 'res/Art/GUIs/pop_up/button.png');
+        btnSend.setPosition(textField.x + textField.width/2 + 60, textField.y - 2);
         btnSend.addClickEventListener(this.sendMessage.bind(this));
         cc.director.getRunningScene().addChild(btnSend, 21, 22);
         //cc.director.getRunningScene().addChild(btnSend, 21, 22);
+
 
         var nameGuildLabel = new cc.LabelBMFont(myClanInfo.name || gv.user.name_guild, 'res/Art/Fonts/soji_20.fnt');
         nameGuildLabel.setPosition(nameGuildLabel.width/2 + 10, size.height - 160 + textField.height + nameGuildLabel.height);
@@ -215,14 +218,14 @@ var MessageGUI = ccui.Button.extend({
                     }else{
                         var labelThank = new cc.LabelBMFont("  Thank you for donated", 'res/Art/Fonts/fista_20_non.fnt');
                         labelThank.setAnchorPoint(0, 0);
-                        labelThank.setPosition(200, content.y - labelThank.height - 5);
+                        labelThank.setPosition(200, content.y - labelThank.height - 10);
                         labelThank.color = cc.color(0, 255, 0, 255);
                         nodeContainer.addNode(labelThank);
                     }
                 }
             }
 
-            var line = new cc.Sprite('res/Art/Bang hoi/q.png');
+            var line = new cc.Sprite('res/Art/GUIs/Chat/dong ke.png');
             line.setAnchorPoint(0, 0);
             line.scaleX = (cc.winSize.width*2/5 - 40) / line.width;
             line.setPosition(content.x, content.y - 70);

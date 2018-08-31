@@ -89,6 +89,7 @@ var LobbyLayer = cc.Layer.extend({
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
+        SETTING_GUI.openAction();
         // CLAN_GUI.openAction();
     },
     onTreasure: function() {

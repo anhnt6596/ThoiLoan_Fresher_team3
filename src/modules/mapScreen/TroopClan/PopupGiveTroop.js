@@ -2,10 +2,10 @@ var PopupGiveTroop = ccui.Button.extend({
     listTroopTag:[],
 
     ctor: function(idUserGet){
-        this._super(res.clan.bubble2);
+        this._super('res/Art/GUIs/Chat/nen 2.png');
         this.setPosition(LOBBY.width/2.5, LOBBY.height/2);
-        this.setScaleX(3);
-        this.setScaleY(2);
+        //this.setScaleX(3);
+        //this.setScaleY(2);
         this.setZoomScale(0);
 
         this.init(idUserGet);

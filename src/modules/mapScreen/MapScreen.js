@@ -3,6 +3,7 @@
 */
 var MAPSCENE = MAPSCENE || null;
 var CLAN_GUI = CLAN_GUI || null;
+var SETTING_GUI = SETTING_GUI || null;
 createMapScene = function() {
     cc.spriteFrameCache.addSpriteFrames('res/Art/building_imgs.plist');
     var game = new cc.Scene();
@@ -19,9 +20,9 @@ createMapScene = function() {
     game.addChild(clanGUI, 1000);
     CLAN_GUI = clanGUI;
 
-    clanGUI.attr({
-
-    });
+    var settingGUI = new SettingGUI();
+    game.addChild(settingGUI, 1000);
+    SETTING_GUI = settingGUI;
 
     return game;
 }

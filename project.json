@@ -124,6 +124,7 @@
         "src/modules/mapScreen/TroopClan/PopupGiveTroop.js",
         "src/modules/mapScreen/TroopClan/TroopGive.js",
         "src/modules/mapScreen/MessageLayer/MessageGUI.js",
+        "src/modules/mapScreen/SettingGUI/SettingGUI.js",
         "src/modules/shop/ShopScreen.js",
         "src/modules/shop/ShopCatalogyScreen.js",
         "src/modules/shop/ShopItemInfo.js",
