@@ -125,6 +125,7 @@ var Wall = Building.extend({
             wallSelectingArray.forEach(function(wall) {
                 wall.wallSelectInLine();
             });
+            this.onTargetSound();
         } else wallSelectingArray = [];
     },
     wallSelectInLine: function() { // set hình ảnh, trạng thái

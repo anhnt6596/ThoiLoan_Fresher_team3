@@ -78,7 +78,7 @@ testnetwork.Connector = cc.Class.extend({
                         if (wallRefs.length < (config.building.TOW_1[getCurrentLevelTownHall()].WAL_1 || 0)) {
                             setTimeout(function() {
                                 MAP.suggestNewWal(temp.newBuildingAdd);
-                            }, 50);
+                            }, 200);
                         }
                     }
                     if (SOUND) cc.audioEngine.playEffect(sRes.building_contruct);
@@ -393,6 +393,7 @@ testnetwork.Connector = cc.Class.extend({
                 gv.user.lastRequestTroopTimeStamp = 0;
                 youAreRequest = false;
                 gv.user.is_in_guild = true;
+                gv.user.name_guild = temp.reqJoinClanName;
                 gv.user.id_guild = temp.reqJoinClanId;
                 // CLAN_GUI_HEADER && CLAN_GUI.removeChild(CLAN_GUI_HEADER);
                 CLAN_GUI.initHeader(1);
@@ -464,6 +465,7 @@ testnetwork.Connector = cc.Class.extend({
             gv.user.is_in_guild = true;
             gv.user.lastRequestTroopTimeStamp = 0;
             gv.user.id_guild = data.id;
+            gv.user.name_guild = temp.createNewClanName;
             myClanInfo = {
                 id: data.id,
                 name: data.name,
@@ -567,6 +569,7 @@ testnetwork.Connector = cc.Class.extend({
         });
 
         temp.listWall = null;
+        // duy thêm phần trừ tài nguyên và update lại lobby vào đây
     },
 
     createTroopAfterSVResponseSuccess: function(type, barrack) {
@@ -1027,10 +1030,10 @@ testnetwork.Connector = cc.Class.extend({
 
         gv.user.is_in_guild = packet.is_in_guild;
         gv.user.id_guild = packet.id_guild || -1,
-            gv.user.name_guild = packet.name_guild || "",
-            gv.user.id_logo_guild = packet.id_logo_guild || 1,
-            gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
-            gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
+        gv.user.name_guild = packet.name_guild || "",
+        gv.user.id_logo_guild = packet.id_logo_guild || 1,
+        gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
+        gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
         cc.log("========================================== Gold: " + gv.user.gold);
         cc.log("========================================== Elixir: " + gv.user.elixir);
         cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);

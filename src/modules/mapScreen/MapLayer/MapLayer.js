@@ -352,6 +352,7 @@ var MapLayer = cc.Layer.extend({
                         //     wall.removeTarget();
                         // });
                         wallSelectingArray = checktargetMultiWall.listWall;
+                        self._targetedObject.onTargetSound();
                         wallSelectingArray.forEach(function(wall) {
                             wall.wallSelectInLine();
                         });

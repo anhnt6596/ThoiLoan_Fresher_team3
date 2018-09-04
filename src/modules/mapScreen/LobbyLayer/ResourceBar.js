@@ -90,17 +90,20 @@ var ResourceBar = cc.Sprite.extend({
         switch (this.type) {
             case 'gold':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityGold || 0);
-                textValue = formatNumber(userInfo.gold || 0);
+                // textValue = formatNumber(userInfo.gold || 0);
+                textValue = userInfo.gold || 0;
                 ratio = userInfo.gold / userInfo.maxCapacityGold || 0;
                 break;
             case 'elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityElixir || 0);
-                textValue = formatNumber(userInfo.elixir || 0);
+                // textValue = formatNumber(userInfo.elixir || 0);
+                textValue = userInfo.elixir || 0;
                 ratio = userInfo.elixir / userInfo.maxCapacityElixir || 0;
                 break;
             case 'dark_elixir':
                 maxTextValue = 'Max: ' + formatNumber(userInfo.maxCapacityDarkElixir || 0);
-                textValue = formatNumber(userInfo.darkElixir || 0);
+                // textValue = formatNumber(userInfo.darkElixir || 0);
+                textValue = userInfo.darkElixir || 0;
                 ratio = userInfo.darkElixir / userInfo.maxCapacityDarkElixir || 0;
                 break;
             default:
@@ -112,6 +115,7 @@ var ResourceBar = cc.Sprite.extend({
         this.valueBar.x = 0.5 + (1 - ratio) * this.valueBar.width;
         
         this.maxText.setString(maxTextValue);
-        this.valueText.setString(textValue);
+        // this.valueText.setString(textValue);
+        changeValueTextEffect(this.valueText, textValue);
     },
 });
