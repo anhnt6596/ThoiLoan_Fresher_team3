@@ -848,7 +848,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var isUnlock = this.getShort();
             var level = this.getShort();
             var population = this.getShort();
-            var startTime = this.getLong();
+            var timeStart = this.getLong();
             var status = this.getString();
             //cc.log('type = '+type );
             troopInfo[type] = {
@@ -856,7 +856,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
-                startTime: startTime,
+                timeStart: timeStart,                
                 status: status,
                 name: name.troop[type].vi
             };
