@@ -289,7 +289,7 @@ var Contruction = cc.Class.extend({
             case 'LAB_1':
             case 'CLC_1':
                 this.squareShadow(3);
-                break
+                break;
             case 'STO_1':
             case 'STO_2':
             case 'RES_2':
@@ -385,7 +385,7 @@ var Contruction = cc.Class.extend({
         }
         updateGUI();
         this.updateListBuildingRef();
-        this.updateBarrackQueueList();
+        this.updateAfterBuildComplete();
         this.updateArmyCampCapacity();
     },
 
@@ -460,8 +460,17 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
+
+        if(this._name == 'CLC_1' && this._level == 1){
+            var btnGuild = ccui.Button('res/Art/GUIs/Chat/button chinh.png', 'res/Art/GUIs/Chat/button chinh.png');
+            btnGuild.setPosition(btnGuild.width/2, cc.winSize.height/2);
+            btnGuild.addClickEventListener(LOBBY.onInteractiveGuild.bind(LOBBY));
+            LOBBY.addChild(btnGuild);
+        }
+
+
         this.updateArmyCampCapacity();
-        this.updateBarrackQueueListAfterUpgradeComplete();
+        this.updateAfterUpgradeComplete();
         
         // fix bug trường hợp nhà collector có nút thu hoạch
         this.collect_bg = null;
@@ -501,14 +510,7 @@ var Contruction = cc.Class.extend({
         increaseUserResources(refundResources);
 
         updateGUI();
-
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        if(this._name == "BAR_1"){
-            //Cap nhat startTime cho barrack
-            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-            barrackQueueList[this._id].flagCountDown = true;
-        }
-
+        this.updateAfterCancelUpgrade();
     },
     cancelBuild: function() {
         var self = this;
@@ -642,13 +644,18 @@ var Contruction = cc.Class.extend({
         // để rỗng
         cc.log("Đây không phải nhà để chứa lính");
     },
-    updateBarrackQueueList: function() {
+    updateWhenStartUpgrade: function() {
+        // de trong
+    },
+    updateAfterBuildComplete: function() {
         // để trống
     },
-    updateBarrackQueueListAfterUpgradeComplete: function() {
+    updateAfterUpgradeComplete: function() {
         // để trống
     },
-
+    updateAfterCancelUpgrade: function() {
+        // để trống
+    },
     updateArmyCampCapacity: function() {
         // de trong
     },

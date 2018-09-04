@@ -63,6 +63,18 @@ var ArmyCamp = Building.extend({
 
     updateArmyCampCapacity: function() {
         temp.pauseOverCapacityFlag = false;
+
+        //Neu chua co linh train thi khong cowntdown
+        for(var i in barrackRefs){
+            var id = barrackRefs[i]._id;
+            if(BARRACK[id]){
+                BARRACK[id].countDown();
+                //Hien thi timebar ben ngoai
+                if(!this.timeBar){
+                    this.addTimeBarTrain(0, 20);
+                }
+            }
+        }
     },
 
     removeTroop: function(troop) {

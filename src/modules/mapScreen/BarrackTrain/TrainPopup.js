@@ -8,9 +8,8 @@ var TrainPopup = TinyPopup.extend({
     _level:1,
     _barrack:null,
     _queueLength:0,
-    _amountItemInQueue:0,                   //So loai item dang co trong queue
-    _totalTroopCapacity:0,                  //Tong so capacity hien tai cua barrack <= queuelength
     _startTime:0,
+    _barrackQueue:null,
     _troopList:{},
 
     _edgeItem:94,
@@ -44,10 +43,10 @@ var TrainPopup = TinyPopup.extend({
 
         //Show du lieu da co
         this._queueLength = config.building['BAR_1'][this._level].queueLength;
-        this._amountItemInQueue = barrackQueueList[this._id]._amountItemInQueue;
-        this._totalTroopCapacity = barrackQueueList[this._id]._totalTroopCapacity;
-        this._startTime = barrackQueueList[this._id]._startTime;
-        this._troopList = barrackQueueList[this._id]._troopList;
+
+        this._barrackQueue = getBarrackQueueById(this._id);
+        this._startTime = this._barrackQueue._startTime;
+        this._troopList = this._barrackQueue._troopList;
 
 
         this.initQueue();
@@ -69,7 +68,8 @@ var TrainPopup = TinyPopup.extend({
         }
 
         //Hien thi du lieu tren queue
-        if(this._troopList != null){
+        if(this._troopList.length > 0){
+            cc.log("============= Barrack " + this._id + ": show Queue Data");
             //Neu current troop capacity > max AMC capacity thi khong cho chay
             this.showQueueData();
         }
@@ -77,22 +77,23 @@ var TrainPopup = TinyPopup.extend({
 
         this.showTextTotalTroop();
         //this.showQuickFinish();
-        this._titleText.setString("Barrack id: " + this._id + "   (" + this._totalTroopCapacity+"/"+this._queueLength + ")");
-        barrackQueueList[this._id]._isFirst = false;
+        this._titleText.setString("Barrack id: " + this._id + "   (" + this._barrackQueue.getTotalTroopCapacity()+"/"+this._queueLength + ")");
+        this._barrackQueue._isFirst = false;
     },
 
     showQueueData: function() {
         var k = 0;
         for(var i in this._troopList){
+            var name = this._troopList[i]._name;
             k++;
             cc.log("======================= Linh thu: " + k);
-            if(this._troopList[i]._amount > 0){
-                this._isShowTimeBar = true;
-                this._statusCountDown = true;
 
-                this._itemInQueue[i].setPosition(this._positionsInQueue[this._troopList[i]._currentPosition]);
-                this._itemInQueue[i].updateAmountSmall();
-            }
+            this._isShowTimeBar = true;
+            this._statusCountDown = true;
+
+            this._itemInQueue[name].setPosition(this._positionsInQueue[i]);
+            this._itemInQueue[name].updateAmountSmall();
+
         }
         if(this._isShowTimeBar){
         //    cc.log("========================== Current time - start time = " + (getCurrentServerTime() - TRAIN_POPUP._startTime)/1000);
@@ -107,7 +108,8 @@ var TrainPopup = TinyPopup.extend({
 
 
         //Check tai nguyen
-        var costItem = TRAIN_POPUP._troopList[this._name].getCost();
+        var troop = new TroopInBarrack(this._name, 1);
+        var costItem = troop.getCost();
         var gResources = checkUserResources(costItem);
         if(gResources == 0){
             _.extend(ReducedTempResources, costItem);
@@ -127,22 +129,17 @@ var TrainPopup = TinyPopup.extend({
     },
 
     updateAmount: function(item) {
-        TRAIN_POPUP._itemInQueue[item._name].getChildByTag(101).setString('x'+TRAIN_POPUP._troopList[item._name]._amount);
+        var troop = TRAIN_POPUP._barrackQueue.getTroopInBarrackByName(item._name);
+        TRAIN_POPUP._itemInQueue[item._name].getChildByTag(101).setString('x' + troop._amount);
     },
 
     updateQueue: function(whoDrop) {
-        for(var k in this._troopList){
-            if(this._troopList[k]._currentPosition > whoDrop){
-                this._itemInQueue[k].setPosition(this._positionsInQueue[this._troopList[k]._currentPosition - 1]);
-                this._troopList[k]._currentPosition--;
-
-                if(this._troopList[k]._currentPosition == 0){
-                    this._startTime = getCurrentServerTime();
-                    this._timeBar.visible = true;
-                    this._statusCountDown = true;
-                    this.countDown();
-                }
-            }
+        this._barrackQueue.updateQueue();
+        if(whoDrop == 0) {
+            this._startTime = getCurrentServerTime();
+            this._timeBar.visible = true;
+            this._statusCountDown = true;
+            this.countDown();
         }
     },
 
@@ -154,9 +151,10 @@ var TrainPopup = TinyPopup.extend({
             //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
             //    continue;
             //}
-            if(TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace > TRAIN_POPUP._queueLength)){
-                TRAIN_POPUP._itemDisplay[i].setBright(false);
-                TRAIN_POPUP._itemDisplay[i].setEnabled(false);
+            var name = TRAIN_POPUP._troopList[i]._name;
+            if(TRAIN_POPUP._itemDisplay[name].isEnabled() && (TRAIN_POPUP._barrackQueue.getTotalTroopCapacity() + TRAIN_POPUP._troopList[i]._housingSpace > TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[name].setBright(false);
+                TRAIN_POPUP._itemDisplay[name].setEnabled(false);
                 cc.log("===================== CO TROOP SE BI DISABLE===================");
             }
         }
@@ -170,9 +168,10 @@ var TrainPopup = TinyPopup.extend({
             //    TRAIN_POPUP._itemDisplay[i].setEnabled(false);
             //    continue;
             //}
-            if(!TRAIN_POPUP._itemDisplay[i].isEnabled() && (TRAIN_POPUP._totalTroopCapacity + TRAIN_POPUP._troopList[i]._housingSpace <= TRAIN_POPUP._queueLength)){
-                TRAIN_POPUP._itemDisplay[i].setBright(true);
-                TRAIN_POPUP._itemDisplay[i].setEnabled(true);
+            var name = TRAIN_POPUP._troopList[i]._name;
+            if(!TRAIN_POPUP._itemDisplay[name].isEnabled() && (TRAIN_POPUP._barrack.getTotalTroopCapacity() + TRAIN_POPUP._troopList[i]._housingSpace <= TRAIN_POPUP._queueLength)){
+                TRAIN_POPUP._itemDisplay[name].setBright(true);
+                TRAIN_POPUP._itemDisplay[name].setEnabled(true);
                 cc.log("===================== CO TROOP DUOC ENABLE===================");
             }
         }
@@ -180,7 +179,7 @@ var TrainPopup = TinyPopup.extend({
 
     showTimeBar: function(){
         //this.addTimeBarFirstItem();
-        if(!this._statusCountDown || barrackQueueList[this._id]._isFirst){
+        if(!this._statusCountDown || this._barrackQueue._isFirst){
             cc.log("======================== REAL =================");
             this.countDown();
         }else if(!temp.pauseOverCapacityFlag){       //Can them check dieu kien khi finish time success
@@ -196,7 +195,7 @@ var TrainPopup = TinyPopup.extend({
             var self = self1;
             setTimeout(function() {
                 //cc.log("======================= LIE COUNTDOWN BARRACK id:  =======================" + self._id);
-                var cur = (getCurrentServerTime() - barrackQueueList[self._id]._startTime)/1000;
+                var cur = (getCurrentServerTime() - self._barrackQueue._startTime)/1000;
                 if(!self.getFirstItemInQueue()) return;
                 var max = self.getFirstItemInQueue()._trainingTime;
                 if (max - cur <= 0 && BARRACK[self._id]._statusCountDown) {
@@ -312,8 +311,8 @@ var TrainPopup = TinyPopup.extend({
                 cc.log("======================= COUNTDOWN BARRACK id:  =======================" + self._id);
                 var totalCapacity = getTotalCapacityAMCs();
                 var currentCapacity = getTotalCurrentTroopCapacity();
-                var cur = (getCurrentServerTime() - barrackQueueList[self._id]._startTime)/1000;
-                if(!self.getFirstItemInQueue() || !barrackQueueList[self._id].flagCountDown){
+                var cur = (getCurrentServerTime() - self._barrackQueue._startTime)/1000;
+                if(!self.getFirstItemInQueue() || !self._barrackQueue.flagCountDown){
                     cc.log("======================================= STOP Countdown: barrack id:   " + self._id);
                     return;
                 }
@@ -329,7 +328,7 @@ var TrainPopup = TinyPopup.extend({
                     var name = self.getFirstItemInQueue()._name;
                     temp.trainedBarrackId = self._id;
                     temp.trainedTroopType = name;
-                    NETWORK.sendFinishTimeTrainTroop(self._id, name, self._troopList[name]._amount - 1);
+                    NETWORK.sendFinishTimeTrainTroop(self._id, name, self._barrackQueue.getTroopInBarrackByName(name)._amount - 1);
                 } else {
                     if(BARRACK[self._id]._statusCountDown){
                         if(condition){
@@ -337,7 +336,7 @@ var TrainPopup = TinyPopup.extend({
                             cc.log("=================== SET WAIT = TRUE ====================");
                             //barrackQueueList[self._id]._startTime += 1000;
                             //Chap nhan xong xenh, luc pause thi cho hien thi = trainingTime
-                            barrackQueueList[self._id]._startTime = getCurrentServerTime();
+                            getBarrackQueueById(self._id)._startTime = getCurrentServerTime();
                         }
                         self.updateTimeBar(cur, max);
                         self.updateQuickFinishTimeBar(cur, self.getTotalTimeQuickFinish());
@@ -382,27 +381,21 @@ var TrainPopup = TinyPopup.extend({
 
     //update thoi gian hien thi va gia khi thay doi so luong troop
     upadateQuickFinishTimeAndCost: function(){
-        this._quickFinishTimeText.setString(timeToReadable(TRAIN_POPUP.getTotalTimeQuickFinish()));
-        var cur = (getCurrentServerTime() - TRAIN_POPUP._startTime)/1000;
+        cc.log("==================== DUYYYYYYYYYYYY startTime: " + this._startTime);
+        this._quickFinishTimeText.setString(timeToReadable(this.getTotalTimeQuickFinish()));
+        var cur = (getCurrentServerTime() - this._startTime)/1000;
         this._costQuickFinish.setString(timeToG(this.getTotalTimeQuickFinish() - cur));
     },
 
-
     getFirstItemInQueue: function() {
-        var first = null;
-        for(var k in this._troopList){
-            if(this._troopList[k]._currentPosition == 0){
-                first = this._troopList[k];
-                break;
-            }
-        }
-        return first;
+        //return this._troopList[0];
+        return this._barrackQueue._troopList[0];
     },
 
     getTotalTimeQuickFinish: function() {
         var totalTime = 0;
         for(var i in this._troopList){
-            var trainingTime = config.troopBase[i].trainingTime;
+            var trainingTime = config.troopBase[this._troopList[i]._name].trainingTime;
             totalTime += this._troopList[i]._amount * trainingTime;
         }
         return totalTime;
@@ -411,7 +404,7 @@ var TrainPopup = TinyPopup.extend({
     getTotalCapacityInQueue: function() {
         var totalCapacity = 0;
         for(var i in this._troopList){
-            var space = config.troopBase[i].housingSpace;
+            var space = config.troopBase[this._troopList[i]._name].housingSpace;
             totalCapacity += this._troopList[i]._amount * space;
         }
         return totalCapacity;
@@ -440,7 +433,7 @@ var TrainPopup = TinyPopup.extend({
         var totalCapacity = getTotalCapacityAMCs();
         var totalAfterTrain = getTotalCurrentTroopCapacity();
         for(var i in barrackQueueList){
-            totalAfterTrain += barrackQueueList[i]._totalTroopCapacity;
+            totalAfterTrain += barrackQueueList[i].getTotalTroopCapacity();
         }
 
         var str = new cc.LabelBMFont('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity, 'res/Art/Fonts/soji_20.fnt');

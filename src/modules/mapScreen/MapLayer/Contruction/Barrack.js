@@ -25,24 +25,21 @@ var Barrack = Building.extend({
             animSprite.runAction(buildingAnim.repeatForever());
         }
     },
-    updateBarrackQueueList: function() {
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        barrackQueueList[this._id] = {};
-        barrackQueueList[this._id].flagCountDown = true;
-        barrackQueueList[this._id]._amountItemInQueue = 0;
-        barrackQueueList[this._id]._totalTroopCapacity = 0;
-        barrackQueueList[this._id]._startTime = 0;
-        barrackQueueList[this._id]._troopList = {};
-        barrackQueueList[this._id]._troopList['ARM_1'] = new TroopInBarrack('ARM_1', 0, -1);
-    },
-    updateBarrackQueueListAfterUpgradeComplete: function() {
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        var troopType = config.building['BAR_1'][this._level].unlockedUnit;
-        barrackQueueList[this._id]._troopList[troopType] = new TroopInBarrack(troopType, 0, -1);
 
+    updateAfterBuildComplete: function() {
+        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
+        var barrackQueue = new BarrackQueue(this._id, 1, 0);
+        barrackQueue._isFirst = true;
+        barrackQueue.flagCountDown = true;
+        barrackQueueList.push(barrackQueue);
+    },
+
+    updateAfterUpgradeComplete: function() {
+        var barrackQueue = getBarrackQueueById(this._id);
         //Cap nhat startTime cho barrack
-        barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-        barrackQueueList[this._id].flagCountDown = true;
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
+        barrackQueue.flagCountDown = true;
+
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
@@ -50,6 +47,34 @@ var Barrack = Building.extend({
             if(!this.timeBar){
                 this.addTimeBarTrain(0, 20);
             }
+        }
+    },
+
+    updateAfterCancelUpgrade: function() {
+        //Cap nhat startTime cho barrack
+        var barrackQueue = getBarrackQueueById(this._id);
+
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
+        barrackQueue.flagCountDown = true;
+        //Neu chua co linh train thi khong cowntdown
+        if(BARRACK[this._id]){
+            BARRACK[this._id].countDown();
+            //Hien thi timebar ben ngoai
+            if(!this.timeBar){
+                this.addTimeBarTrain(0, 20);
+            }
+        }
+    },
+
+    updateWhenStartUpgrade: function() {
+        var barrackQueue = getBarrackQueueById(this._id);
+        //Cap nhat startTime cho barrack
+        barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
+        //Dung countdown cua barrack nay
+        barrackQueue.flagCountDown = false;
+        if(this.timeBar){
+            MAP.removeChild(this.timeBar);
+            this.timeBar = null;
         }
     },
 
@@ -94,7 +119,6 @@ var Barrack = Building.extend({
             if(this.timeBar){
                 MAP.removeChild(this.timeBar);
                 this.timeBar = null;
-                cc.log("======================= DAY 1 ======================");
                 return;
             }
         }
@@ -103,8 +127,6 @@ var Barrack = Building.extend({
         if(condition){
             MAP.removeChild(this.timeBar);
             this.timeBar = null;
-            cc.log("======================= DAY 2 ======================");
-
             return;
         }
 

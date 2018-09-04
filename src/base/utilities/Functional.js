@@ -378,6 +378,13 @@ var updateMessageBox = function() {
     }
 };
 
+var getLevelGuildBuilding = function() {
+    for(var k in contructionList){
+        if(contructionList[k].name == 'CLC_1'){
+            return contructionList[k].level;
+        }
+    }
+};
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
@@ -490,6 +497,14 @@ var getIdGuildBuilding = function() {
             return build._id;
         }
     }
+};
+
+var getBarrackQueueById = function(id) {
+    for(var i = 0; i < barrackQueueList.length; i++) {
+        var barrackQueue = barrackQueueList[i];
+        if(barrackQueue._idBarrack == id) return barrackQueue;
+    }
+    return null;
 };
 
 var getBarrackObjectById = function(id) {

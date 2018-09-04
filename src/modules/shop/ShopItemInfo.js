@@ -244,11 +244,15 @@ var ItemInfo = TinyPopup.extend({
                 listInfo.push('capacityDarkElixir');
                 listInfo.push('hitpoints');
                 break;
+            case 'CLC_1':
+                listInfo.push('hitpoints');
+                listInfo.push('troopCapacity');
+                break;
             default:
                 break;
         }
         listInfo.forEach(function(element, i) {
-            var dirName = element == 'capacity' ? capacityforeachbuilding[itemName] : element;
+            var dirName = (element == 'capacity') ? capacityforeachbuilding[itemName] : element;
             var dirName = element == 'productivity' ? productforeachbuilding[itemName] : dirName;
             var icon = new cc.Sprite(icons[dirName]);
             icon.attr({ y: - i * 40 });
@@ -287,7 +291,7 @@ var TroopGuildItem = ccui.Button.extend({
     },
 
     initItem:function(troopName, level, amount){
-        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName+'.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 

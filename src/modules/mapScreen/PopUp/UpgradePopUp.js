@@ -69,7 +69,7 @@ var createUpgradePopUp = function() {
         var unlockedUnit = config.building.BAR_1[info._level+1].unlockedUnit;
         var slot = new cc.Sprite("res/Art/GUIs/train_troop_gui/slot.png");
         slot.attr({ x: 0, y: -80 });
-        var img = new cc.Sprite("res/Art/GUIs/train_troop_gui/icon/" + unlockedUnit + '.png' || "res/Art/GUIs/train_troop_gui/icon/ARM_1.png");
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + unlockedUnit + '.png' || train_troop_constant.img_train_troop_dir + "ARM_1.png");
         img.attr({ anchorX: 0.5, anchorY: 0.5, x: slot.width / 2, y: slot.height / 2 });
         slot.addChild(img);
         content.push(slot);
@@ -408,6 +408,7 @@ var capacityforeachbuilding = {
     RES_1: 'capacityGold',
     RES_2: 'capacityElixir',
     RES_3: 'capacityDarkElixir',
+    CLC_1: 'troopCapacity'
 };
 
 var productforeachbuilding = {
