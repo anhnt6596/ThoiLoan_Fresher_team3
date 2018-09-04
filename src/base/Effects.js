@@ -11,7 +11,7 @@ ui.makeAnimation = function(name, s, e, fps){
     return cc.animate(animation);
 };
 ui.productTextEffect = function (building, type, text) {
-    var textEff = new cc.LabelBMFont(text, 'res/Art/Fonts/soji_24.fnt');
+    var textEff = new cc.LabelBMFont(text, res.font_soji[24]);
     var color;
     switch (type) {
         case "RES_1":
@@ -79,7 +79,7 @@ ui.dropCoinEffect = function(building, product) {
                 
                 dropCoinEff.addChild(coinSprite);
                 
-                var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '_', 0, 4, 0.1);
+                var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '/', 0, 4, 0.1);
                 var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
                 var fade_action = cc.FadeOut(1);
             

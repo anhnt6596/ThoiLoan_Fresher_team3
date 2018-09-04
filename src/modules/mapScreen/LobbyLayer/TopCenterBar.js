@@ -1,6 +1,6 @@
 var TopCenterBar = cc.Sprite.extend({
     ctor: function(x, y, type, userInfo) {
-        this._super('res/Art/GUIs/Main_Gui/bg_bar_1.png');
+        this._super(res.gui.troophy_bg);
         this.x = x;
         this.y = y;
         this.type = type;
@@ -11,17 +11,17 @@ var TopCenterBar = cc.Sprite.extend({
             case 'builder':
                 title = "Builder";
                 value = userInfo.freeBuilder + '/' + userInfo.allBuilder;
-                leftIconRes = 'res/Art/GUIs/Main_Gui/builder_icon.png';
+                leftIconRes = res.gui.builder_icon;
                 break;
             case 'army':
                 title = "Army";
                 value = getTotalCurrentTroopCapacity() + '/' + getTotalCapacityAMCs();
-                leftIconRes = 'res/Art/GUIs/Main_Gui/army_icon.png';
+                leftIconRes = res.gui.army_icon;
                 break;
             case 'shield':
                 title = "Shield";
                 value = "không";
-                leftIconRes = 'res/Art/GUIs/Main_Gui/shield.png';
+                leftIconRes = res.gui.shield_icon;
                 break;
             default:
             break;
@@ -32,7 +32,7 @@ var TopCenterBar = cc.Sprite.extend({
             y: this.height / 2,
         });
         this.addChild(leftIcon);
-        var titleP = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_12.fnt');
+        var titleP = new cc.LabelBMFont(title, res.font_soji[12]);
         titleP.attr({
             anchorX: 0.5,
             anchorY: 0,
@@ -41,7 +41,7 @@ var TopCenterBar = cc.Sprite.extend({
         });
         this.addChild(titleP);
 
-        var valueP = new cc.LabelBMFont(value, 'res/Art/Fonts/soji_12.fnt');
+        var valueP = new cc.LabelBMFont(value, res.font_soji[12]);
         this.valueP = valueP;
         valueP.attr({
             anchorX: 0.5,

@@ -13,85 +13,85 @@ var ObjectMenu = cc.Node.extend({
     init: function() {
         var size = cc.winSize;
 
-        var infoBtn = ui.iconButton(100, size.width / 2 - 120, - 55, 'res/Art/GUIs/Action_Building_Icon/info_icon.png', 'Info');
+        var infoBtn = ui.iconButton(100, size.width / 2 - 120, - 55, res.gui.info_icon, 'Info');
         this._listBtn.push(infoBtn);
         this.infoBtn = infoBtn;
         this.addChild(infoBtn);
         infoBtn.addClickEventListener(this.onInfo.bind(this));
 
-        var upgradeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/upgrade_icon.png', 'Upgrade');
+        var upgradeBtn = ui.iconButton(100, 0, - 55, res.gui.upgrade_icon, 'Upgrade');
         this._listBtn.push(upgradeBtn);
         this.upgradeBtn = upgradeBtn;
         this.addChild(upgradeBtn);
         upgradeBtn.addClickEventListener(this.upgrade.bind(this));
 
-        var cancelBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/cancel_icon.png', 'Cancel');
+        var cancelBtn = ui.iconButton(100, 0, - 55, res.gui.cancel_icon, 'Cancel');
         this._listBtn.push(cancelBtn);
         this.cancelBtn = cancelBtn;
         this.addChild(cancelBtn);
         cancelBtn.addClickEventListener(this.cancel.bind(this));
 
-        var quickFinishBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/quick_finish.png', 'Quick\nFinish');
+        var quickFinishBtn = ui.iconButton(100, 0, - 55, res.gui.quick_finish_icon, 'Quick\nFinish');
         this._listBtn.push(quickFinishBtn);
         this.quickFinishBtn = quickFinishBtn;
         this.addChild(quickFinishBtn);
         quickFinishBtn.addClickEventListener(this.quickFinish.bind(this));
 
-        var removeBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/remove_icon.png', 'Remove');
+        var removeBtn = ui.iconButton(100, 0, - 55, res.gui.remove_icon, 'Remove');
         this._listBtn.push(removeBtn);
         this.removeBtn = removeBtn;
         this.addChild(removeBtn);
         //removeBtn.addClickEventListener(this.remove.bind(this));
 
-        var researchBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/research_icon.png', 'Research');
+        var researchBtn = ui.iconButton(100, 0, - 55, res.gui.research_icon, 'Research');
         this._listBtn.push(researchBtn);
         this.researchBtn = researchBtn;
         this.addChild(researchBtn);
         researchBtn.addClickEventListener(this.research.bind(this));
 
-        var collectGoldBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_gold.png', 'Collect');
+        var collectGoldBtn = ui.iconButton(100, 0, - 55, res.gui.collect_gold_icon, 'Collect');
         this._listBtn.push(collectGoldBtn);
         this.collectGoldBtn = collectGoldBtn;
         this.addChild(collectGoldBtn);
         collectGoldBtn.addClickEventListener(this.collect.bind(this));
 
-        var collectElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_elixir.png', 'Collect');
+        var collectElixirBtn = ui.iconButton(100, 0, - 55, res.gui.collect_elixir_icon, 'Collect');
         this._listBtn.push(collectElixirBtn);
         this.collectElixirBtn = collectElixirBtn;
         this.addChild(collectElixirBtn);
         collectElixirBtn.addClickEventListener(this.collect.bind(this));
 
-        var collectDarkElixirBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/harvest_dark_elixir.png', 'Collect');
+        var collectDarkElixirBtn = ui.iconButton(100, 0, - 55, res.gui.collect_dark_elixir_icon, 'Collect');
         this._listBtn.push(collectDarkElixirBtn);
         this.collectDarkElixirBtn = collectDarkElixirBtn;
         this.addChild(collectDarkElixirBtn);
         collectDarkElixirBtn.addClickEventListener(this.collect.bind(this));
 
-        var trainBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/train_icon.png', 'Train');
+        var trainBtn = ui.iconButton(100, 0, - 55, res.gui.train_icon, 'Train');
         this._listBtn.push(trainBtn);
         this.trainBtn = trainBtn;
         this.addChild(trainBtn);
         trainBtn.addClickEventListener(this.train.bind(this));
 
-        var selectLineBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/select_line.png', 'SelectLine');
+        var selectLineBtn = ui.iconButton(100, 0, - 55, res.gui.select_line_icon, 'SelectLine');
         this._listBtn.push(selectLineBtn);
         this.selectLineBtn = selectLineBtn;
         this.addChild(selectLineBtn);
         selectLineBtn.addClickEventListener(this.selectLine.bind(this));
 
-        var rotateBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/rotate_icon.png', 'Rotate');
+        var rotateBtn = ui.iconButton(100, 0, - 55, res.gui.rotate_icon, 'Rotate');
         this._listBtn.push(rotateBtn);
         this.rotateBtn = rotateBtn;
         this.addChild(rotateBtn);
         rotateBtn.addClickEventListener(this.rotate.bind(this));
         
-        var clanBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/clan_button.png', 'Clan');
+        var clanBtn = ui.iconButton(100, 0, - 55, res.gui.clan_icon, 'Clan');
         this._listBtn.push(clanBtn);
         this.clanBtn = clanBtn;
         this.addChild(clanBtn);
         clanBtn.addClickEventListener(this.clan.bind(this));
 
-        var requestTroopBtn = ui.iconButton(100, 0, - 55, 'res/Art/GUIs/Action_Building_Icon/request_troop_button.png', 'Request');
+        var requestTroopBtn = ui.iconButton(100, 0, - 55, res.gui.request_troop_icon, 'Request');
         this._listBtn.push(requestTroopBtn);
         this.requestTroopBtn = requestTroopBtn;
         this.addChild(requestTroopBtn);
@@ -128,25 +128,6 @@ var ObjectMenu = cc.Node.extend({
             var researchPopUp = new ResearchGUI();
             MAPSCENE.addChild(researchPopUp, 1000);
         }
-        
-        //createResearchPopup();
-        //if (research_constant.used_open){
-        //    console.log("Re-open Popup research");
-        //    ResearchPOPUP.attr({
-        //        x: cc.winSize.width / 2,
-        //        y: cc.winSize.height / 2,
-        //        anchorX: 0.5,
-        //        anchorY: 0.5,
-        //    });
-        //
-        //     //cho popUp ve vi tri cu tren man hinh
-        //}
-        //else {
-        //    console.log("open Popup research");
-        //    var researchPopUp = new ResearchPopUp();
-        //    MAPSCENE.addChild(researchPopUp, 1000);
-        //}
-
     },
     collect: function() {
         cc.log('===========> COLLECT');

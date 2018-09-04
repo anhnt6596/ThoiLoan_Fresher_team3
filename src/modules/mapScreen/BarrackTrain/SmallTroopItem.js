@@ -13,7 +13,7 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     initSmallItem: function(troopName){
-        var img = new cc.Sprite('res/Art/GUIs/train_troop_gui/icon/'+troopName+'.png');
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 1);
 
@@ -36,6 +36,6 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     updateAmountSmall: function() {
-        this.getChildByTag(101).setString('x'+BARRACK[this._barrackId]._troopList[this._name]._amount);
+        this.getChildByTag(101).setString('x'+BARRACK[this._barrackId]._barrackQueue.getTroopInBarrackByName(this._name)._amount);
     }
 });

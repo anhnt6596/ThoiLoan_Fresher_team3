@@ -568,7 +568,6 @@ testnetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
 
 var contructionList = contructionList || [];
 var obstacleLists = obstacleLists || [];
-var ID_CLC_BUILDING;
 testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
     {
         ctor:function()
@@ -585,11 +584,6 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this._id = this.getInt();
                 this.name = this.getString();
                 cc.log("========================name Nha: " + this.name);
-
-                if(this.name == "CLC_1"){
-                    ID_CLC_BUILDING = this._id;
-                }
-
                 cc.log("_id: " + this._id);
                 this.posX = this.getInt();
                 cc.log("posX: " + this.posX);
@@ -856,7 +850,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
-                timeStart: timeStart,                
+                startTime: timeStart,                
                 status: status,
                 name: name.troop[type].vi
             };
@@ -909,53 +903,40 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
         },
         readData:function(){
             this.n = this.getInt();
-            cc.log("================================= Current Time: " + getCurrentServerTime());
             cc.log("================================= SO LUONG BARRACK QUEUE INFO: " + this.n);
-            for (var i=0; i < this.n; i++){
+            for (var i = 0; i < this.n; i++){
                 cc.log("================================= BARRACK thu : " + (i+1));
                 this.idBarrack = this.getInt();
-                barrackQueueList[this.idBarrack] = {};
-                this.amountItemInQueue = this.getInt();
-                barrackQueueList[this.idBarrack]._amountItemInQueue = this.amountItemInQueue;
-                cc.log("================================= Amount Item in Barrack: " + this.amountItemInQueue);
-                this.totalTroopCapacity = this.getInt();
-                barrackQueueList[this.idBarrack]._totalTroopCapacity = this.totalTroopCapacity;
-                cc.log("================================= Total Troop capcity in Barrack: " + this.totalTroopCapacity);
+                this.barrackLevel = this.getInt();
                 this.startTime = this.getLong();
-                barrackQueueList[this.idBarrack]._startTime = this.startTime;
-                cc.log("================================= StartTime Barrack Queue: " + this.startTime);
 
-                barrackQueueList[this.idBarrack]._isFirst = true;
+                var barrackQueue = new BarrackQueue(this.idBarrack, this.barrackLevel, this.startTime);
+                barrackQueue._isFirst = true;
 
-                //Dat them 1 thuoc tinh flag cho Barrack de stop countdown luc barrack dc upgrade
-                //Neu barrack dang upgrade thi khong countdown
+                //Dat them 1 thuoc tinh flag cho Barrack de stop countdown luc barrack dc upgrade, neu barrack dang upgrade thi khong countdown
                 if(getObjBuildingById(this.idBarrack)._status == 'upgrade'){
-                    barrackQueueList[this.idBarrack].flagCountDown = false;
+                    barrackQueue.flagCountDown = false;
                 }else{
-                    barrackQueueList[this.idBarrack].flagCountDown = true;
+                    barrackQueue.flagCountDown = true;
                 }
-
 
                 this.m = this.getInt();
                 cc.log("================================= SO LUONG TROOP: " + this.m);
-                barrackQueueList[this.idBarrack]._troopList = {};
-                cc.log("================================= TROOP LIST: ");
-                for (var j=0; j < this.m; j++){
+                for (var j = 0; j < this.m; j++){
                     cc.log("================================= Troop thu : " + (j+1));
                     this.troopType = this.getString();
-                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = {};
-                    cc.log("================================= Troop Type: " + this.troopType);
+                    cc.log("================================= Troop name : " + this.troopType);
                     this.amount = this.getInt();
-                    cc.log("================================= Troop Amount: " + this.amount);
-
-                    this.currentPosition = this.getInt();
-                    cc.log("================================= current position: " + this.currentPosition);
-                    barrackQueueList[this.idBarrack]._troopList[this.troopType] = new TroopInBarrack(this.troopType, this.amount, this.currentPosition);
+                    cc.log("================================= Troop amount : " + this.amount);
+                    var troopInBarrack = new TroopInBarrack(this.troopType, this.amount);
+                    barrackQueue._troopList.push(troopInBarrack);
                 }
+
+                barrackQueueList.push(barrackQueue);
+
 
                 //Cho chạy ngầm từ đầu
                 var barrackObj = getObjBuildingById(this.idBarrack);
-
                 var totalCapacity = getTotalCapacityAMCs();
                 cc.log("================================= totalCapacity: " + totalCapacity);
                 var currentCapacity = getTotalCurrentTroopCapacity();
@@ -966,8 +947,11 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
                     temp.pauseOverCapacityFlag = true;
                 }
 
-                var data = {train: true, barrack: barrackObj};
-                new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+                if(barrackQueue._troopList.length > 0) {
+                    cc.log("================================= Barrack " + this.idBarrack + " chay COUNTDOWN");
+                    var data = {train: true, barrack: barrackObj};
+                    new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+                }
             }
         }
     }

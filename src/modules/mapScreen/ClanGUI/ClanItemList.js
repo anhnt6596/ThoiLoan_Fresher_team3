@@ -1,26 +1,26 @@
 var ClanItemList = ccui.Button.extend({
     ctor: function(clan, i) {
-        this._super("res/Art/Bang hoi/slost.png");
+        this._super(res.clan.slost);
         this.clan = clan;
         this.i = i;
         this.init();
     },
     init: function() {
-        var text1 = new cc.LabelBMFont(this.i + ".", 'res/Art/Fonts/soji_20.fnt');
+        var text1 = new cc.LabelBMFont(this.i + ".", res.font_soji[20]);
         text1.attr({
             x: 35,
             y: this.height / 2,
         });
         this.addChild(text1);
 
-        var clanIcon = new cc.Sprite("res/Art/Bang hoi/icon bieu tuong/"+ this.clan.iconType +".png");
+        var clanIcon = new cc.Sprite(res.clan.iconDir + this.clan.iconType +".png");
         clanIcon.attr({
             x: 80,
             y: this.height / 2,
         });
         this.addChild(clanIcon);
         
-        var nameText = new cc.LabelBMFont(this.clan.name, 'res/Art/Fonts/soji_16.fnt');
+        var nameText = new cc.LabelBMFont(this.clan.name, res.font_soji[16]);
         nameText.attr({
             x: 110,
             y: this.height / 2 + 10,
@@ -63,21 +63,21 @@ var ClanItemList = ccui.Button.extend({
         });
         this.addChild(memberText);
 
-        var troophyBg = new cc.Sprite("res/Art/Bang hoi/1.png");
+        var troophyBg = new cc.Sprite(res.clan.troophyBg);
         troophyBg.attr({
             x: this.width - 85,
             y: this.height / 2,
         });
         this.addChild(troophyBg);
 
-        var troophyIcon = new cc.Sprite("res/Art/Bang hoi/cup.png");
+        var troophyIcon = new cc.Sprite(res.clan.cup3);
         troophyIcon.attr({
             x: troophyBg.width - 25,
             y: troophyBg.height / 2,
         });
         troophyBg.addChild(troophyIcon);
 
-        var troophyText = new cc.LabelBMFont(formatNumber(this.clan.troophy), 'res/Art/Fonts/soji_16.fnt');
+        var troophyText = new cc.LabelBMFont(formatNumber(this.clan.troophy), res.font_soji[16]);
         troophyText.attr({
             x: troophyBg.width - 48,
             y: troophyBg.height / 2,

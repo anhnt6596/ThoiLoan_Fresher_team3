@@ -28,6 +28,7 @@ temp.listWall = null;
 //Train Troop
 temp.trainedBarrackId = null;
 temp.trainedTroopType = null;
+
 //Bao hieu vuot qua capacity: true
 temp.pauseOverCapacityFlag = false;
 

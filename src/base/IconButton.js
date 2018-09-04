@@ -20,7 +20,7 @@ ui.iconButton = function(size, x, y, src_img, text = ''){
     btn.setCapInsets(capInsets);
     btn.setContentSize(cc.size(size,size));
 
-    var valueText = new cc.LabelBMFont(text, 'res/Art/Fonts/soji_16.fnt');
+    var valueText = new cc.LabelBMFont(text, res.font_soji[16]);
     valueText.attr({
         anchorX: 0.5,
         anchorY: 0,

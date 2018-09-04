@@ -103,6 +103,7 @@ var Contruction = cc.Class.extend({
                 y: coor.y,
             });
         };
+        this.showRange();
     },
     collect: function() {
         // để rỗng
@@ -125,7 +126,14 @@ var Contruction = cc.Class.extend({
         this.tempY = this._posY;
         this.buildingImg.stopAllActions();
         this.buildingImg.runAction(ui.backToDefaultColor());
+        this.hideRange();
         LOBBY.hideObjectMenu();
+    },
+    showRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
+    },
+    hideRange: function() {
+        // hiển thị tầm, ghi đè ở DefenseBuilding và ClanCastle
     },
     moving: function(mapPos) {
         // if (this._name === "CLC_1" && this._level === 0) return;
@@ -239,14 +247,14 @@ var Contruction = cc.Class.extend({
         MAP.updateContructionList(this);
         MAP.createLogicArray(contructionList, obstacleLists);
         if (this._name === "AMC_1" || this._name === "CLC_1") this.armyRun();
-        if(this._name === "WAL_1") {
-            setTimeout(function() {
-                wallRefs.forEach(function(wall) {
-                    if (wall._id === this._id) wall.updatePresentImg(mapPos);
-                    else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
-                });
-            }, 0);
-        }
+        // if(this._name === "WAL_1") {
+        //     setTimeout(function() {
+        //         wallRefs.forEach(function(wall) {
+        //             if (wall._id === this._id) wall.updatePresentImg(mapPos);
+        //             else wall.updatePresentImg({ x: wall._posX, y: wall._posY });
+        //         });
+        //     }, 0);
+        // }
     },
     checkNewPosition: function(mapPos) {
         if (mapPos.x < 0 || mapPos.y < 0 || mapPos.x > MAPVALUE.MAPSIZE - this._width || mapPos.y > MAPVALUE.MAPSIZE - this._height) return false;
@@ -281,7 +289,7 @@ var Contruction = cc.Class.extend({
             case 'LAB_1':
             case 'CLC_1':
                 this.squareShadow(3);
-                break
+                break;
             case 'STO_1':
             case 'STO_2':
             case 'RES_2':
@@ -318,7 +326,7 @@ var Contruction = cc.Class.extend({
     },
     addNameText: function() {
         var bd_name = name.building[this._name] ? name.building[this._name].en : 'unknown';
-        var nameText = new cc.LabelBMFont(bd_name, 'res/Art/Fonts/soji_24.fnt');
+        var nameText = new cc.LabelBMFont(bd_name, res.font_soji[24]);
         this.nameText = nameText;
         var coor = this.xyOnMap(this._posX, this._posY);
         nameText.attr({
@@ -329,7 +337,7 @@ var Contruction = cc.Class.extend({
         });
         MAP.addChild(nameText, 1000);
         
-        var levelText = new cc.LabelBMFont('cấp ' + this._level, 'res/Art/Fonts/soji_16.fnt');
+        var levelText = new cc.LabelBMFont('cấp ' + this._level, res.font_soji[16]);
         this.levelText = levelText;
         levelText.attr({
             x: nameText.width / 2,
@@ -365,6 +373,7 @@ var Contruction = cc.Class.extend({
         this.levelText.setString('Level: ' + this._level);
         this.presentImg();
         this.showLevelUpEffect();
+        this.playBuildCompleteSound();
         this.setStatus('complete');
         this.setStartTime();
         for(var item in contructionList){
@@ -376,7 +385,7 @@ var Contruction = cc.Class.extend({
         }
         updateGUI();
         this.updateListBuildingRef();
-        this.updateBarrackQueueList();
+        this.updateAfterBuildComplete();
         this.updateArmyCampCapacity();
     },
 
@@ -451,8 +460,17 @@ var Contruction = cc.Class.extend({
             }
         }
         updateGUI();
+
+        if(this._name == 'CLC_1' && this._level == 1){
+            var btnGuild = ccui.Button('res/Art/GUIs/Chat/button chinh.png', 'res/Art/GUIs/Chat/button chinh.png');
+            btnGuild.setPosition(btnGuild.width/2, cc.winSize.height/2);
+            btnGuild.addClickEventListener(LOBBY.onInteractiveGuild.bind(LOBBY));
+            LOBBY.addChild(btnGuild);
+        }
+
+
         this.updateArmyCampCapacity();
-        this.updateBarrackQueueListAfterUpgradeComplete();
+        this.updateAfterUpgradeComplete();
         
         // fix bug trường hợp nhà collector có nút thu hoạch
         this.collect_bg = null;
@@ -492,14 +510,7 @@ var Contruction = cc.Class.extend({
         increaseUserResources(refundResources);
 
         updateGUI();
-
-        //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
-        if(this._name == "BAR_1"){
-            //Cap nhat startTime cho barrack
-            barrackQueueList[this._id]._startTime = getCurrentServerTime() - barrackQueueList[this._id]._startTime;
-            barrackQueueList[this._id].flagCountDown = true;
-        }
-
+        this.updateAfterCancelUpgrade();
     },
     cancelBuild: function() {
         var self = this;
@@ -549,9 +560,8 @@ var Contruction = cc.Class.extend({
     },
 
     addTimeBar: function(cur, max) {
-        cc.log("==================== DUY statusRequest: " + temp.statusRequest);
-
         if(temp.statusRequest && this._name == "CLC_1"){
+        //if(temp.statusRequest && this._name == "CLC_1"){
             //de trong
             cc.log("=============== HIEN THI REQUEST ==========================");
         }else{
@@ -590,7 +600,7 @@ var Contruction = cc.Class.extend({
 
         //var t = timeToString(max - cur);
         var t = timeToReadable(max - cur);
-        var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
+        var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
         this.timeText = timeText;
         timeText.attr({
             x: timeBar.width / 2,
@@ -608,7 +618,7 @@ var Contruction = cc.Class.extend({
         }
     },
     showLevelUpEffect: function() {
-        var lvUpAnims = ui.makeAnimation('construct_levelup_', 0, 6, 0.15);
+        var lvUpAnims = ui.makeAnimation('construct_levelup/', 0, 6, 0.15);
         var lvUpEffSprite = new cc.Sprite();
         MAP.addChild(lvUpEffSprite, 1100);
         lvUpEffSprite.attr({
@@ -634,14 +644,23 @@ var Contruction = cc.Class.extend({
         // để rỗng
         cc.log("Đây không phải nhà để chứa lính");
     },
-    updateBarrackQueueList: function() {
+    updateWhenStartUpgrade: function() {
+        // de trong
+    },
+    updateAfterBuildComplete: function() {
         // để trống
     },
-    updateBarrackQueueListAfterUpgradeComplete: function() {
+    updateAfterUpgradeComplete: function() {
         // để trống
+    },
+    updateAfterCancelUpgrade: function() {
+        // để trống
+    },
+    updateArmyCampCapacity: function() {
+        // de trong
     },
 
-    updateArmyCampCapacity: function() {
+    addTimeBarTrain: function(cur, max) {
         // de trong
     },
 
@@ -686,7 +705,7 @@ var Contruction = cc.Class.extend({
             setTimeout(() => {
                 cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             max = TIME_REQUEST_TROOP/1000;
-            if (cur >= max) {
+            if (cur >= max || !this.timeBar) {
                 this.timeBar && MAP.removeChild(this.timeBar);
                 this.timeBar = null;
                 return;
@@ -718,6 +737,12 @@ var Contruction = cc.Class.extend({
                 case 'STO_2':
                     cc.audioEngine.playEffect(sRes.elixirstorage_pickup);
                     break;
+                case 'RES_3':
+                    cc.audioEngine.playEffect(sRes.darkelixirdrill_pickup);
+                    break;
+                case 'STO_3':
+                    cc.audioEngine.playEffect(sRes.elixirpump_pickup);
+                    break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_pickup);
                     break;
@@ -726,6 +751,9 @@ var Contruction = cc.Class.extend({
                     break;
                 case 'DEF_1':
                     cc.audioEngine.playEffect(sRes.cannon_pickup);
+                    break;
+                case 'WAL_1':
+                    cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
                 default:
                     break;
@@ -750,6 +778,12 @@ var Contruction = cc.Class.extend({
                 case 'STO_2':
                     cc.audioEngine.playEffect(sRes.elixirstorage_place);
                     break;
+                case 'RES_3':
+                    cc.audioEngine.playEffect(sRes.darkelixirdrill_place);
+                    break;
+                case 'STO_3':
+                    cc.audioEngine.playEffect(sRes.elixirpump_place);
+                    break;
                 case 'BDH_1':
                     cc.audioEngine.playEffect(sRes.builderhut_place);
                     break;
@@ -759,9 +793,15 @@ var Contruction = cc.Class.extend({
                 case 'DEF_1':
                     cc.audioEngine.playEffect(sRes.cannon_place);
                     break;
+                case 'WAL_1':
+                    cc.audioEngine.playEffect(sRes.wall_place);
+                    break;
                 default:
                     break;
             }
         }
+    },
+    playBuildCompleteSound: function() {
+        if (SOUND) cc.audioEngine.playEffect(sRes.building_finish);
     },
 });

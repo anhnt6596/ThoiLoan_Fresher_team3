@@ -378,6 +378,13 @@ var updateMessageBox = function() {
     }
 };
 
+var getLevelGuildBuilding = function() {
+    for(var k in contructionList){
+        if(contructionList[k].name == 'CLC_1'){
+            return contructionList[k].level;
+        }
+    }
+};
 
 //Quy doi tai nguyen sang G
 var goldToG = function(gold){
@@ -481,6 +488,31 @@ var getTotalCapacityTroopGuild = function(){
         totalCapacity += config.troopBase[item.typeTroop].housingSpace;
     }
     return totalCapacity;
+};
+
+var getIdGuildBuilding = function() {
+    for(var k in contructionList){
+        var build = contructionList[k];
+        if(build.name == 'CLC_1'){
+            return build._id;
+        }
+    }
+};
+
+var getBarrackQueueById = function(id) {
+    for(var i = 0; i < barrackQueueList.length; i++) {
+        var barrackQueue = barrackQueueList[i];
+        if(barrackQueue._idBarrack == id) return barrackQueue;
+    }
+    return null;
+};
+
+var getBarrackObjectById = function(id) {
+    for(var i in barrackRefs){
+        if(barrackRefs[i]._id == id){
+            return barrackRefs[i];
+        }
+    }
 };
 
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];

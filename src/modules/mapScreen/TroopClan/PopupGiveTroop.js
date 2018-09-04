@@ -2,10 +2,10 @@ var PopupGiveTroop = ccui.Button.extend({
     listTroopTag:[],
 
     ctor: function(idUserGet){
-        this._super('res/Art/Bang hoi/POPUP_0002_Layer-4.png');
+        this._super('res/Art/GUIs/Chat/nen 2.png');
         this.setPosition(LOBBY.width/2.5, LOBBY.height/2);
-        this.setScaleX(3);
-        this.setScaleY(2);
+        //this.setScaleX(3);
+        //this.setScaleY(2);
         this.setZoomScale(0);
 
         this.init(idUserGet);
@@ -15,7 +15,7 @@ var PopupGiveTroop = ccui.Button.extend({
     },
 
     init: function(idUserGet) {
-        var j = 1;
+        var j = 107;
         var isExistTroop = false;
 
         for(var i in troopInfo) {
@@ -24,14 +24,14 @@ var PopupGiveTroop = ccui.Button.extend({
                 isExistTroop = true;
                 var troop = new TroopGive(item.type);
                 troop.setAnchorPoint(0, 0);
-                troop.setPosition(this.x - 2.7 * troop.width + troop.width * j, this.y);
+                troop.setPosition(this.x - 2.7 * troop.width + troop.width * (j-106), this.y);
                 troop.setScale(1);
                 troop.idUserGet = idUserGet;
                 troop.level = item.level;
                 troop.type = item.type;
                 troop.tagTroopGive = j;
                 troop.addClickEventListener(this.giveTroop.bind(troop));
-                cc.director.getRunningScene().addChild(troop, 2223, j);
+                cc.director.getRunningScene().addChild(troop, 2259, j);
                 this.listTroopTag.push(j);
                 j++;
             }
@@ -77,6 +77,7 @@ var PopupGiveTroop = ccui.Button.extend({
             cc.log("=================== REMOVE: " + i);
 
             var child = cc.director.getRunningScene().getChildByTag(this.listTroopTag[i]);
+            cc.log("======================= TAG la: " + this.listTroopTag[i]);
             if(child){
                 child.retain();
             }

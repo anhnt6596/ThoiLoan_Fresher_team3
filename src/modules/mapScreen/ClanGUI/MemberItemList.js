@@ -1,34 +1,27 @@
 var MemberItemList = ccui.Button.extend({
     ctor: function(member, i) {
-        this._super("res/Art/Bang hoi/slost.png");
+        this._super(res.clan.slost);
         this.member = member;
         this.i = i;
         this.init();
         if(member.id === gv.user.id) this.setColor(new cc.color(220, 230, 247, 255));
     },
     init: function() {
-        var starIcon = new cc.Sprite("res/Art/Bang hoi/sao sao.png");
+        var starIcon = new cc.Sprite(res.clan.bigStar);
         starIcon.attr({
             x: 35,
             y: this.height / 2,
         });
         this.addChild(starIcon);
 
-        var text1 = new cc.LabelBMFont(this.i.toString(), 'res/Art/Fonts/soji_20.fnt');
+        var text1 = new cc.LabelBMFont(this.i.toString(), res.font_soji[20]);
         text1.attr({
             x: 35,
             y: this.height / 2,
         });
         this.addChild(text1);
-
-        // var clanIcon = new cc.Sprite("res/Art/Bang hoi/icon bieu tuong/"+ this.member.iconType +".png");
-        // clanIcon.attr({
-        //     x: 80,
-        //     y: this.height / 2,
-        // });
-        // this.addChild(clanIcon);
         
-        var nameText = new cc.LabelBMFont(this.member.name, 'res/Art/Fonts/soji_16.fnt');
+        var nameText = new cc.LabelBMFont(this.member.name, res.font_soji[16]);
         nameText.attr({
             x: 90,
             y: this.height / 2 + 10,
@@ -91,21 +84,21 @@ var MemberItemList = ccui.Button.extend({
         });
         this.addChild(requestTroopText);
 
-        var troophyBg = new cc.Sprite("res/Art/Bang hoi/1.png");
+        var troophyBg = new cc.Sprite(res.clan.troophyBg);
         troophyBg.attr({
             x: this.width - 85,
             y: this.height / 2,
         });
         this.addChild(troophyBg);
 
-        var troophyIcon = new cc.Sprite("res/Art/Bang hoi/cup.png");
+        var troophyIcon = new cc.Sprite(res.clan.cup3);
         troophyIcon.attr({
             x: troophyBg.width - 25,
             y: troophyBg.height / 2,
         });
         troophyBg.addChild(troophyIcon);
 
-        var troophyText = new cc.LabelBMFont(formatNumber(this.member.troophy), 'res/Art/Fonts/soji_16.fnt');
+        var troophyText = new cc.LabelBMFont(formatNumber(this.member.troophy), res.font_soji[16]);
         troophyText.attr({
             x: troophyBg.width - 48,
             y: troophyBg.height / 2,

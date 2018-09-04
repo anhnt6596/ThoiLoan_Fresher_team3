@@ -161,7 +161,7 @@ var ItemBtn = ccui.Button.extend({
         var elixir_rq = config.troop[type][level+1].researchElixir;
         var dark_elixir_rq = config.troop[type][level+1].researchDarkElixir;
                 
-        var data = {_level: troopInfo[type].level + 1, itemName: type, countDownDate: countDownDate, elixir_rq: elixir_rq, dark_elixir_rq: dark_elixir_rq};
+        var data = {_level: troopInfo[type].level, itemName: type, countDownDate: countDownDate, elixir_rq: elixir_rq, dark_elixir_rq: dark_elixir_rq};
         var popup = new TroopResearchInfo(cc.winSize.width * 3 / 4, cc.winSize.height * 5.7 / 6, name.troop[type].vi + ' nâng lên cấp ' + (troopInfo[type].level + 1), true, data);
         cc.director.getRunningScene().addChild(popup, 1500);
     }

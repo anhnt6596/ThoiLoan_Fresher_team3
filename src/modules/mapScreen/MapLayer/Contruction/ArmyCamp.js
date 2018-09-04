@@ -18,7 +18,7 @@ var ArmyCamp = Building.extend({
         });
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
-        var buildingAnim = ui.makeAnimation('armycam_1_', 0, 4, 0.2);
+        var buildingAnim = ui.makeAnimation('armycam_1/', 0, 4, 0.2);
         var animSprite = new cc.Sprite();
         buildingImg.addChild(animSprite, 11);
         animSprite.attr({
@@ -63,6 +63,18 @@ var ArmyCamp = Building.extend({
 
     updateArmyCampCapacity: function() {
         temp.pauseOverCapacityFlag = false;
+
+        //Neu chua co linh train thi khong cowntdown
+        for(var i in barrackRefs){
+            var id = barrackRefs[i]._id;
+            if(BARRACK[id]){
+                BARRACK[id].countDown();
+                //Hien thi timebar ben ngoai
+                if(!this.timeBar){
+                    this.addTimeBarTrain(0, 20);
+                }
+            }
+        }
     },
 
     removeTroop: function(troop) {
