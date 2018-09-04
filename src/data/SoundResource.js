@@ -39,5 +39,6 @@ var sRes = {
     
     building_finish: 'res/Sounds/sfx/building_finish.mp3',
     building_contruct: 'res/Sounds/sfx/building_contruct.mp3',
-    // building_contruct: 'res/Sounds/sfx/building_contruct.mp3',
+
+    theme: 'res/Sounds/theme.mp3',
 };

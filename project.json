@@ -45,6 +45,7 @@
         "src/base/utilities/DeniedPopup.js",
         "src/base/Effects.js",
         "src/base/OptionButton.js",
+        "src/base/Music.js",
         "src/libs/md5.js",
         "src/libs/signals.js",
         "src/libs/underscore.js",

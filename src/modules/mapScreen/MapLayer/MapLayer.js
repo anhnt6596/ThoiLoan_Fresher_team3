@@ -36,6 +36,7 @@ var MapLayer = cc.Layer.extend({
         this.addMultiTouch();
         this.addKeyboardListener();
         this.updateTimeStamp();
+        mu.playTheme();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/fx_1.plist');
