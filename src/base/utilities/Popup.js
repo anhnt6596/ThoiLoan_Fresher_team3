@@ -27,7 +27,7 @@ var Popup = cc.Layer.extend({
         this._resInfo.setPosition(0, bakeLayer.height * bakeLayer.scaleY - this._resInfo.height - 10);
         this.addChild(this._resInfo, 1, 1);
 
-        var label = new cc.LabelBMFont(text.toUpperCase(), 'res/Art/Fonts/soji_24.fnt');
+        var label = new cc.LabelBMFont(text.toUpperCase(), res.font_soji[24]);
         label.scale = 1.5;
         label.setAnchorPoint(0, 0);
         label.setPosition((cc.winSize.width - label.width*label.scaleX)/2, this._resInfo.y + 5);

@@ -1,11 +1,11 @@
 var ItemInfo = TinyPopup.extend({
     troopGuildListDiff: {},
-    troopGuildArray: [],
 
     ctor:function(width, height, title, type, data) {
         this._super(width, height, title, type, data);
 
         if(data.itemName == "CLC_1"){
+            this.troopGuildListDiff = {};
             //Hien thi so luong quan hien tai cua guild
             this.showClanInfo();
         }
@@ -49,7 +49,7 @@ var ItemInfo = TinyPopup.extend({
             }
         }
         if(missImage){
-            var note = cc.LabelBMFont('This building has no image' , 'res/Art/Fonts/soji_24.fnt');
+            var note = cc.LabelBMFont('This building has no image' , res.font_soji[24]);
             note.setPosition(0, 0);
             this.addChild(note, 10);
             return;
@@ -83,7 +83,7 @@ var ItemInfo = TinyPopup.extend({
         var buildingImg;
         var shadow;
         var buildingAnim;
-        var animSprite
+        var animSprite;
         switch (itemName) {
             case 'TOW_1':
                 buildingImg = new cc.Sprite(res.building.townhall[level]);
@@ -99,7 +99,7 @@ var ItemInfo = TinyPopup.extend({
                 buildingImg.addChild(animSprite, 11);
                 animSprite.attr({
                     x: buildingImg.width / 2 + 3,
-                    y: buildingImg.height / 2 + 38,
+                    y: buildingImg.height / 2 + 38
                 });
                 animSprite.runAction(buildingAnim.repeatForever());
                 break;
@@ -273,7 +273,7 @@ var ItemInfo = TinyPopup.extend({
 
             infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
 
-            var textInfo = cc.LabelBMFont(curValue, 'res/Art/Fonts/soji_12.fnt');
+            var textInfo = cc.LabelBMFont(curValue, res.font_soji[12]);
             textInfo.attr({ anchorX: 0, x: 35, y: - i * 40 });
             infoArea.addChild(textInfo, 5);
         });
@@ -296,12 +296,12 @@ var TroopGuildItem = ccui.Button.extend({
         this.addChild(img, 100);
 
 
-        var levelLabel = new cc.LabelBMFont(level, 'res/Art/Fonts/soji_24.fnt');
+        var levelLabel = new cc.LabelBMFont(level, res.font_soji[24]);
         levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
         levelLabel.setColor(new cc.color(0, 255, 0, 255));
         this.addChild(levelLabel, 109);
 
-        var amountLabel = new cc.LabelBMFont(amount, 'res/Art/Fonts/soji_24.fnt');
+        var amountLabel = new cc.LabelBMFont(amount, res.font_soji[24]);
         amountLabel.setPosition(amountLabel.width/2 + 5, amountLabel.height/2 + 5);
         amountLabel.setColor(new cc.color(0, 255, 0, 255));
         this.addChild(amountLabel, 109);

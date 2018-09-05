@@ -116,8 +116,7 @@ var suggestLocation = function(width, height, mapLogic){
         }
     }
 
-    var location = {posX:posXMax, posY:posYMax};
-    return location;
+    return {posX:posXMax, posY:posYMax};
 };
 
 

@@ -5,7 +5,7 @@ var DeniedPopup = TinyPopup.extend({
     },
 
     showContent: function(data) {
-        var contentText = new cc.LabelBMFont(data.content, 'res/Art/Fonts/soji_20.fnt');
+        var contentText = new cc.LabelBMFont(data.content, res.font_soji[20]);
         contentText.setPosition(0, 30);
         contentText.color = cc.color(0, 255, 0, 255);
         this.addChild(contentText, 2);

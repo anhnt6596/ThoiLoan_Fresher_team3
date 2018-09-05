@@ -550,6 +550,12 @@ res.font_soji = {
     "24": 'res/Art/Fonts/soji_24.fnt'
 };
 
+res.font_fista = {
+    "16": 'res/Art/Fonts/fista_16_non.fnt',
+    "20": 'res/Art/Fonts/fista_20_non.fnt',
+    "24": 'res/Art/Fonts/fista_24_non.fnt'
+};
+
 res.gui = {
     bg_exp: 'res/Art/GUIs/Main_Gui/bg_exp.png',
     exp_bg_bar: 'res/Art/GUIs/Main_Gui/exp_bg_bar.png',
@@ -822,7 +828,6 @@ var time = {
     DeltaTime: 0   //Client - Server
 };
 
-
 var research_constant = {
     troop: null,
     time_text_dir : 'res/Art/Fonts/soji_20.fnt',
@@ -844,6 +849,15 @@ var train_troop_constant = {
     img_train_troop_dir: "res/Art/GUIs/train_troop_gui/icon/"
 };
 
+var shop_constant = {
+    base_dir: "res/Art/GUIs/shop_gui/",
+    shop_json: "res/Config json/ShopInfo.json",
+    gold_icon: "res/Art/GUIs/shop_gui/gold.png",
+    elixir_icon: "res/Art/GUIs/shop_gui/elixir.png",
+    darkElixir_icon: "res/Art/GUIs/Main_Gui/darkElixir_icon.png",
+    coin_icon: "res/Art/GUIs/shop_gui/g.png"
+};
+
 //type Response
 var RESPONSE_VALIDATE = 1;
 var RESPONSE_TO_ALL = 2;
@@ -860,4 +874,3 @@ var MAX_MESSAGES_QUEUE = 100;
 var MAX_LENGTH_MESSAGE = 50;
 var MAX_TROOP_AMOUNT_USER_CAN_GIVE = 5;
 var TIME_REQUEST_TROOP = 1200000;              //ms
-//var ID_CLC_BUILDING = 0;

@@ -23,7 +23,7 @@ var TinyPopup = cc.Node.extend({
         this._frame.setScale(width/this._frame.width, height/this._frame.height);
         this.addChild(this._frame, 1);
 
-        this._titleText = new cc.LabelBMFont(title, 'res/Art/Fonts/soji_20.fnt');
+        this._titleText = new cc.LabelBMFont(title, res.font_soji[20]);
         this._titleText.setPosition(0, this._frame.height*this._frame.scaleY/2 - this._titleText.height/2 - 15);
         this.addChild(this._titleText, 2);
 
@@ -38,7 +38,7 @@ var TinyPopup = cc.Node.extend({
             this.addChild(acceptBtn, 200);
             acceptBtn.addClickEventListener(this.ok.bind(this));
 
-            this._btnText = new cc.LabelBMFont("20", 'res/Art/Fonts/soji_20.fnt');
+            this._btnText = new cc.LabelBMFont("20", res.font_soji[20]);
             this._btnText.setPosition(acceptBtn.x, acceptBtn.y);
             this.addChild(this._btnText, 202);
 
@@ -52,19 +52,19 @@ var TinyPopup = cc.Node.extend({
     showContent: function(data) {
         var contentText;
         if(data.type == 'builder'){
-            contentText = new cc.LabelBMFont('Do you want to release a builder?', 'res/Art/Fonts/soji_20.fnt');
+            contentText = new cc.LabelBMFont('Do you want to release a builder?', res.font_soji[20]);
         }else{
-            contentText = new cc.LabelBMFont('Do you want to by lacking resources?', 'res/Art/Fonts/soji_20.fnt');
+            contentText = new cc.LabelBMFont('Do you want to by lacking resources?', res.font_soji[20]);
             var stt = 0;
             for(var i in data.type){
                 if(data.type[i] > 0){
                     stt++;
-                    var res = new cc.LabelBMFont(formatNumber(data.type[i]), 'res/Art/Fonts/soji_20.fnt');
-                    res.setPosition(contentText.x, contentText.y - 30*stt);
-                    this.addChild(res, 2);
+                    var resource = new cc.LabelBMFont(formatNumber(data.type[i]), res.font_soji[20]);
+                    resource.setPosition(contentText.x, contentText.y - 30*stt);
+                    this.addChild(resource, 2);
 
                     var unit = new cc.Sprite('res/Art/GUIs/Main_Gui/'+ i +'_icon.png');
-                    unit.setPosition(res.x + res.width/2 + 20, res.y);
+                    unit.setPosition(resource.x + resource.width/2 + 20, resource.y);
                     this.addChild(unit, 2);
                 }
             }

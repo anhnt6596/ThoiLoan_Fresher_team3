@@ -83,32 +83,21 @@ var Barrack = Building.extend({
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
         var coor = this.xyOnMap(this._posX, this._posY);
-        timeBar.attr({
-            x: coor.x,
-            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
-        });
+        timeBar.setPosition(coor.x, coor.y + (this._height / 2) * TILE_HEIGHT + 60);
         MAP.addChild(timeBar, 1100);
 
         var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
         this.processBar = processBar;
-        processBar.attr({
-            anchorX: 0,
-            anchorY: 0
-        });
+        processBar.setAnchorPoint(0, 0);
         timeBar.addChild(processBar);
 
         var ratio = cur / max;
-
         processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
-        //var t = timeToString(max - cur);
         var t = timeToReadable(max - cur);
-        var timeText = new cc.LabelBMFont(t, 'res/Art/Fonts/soji_16.fnt');
+        var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
         this.timeText = timeText;
-        timeText.attr({
-            x: timeBar.width / 2,
-            y: 42
-        });
+        timeText.setPosition(timeBar.width / 2, 42);
         timeBar.addChild(timeText);
 
         timeBar.visible = false;
@@ -138,5 +127,5 @@ var Barrack = Building.extend({
             this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
             this.timeText.setString(t);
         }
-    },
+    }
 });

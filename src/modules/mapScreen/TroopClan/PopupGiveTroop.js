@@ -38,7 +38,7 @@ var PopupGiveTroop = ccui.Button.extend({
         }
 
         if(!isExistTroop){
-            var label = new cc.LabelBMFont("Train more troops to could be donate!", 'res/Art/Fonts/soji_20.fnt');
+            var label = new cc.LabelBMFont("Train more troops to could be donate!", res.font_soji[20]);
             label.setAnchorPoint(0, 0);
             label.setPosition(this.x - label.width/2 + 30, this.y);
             label.color = cc.color(0, 255, 0, 200);

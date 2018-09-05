@@ -19,6 +19,13 @@ var BarrackQueue = cc.Class.extend({
         return null;
     },
 
+    getTroopPositionInQueue: function(troopType) {
+        for(var i = 0; i < this._troopList.length; i++) {
+            var troop = this._troopList[i];
+            if(troop._name == troopType) return i;
+        }
+    },
+
     removeTroopInBarrackByName: function(troopType) {
         for(var i = 0; i < this._troopList.length; i++) {
             var troop = this._troopList[i];

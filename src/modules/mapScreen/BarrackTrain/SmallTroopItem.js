@@ -17,7 +17,7 @@ var SmallTroopItem = ccui.Button.extend({
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 1);
 
-        var amountLabel = new cc.LabelBMFont('x'+this._amount, 'res/Art/Fonts/soji_20.fnt');
+        var amountLabel = new cc.LabelBMFont('x'+this._amount, res.font_soji[20]);
         amountLabel.setPosition(this.width/2 + 10, this.height - amountLabel.height/2 - 10);
         this.addChild(amountLabel, 101, 101);
 
