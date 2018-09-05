@@ -270,6 +270,7 @@ var EditClanView = cc.Sprite.extend({
         cc.log("Create..." + data.name + "/" + data.iconType + "/" + data.description + "/" + data.status + "/" + data.requireTroophy);
         // NETWORK.sendCreateGuild(data);
         if(!this.checkReqName(data.name)) return;
+        temp.createNewClanName = data.name;
         this.checkGoldReq(this.createCost, () => NETWORK.sendCreateGuild(data));
     },
     editAction: function() {
@@ -296,7 +297,7 @@ var EditClanView = cc.Sprite.extend({
 
         this.iconType = myClanInfo.iconType;
         this.icon && this.removeChild(this.icon);
-        var icon = new cc.Sprite(res,clan.iconDir + this.iconType + ".png");
+        var icon = new cc.Sprite(res.clan.iconDir + this.iconType + ".png");
         this.icon = icon;
         icon.attr({ 
             x: this.width / 2 - 60,

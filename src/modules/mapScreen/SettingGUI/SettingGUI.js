@@ -7,6 +7,7 @@ var SettingGUI = ui.PopUp.extend({
         this.initContent();
     },
     initContent: function() {
+        // Sound
         var text1 = new cc.LabelTTF("Âm thanh:", "Calibri", 22);
         text1.attr({ 
             x: -170,
@@ -40,11 +41,53 @@ var SettingGUI = ui.PopUp.extend({
             y: this.height + 100,
         });
         this.addChild(soundText, 100);
+
+        // Music
+        var text2 = new cc.LabelTTF("Nhạc:", "Calibri", 22);
+        text2.attr({ 
+            x: -170,
+            y: this.height + 50,
+            anchorX: 1,
+            color: new cc.color(142, 8, 8, 255)
+        });
+        this.addChild(text2, 100);
+
+        var leftButton2 = new ccui.Button(res.clan.prevBtn);
+        leftButton2.attr({
+            x: this.width / 2 - 90,
+            y: this.height + 50,
+        });
+        this.addChild(leftButton2, 100);
+        leftButton2.addClickEventListener(this.toggleMusic.bind(this));
+
+        var rightButton2 = new ccui.Button(res.clan.nextBtn);
+        rightButton2.attr({ 
+            x: this.width / 2 + 90,
+            y: this.height + 50,
+        });
+        this.addChild(rightButton2, 100);
+        rightButton2.addClickEventListener(this.toggleMusic.bind(this));
+
+        var t2 = MUSIC ? "Bật" : "Tắt";
+        var musicText = new cc.LabelBMFont(t2, res.font_soji[16]);
+        this.musicText = musicText;
+        musicText.attr({
+            x: this.width / 2,
+            y: this.height + 50,
+        });
+        this.addChild(musicText, 100);
     },
     toggleSound: function() {
         SOUND = !SOUND;
         var t = SOUND ? "Bật" : "Tắt";
         this.soundText.setString(t);
+    },
+    toggleMusic: function() {
+        MUSIC = !MUSIC;
+        if (!MUSIC) cc.audioEngine.pauseMusic();
+        else cc.audioEngine.resumeMusic();
+        var t = MUSIC ? "Bật" : "Tắt";
+        this.musicText.setString(t);
     },
     openAction: function(scale) {
         var size = cc.winSize;

@@ -36,6 +36,7 @@ var MapLayer = cc.Layer.extend({
         this.addMultiTouch();
         this.addKeyboardListener();
         this.updateTimeStamp();
+        mu.playTheme();
     },
     init: function() {
         cc.spriteFrameCache.addSpriteFrames('res/Art/Effects/fx_1.plist');
@@ -351,6 +352,7 @@ var MapLayer = cc.Layer.extend({
                         //     wall.removeTarget();
                         // });
                         wallSelectingArray = checktargetMultiWall.listWall;
+                        self._targetedObject.onTargetSound();
                         wallSelectingArray.forEach(function(wall) {
                             wall.wallSelectInLine();
                         });

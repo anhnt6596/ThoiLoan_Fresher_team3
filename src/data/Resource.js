@@ -817,6 +817,7 @@ var SOLID_MAP_VALUE = {
 };
 
 var SOUND = true;
+var MUSIC = true;
 
 var ZOOM_SCALE = {
     MAX: 2,

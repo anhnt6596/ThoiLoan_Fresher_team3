@@ -141,6 +141,7 @@ var ClanInfo = cc.Sprite.extend({
         if (gv.user.is_in_guild && gv.user.id_guild === this.clanInfo.id) cc.log("Bạn đã ở guild này rồi");
         else {
             temp.reqJoinClanId = this.clanInfo.id;
+            temp.reqJoinClanName = this.clanInfo.name;
             youAreRequest = true;
             NETWORK.sendAddRequestMember(this.clanInfo.id);
         }

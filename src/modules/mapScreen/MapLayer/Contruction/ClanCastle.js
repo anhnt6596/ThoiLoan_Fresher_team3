@@ -17,7 +17,7 @@ var ClanCastle = Building.extend({
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
         MAP.addChild(buildingImg, zOrder);
         this.initRange();
-        //this.addClanIcon();
+        this.addClanIcon();
     },
     addClanIcon: function() {
         if (this.icon !== null) {

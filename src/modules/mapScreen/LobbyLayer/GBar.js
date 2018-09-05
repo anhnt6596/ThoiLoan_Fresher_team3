@@ -26,6 +26,7 @@ var GBar = cc.Sprite.extend({
         this.addChild(icon);
     },
     update: function(userInfo) {
-        this.valueText.setString(formatNumber(userInfo.coin));
+        // this.valueText.setString(formatNumber(userInfo.coin));
+        changeValueTextEffect(this.valueText, userInfo.coin);
     }
 });

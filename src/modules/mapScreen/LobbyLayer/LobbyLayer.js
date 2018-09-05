@@ -83,9 +83,9 @@ var LobbyLayer = cc.Layer.extend({
         cc.director.pushScene(shopScene);
     },
     onAttack: function() {
-        var resource = { gold:1000, elixir:0, darkElixir:0, coin:1000000 };
+        var resource = { gold:10000, elixir:0, darkElixir:0, coin:100000 };
         _.extend(ReducedTempResources, resource);
-        NETWORK.sendAddResource(1000, 0, 0, 1000000);
+        NETWORK.sendAddResource(10000, 0, 0, 100000);
         // NETWORK.sendGetTroopInfo();
     },
     onSetting: function () {
@@ -177,3 +177,39 @@ var LobbyLayer = cc.Layer.extend({
         this.ShieldBar.update(userInfo);
     },
 });
+
+var changeValueTextEffect = function(obj, newValue) {
+    var timeTick = 27;
+    var oldValueStr = obj.getString();
+    var oldValue = formatNumberToNumber(oldValueStr);
+    cc.log("oldValue: " + oldValue);
+    if (oldValue == newValue) return;
+    var changePerTick = ((newValue - oldValue) / timeTick).toFixed(0);
+    var curText = parseInt(oldValue);
+    var count = 0;
+    obj.setScale(1.05);
+    var tick = function() {
+        setTimeout(function() {
+            curText += parseInt(changePerTick);
+            obj.setString(formatNumber(curText));
+            count += 1;
+            if (count >= timeTick) {
+                obj.setString(formatNumber(newValue));
+                obj.setScale(1);
+            } else {
+                tick();
+            }
+        }, 20);
+    };
+    tick();
+};
+
+var formatNumberToNumber = function(str) {
+    var result = str;
+    result = result.replace(",", "");
+    result = result.replace(",", "");
+    result = result.replace(",", "");
+    result = result.replace(",", "");
+    cc.log("result: "  + result);
+    return parseInt(result);
+}
