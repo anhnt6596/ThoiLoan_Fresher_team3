@@ -28,21 +28,12 @@ var ElixirCollector = CollectorBuilding.extend({
         });
         animSprite.runAction(elixirCollectorAnim.repeatForever());
     },
-    //setCollectIcon: function() {
-    //    cc.log(this._level+"= level");
-    //    if (this._status === 'complete' && this.startTime) {
-    //        var time_sx = (getCurrentServerTime() - this.startTime)/1000;
-    //        cc.log("============================start time: " +this.startTime);
-    //        var productivity = timeToProductivity(this._name,this._level,time_sx);
-    //        var suc_chua = config.building[this._name][this._level].capacity;
-    //        if ( (productivity.sanluong>=suc_chua/100)  ){
-    //            this.addCollectIcon(productivity.is_full);
-    //        }
-    //        else {
-    //            this.disableCollectIcon();
-    //        }
-    //
-    //    }
-    //},
+    //tra ve true neu day capacity, tra ve false neu chua day`
+    isFullCapacity: function(sanluong){
+        if (sanluong+gv.user.elixir > gv.user.maxCapacityElixir){
+            return true
+        }
+        return false;
+    },
 
 });

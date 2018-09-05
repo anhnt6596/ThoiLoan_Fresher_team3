@@ -36,5 +36,12 @@ var GoldMine = CollectorBuilding.extend({
 
 
     },
+    //tra ve true neu day capacity, tra ve false neu chua day`
+    isFullCapacity: function(sanluong){
+        if (sanluong+gv.user.gold > gv.user.maxCapacityGold){
+            return true
+        }
+        return false;
+    },
 
 });
