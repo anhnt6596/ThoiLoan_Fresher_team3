@@ -16,11 +16,11 @@ var LoginScreen = cc.Layer.extend({
 
         var height = 480;
         var width = 800;
-        var background = new cc.Sprite("res/Art/GUIs/Main_Gui/login/background.jpg");
+        var background = new cc.Sprite("res/Art/LoginGui/loginScreen.png");
         background.attr({
             x: size.width/2,
             y: size.height/2,
-            scale: 1.5
+            scale: 1
 
         });
 
@@ -31,27 +31,28 @@ var LoginScreen = cc.Layer.extend({
         //this.tfId.setMaxLengthEnabled(true);
         //this.tfId.setMaxLength(12);
         //this.addChild(this.tfId);
-        this.uuidEb = cc.EditBox.create(cc.size(size.width/3,size.height/10),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-        this.uuidEb.setPlaceHolder("  uuid");
+        this.uuidEb = cc.EditBox.create(cc.size(size.width/3,size.height/10),"res/Art/LoginGui/g_background.png");
+        this.uuidEb.setPlaceHolder("  Tài khoản");
         this.uuidEb.attr({
             anchorX: 0.5,
             anchorY: 0.5,
-            x: size.width/2,
-            y: size.height/3,
-            fontSize: 25
+            x: size.width/2 - 175,
+            y: size.height/2 + 30,
+            fontSize: 25,
+            scale: 1.1,
             //placeHolderFontColor: cc.color(255,255,255,200)
 
         });
-        this.uuidEb.setFontColor(new cc.Color(150,150,150,255));
+        this.uuidEb.setFontColor(new cc.Color(255, 255, 255, 255));
         this.addChild(this.uuidEb);
 
         //var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");
-        var btnLogin = ui.optionButton("Login", res.clan.greenBtn);
+        var btnLogin = ui.optionButton("Login", "res/Art/LoginGui/bg-btn-login.png");
         btnLogin.attr({
-            x: size.width / 2,
-            y: 120,
-            scale: 1.5
+            x: this.uuidEb.x,
+            y: this.uuidEb.y - 140,            
         });
+        btnLogin.label.setScale(2);
 
         this.addChild(btnLogin);
         btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
