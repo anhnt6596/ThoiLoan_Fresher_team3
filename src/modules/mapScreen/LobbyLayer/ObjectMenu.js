@@ -119,8 +119,15 @@ var ObjectMenu = cc.Node.extend({
     research: function() {
         cc.log('===========> RESEARCH');
         console.log("open Popup research");
-        var researchPopUp = new ResearchPopUp();
-        MAPSCENE.addChild(researchPopUp, 1000);
+        //var researchPopUp = new ResearchPopUp();
+        if (RESEARCH_GUI){
+            RESEARCH_GUI.setVisible(true);
+            RESEARCH_GUI.updateInfo();
+        }
+        else {
+            var researchPopUp = new ResearchGUI();
+            MAPSCENE.addChild(researchPopUp, 1000);
+        }
     },
     collect: function() {
         cc.log('===========> COLLECT');

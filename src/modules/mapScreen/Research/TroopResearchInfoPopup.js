@@ -73,8 +73,8 @@ var TroopResearchInfo = TroopInfo.extend({
         this.addChild(number_time_Text,499);
 
         var type = data.itemName;
-        var elixir_rq = ResearchPOPUP.getResourceRequire(type, troopInfo[type].level+1, "researchElixir");
-        var dark_elixir_rq = ResearchPOPUP.getResourceRequire(type, troopInfo[type].level+1, "researchDarkElixir");
+        var elixir_rq = data.elixir_rq;
+        var dark_elixir_rq = data.dark_elixir_rq;
 
         var researchElixir_txt = new cc.LabelBMFont(elixir_rq, 'res/Art/Fonts/soji_12.fnt');
         researchElixir_txt.attr({
@@ -183,7 +183,8 @@ var TroopResearchInfo = TroopInfo.extend({
         return ans;
     },
     selectReseachItem: function (type) {
-        ResearchPOPUP.onResearchItem(type);
+        //ResearchPOPUP.onResearchItem(type);
+        RESEARCH_GUI.onResearchItem(type);
         this.close();
     }
 
