@@ -1173,3 +1173,17 @@ testnetwork.packetMap[gv.CMD.ONLINE_MESSAGE] = fr.InPacket.extend(
         }
     }
 );
+
+testnetwork.packetMap[gv.CMD.DO_HARVEST] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();            
+            this.type = this.getString();
+            this.sanluong = this.getInt();
+        }
+    }
+);

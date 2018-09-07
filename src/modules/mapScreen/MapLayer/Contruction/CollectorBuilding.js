@@ -102,33 +102,24 @@ var CollectorBuilding = Building.extend({
     },
     onCollectResource: function (is_upgrade) {
         console.log("Thu hoach resource "+this._name+" id="+this._id);
-        
-
-        var time_sx = (getCurrentServerTime() - this.startTime)/1000;
-        cc.log("============================cur_time: " +getCurrentServerTime());
-        cc.log("============================start time: " +this.startTime);
-        cc.log("============================time san xuat: " + time_sx);
-        var productivity = timeToProductivity(this._name,this._level,time_sx);
-        productivity.sanluong = Math.floor(productivity.sanluong);
-
+        temp.collectingBuilding = this;
         if (!is_upgrade) {
-            NETWORK.sendDoHarvest(this._id); //Neu dang upgrade thi khong can gui goi tin thu hoac, server tu xu li thu hoach
+            NETWORK.sendDoHarvest(this._id); //Neu dang upgrade thi khong can gui goi tin thu hoach, server tu xu li thu hoach
         }
-
-        cc.log("============================san luong thu hoach: " +productivity.sanluong);
+    },
+    processCollectResource: function(sanluong){        
         switch (this._name){
             case 'RES_1':
-                addUserResources(productivity.sanluong,0,0,0);
+                addUserResources(sanluong,0,0,0);
                 break;
             case 'RES_2':
-                addUserResources(0,productivity.sanluong,0,0);
+                addUserResources(0,sanluong,0,0);
                 break;
             case 'RES_3':
-                addUserResources(0,0,productivity.sanluong,0);
+                addUserResources(0,0,sanluong,0);
                 break;
         }
-
-
+        
         this.disableCollectIcon();
         this.setStartTime();
         for(var item in contructionList){
@@ -137,7 +128,7 @@ var CollectorBuilding = Building.extend({
                 break;
             }
         }
-        this.collectEffect(this._name, productivity.sanluong);
+        this.collectEffect(this._name, sanluong);
         this.playCollectSound();
     },
     collect: function() {

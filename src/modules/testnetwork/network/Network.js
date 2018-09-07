@@ -272,6 +272,22 @@ testnetwork.Connector = cc.Class.extend({
                 cc.log("=======================================SERVER SEND ONLINE MEMBER=======================================");
                 this.processOnlineMessage(packet);
                 break;
+            case gv.CMD.DO_HARVEST:
+                cc.log("=======================================SERVER SEND DO HARVEST=======================================");
+                this.processDoHarvest(packet);
+                break;
+        }
+    },
+    processDoHarvest: function(data){
+        var gold = 0;
+        var elixir = 0;
+        var dElixir = 0;
+        if (data.validate) {            
+            temp.collectingBuilding.processCollectResource(data.sanluong);
+            
+        }
+        else { //neu server tra ve false , xu li log out nguoi dung ra khoi game
+
         }
     },
     processSetGuildPosition: function(data) {
