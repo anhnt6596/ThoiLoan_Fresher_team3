@@ -20,12 +20,12 @@ var TroopInfo = TinyPopup.extend({
         barsInfo.setPosition(0, this._frame.height/5 * this._frame.scaleY);
         this.addChild(barsInfo, 10);
 
-        var trainingTime = new cc.LabelBMFont("Training time: " + timeToReadable(config.troopBase[itemName].trainingTime), 'res/Art/Fonts/soji_20.fnt');
+        var trainingTime = new cc.LabelBMFont("Training time: " + timeToReadable(config.troopBase[itemName].trainingTime), res.font_soji[20]);
         trainingTime.setPosition(width/8, -1* height / 9);
         trainingTime.color = new cc.color(0, 255, 0, 255);
         this.addChild(trainingTime, 100);
 
-        var housingSpace = new cc.LabelBMFont("Housing space: " + config.troopBase[itemName].housingSpace, 'res/Art/Fonts/soji_20.fnt');
+        var housingSpace = new cc.LabelBMFont("Housing space: " + config.troopBase[itemName].housingSpace, res.font_soji[20]);
         housingSpace.setPosition(trainingTime.x, -1 * height / 6);
         housingSpace.color = new cc.color(0, 255, 0, 255);
         this.addChild(housingSpace, 100);
@@ -76,7 +76,7 @@ var TroopInfo = TinyPopup.extend({
 
             infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
 
-            var textInfo = cc.LabelBMFont(curValue, 'res/Art/Fonts/soji_12.fnt');
+            var textInfo = cc.LabelBMFont(curValue, res.font_soji[12]);
             textInfo.attr({ anchorX: 0, x: 35, y: - i * 40 });
             infoArea.addChild(textInfo, 5);
         });

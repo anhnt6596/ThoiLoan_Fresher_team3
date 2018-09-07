@@ -16,7 +16,7 @@ var TroopItem = ccui.Button.extend({
         var requireLevelBarrack = config.troopBase[troopName].barracksLevelRequired;
         if(barrackLevel < requireLevelBarrack){
             this.setDisable();
-            var requiredLabel = new cc.LabelBMFont("     Require\nBarrack level\n           " + requireLevelBarrack, 'res/Art/Fonts/soji_12.fnt');
+            var requiredLabel = new cc.LabelBMFont("     Require\nBarrack level\n           " + requireLevelBarrack, res.font_soji[12]);
             requiredLabel.setColor(cc.color(255, 0, 0, 255));
             requiredLabel.setPosition(this.width/2, this.height/2);
             this.addChild(requiredLabel, 10000);
@@ -27,7 +27,7 @@ var TroopItem = ccui.Button.extend({
 
             var currentLevelTroop = troopInfo[troopName].level;
 
-            var cost_label = new cc.LabelBMFont(config.troop[troopName][currentLevelTroop].trainingElixir, 'res/Art/Fonts/soji_12.fnt');
+            var cost_label = new cc.LabelBMFont(config.troop[troopName][currentLevelTroop].trainingElixir, res.font_soji[12]);
             cost_label.setPosition(this.width/2, cost.y);
             this.addChild(cost_label, 101);
 
@@ -36,7 +36,7 @@ var TroopItem = ccui.Button.extend({
             this.addChild(costUnit, 101);
         }
 
-        var levelLabel = new cc.LabelBMFont(troopInfo[this._name].level, 'res/Art/Fonts/soji_24.fnt');
+        var levelLabel = new cc.LabelBMFont(troopInfo[this._name].level, res.font_soji[24]);
         levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
         levelLabel.setColor(new cc.color(0, 255, 0, 255));
         this.addChild(levelLabel, 109);

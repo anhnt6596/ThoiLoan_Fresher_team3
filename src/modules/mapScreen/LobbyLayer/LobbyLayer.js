@@ -105,8 +105,12 @@ var LobbyLayer = cc.Layer.extend({
     onInteractiveGuild: function() {
         var messLayer = new MessageGUI();
         messLayer.setAnchorPoint(0, 0);
+        messLayer.setPosition(-100, 0);
         this.messLayer = messLayer;
         cc.director.getRunningScene().addChild(messLayer, 17, 17);
+
+        //var showAct = cc.moveTo(0.2, cc.p(100, 0));
+        //messLayer.runAction(showAct);
     },
 
 
@@ -183,7 +187,11 @@ var changeValueTextEffect = function(obj, newValue) {
     var oldValueStr = obj.getString();
     var oldValue = formatNumberToNumber(oldValueStr);
     cc.log("oldValue: " + oldValue);
+    // giá trị không đổi thì thôi
     if (oldValue == newValue) return;
+    // nếu thay đổi ít quá thì giảm hiệu ứng
+    if (Math.abs(oldValue - newValue) < timeTick) timeTick = Math.abs(oldValue - newValue);
+    // thay đổi trên mỗi lần nhảy số
     var changePerTick = ((newValue - oldValue) / timeTick).toFixed(0);
     var curText = parseInt(oldValue);
     var count = 0;
@@ -212,4 +220,4 @@ var formatNumberToNumber = function(str) {
     result = result.replace(",", "");
     cc.log("result: "  + result);
     return parseInt(result);
-}
+};

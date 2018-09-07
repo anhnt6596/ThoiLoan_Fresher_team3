@@ -12,11 +12,19 @@ var BarrackQueue = cc.Class.extend({
     },
 
     getTroopInBarrackByName: function(troopType) {
-        for(var i = 0; i < this._troopList.length; i++) {
+        //for(var i = 0; i < this._troopList.length; i++) {
+        for(var i in this._troopList) {
             var troop = this._troopList[i];
             if(troop._name == troopType) return troop;
         }
         return null;
+    },
+
+    getTroopPositionInQueue: function(troopType) {
+        for(var i = 0; i < this._troopList.length; i++) {
+            var troop = this._troopList[i];
+            if(troop._name == troopType) return i;
+        }
     },
 
     removeTroopInBarrackByName: function(troopType) {

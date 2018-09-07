@@ -1,13 +1,10 @@
 var ShopScreen = Popup.extend({
-
     _catalogyList:[],
     _catalogy:null,
     _obj:null,
 
     ctor:function(width, height, text, data, bool) {
-        cc.log("-----------ctor ShopScreen-----------");
         this._super(width, height, text, data, bool);
-        //this._obj = JSON.parse(shopInfo);
         this.initCatalogy();
     },
 
@@ -55,24 +52,23 @@ var ShopScreen = Popup.extend({
     },
 
     createCatalogy:function(catalogyName){
-        this._catalogy = new cc.Sprite('res/Art/GUIs/shop_gui/slot_catalogy.png');
+        this._catalogy = new cc.Sprite(shop_constant.base_dir + 'slot_catalogy.png');
         this._catalogy.setAnchorPoint(0, 0);
 
-        var bg = new cc.Sprite('res/Art/GUIs/shop_gui/catalogy_bg.png');
+        var bg = new cc.Sprite(shop_constant.base_dir + 'catalogy_bg.png');
         bg.setAnchorPoint(0, 0);
         this._catalogy.addChild(bg, 1, 1);
 
-        var ha = new cc.Sprite('res/Art/GUIs/shop_gui/' + catalogyName + '.png');
+        var ha = new cc.Sprite(shop_constant.base_dir + catalogyName + '.png');
         ha.setAnchorPoint(0, 0);
         this._catalogy.addChild(ha, 2, 2);
 
-        var titleBg = new cc.Sprite('res/Art/GUIs/shop_gui/title_background.png');
+        var titleBg = new cc.Sprite(shop_constant.base_dir + 'title_background.png');
         titleBg.setAnchorPoint(0, 0);
         titleBg.x = this._catalogy.x + 6;
         this._catalogy.addChild(titleBg, 3, 3);
 
-        var name = new cc.LabelBMFont(this.switchToName(catalogyName).toUpperCase(), 'res/Art/Fonts/soji_20.fnt');
-        //name.scale = 0.8;
+        var name = new cc.LabelBMFont(this.switchToName(catalogyName).toUpperCase(), res.font_soji[20]);
         name.setAnchorPoint(0, 0);
         name.x = titleBg.x + (CATALOGY_WIDTH-name.width)/2;
         name.y = titleBg.y + (titleBg.height-name.height)/2;
@@ -102,15 +98,5 @@ var ShopScreen = Popup.extend({
 
         this._catalogyList.push(this._catalogy);
         this._catalogy.retain();
-    },
-
-    onEnter:function(){
-        cc.log("-----------onEnter ShopScreen-----------");
-        this._super();
-    },
-
-    onExit:function(){
-        cc.log("-----------onExit ShopScreen-----------");
-        this._super();
     }
 });

@@ -44,7 +44,7 @@ var MessageGUI = ccui.Button.extend({
         btnJoinClan.addClickEventListener(this.joinClan.bind(this));
         cc.director.getRunningScene().addChild(btnJoinClan, 21, 25);
 
-        var label = new cc.LabelBMFont("  Join now", 'res/Art/Fonts/fista_20_non.fnt');
+        var label = new cc.LabelBMFont("  Join now", res.font_fista[20]);
         label.setPosition(size.width/5, size.height/2);
         cc.director.getRunningScene().addChild(label, 22, 22);
 
@@ -72,7 +72,7 @@ var MessageGUI = ccui.Button.extend({
         headClan.scaleY = 1.4;
         cc.director.getRunningScene().addChild(headClan, 21, 24);
 
-        var labelCLAN = new cc.LabelBMFont("CLAN", 'res/Art/Fonts/soji_20.fnt');
+        var labelCLAN = new cc.LabelBMFont("CLAN", res.font_soji[20]);
         labelCLAN.setPosition(headClan.x, headClan.y - 5);
         cc.director.getRunningScene().addChild(labelCLAN, 22, 25);
 
@@ -93,7 +93,7 @@ var MessageGUI = ccui.Button.extend({
         //cc.director.getRunningScene().addChild(btnSend, 21, 22);
 
 
-        var nameGuildLabel = new cc.LabelBMFont(myClanInfo.name || gv.user.name_guild, 'res/Art/Fonts/soji_20.fnt');
+        var nameGuildLabel = new cc.LabelBMFont(myClanInfo.name || gv.user.name_guild, res.font_soji[20]);
         nameGuildLabel.setPosition(nameGuildLabel.width/2 + 10, size.height - 160 + textField.height + nameGuildLabel.height);
         cc.director.getRunningScene().addChild(nameGuildLabel, 24, 26);
 
@@ -161,20 +161,20 @@ var MessageGUI = ccui.Button.extend({
             nodeContainer.setPosition(0, 0);
             scrollView.addChild(nodeContainer);
 
-            var content = new cc.LabelBMFont(item.content, 'res/Art/Fonts/fista_20_non.fnt');
+            var content = new cc.LabelBMFont(item.content, res.font_fista[20]);
             content.setAnchorPoint(0, 0);
             content.setPosition(10, 150*i - 80);
             content.color = cc.color(0, 255, 0, 255);
             nodeContainer.addNode(content);
 
 
-            var sender = new cc.LabelBMFont(item.usernameSend, 'res/Art/Fonts/fista_20_non.fnt');
+            var sender = new cc.LabelBMFont(item.usernameSend, res.font_fista[20]);
             sender.setAnchorPoint(0, 0);
             sender.setPosition(content.x, content.y + 30);
             nodeContainer.addNode(sender);
 
 
-            var timeStamp = new cc.LabelBMFont(timeToReadable((getCurrentServerTime() - item.timeStamp) / 1000) + " before", 'res/Art/Fonts/fista_20_non.fnt');
+            var timeStamp = new cc.LabelBMFont(timeToReadable((getCurrentServerTime() - item.timeStamp) / 1000) + " before", res.font_fista[20]);
             timeStamp.setAnchorPoint(0, 0);
             timeStamp.setPosition(scrollView.width - timeStamp.width/2 - 80, sender.y);
             nodeContainer.addNode(timeStamp);
@@ -196,7 +196,7 @@ var MessageGUI = ccui.Button.extend({
                 var ratio = cur / max;
                 processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
-                var timeText = new cc.LabelBMFont(cur + "/" + max, 'res/Art/Fonts/soji_12.fnt');
+                var timeText = new cc.LabelBMFont(cur + "/" + max, res.font_soji[12]);
                 this._timeText = timeText;
                 timeBar.addChild(timeText);
                 timeText.setPosition(-timeBar.width/2, timeText.height/2);
@@ -211,14 +211,14 @@ var MessageGUI = ccui.Button.extend({
                         btn.userSend = item.userId;
                         nodeContainer.addNode(btn);
 
-                        var label = new cc.LabelBMFont("  Donate", 'res/Art/Fonts/fista_20_non.fnt');
+                        var label = new cc.LabelBMFont("  Donate", res.font_fista[20]);
                         label.setAnchorPoint(0, 0);
                         label.setPosition(btn.x + 30, btn.y + 20);
                         nodeContainer.addNode(label);
                     }else{
-                        var labelThank = new cc.LabelBMFont("  Thank you for donated", 'res/Art/Fonts/fista_20_non.fnt');
+                        var labelThank = new cc.LabelBMFont("  Thank you for donated", res.font_fista[20]);
                         labelThank.setAnchorPoint(0, 0);
-                        labelThank.setPosition(200, content.y - labelThank.height - 10);
+                        labelThank.setPosition(200, content.y - labelThank.height - 15);
                         labelThank.color = cc.color(0, 255, 0, 255);
                         nodeContainer.addNode(labelThank);
                     }
@@ -256,7 +256,7 @@ var MessageGUI = ccui.Button.extend({
         for(var i = 1; i <= memberListOnline.length; i++){
             var item = memberListOnline[i-1];
 
-            var nameLabel = new cc.LabelBMFont(item.username, 'res/Art/Fonts/soji_16.fnt');
+            var nameLabel = new cc.LabelBMFont(item.username, res.font_soji[16]);
             nameLabel.setAnchorPoint(0, 0);
             nameLabel.setPosition(20, 40*i + 10);
             scrollView.addChild(nameLabel);
@@ -278,5 +278,5 @@ var MessageGUI = ccui.Button.extend({
 
         scrollView.setInnerContainerSize(cc.size(scrollView.width, memberListOnline.length * 50));
         return scrollView;
-    },
+    }
 });

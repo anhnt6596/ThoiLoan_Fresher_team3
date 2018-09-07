@@ -13,7 +13,7 @@ var TroopGive = ccui.Button.extend({
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 
-        var levelLabel = new cc.LabelBMFont(troopInfo[this._name].level, 'res/Art/Fonts/soji_24.fnt');
+        var levelLabel = new cc.LabelBMFont(troopInfo[this._name].level, res.font_soji[24]);
         levelLabel.setPosition(levelLabel.width/2 + 5, levelLabel.height/2 + 5);
         levelLabel.setColor(new cc.color(0, 255, 0, 255));
         this.addChild(levelLabel, 109);

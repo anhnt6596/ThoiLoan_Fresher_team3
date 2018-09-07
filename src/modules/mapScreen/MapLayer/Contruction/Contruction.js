@@ -34,7 +34,7 @@ var Contruction = cc.Class.extend({
         this.presentImg(); // chỉ có ở nhà chứa
     },
     setBuildingStatus: function() {
-        if (this._status === 'upgrade' || this._status === 'pending' && this.startTime) {
+        if ((this._status === 'upgrade' || this._status === 'pending') && this.startTime) {
             var cur = (getCurrentServerTime() - this.startTime)/1000;
             //cc.log("============================start time: " +this.startTime);
             var max = this.buildTime;
@@ -47,9 +47,9 @@ var Contruction = cc.Class.extend({
         if(temp.statusRequest && this._name == "CLC_1"){
             var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             var max = TIME_REQUEST_TROOP/1000;
-            if(!this.timeBar){
-                this.addTimeBar(cur, max);
-                this.countDown(cur, max);
+            if(!this.timeBarRequest){
+                this.addTimeBarRequest(cur, max);
+                this.countDownRequest(cur, max);
             }
         }
     },
@@ -205,6 +205,10 @@ var Contruction = cc.Class.extend({
         this.timeBar && this.timeBar.attr({
             x: coor.x,
             y: coor.y + (this._height / 2) * TILE_HEIGHT + 60,
+        });
+        this.timeBarRequest && this.timeBarRequest.attr({
+            x: coor.x,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 100,
         });
     },
     updatePosition: function(mapPos) {
@@ -389,7 +393,6 @@ var Contruction = cc.Class.extend({
         this.updateArmyCampCapacity();
     },
 
-
     upgrade: function() {
         if(!checkConditionUpgrade(this)){
             showPopupNotEnoughG('upgrade_require_townhall');
@@ -560,8 +563,7 @@ var Contruction = cc.Class.extend({
     },
 
     addTimeBar: function(cur, max) {
-        if(temp.statusRequest && this._name == "CLC_1"){
-        //if(temp.statusRequest && this._name == "CLC_1"){
+        if(temp.statusRequest && this._name == "CLC_1" || this._status == 'complete'){
             //de trong
             cc.log("=============== HIEN THI REQUEST ==========================");
         }else{
@@ -575,7 +577,6 @@ var Contruction = cc.Class.extend({
             });
             this.buildingImg.addChild(upgradeBarrier, 1000);
         }
-
 
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
@@ -598,7 +599,6 @@ var Contruction = cc.Class.extend({
 
         processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
-        //var t = timeToString(max - cur);
         var t = timeToReadable(max - cur);
         var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
         this.timeText = timeText;
@@ -664,6 +664,14 @@ var Contruction = cc.Class.extend({
         // de trong
     },
 
+    addTimeBarRequest: function(cur, max) {
+        //de trong
+    },
+
+    updateTimeBarRequest: function(cur, max) {
+        //de trong
+    },
+
     updateListBuildingRef: function() {
         if (this._name === "AMC_1") armyCampRefs.push(this);
         if (this instanceof StorageBuilding) storageBuildingRefs.push(this);
@@ -705,12 +713,12 @@ var Contruction = cc.Class.extend({
             setTimeout(() => {
                 cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             max = TIME_REQUEST_TROOP/1000;
-            if (cur >= max || !this.timeBar) {
-                this.timeBar && MAP.removeChild(this.timeBar);
-                this.timeBar = null;
+            if (cur >= max || !this.timeBarRequest) {
+                this.timeBarRequest && MAP.removeChild(this.timeBarRequest);
+                this.timeBarRequest = null;
                 return;
             } else {
-                this.updateTimeBar(cur, max);
+                this.updateTimeBarRequest(cur, max);
                 tick();
             }
         }, 1000);

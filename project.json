@@ -24,6 +24,7 @@
         "src/data/ResourceAnimation.js",
         "src/data/Temp.js",
         "src/data/ConfigData.js",
+        "src/data/DefineConstant.js",
         "src/framework/AnimationMgr.js",
         "src/framework/Framework.js",
         "src/framework/GUI.js",
