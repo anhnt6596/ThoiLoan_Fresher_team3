@@ -2,7 +2,7 @@
 var checkPendingBuilding = function(){
     var pendingBuilding = 0;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade"){                 //co the de bang "building" va "upgrading"
+        if(contructionList[k].status == PENDING || contructionList[k].status == UPGRADE){                 //co the de bang "building" va "upgrading"
             pendingBuilding++;
         }
     }
@@ -46,9 +46,9 @@ var finishSmallestRemainingTimeBuilding = function(){
     var idBuildingWillComplete = getIdBuildingMinRemainTime();
     for(var k in objectRefs){
         if(objectRefs[k]._id == idBuildingWillComplete){
-            if(objectRefs[k]._status == 'pending'){
+            if(objectRefs[k]._status == PENDING){
                 objectRefs[k].buildComplete(false);
-            }else if(objectRefs[k]._status == 'upgrade'){
+            }else if(objectRefs[k]._status == UPGRADE){
                 objectRefs[k].upgradeComplete(false);
             }
         }
@@ -111,7 +111,7 @@ var getLackingResources = function(cost){
 var getGToReleaseBuilder = function(){
     var minTimeRemain = Infinity;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
+        if(contructionList[k].status == PENDING || contructionList[k].status == UPGRADE) {
             var timeRemain = contructionList[k].buildTime*1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
@@ -130,7 +130,7 @@ var getIdBuildingMinRemainTime = function(){
     var minTimeRemain = Infinity;
     var id = null;
     for(var k in contructionList){
-        if(contructionList[k].status == "pending" || contructionList[k].status == "upgrade") {
+        if(contructionList[k].status == PENDING || contructionList[k].status == UPGRADE) {
             var timeRemain = contructionList[k].buildTime * 1000 - (getCurrentServerTime() - contructionList[k].startTime);
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
@@ -174,7 +174,7 @@ var reduceUserResources = function(costBuilding){
         gv.user.coin = 0;
     }
 
-    LOBBY.update(gv.user);
+    this.updateGUI();
 };
 
 var timeToProductivity = function(type,level,time_sanxuat){ //ham chuyen doi thoi gian sang san luong, thoi gian truyen vao tinh theo s
@@ -247,20 +247,6 @@ var storageBuildingUpdateImg = function(userInfo) {
     });
 };
 
-var logReducedUserResources = function(){
-    cc.log("========================REDUCED USER RESOURCE========================");
-    cc.log("Gold:                   " + ReducedTempResources.gold);
-    cc.log("Elixir:                 " + ReducedTempResources.elixir);
-    cc.log("Dark Elixir:            " + ReducedTempResources.darkElixir);
-    cc.log("Coin (G):               " + ReducedTempResources.coin);
-    cc.log("========================REMAIN USER RESOURCE========================");
-    cc.log("Gold remain:            " + gv.user.gold);
-    cc.log("Elixir remain:          " + gv.user.elixir);
-    cc.log("Dark Elixir remain:     " + gv.user.darkElixir);
-    cc.log("Coin (G) remain:        " + gv.user.coin);
-    cc.log("====================================================================");
-};
-
 var resetReducedTempResources = function(){
     ReducedTempResources.gold = 0;
     ReducedTempResources.elixir = 0;
@@ -301,8 +287,7 @@ var increaseUserResources = function(resources){
     //}
 
     gv.user.coin += resources.coin;
-    storageBuildingUpdateImg(gv.user);
-    LOBBY.update(gv.user);
+    this.updateGUI();
     resetReducedTempResources();
 };
 
@@ -314,7 +299,7 @@ var setUserResourcesCapacity = function(){
 
     for(var k in contructionList){
         var build = contructionList[k];
-        if(build.status == 'complete' || build.status == 'upgrade'){
+        if(build.status == COMPLETE || build.status == UPGRADE){
             if(build.name == 'STO_1'){
                 goldCapacity += config.building['STO_1'][build.level].capacity;
             }else if(build.name == 'STO_2'){
@@ -328,6 +313,8 @@ var setUserResourcesCapacity = function(){
     gv.user.maxCapacityGold = goldCapacity + config.building['TOW_1'][currentLevelTownHall].capacityGold;
     gv.user.maxCapacityElixir = elixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityElixir;
     gv.user.maxCapacityDarkElixir = darkElixirCapacity + config.building['TOW_1'][currentLevelTownHall].capacityDarkElixir;
+
+    storageBuildingUpdateImg(gv.user);
 };
 
 //get level TOW_1 hien tai
@@ -466,7 +453,7 @@ var getTotalCapacityAMCs = function(){
     var total = 0;
     for(var k in contructionList){
         var build = contructionList[k];
-        if((build.status == 'complete' || build.status == 'upgrade') && (build.name == 'AMC_1')){
+        if((build.status == COMPLETE || build.status == UPGRADE) && (build.name == 'AMC_1')){
             total += config.building['AMC_1'][build.level].capacity;
         }
     }
@@ -499,6 +486,15 @@ var getIdGuildBuilding = function() {
     }
 };
 
+var getGuildBuildingById = function () {
+    for(var k in objectRefs){
+        var build = objectRefs[k];
+        if(build._name == 'CLC_1'){
+            return build;
+        }
+    }
+};
+
 var getBarrackQueueById = function(id) {
     for(var i = 0; i < barrackQueueList.length; i++) {
         var barrackQueue = barrackQueueList[i];
@@ -513,6 +509,22 @@ var getBarrackObjectById = function(id) {
             return barrackRefs[i];
         }
     }
+};
+
+var getBarrackOrderById = function(id) {
+    var order = 1;
+    for(var i in barrackRefs){
+        if(barrackRefs[i]._id < id){
+            order++;
+        }
+    }
+    return order;
+};
+
+var createTrainPopup = function(barrackObject, isShowPopup) {
+    var data = {train: true, barrack: barrackObject};
+    var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack " + getBarrackOrderById(barrackObject._id), true, data);
+    if(isShowPopup) cc.director.getRunningScene().addChild(popup, 200);
 };
 
 var listBuildingMissImage = ['SPF_1', 'KQB_1', 'KQB_2', 'KQB_3', 'KQB_4', 'BAR_2', 'DEF_2', 'DEF_3', 'DEF_4', 'DEF_5', 'DEF_7', 'DEF_8'];

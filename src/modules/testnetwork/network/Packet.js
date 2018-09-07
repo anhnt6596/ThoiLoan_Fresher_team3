@@ -915,9 +915,9 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
 
                 //Dat them 1 thuoc tinh flag cho Barrack de stop countdown luc barrack dc upgrade, neu barrack dang upgrade thi khong countdown
                 if(getObjBuildingById(this.idBarrack)._status == 'upgrade'){
-                    barrackQueue.flagCountDown = false;
+                    barrackQueue.isUpgrade = true;
                 }else{
-                    barrackQueue.flagCountDown = true;
+                    barrackQueue.isUpgrade = false;
                 }
 
                 this.m = this.getInt();
@@ -949,8 +949,7 @@ testnetwork.packetMap[gv.CMD.GET_BARRACK_QUEUE_INFO] = fr.InPacket.extend(
 
                 if(barrackQueue._troopList.length > 0) {
                     cc.log("================================= Barrack " + this.idBarrack + " chay COUNTDOWN");
-                    var data = {train: true, barrack: barrackObj};
-                    new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
+                    createTrainPopup(barrackObj, false);
                 }
             }
         }

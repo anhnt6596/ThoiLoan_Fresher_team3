@@ -105,8 +105,12 @@ var LobbyLayer = cc.Layer.extend({
     onInteractiveGuild: function() {
         var messLayer = new MessageGUI();
         messLayer.setAnchorPoint(0, 0);
+        messLayer.setPosition(-100, 0);
         this.messLayer = messLayer;
         cc.director.getRunningScene().addChild(messLayer, 17, 17);
+
+        //var showAct = cc.moveTo(0.2, cc.p(100, 0));
+        //messLayer.runAction(showAct);
     },
 
 
@@ -216,4 +220,4 @@ var formatNumberToNumber = function(str) {
     result = result.replace(",", "");
     cc.log("result: "  + result);
     return parseInt(result);
-}
+};

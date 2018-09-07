@@ -192,7 +192,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    this.finishTimeTroopTrain(temp.trainedBarrackId, temp.trainedTroopType);
+                    this.finishTimeTroopTrain(packet.idBarrack, packet.troopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_finish_time_train_troop');
@@ -530,7 +530,8 @@ testnetwork.Connector = cc.Class.extend({
                 building.onCollectResource(true);
             }
 
-            building.setStatus('upgrade');
+            building.setStatus(UPGRADE);
+            cc.log("building status =============== " + building._status);
             building.startTime = getCurrentServerTime();
 
             building.updateWhenStartUpgrade();
@@ -543,7 +544,7 @@ testnetwork.Connector = cc.Class.extend({
 
             for(var item in contructionList){
                 if(contructionList[item]._id == building._id){
-                    contructionList[item].status = 'upgrade';
+                    contructionList[item].status = UPGRADE;
                     contructionList[item].startTime = building.startTime;
                     contructionList[item].buildTime = max;
                     break;
@@ -558,25 +559,25 @@ testnetwork.Connector = cc.Class.extend({
 
     quickFinishConstruction: function(building) {
         reduceUserResources(ReducedTempResources);
-        if(building._status == 'pending'){
+        if(building._status == PENDING){
             building.buildComplete(true);
-        }else if(building._status == 'upgrade'){
+        }else if(building._status == UPGRADE){
             building.upgradeComplete(true);
         }
         resetReducedTempResources();
     },
 
     finishTimeConstruction: function(building) {
-        if(building._status == 'pending'){
+        if(building._status == PENDING){
             building.buildComplete(true);
-        }else if(building._status == 'upgrade'){
+        }else if(building._status == UPGRADE){
             building.upgradeComplete(true);
         }
     },
 
     cancelConstruction: function(building) {
-        if (building._status == 'upgrade') building.cancelUpgrade();
-        else if (building._status == 'pending') building.cancelBuild();
+        if (building._status == UPGRADE) building.cancelUpgrade();
+        else if (building._status == PENDING) building.cancelBuild();
     },
 
     processUpgradeMultiWalls: function(listWall) {
@@ -639,70 +640,35 @@ testnetwork.Connector = cc.Class.extend({
 
     finishTimeTroopTrain: function(id, troopType) {
         //Cho linh chay ra
-        var start;
-        for(var i in objectRefs){
-            if(objectRefs[i]._id == id){
-                start = objectRefs[i];
-                break;
-            }
-        }
+        var start = getBarrackObjectById(id);
         this.createTroopAfterSVResponseSuccess(troopType, start);
         troopInfo[troopType].population++;
         LOBBY.update(gv.user);
-        //var here = barrackQueueList[id];
 
         var barrack = BARRACK[id]._barrackQueue;
         var troop = barrack.getTroopInBarrackByName(troopType);
 
-        cc.log("=================================== id luc xac nhan finish time: " + id);
         troop._amount -= 1;
-        BARRACK[id]._titleText.setString("Barrack id: " + BARRACK[id]._id + "   (" + barrack.getTotalTroopCapacity()+"/"+BARRACK[id]._queueLength + ")");
+
         BARRACK[id].enableItemDisplay();
-        //Het icon trong item
-        if(troop._amount == 0){
-            barrack.removeTroopInBarrackByName(troopType);
-            BARRACK[id]._itemInQueue[troopType].setPosition(-1000, -1000);
-            BARRACK[id]._startTime = getCurrentServerTime();
-            barrack._startTime = getCurrentServerTime();
-            //Het item trong queue
+
+        if (troop._amount == 0) {
             BARRACK[id].updateQueue(0);
-
-            if(barrack.getAmountItemInQueue() == 0){
-                BARRACK[id]._timeBar.visible = false;
-                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
+            if (barrack.getAmountItemInQueue() == 0){
+                BARRACK[id].removeAllTrainBars();
                 BARRACK[id]._statusCountDown = false;
-
-                if(getBarrackObjectById(id).timeBar){
-                    MAP.removeChild(getBarrackObjectById(id).timeBar);
-                    getBarrackObjectById(id).timeBar = null;
-                }
                 return;
-                //Con item trong queue
-            }else{
+            } else {
                 BARRACK[id].updateTimeBar(0, BARRACK[id].getFirstItemInQueue()._trainingTime);
             }
-            //Con icon trong item
-        }else{
-            BARRACK[id]._itemInQueue[troopType].updateAmountSmall();
+        } else {
+            BARRACK[id].updateAmountSmall(troopType);
             BARRACK[id].updateTimeBar(0, BARRACK[id].getFirstItemInQueue()._trainingTime);
-            BARRACK[id]._startTime = getCurrentServerTime();
             barrack._startTime = getCurrentServerTime();
-            BARRACK[id]._isShowTimeBar = true;
-            BARRACK[id]._statusCountDown = true;
+            BARRACK[id].setStatusCountDown(true);
             BARRACK[id].countDown();
         }
-
-        var totalCapacity = getTotalCapacityAMCs();
-        //var currentCapacity = getTotalCurrentTroopCapacity();
-        //BARRACK[id].str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
-        //BARRACK[id].upadateQuickFinishTimeAndCost();
-
-        //update label
-        var totalAfterTrain = getTotalCurrentTroopCapacity();
-        for(var i in barrackQueueList){
-            totalAfterTrain += barrackQueueList[i].getTotalTroopCapacity();
-        }
-        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
+        BARRACK[id].updateLabels();
     },
 
     quickFinishTroopTrain: function(id) {
@@ -710,83 +676,40 @@ testnetwork.Connector = cc.Class.extend({
         reduceUserResources(ReducedTempResources);
         resetReducedTempResources();
 
-        //An tat ca, reset queue, troop
-        var here = getBarrackQueueById(id);
-        var barrack = TRAIN_POPUP._barrackQueue;
-        TRAIN_POPUP._startTime = 0;
-        //here._startTime = 0;
-
-        var start;
-        for(var i in objectRefs){
-            if(objectRefs[i]._id == id){
-                start = objectRefs[i];
-                break;
-            }
-        }
-
         //cho tat ca linh chay
-        for(var i in TRAIN_POPUP._troopList){
-            var name = TRAIN_POPUP._troopList[i]._name;
-            for(var j = 0; j < TRAIN_POPUP._troopList[i]._amount; j++){
+        var start = getBarrackObjectById(id);
+        var barrack = TRAIN_POPUP._barrackQueue;
+        for(var i = 0; i < barrack._troopList.length; i++){
+            var name = barrack._troopList[i]._name;
+            for(var j = 0; j < barrack._troopList[i]._amount; j++){
                 this.createTroopAfterSVResponseSuccess(name, start);
             }
         }
 
-        for(var i in TRAIN_POPUP._troopList){
-            var name = TRAIN_POPUP._troopList[i]._name;
-            troopInfo[name].population += TRAIN_POPUP._troopList[i]._amount;
-            TRAIN_POPUP._itemInQueue[name].setPosition(-1000, -1000);
-        }
-
-        //barrack.doReset();
-        barrack._troopList = [];
-        TRAIN_POPUP._troopList = [];
-
-        cc.log("============== Troop trong barrack:");
-        for(var j in barrack._troopList){
-            cc.log("============= troop: " + barrack._troopList[j]._name);
-        }
-
-        cc.log("============== Troop trong TRAIN_POPUP:");
-        for(var j in TRAIN_POPUP._troopList){
-            cc.log("============= troop: " + TRAIN_POPUP._troopList[j]._name);
-        }
-
-        TRAIN_POPUP._timeBar.visible = false;
+        TRAIN_POPUP.resetQueue();
         TRAIN_POPUP._statusCountDown = false;
-        LOBBY.update(gv.user);
 
-        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._barrackQueue.getTotalTroopCapacity() + "/"+TRAIN_POPUP._queueLength + ")");
         TRAIN_POPUP.enableItemDisplay();
+        TRAIN_POPUP.updateLabels();
 
-        var totalCapacity = getTotalCapacityAMCs();
-        var currentCapacity = getTotalCurrentTroopCapacity();
-        TRAIN_POPUP.str.setString('Total troops after training: ' + currentCapacity +'/' + totalCapacity);
-        if(getBarrackObjectById(id).timeBar){
-            MAP.removeChild(getBarrackObjectById(id).timeBar);
-            getBarrackObjectById(id).timeBar = null;
-        }
+        TRAIN_POPUP.removeAllTrainBars();
     },
 
     trainTroopCompleted: function(troopType) {
         reduceUserResources(ReducedTempResources);
         resetReducedTempResources();
 
-        var here = getBarrackQueueById(temp.trainedBarrackId);
         var barrackQueue = TRAIN_POPUP._barrackQueue;
         var troop = barrackQueue.getTroopInBarrackByName(troopType);
         if(troop == null) {
             barrackQueue._troopList.push(new TroopInBarrack(troopType, 0));
             if(barrackQueue.getAmountItemInQueue() == 1){
-                TRAIN_POPUP._startTime = getCurrentServerTime();
                 barrackQueue._startTime = getCurrentServerTime();
-                //here._startTime = getCurrentServerTime();
 
                 if(!TRAIN_POPUP._isShowTimeBar){
                     cc.log("================================ SHOW TIME BAR sau khi train troop ================================");
                     TRAIN_POPUP.showTimeBar();
-                    TRAIN_POPUP._isShowTimeBar = true;
-                    TRAIN_POPUP._statusCountDown = true;
+                    TRAIN_POPUP.setStatusCountDown(true);
                 }else{
                     TRAIN_POPUP._statusCountDown = true;
                     if(TRAIN_POPUP._isShowTimeBar){
@@ -796,77 +719,53 @@ testnetwork.Connector = cc.Class.extend({
                 }
                 TRAIN_POPUP._timeBar.visible = true;
             }
-
-            cc.log("==================== DAT ITEM VAO VI TRI: " + (barrackQueue._troopList.length - 1));
-            TRAIN_POPUP._itemInQueue[troopType].setPosition(TRAIN_POPUP._positionsInQueue[barrackQueue._troopList.length - 1]);
+            TRAIN_POPUP.setItemToPositionInQueue(troopType, barrackQueue._troopList.length - 1);
         }
         barrackQueue.getTroopInBarrackByName(troopType)._amount += 1;
-        //TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
 
         TRAIN_POPUP.disableItemDisplay();
-
-        TRAIN_POPUP.updateAmount(TRAIN_POPUP._itemDisplay[troopType]);
-        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + TRAIN_POPUP._barrackQueue.getTotalTroopCapacity()+"/"+TRAIN_POPUP._queueLength + ")");
-
-        //update label
-        var totalCapacity = getTotalCapacityAMCs();
-        var totalAfterTrain = getTotalCurrentTroopCapacity();
-        for(var i in barrackQueueList){
-            totalAfterTrain += barrackQueueList[i].getTotalTroopCapacity();
-        }
-        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
-
-        cc.log("========================================= total time: " + TRAIN_POPUP.getTotalTimeQuickFinish());
-        TRAIN_POPUP.upadateQuickFinishTimeAndCost();
+        TRAIN_POPUP.updateAmountSmall(troopType);
+        TRAIN_POPUP.updateLabels();
     },
 
     canceledTrainTroop: function(troopType) {
-        var here = getBarrackQueueById(temp.trainedBarrackId);
         var barrack = TRAIN_POPUP._barrackQueue;
         var troop = barrack.getTroopInBarrackByName(troopType);
-
         troop._amount--;
         if(troop._amount == 0){
-            barrack.removeTroopInBarrackByName(troopType);
+            var index = barrack.getTroopPositionInQueue(troopType);
+            TRAIN_POPUP.updateQueue(index);
             if(barrack.getAmountItemInQueue() == 0){
-                TRAIN_POPUP._isShowTimeBar = false;
-                if(TRAIN_POPUP._timeBar) TRAIN_POPUP._timeBar.visible = false;
-                TRAIN_POPUP._statusCountDown = false;
-                if(getBarrackObjectById(temp.trainedBarrackId).timeBar){
-                    MAP.removeChild(getBarrackObjectById(temp.trainedBarrackId).timeBar);
-                    getBarrackObjectById(temp.trainedBarrackId).timeBar = null;
-                }
-                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
-            }else{
-                TRAIN_POPUP.updateQueue(TRAIN_POPUP._troopList.length - 1);
+                TRAIN_POPUP.setStatusCountDown(false);
+                TRAIN_POPUP.removeAllTrainBars();
             }
-            TRAIN_POPUP._itemInQueue[troopType].setPosition(-1000, -1000);
         }else{
-            TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
+            TRAIN_POPUP.updateAmountSmall(troopType);
         }
-        TRAIN_POPUP._titleText.setString("Barrack id: " + TRAIN_POPUP._id + "   (" + barrack.getTotalTroopCapacity() +"/"+TRAIN_POPUP._queueLength + ")");
 
-        //update label
-        var totalCapacity = getTotalCapacityAMCs();
-        var totalAfterTrain = getTotalCurrentTroopCapacity();
-        for(var i in barrackQueueList){
-            totalAfterTrain += barrackQueueList[i].getTotalTroopCapacity();
-        }
-        TRAIN_POPUP.str.setString('Total troops after training: ' + totalAfterTrain +'/' + totalCapacity);
-
+        TRAIN_POPUP.updateLabels();
         TRAIN_POPUP.enableItemDisplay();
-        TRAIN_POPUP.upadateQuickFinishTimeAndCost();
 
         //Refund
-        var costItem = troop.getCost();
-        cc.log("============================= Elixir cost: " + costItem.elixir);
-        var refundResources = {gold:costItem.gold, elixir:costItem.elixir, darkElixir:costItem.darkElixir, coin:costItem.coin};
-        increaseUserResources(refundResources);
+        increaseUserResources(troop.getCost());
     },
 
     processGiveTroop: function() {
         troopInfo[temp.typeTroopGive].population--;
         LOBBY.update(gv.user);
+
+        //Chay tiep countdown neu co
+        for(var i = 0; i < barrackRefs.length; i++){
+            var id = barrackRefs[i]._id;
+            if(BARRACK[id]){
+                BARRACK[id].countDown();
+                //Hien thi timebar ben ngoai
+                if(!barrackRefs[i].timeBar){
+                    barrackRefs[i].addTimeBarTrain(0, 20);
+                }
+            }
+        }
+
         if(userGotList[temp.idUserGetTroop]){
             userGotList[temp.idUserGetTroop] += 1;
         }else{
@@ -903,7 +802,6 @@ testnetwork.Connector = cc.Class.extend({
                         }
                     }
                 }
-
                 break;
             }
         }
@@ -959,10 +857,11 @@ testnetwork.Connector = cc.Class.extend({
             var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             var max = TIME_REQUEST_TROOP / 1000;
             var guildId = getIdGuildBuilding();
-            if(!objectRefs[guildId].timeBar){
-                objectRefs[guildId].addTimeBar(cur, max);
+            if(!objectRefs[guildId].timeBarRequest){
+                objectRefs[guildId].addTimeBarRequest(cur, max);
                 objectRefs[guildId].countDownRequest(cur, max);
             }
+            MAP._targetedObject = null;
         }
         messageList.push(message);
         temp.enableSendMessageFlag = true;
@@ -1038,6 +937,7 @@ testnetwork.Connector = cc.Class.extend({
 
         gv.user.lastRequestTroopTimeStamp = packet.last_time_ask_for_troops;
         if(getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp < TIME_REQUEST_TROOP){
+            //Trang thai dang request troop, hien thi bar
             temp.statusRequest = true;
             cc.log(" =========================== status request = true ");
         }

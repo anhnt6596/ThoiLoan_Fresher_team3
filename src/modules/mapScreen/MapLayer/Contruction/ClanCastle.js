@@ -87,4 +87,46 @@ var ClanCastle = Building.extend({
     hideRange: function() {
        this.rangeLine && this.rangeLine.setVisible(false);
     },
+
+    addTimeBarRequest: function(cur, max) {
+        var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
+        this.timeBarRequest = timeBar;
+        var coor = this.xyOnMap(this._posX, this._posY);
+        timeBar.attr({
+            x: coor.x,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 100
+        });
+        MAP.addChild(timeBar, 1100);
+
+        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        this.processBarRequest = processBar;
+        processBar.attr({
+            anchorX: 0,
+            anchorY: 0
+        });
+        timeBar.addChild(processBar);
+
+        var ratio = cur / max;
+
+        processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
+
+        var t = timeToReadable(max - cur);
+        var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
+        this.timeTextRequest = timeText;
+        timeText.attr({
+            x: timeBar.width / 2,
+            y: 42
+        });
+        timeBar.addChild(timeText);
+    },
+
+    updateTimeBarRequest: function(cur, max) {
+        if (this.timeBarRequest) {
+            var ratio = cur / max;
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
+            this.processBarRequest.setTextureRect(cc.rect(0, 0, this.timeBarRequest.width * ratio, this.timeBarRequest.height));
+            this.timeTextRequest.setString(t);
+        }
+    },
 });

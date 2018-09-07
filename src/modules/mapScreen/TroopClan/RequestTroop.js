@@ -26,7 +26,7 @@ var RequestTroop = TinyPopup.extend({
     },
 
     showContent: function() {
-        var label = new cc.LabelBMFont("Enter your message", 'res/Art/Fonts/soji_20.fnt');
+        var label = new cc.LabelBMFont("Enter your message", res.font_soji[20]);
         label.setPosition(this._frame.x, this._frame.y + 50);
         this.addChild(label, 200);
 

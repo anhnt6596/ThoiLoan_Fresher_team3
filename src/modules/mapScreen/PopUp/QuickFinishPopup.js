@@ -6,7 +6,7 @@ var QuickFinishPopup = TinyPopup.extend({
 
     //ghi de cua cha
     showContent: function(data) {
-        var contentText = new cc.LabelBMFont('Do you want to quick finish this progress?', 'res/Art/Fonts/soji_20.fnt');
+        var contentText = new cc.LabelBMFont('Do you want to quick finish this progress?', res.font_soji[20]);
         contentText.setPosition(0, 30);
         contentText.color = cc.color(0, 255, 0, 255);
         this.addChild(contentText, 2);

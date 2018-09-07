@@ -62,16 +62,23 @@ var ArmyCamp = Building.extend({
     },
 
     updateArmyCampCapacity: function() {
+        cc.log("================== DUY 1");
         temp.pauseOverCapacityFlag = false;
 
         //Neu chua co linh train thi khong cowntdown
-        for(var i in barrackRefs){
+        for(var i = 0; i < barrackRefs.length; i++){
+            cc.log("================== DUY 2");
+
             var id = barrackRefs[i]._id;
             if(BARRACK[id]){
+                cc.log("================== DUY 3");
+
                 BARRACK[id].countDown();
                 //Hien thi timebar ben ngoai
-                if(!this.timeBar){
-                    this.addTimeBarTrain(0, 20);
+                if(!barrackRefs[i].timeBar){
+                    cc.log("================== DUY 4");
+
+                    barrackRefs[i].addTimeBarTrain(0, 20);
                 }
             }
         }
