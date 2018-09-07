@@ -330,7 +330,7 @@ testnetwork.Connector = cc.Class.extend({
             cc.log("=======================================XAC NHAN REMOVE MEMBER tu SERVER=======================================");
 
             if (data.id === gv.user.id) {
-                var popup = new ui.PopUp("Bạn đã bị đuổi khỏi Bang");
+                var popup = new ui.PopUp("Bạn đã ra khỏi Bang");
                 MAPSCENE.addChild(popup, 1000);
                 popup.openAction();
                 gv.user.is_in_guild = false;
