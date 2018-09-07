@@ -842,7 +842,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
             var isUnlock = this.getShort();
             var level = this.getShort();
             var population = this.getShort();
-            var startTime = this.getLong();
+            var timeStart = this.getLong();
             var status = this.getString();
             //cc.log('type = '+type );
             troopInfo[type] = {
@@ -850,7 +850,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
-                startTime: startTime,
+                startTime: timeStart,                
                 status: status,
                 name: name.troop[type].vi
             };
@@ -1170,6 +1170,20 @@ testnetwork.packetMap[gv.CMD.ONLINE_MESSAGE] = fr.InPacket.extend(
             cc.log("=================== User Online: " + this.userOnline);
             this.valueOnline = this.getShort();
             cc.log("=================== Value Online: " + this.valueOnline);
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.DO_HARVEST] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();            
+            this.type = this.getString();
+            this.sanluong = this.getInt();
         }
     }
 );

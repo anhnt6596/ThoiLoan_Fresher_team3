@@ -17,15 +17,14 @@ var DarkElixirCollector = CollectorBuilding.extend({
             y: coor.y,
         });
         var zOrder = this.caluclateZOrder({ x: this._posX, y: this._posY });
-        MAP.addChild(buildingImg, zOrder);
-        // var elixirCollectorAnim = ui.makeAnimation('RES_2_' + this._level + '_effect_', 0, 9, 0.2);
-        // var animSprite = new cc.Sprite();
-        // buildingImg.addChild(animSprite, 11);
-        // animSprite.attr({
-        //     x: buildingImg.width / 2,
-        //     y: buildingImg.height / 2,
-        // });
-        // animSprite.runAction(elixirCollectorAnim.repeatForever());
+        MAP.addChild(buildingImg, zOrder);        
+    },
+    //tra ve true neu day capacity, tra ve false neu chua day`
+    isFullCapacity: function(sanluong){
+        if (sanluong+gv.user.darkElixir > gv.user.maxCapacityDarkElixir){
+            return true
+        }
+        return false;
     },
 
 });

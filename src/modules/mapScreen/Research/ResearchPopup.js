@@ -131,7 +131,8 @@ var ResearchPopUp = ui.PopUp.extend({
             var img_troop = new cc.Sprite(research_constant.img_troop_dir+"ARM_"+(i+1)+"_"+(troop.level+1)+".png");
             img_troop.attr({
                 x: mieng_trang.width/7,
-                y: mieng_trang.height/2
+                y: mieng_trang.height/2,
+                scale: 0.5,
             })
             mieng_trang.addChild(img_troop);
             img_troop.setVisible(false);
@@ -316,7 +317,6 @@ var ResearchPopUp = ui.PopUp.extend({
                     scale: 1.5,
                 }
             )
-
 
             button.label_rq = new cc.Sprite(research_constant.research_dir+"nen trong.png");
             button.label_rq.attr({
