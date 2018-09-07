@@ -54,7 +54,7 @@ ui.PopUp = cc.Sprite.extend({
         });
     },
     openAction: function(scale) {
-         var size = cc.winSize;
+        var size = cc.winSize;
         this.attr({
             x: size.width / 2,
             y: size.height / 2,

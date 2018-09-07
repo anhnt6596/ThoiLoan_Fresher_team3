@@ -340,7 +340,6 @@ var MapLayer = cc.Layer.extend({
             var target_id = mapLogicArray[mapPos.x][mapPos.y];
             cc.log('target_id: ' + target_id);
             for(var i = 0; i < objectRefs.length; i+=1) {
-                // cc.log('bool ' + objectRefs[i].info._id == target_id);
                 if (objectRefs[i] && objectRefs[i]._id >= 0 && objectRefs[i]._id == target_id) {
                     var newTarget = objectRefs[i];
                     var checktargetMultiWall = self.isTargetMultiWall(oldTarget, newTarget);
@@ -348,9 +347,9 @@ var MapLayer = cc.Layer.extend({
                         haveObjectInTarget = true;
                         break;
                     } if (checktargetMultiWall.status) { // chọn tường trong hàng thì chọn cả hàng
-                        // wallRefs.forEach(function(wall) {
-                        //     wall.removeTarget();
-                        // });
+                        wallSelectingArray.forEach(function(wall) {
+                            wall.removeTarget();
+                        });
                         wallSelectingArray = checktargetMultiWall.listWall;
                         self._targetedObject.onTargetSound();
                         wallSelectingArray.forEach(function(wall) {
@@ -378,8 +377,7 @@ var MapLayer = cc.Layer.extend({
         var result = {
             status: false,
             listWall: [],
-        }
-        cc.log("oldTarget: " + oldTarget);
+        };
         if (!(oldTarget instanceof Wall)) return false;
         if (!(newTarget instanceof Wall)) return false;
         if (oldTarget._posX !== newTarget._posX && oldTarget._posY !== newTarget._posY) return false;

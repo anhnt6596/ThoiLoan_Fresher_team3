@@ -38,7 +38,8 @@ var ResourceBar = cc.Sprite.extend({
         }
         if (ratio > 1) ratio = 1;
         if (ratio < 0) ratio = 0;
-        var valueBar = new cc.Sprite(resValueBar);
+
+        var valueBar = new ccui.LoadingBar(resValueBar);
         this.valueBar = valueBar;
         valueBar.attr({
             anchorX: 0,
@@ -47,10 +48,10 @@ var ResourceBar = cc.Sprite.extend({
             y: 6.5,
             // scale: 0.95,
         });
+        valueBar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        valueBar.setPercent(ratio * 100);
         this.addChild(valueBar);
 
-        valueBar.setTextureRect(cc.rect(valueBar.width * (1 - ratio), 0, valueBar.width, valueBar.height));
-        valueBar.x = 0.5 + (1 - ratio) * valueBar.width;
 
         var maxText = new cc.LabelBMFont(maxTextValue, 'res/Art/Fonts/soji_12.fnt');
         this.maxText = maxText;
@@ -72,7 +73,7 @@ var ResourceBar = cc.Sprite.extend({
             y: 4,
             scale: 0.9
         });
-        this.addChild(valueText);
+        this.addChild(valueText, 10);
 
         var icon = new cc.Sprite(resIcon);
         icon.attr({
@@ -111,11 +112,34 @@ var ResourceBar = cc.Sprite.extend({
         }
         if (ratio > 1) ratio = 1;
         if (ratio < 0) ratio = 0;
-        this.valueBar.setTextureRect(cc.rect(this.valueBar.width * (1 - ratio), 0, this.valueBar.width, this.valueBar.height));
-        this.valueBar.x = 0.5 + (1 - ratio) * this.valueBar.width;
+        this.setValueBarPercent(ratio);
         
         this.maxText.setString(maxTextValue);
         // this.valueText.setString(textValue);
         changeValueTextEffect(this.valueText, textValue);
     },
+    setValueBarPercent: function(ratio) {
+        var self = this;
+
+        var newPercent = ratio * 100;
+        var oldPercent = this.valueBar.getPercent();
+        if (oldPercent == newPercent) return;
+        var diff = Math.abs(newPercent - oldPercent);
+        var changePerTick = newPercent > oldPercent ? 1 : -1;
+        var curPercent = oldPercent;
+        var count = 0;
+        var tick = function() {
+            setTimeout(function() {
+                count += 1;
+                curPercent += changePerTick;
+                self.valueBar.setPercent(curPercent);
+                if (count >= diff) {
+                    self.valueBar.setPercent(newPercent);
+                } else {
+                    tick();
+                }
+            }, 5);
+        };
+        tick();
+    }
 });
