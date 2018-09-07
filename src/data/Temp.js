@@ -28,6 +28,7 @@ temp.listWall = null;
 //Train Troop
 temp.trainedBarrackId = null;
 temp.trainedTroopType = null;
+temp.endLieTick = false;
 
 //Bao hieu vuot qua capacity: true
 temp.pauseOverCapacityFlag = false;
@@ -49,7 +50,7 @@ temp.tagTroopGive = null;
 
 temp.isOpenMessageBox = false;
 
-//Flag request troop
+//Flag request troop (dang trong thoi gian request)
 temp.statusRequest = false;
 
 //temp.overMaxTroopGive = [];

@@ -295,7 +295,7 @@ var ShopCatalogyScreen = Popup.extend({
                                 width: catalogy[itemName].width,
                                 height: catalogy[itemName].height,
                                 buildTime: catalogy[itemName].buildTime,
-                                status: 'pending',
+                                status: PENDING,
                                 cost: costBuilding
                             };
                             gv.user.largestId += 1;

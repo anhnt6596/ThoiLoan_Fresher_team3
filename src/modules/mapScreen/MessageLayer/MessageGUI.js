@@ -218,7 +218,7 @@ var MessageGUI = ccui.Button.extend({
                     }else{
                         var labelThank = new cc.LabelBMFont("  Thank you for donated", res.font_fista[20]);
                         labelThank.setAnchorPoint(0, 0);
-                        labelThank.setPosition(200, content.y - labelThank.height - 10);
+                        labelThank.setPosition(200, content.y - labelThank.height - 15);
                         labelThank.color = cc.color(0, 255, 0, 255);
                         nodeContainer.addNode(labelThank);
                     }

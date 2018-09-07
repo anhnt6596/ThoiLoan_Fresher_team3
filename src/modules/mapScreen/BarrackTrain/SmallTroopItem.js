@@ -36,6 +36,7 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     updateAmountSmall: function() {
-        this.getChildByTag(101).setString('x'+BARRACK[this._barrackId]._barrackQueue.getTroopInBarrackByName(this._name)._amount);
+        var barrack = getBarrackQueueById(this._barrackId);
+        this.getChildByTag(101).setString('x'+barrack.getTroopInBarrackByName(this._name)._amount);
     }
 });

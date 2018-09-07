@@ -128,10 +128,7 @@ var ObjectMenu = cc.Node.extend({
         this.disableCollectorBtn();
     },
     train: function() {
-        //NETWORK.sendGetBarrackQueueInfo();
-        var data = {train: true, barrack: MAP._targetedObject};
-        var popup = new TrainPopup(cc.winSize.width*5/6, cc.winSize.height*99/100, "Barrack id " + data.barrack._id, true, data);
-        cc.director.getRunningScene().addChild(popup, 200);
+        createTrainPopup(MAP._targetedObject, true);
     },
     quickFinish: function(){
         if(MAP._targetedObject){
@@ -153,6 +150,7 @@ var ObjectMenu = cc.Node.extend({
             this.setUpValidBtn(MAP._targetedObject);
         }
     },
+
     rotate: function() {
         if (MAP._targetedObject) {
             MAP._targetedObject.rotate();
@@ -165,6 +163,7 @@ var ObjectMenu = cc.Node.extend({
         var popup = new RequestTroop(cc.winSize.width/2, cc.winSize.height/1.5, "Request troop from your clan ", false, null);
         cc.director.getRunningScene().addChild(popup, 200);
     },
+
     setUpValidBtn: function(object) {
         this.hideAll();
         this._listValidBtn = [];
@@ -198,6 +197,14 @@ var ObjectMenu = cc.Node.extend({
                 }else{
                     cc.log("========================== condition1 false");
                     cc.log("=================== lastRequestTroopTimeStamp " + gv.user.lastRequestTroopTimeStamp);
+                }
+
+                if(condition2){
+                    cc.log("========================== condition2 true");
+                }else{
+                    cc.log("========================== condition2 false");
+                    cc.log("=================== capacityTroopGuild " + capacityTroopGuild);
+                    cc.log("=================== capacityGuild " + capacityGuild);
                 }
 
                 if (condition1 && condition2) {

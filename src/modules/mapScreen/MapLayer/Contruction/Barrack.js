@@ -1,4 +1,5 @@
 var Barrack = Building.extend({
+    _imgTroop:{},
     ctor: function(info) {
         this._super(info);
         // this.addBuildingImg();
@@ -30,7 +31,7 @@ var Barrack = Building.extend({
         //Khi 1 barrack duoc xay xong thi cap nhat lai BarrackQueueList
         var barrackQueue = new BarrackQueue(this._id, 1, 0);
         barrackQueue._isFirst = true;
-        barrackQueue.flagCountDown = true;
+        barrackQueue.isUpgrade = false;
         barrackQueueList.push(barrackQueue);
     },
 
@@ -38,7 +39,7 @@ var Barrack = Building.extend({
         var barrackQueue = getBarrackQueueById(this._id);
         //Cap nhat startTime cho barrack
         barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
-        barrackQueue.flagCountDown = true;
+        barrackQueue.isUpgrade = false;
 
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
@@ -55,7 +56,7 @@ var Barrack = Building.extend({
         var barrackQueue = getBarrackQueueById(this._id);
 
         barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
-        barrackQueue.flagCountDown = true;
+        barrackQueue.isUpgrade = false;
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
@@ -71,7 +72,7 @@ var Barrack = Building.extend({
         //Cap nhat startTime cho barrack
         barrackQueue._startTime = getCurrentServerTime() - barrackQueue._startTime;
         //Dung countdown cua barrack nay
-        barrackQueue.flagCountDown = false;
+        barrackQueue.isUpgrade = true;
         if(this.timeBar){
             MAP.removeChild(this.timeBar);
             this.timeBar = null;
@@ -79,7 +80,6 @@ var Barrack = Building.extend({
     },
 
     addTimeBarTrain: function(cur, max) {
-
         var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
         this.timeBar = timeBar;
         var coor = this.xyOnMap(this._posX, this._posY);
@@ -100,32 +100,104 @@ var Barrack = Building.extend({
         timeText.setPosition(timeBar.width / 2, 42);
         timeBar.addChild(timeText);
 
+        this.initTroopImages();
+
+        //Hinh anh linh
+        if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()) {
+            var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+            this.visibleImageTroop(troopName);
+        }
+
         timeBar.visible = false;
     },
 
     updateTimeBar: function(cur, max) {
-        if(BARRACK[this._id] && !BARRACK[this._id]._statusCountDown && (objectRefs[this._id]._status != 'upgrade')){
-            if(this.timeBar){
+        var totalCapacity = getTotalCapacityAMCs();
+        var currentCapacity = getTotalCurrentTroopCapacity();
+        if(BARRACK[this._id]){
+            var firstItem = BARRACK[this._id].getFirstItemInQueue();
+        }
+
+        cc.log("========================= DUY 1 =================");
+
+
+        var condition1 = BARRACK[this._id] && !BARRACK[this._id]._statusCountDown && (this._status != UPGRADE);
+        var condition2 = BARRACK[this._id] && BARRACK[this._id]._statusCountDown && BARRACK[this._id].wait && (this._status != UPGRADE);
+        var condition3 = (currentCapacity + (firstItem ? firstItem._housingSpace : 0)  > totalCapacity) && (Math.ceil(cur) >= max);
+        if(condition1 || condition2 || condition3) {
+            if(condition1){
+                cc.log("================== 1 true");
+                cc.log("object status: " + this._status);
+
+            }
+            if(condition2){
+                cc.log("================== 2 true");
+            }
+            if(condition3){
+                cc.log("================== 3 true");
+            }
+
+            cc.log("========================= DUY 2 =================");
+
+            if (this.timeBar) {
                 MAP.removeChild(this.timeBar);
                 this.timeBar = null;
                 return;
             }
         }
 
-        var condition = BARRACK[this._id] && BARRACK[this._id]._statusCountDown && BARRACK[this._id].wait && (objectRefs[this._id]._status != 'upgrade');
-        if(condition){
-            MAP.removeChild(this.timeBar);
-            this.timeBar = null;
-            return;
-        }
+        cc.log("========================= DUY 3 =================");
 
         if (this.timeBar) {
             this.timeBar.visible = true;
             var ratio = cur / max;
-            //var t = timeToString(max - cur);
             var t = timeToReadable(max - cur);
             this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
             this.timeText.setString(t);
+
+            //Hinh anh linh
+            if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()){
+                var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+                this.visibleImageTroop(troopName);
+            }
         }
+    },
+    
+    initTroopImages: function() {
+        for (var i = 0; i < 4; i++) {
+            var a = i + 1;
+            var name = 'ARM_' + a;
+
+            this._imgTroop[name] = this.createImageTroop(name);
+            this.timeBar.addChild(this._imgTroop[name]);
+            this._imgTroop[name].setAnchorPoint(0, 0);
+            this._imgTroop[name].setPosition(-40, -5);
+            this._imgTroop[name].setScale(0.4);
+            this._imgTroop[name].visible = false;
+        }
+    },
+    
+    visibleImageTroop: function (troopName) {
+        for (var i = 0; i < 4; i++) {
+            var a = i + 1;
+            var name = 'ARM_' + a;
+
+            if(name == troopName){
+                this._imgTroop[name].visible = true;
+            }else {
+                this._imgTroop[name].visible = false;
+            }
+
+        }
+    },
+
+    createImageTroop: function(troopName) {
+        var btn = new ccui.Button('res/Art/GUIs/train_troop_gui/slot.png');
+
+        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
+        img.setPosition(btn.width/2, btn.height/2);
+        btn.addChild(img, 1);
+
+        return btn;
     }
 });

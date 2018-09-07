@@ -59,7 +59,7 @@ var ItemInfo = TinyPopup.extend({
         this.addChild(image, 10);
 
         var buildingInfo = this.showbuildingInfo(itemName, level);
-        buildingInfo.setPosition(0, this._frame.height/5 * this._frame.scaleY);
+        buildingInfo.setPosition(0, this._frame.height/4 * this._frame.scaleY);
         this.addChild(buildingInfo, 10);
 
 
@@ -269,7 +269,6 @@ var ItemInfo = TinyPopup.extend({
             var buildingConfig = config.building[itemName];
             var curValue = buildingConfig[level][element];
             var maxValue = buildingConfig[objectSize(buildingConfig)][element];
-            cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', objectSize(buildingConfig));
 
             infoBarBG.setTextureRect(cc.rect(0, 0, (curValue/maxValue) * infoBar.width, infoBar.height));
 
@@ -295,10 +294,9 @@ var TroopGuildItem = ccui.Button.extend({
         img.setPosition(this.width/2, this.height/2);
         this.addChild(img, 100);
 
-
         var levelLabel = new cc.LabelBMFont(level, res.font_soji[24]);
         levelLabel.setPosition(levelLabel.width/2 + 5, this.height - levelLabel.height/2 - 5);
-        levelLabel.setColor(new cc.color(0, 255, 0, 255));
+        levelLabel.setColor(new cc.color(230, 230, 0, 255));
         this.addChild(levelLabel, 109);
 
         var amountLabel = new cc.LabelBMFont(amount, res.font_soji[24]);

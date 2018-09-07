@@ -35,6 +35,7 @@ var TinyPopup = cc.Node.extend({
         if(!type){
             var acceptBtn = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button2.png');
             acceptBtn.setPosition(this._frame.x, this._frame.y - this._frame.height * this._frame.scaleY/2 + acceptBtn.height + 10);
+            acceptBtn.scaleX = 1.5;
             this.addChild(acceptBtn, 200);
             acceptBtn.addClickEventListener(this.ok.bind(this));
 

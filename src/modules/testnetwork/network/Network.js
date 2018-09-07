@@ -192,7 +192,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME TRAIN TROOP tu SERVER=======================================");
-                    this.finishTimeTroopTrain(temp.trainedBarrackId, temp.trainedTroopType);
+                    this.finishTimeTroopTrain(packet.idBarrack, packet.troopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
                     showPopupNotEnoughG('server_denied_finish_time_train_troop');
@@ -514,7 +514,8 @@ testnetwork.Connector = cc.Class.extend({
                 building.onCollectResource(true);
             }
 
-            building.setStatus('upgrade');
+            building.setStatus(UPGRADE);
+            cc.log("building status =============== " + building._status);
             building.startTime = getCurrentServerTime();
 
             building.updateWhenStartUpgrade();
@@ -527,7 +528,7 @@ testnetwork.Connector = cc.Class.extend({
 
             for(var item in contructionList){
                 if(contructionList[item]._id == building._id){
-                    contructionList[item].status = 'upgrade';
+                    contructionList[item].status = UPGRADE;
                     contructionList[item].startTime = building.startTime;
                     contructionList[item].buildTime = max;
                     break;
@@ -542,25 +543,25 @@ testnetwork.Connector = cc.Class.extend({
 
     quickFinishConstruction: function(building) {
         reduceUserResources(ReducedTempResources);
-        if(building._status == 'pending'){
+        if(building._status == PENDING){
             building.buildComplete(true);
-        }else if(building._status == 'upgrade'){
+        }else if(building._status == UPGRADE){
             building.upgradeComplete(true);
         }
         resetReducedTempResources();
     },
 
     finishTimeConstruction: function(building) {
-        if(building._status == 'pending'){
+        if(building._status == PENDING){
             building.buildComplete(true);
-        }else if(building._status == 'upgrade'){
+        }else if(building._status == UPGRADE){
             building.upgradeComplete(true);
         }
     },
 
     cancelConstruction: function(building) {
-        if (building._status == 'upgrade') building.cancelUpgrade();
-        else if (building._status == 'pending') building.cancelBuild();
+        if (building._status == UPGRADE) building.cancelUpgrade();
+        else if (building._status == PENDING) building.cancelBuild();
     },
 
     processUpgradeMultiWalls: function(listWall) {
@@ -631,28 +632,24 @@ testnetwork.Connector = cc.Class.extend({
         var barrack = BARRACK[id]._barrackQueue;
         var troop = barrack.getTroopInBarrackByName(troopType);
 
-        cc.log("=================================== id luc xac nhan finish time: " + id);
         troop._amount -= 1;
 
         BARRACK[id].enableItemDisplay();
 
-        if(troop._amount == 0){
+        if (troop._amount == 0) {
             BARRACK[id].updateQueue(0);
-            if(barrack.getAmountItemInQueue() == 0){
-                BARRACK[id]._timeBar.visible = false;
-                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
+            if (barrack.getAmountItemInQueue() == 0){
+                BARRACK[id].removeAllTrainBars();
                 BARRACK[id]._statusCountDown = false;
-                this.removeTrainBarMap(id);
                 return;
-            }else{
+            } else {
                 BARRACK[id].updateTimeBar(0, BARRACK[id].getFirstItemInQueue()._trainingTime);
             }
-        }else{
-            BARRACK[id]._itemInQueue[troopType].updateAmountSmall();
+        } else {
+            BARRACK[id].updateAmountSmall(troopType);
             BARRACK[id].updateTimeBar(0, BARRACK[id].getFirstItemInQueue()._trainingTime);
             barrack._startTime = getCurrentServerTime();
-            BARRACK[id]._isShowTimeBar = true;
-            BARRACK[id]._statusCountDown = true;
+            BARRACK[id].setStatusCountDown(true);
             BARRACK[id].countDown();
         }
         BARRACK[id].updateLabels();
@@ -674,12 +671,12 @@ testnetwork.Connector = cc.Class.extend({
         }
 
         TRAIN_POPUP.resetQueue();
-        TRAIN_POPUP._timeBar.visible = false;
         TRAIN_POPUP._statusCountDown = false;
 
         TRAIN_POPUP.enableItemDisplay();
         TRAIN_POPUP.updateLabels();
-        this.removeTrainBarMap(id);
+
+        TRAIN_POPUP.removeAllTrainBars();
     },
 
     trainTroopCompleted: function(troopType) {
@@ -696,8 +693,7 @@ testnetwork.Connector = cc.Class.extend({
                 if(!TRAIN_POPUP._isShowTimeBar){
                     cc.log("================================ SHOW TIME BAR sau khi train troop ================================");
                     TRAIN_POPUP.showTimeBar();
-                    TRAIN_POPUP._isShowTimeBar = true;
-                    TRAIN_POPUP._statusCountDown = true;
+                    TRAIN_POPUP.setStatusCountDown(true);
                 }else{
                     TRAIN_POPUP._statusCountDown = true;
                     if(TRAIN_POPUP._isShowTimeBar){
@@ -707,14 +703,12 @@ testnetwork.Connector = cc.Class.extend({
                 }
                 TRAIN_POPUP._timeBar.visible = true;
             }
-
-            cc.log("==================== DAT ITEM VAO VI TRI: " + (barrackQueue._troopList.length - 1));
-            TRAIN_POPUP._itemInQueue[troopType].setPosition(TRAIN_POPUP._positionsInQueue[barrackQueue._troopList.length - 1]);
+            TRAIN_POPUP.setItemToPositionInQueue(troopType, barrackQueue._troopList.length - 1);
         }
         barrackQueue.getTroopInBarrackByName(troopType)._amount += 1;
 
         TRAIN_POPUP.disableItemDisplay();
-        TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
+        TRAIN_POPUP.updateAmountSmall(troopType);
         TRAIN_POPUP.updateLabels();
     },
 
@@ -726,14 +720,11 @@ testnetwork.Connector = cc.Class.extend({
             var index = barrack.getTroopPositionInQueue(troopType);
             TRAIN_POPUP.updateQueue(index);
             if(barrack.getAmountItemInQueue() == 0){
-                TRAIN_POPUP._isShowTimeBar = false;
-                if(TRAIN_POPUP._timeBar) TRAIN_POPUP._timeBar.visible = false;
-                TRAIN_POPUP._statusCountDown = false;
-                this.removeTrainBarMap(temp.trainedBarrackId);
-                cc.log("=========================VISIBLE TIMEBAR = FALSE=========================");
+                TRAIN_POPUP.setStatusCountDown(false);
+                TRAIN_POPUP.removeAllTrainBars();
             }
         }else{
-            TRAIN_POPUP._itemInQueue[troopType].updateAmountSmall();
+            TRAIN_POPUP.updateAmountSmall(troopType);
         }
 
         TRAIN_POPUP.updateLabels();
@@ -743,16 +734,22 @@ testnetwork.Connector = cc.Class.extend({
         increaseUserResources(troop.getCost());
     },
 
-    removeTrainBarMap: function(idBarrack) {
-        if(getBarrackObjectById(idBarrack).timeBar){
-            MAP.removeChild(getBarrackObjectById(idBarrack).timeBar);
-            getBarrackObjectById(idBarrack).timeBar = null;
-        }
-    },
-
     processGiveTroop: function() {
         troopInfo[temp.typeTroopGive].population--;
         LOBBY.update(gv.user);
+
+        //Chay tiep countdown neu co
+        for(var i = 0; i < barrackRefs.length; i++){
+            var id = barrackRefs[i]._id;
+            if(BARRACK[id]){
+                BARRACK[id].countDown();
+                //Hien thi timebar ben ngoai
+                if(!barrackRefs[i].timeBar){
+                    barrackRefs[i].addTimeBarTrain(0, 20);
+                }
+            }
+        }
+
         if(userGotList[temp.idUserGetTroop]){
             userGotList[temp.idUserGetTroop] += 1;
         }else{
@@ -789,7 +786,6 @@ testnetwork.Connector = cc.Class.extend({
                         }
                     }
                 }
-
                 break;
             }
         }
@@ -845,10 +841,11 @@ testnetwork.Connector = cc.Class.extend({
             var cur = (getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp)/1000;
             var max = TIME_REQUEST_TROOP / 1000;
             var guildId = getIdGuildBuilding();
-            if(!objectRefs[guildId].timeBar){
-                objectRefs[guildId].addTimeBar(cur, max);
+            if(!objectRefs[guildId].timeBarRequest){
+                objectRefs[guildId].addTimeBarRequest(cur, max);
                 objectRefs[guildId].countDownRequest(cur, max);
             }
+            MAP._targetedObject = null;
         }
         messageList.push(message);
         temp.enableSendMessageFlag = true;
@@ -924,6 +921,7 @@ testnetwork.Connector = cc.Class.extend({
 
         gv.user.lastRequestTroopTimeStamp = packet.last_time_ask_for_troops;
         if(getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp < TIME_REQUEST_TROOP){
+            //Trang thai dang request troop, hien thi bar
             temp.statusRequest = true;
             cc.log(" =========================== status request = true ");
         }
