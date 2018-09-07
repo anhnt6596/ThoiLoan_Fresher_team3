@@ -150,7 +150,7 @@ var ResearchStatusInfo = cc.Sprite.extend({
 
         return qFinishBtnNode;
     },
-    updateTimeCountDown: function(troop){
+    updateTimeCountDown: function(troop){        
         var countDownDate = config.troop[troop.type][troop.level+1].researchTime*1000;
         var self = this;
         var x = setInterval(function() {
@@ -160,8 +160,8 @@ var ResearchStatusInfo = cc.Sprite.extend({
 
             // Find the distance between now and the count down date
             var distance = countDownDate - (now - troop.timeStart);
-            //console.log("Thoi gian research quan: "+ type+" level "+ level+"len level "+ (level +1) );
-            //cc.log("timeStart= "+timeStart+"countDownDate= "+countDownDate+"distance="+distance);
+            // console.log("Thoi gian research quan: "+ troop.type+" level "+ troop.level+"len level "+ (troop.level +1) );
+            // cc.log("timeStart= "+troop.timeStart+"countDownDate= "+countDownDate+"distance="+distance);
             var gFinish = timeToG(distance*0.001);
 
             // If the count down is finished, write some text

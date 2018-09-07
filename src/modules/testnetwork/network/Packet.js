@@ -850,7 +850,7 @@ testnetwork.packetMap[gv.CMD.GET_TROOP_INFO] = fr.InPacket.extend({
                 isUnlock: isUnlock,
                 level: level,
                 population: population,
-                startTime: timeStart,                
+                timeStart: timeStart,                
                 status: status,
                 name: name.troop[type].vi
             };
