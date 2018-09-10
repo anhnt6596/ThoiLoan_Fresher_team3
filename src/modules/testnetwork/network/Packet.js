@@ -641,7 +641,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 //cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
                 //cc.log(", posY: " + this.posYObs);
-
+                this.status = this.getString();
                 //console.log("/n");
                 var obstacle = {
                     _id: this.idObs,
@@ -651,7 +651,9 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                     width: config.obtacle[this.typeObs][1].width,
                     height: config.obtacle[this.typeObs][1].height,
                 };
-                obstacleLists.push(obstacle);
+                if (this.status !== 'destroy') {
+                    obstacleLists.push(obstacle);
+                }
             }
 
 
