@@ -30,8 +30,7 @@ var RequestTroop = TinyPopup.extend({
         label.setPosition(this._frame.x, this._frame.y + 50);
         this.addChild(label, 200);
 
-        //var textField = cc.EditBox.create(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Main_Gui/login/bg_text.png");
-        var textField = new cc.EditBox(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        var textField = new cc.EditBox(cc.size(this._frame.width/2, 100),"res/Art/GUIs/Chat/bg_text.png");
         textField.setString("Please give me some troops!");
         textField.setFontColor(new cc.Color(0,0,0,255));
         textField.setFontSize(25);

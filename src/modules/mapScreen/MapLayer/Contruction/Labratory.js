@@ -9,6 +9,12 @@ var Labratory = Building.extend({
     },
     progressStatus: function () {
         console.log("process status researching");
+        if (this.timeBar){
+            cc.log("da co time bar");
+        }
+        else {
+            cc.log("Chua co timebar");
+        }
         if (research_constant.troop && !this.timeBar){
             this.addResearchTimeBar();
             this.countDownResearchBar();
@@ -44,7 +50,7 @@ var Labratory = Building.extend({
     },
     addResearchTimeBar: function(){
         console.log("add research time bar4444444444");
-        var cur = getCurrentServerTime() - research_constant.troop.startTime;
+        var cur = getCurrentServerTime() - research_constant.troop.timeStart;
         var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime*1000;
         if (research_constant.status.now === research_constant.status.free){
             return;
@@ -84,8 +90,8 @@ var Labratory = Building.extend({
     },
     countDownResearchBar: function(){
         if (research_constant.troop){
-            console.log("count down research time bar");
-            this.startTime = research_constant.troop.startTime;
+            //console.log("count down research time bar");
+            this.startTime = research_constant.troop.timeStart;
             //var cur = getCurrentServerTime() - research_constant.troop.startTime;
             var max = config.troop[research_constant.troop.type][research_constant.troop.level+1].researchTime;
             var self = this;
