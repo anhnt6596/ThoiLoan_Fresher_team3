@@ -24,13 +24,13 @@ var ShowRemoveObsPopup = TinyPopup.extend({
                     cc.director.getRunningScene().addChild(popup, 2000000);
                 }
             }else{
-                temp.removedObs = this._data.obs._id;
+                temp.removedObs = this._data.obs;
                 NETWORK.sendRemoveObs(this._data.obs._id);
             }
         }else if(this._data.type == 'builder'){
             ReducedTempResources.coin += this._data.g;
             finishSmallestRemainingTimeBuilding();
-            temp.removedObs = this._data.obs._id;
+            temp.removedObs = this._data.obs;
             NETWORK.sendRemoveObs(this._data.obs._id);
         }
     },

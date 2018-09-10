@@ -274,7 +274,7 @@ var ObjectMenu = cc.Node.extend({
                     this._listValidBtn.push(this.requestTroopBtn);
                 }
             }
-        } else if (object instanceof Obstacle) {
+        } else if (object instanceof Obstacle && object._status == COMPLETE) {
             this._listValidBtn.push(this.removeBtn);
         }
         var size = cc.winSize;

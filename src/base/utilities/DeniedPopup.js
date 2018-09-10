@@ -108,6 +108,10 @@ var showPopupNotEnoughG = function(type){
             data.content = "Please try again later!";
             title = "Server denied to remove";
             break;
+        case 'server_denied_finish_time_obstacle':
+            data.content = "Please try again later!";
+            title = "Server denied to finish time this obstacle";
+            break;
         case 'server_denied_add_resources':
             resetReducedTempResources();
             data.content = "Please try again later!";

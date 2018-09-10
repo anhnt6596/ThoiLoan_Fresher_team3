@@ -180,7 +180,7 @@ var MapLayer = cc.Layer.extend({
             for (var i = 0; i < _size; i++) {
                 for (var j = 0; j < _size; j++) {
                     if (_inRow + i < MAPVALUE.MAPSIZE && _inColumn + j < MAPVALUE.MAPSIZE)
-                    mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle]._id;
+                    mapLogicArray[_inRow + i][_inColumn + j] = obstacles[obstacle].id;
                 }
             }
         }
@@ -694,6 +694,7 @@ var MapLayer = cc.Layer.extend({
     },
     removeObstacle: function(obstacle) {
         // obstacle.remove();
+        temp.removedObs = obstacle;
         NETWORK.sendRemoveObs(obstacle._id);
     },
     setVXbtn: function(targetedObject) {

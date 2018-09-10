@@ -103,6 +103,7 @@ var LobbyLayer = cc.Layer.extend({
     },
 
     onInteractiveGuild: function(isAni = true) {
+        cc.log("=============== MO MESSAGE BOX o LOBBY ===========");
         var messLayer = new MessageGUI();
         messLayer.setAnchorPoint(0, 0);
         messLayer.setPosition(-1000, 0);

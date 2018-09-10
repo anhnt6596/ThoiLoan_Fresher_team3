@@ -14,6 +14,7 @@ gv.CMD.ADD_CONSTRUCTION = 2003;
 gv.CMD.UPGRADE_CONSTRUCTION = 2004;
 gv.CMD.CANCEL_CONSTRUCTION = 2005;
 gv.CMD.REMOVE_OBSTACLE = 2006;
+gv.CMD.FINISH_TIME_REMOVE_OBSTACLE = 2007;
 gv.CMD.DO_HARVEST = 2008;
 gv.CMD.MOVE_MULTI_WALL = 2009;
 gv.CMD.UPGRADE_MULTI_WALL = 2010;
@@ -40,7 +41,7 @@ gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
 gv.CMD.NEW_MESSAGE = 8001;
 gv.CMD.GIVE_TROOP_GUILD = 8002;
 gv.CMD.GET_INTERACTION_GUILD = 8003;
-gv.CMD.ONLINE_MESSAGE = 8004
+gv.CMD.ONLINE_MESSAGE = 8004;
 
 
 
@@ -214,6 +215,22 @@ CmdSendRemoveObs = fr.OutPacket.extend(
         }
     }
 );
+CmdSendFinishTimeRemoveObs = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.FINISH_TIME_REMOVE_OBSTACLE);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
 CmdSendUpgradeMultiWall = fr.OutPacket.extend(
     {
         ctor:function()
@@ -282,24 +299,6 @@ CmdSendCancelConstruction = fr.OutPacket.extend(
         }
     }
 );
-
-CmdSendRemoveObstacle = fr.OutPacket.extend(
-    {
-        ctor:function()
-        {
-            this._super();
-            this.initData(100);
-            this.setCmdId(gv.CMD.REMOVE_OBSTACLE);
-        },
-        pack:function(id){
-            this.packHeader();
-            this.putInt(id);
-            this.updateSize();
-        }
-    }
-);
-
-
 CmdGetServerTime = fr.OutPacket.extend(
     {
         ctor:function()
@@ -641,17 +640,23 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 //cc.log(", posX: " + this.posXObs);
                 this.posYObs = this.getInt();
                 //cc.log(", posY: " + this.posYObs);
-
+                this.status = this.getString();
+                this.startTime = this.getLong();
                 //console.log("/n");
                 var obstacle = {
-                    _id: this.idObs,
+                    id: this.idObs,
                     name: this.typeObs,
                     posX: this.posXObs,
                     posY: this.posYObs,
+                    status: this.status,
+                    buildTime: config.obtacle[this.typeObs][1].buildTime,
+                    startTime: this.startTime,
                     width: config.obtacle[this.typeObs][1].width,
                     height: config.obtacle[this.typeObs][1].height,
                 };
-                obstacleLists.push(obstacle);
+                if (this.status !== 'destroy') {
+                    obstacleLists.push(obstacle);
+                }
             }
 
 
@@ -793,6 +798,18 @@ testnetwork.packetMap[gv.CMD.UPGRADE_MULTI_WALL] = fr.InPacket.extend(
 );
 
 testnetwork.packetMap[gv.CMD.REMOVE_OBSTACLE] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.validate  = this.getShort();
+        }
+    }
+);
+
+testnetwork.packetMap[gv.CMD.FINISH_TIME_REMOVE_OBSTACLE] = fr.InPacket.extend(
     {
         ctor:function()
         {

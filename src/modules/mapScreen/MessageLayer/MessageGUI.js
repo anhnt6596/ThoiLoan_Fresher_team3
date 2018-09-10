@@ -104,7 +104,7 @@ var MessageGUI = cc.LayerColor.extend({
 
     joinClan: function() {
         CLAN_GUI.openAction();
-        this.onCloseInteractiveGuild();
+        this.onCloseInteractiveGuild(false);
     },
 
     onCloseInteractiveGuild: function(isAni = true) {
