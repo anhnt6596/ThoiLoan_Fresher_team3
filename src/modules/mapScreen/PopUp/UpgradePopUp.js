@@ -77,14 +77,15 @@ var createUpgradePopUp = function() {
         text3.attr({ y: -15, color: new cc.color(142, 8, 8, 255) });
         content.push(text3);
     }
-    var upgradePopUp = new ui.PopUp('Upgrade to level ' + (info._level + 1), content);
+    var popUpLabel = info._level !== 0 ? 'Upgrade to level ' + (info._level + 1) : 'Rebuild';
+    var upgradePopUp = new ui.PopUp(popUpLabel, content);
     upgradePopUp.openAction();
 
     scrollList && scrollList.setContentSize(cc.size(upgradePopUp.frame.width - 50, 200));
 
     MAPSCENE.addChild(upgradePopUp, 1000);
     acceptBtn.addClickEventListener(function() {
-        MAP._targetedObject && MAP._targetedObject.upgrade();
+        info && info.upgrade();
         upgradePopUp.close();
     });
 };
@@ -374,7 +375,7 @@ var showNextBuildingInfo = function(info) {
         infoArea.addChild(infoBarBG, 2);
 
         var buildingConfig = config.building[info._name];
-        var curValue = buildingConfig[info._level][element];
+        var curValue = info._level !== 0 ? buildingConfig[info._level][element] : 0;
         var nextValue = buildingConfig[info._level + 1][element];
         var maxValue = buildingConfig[objectSize(buildingConfig)][element];
         cc.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', objectSize(buildingConfig));
