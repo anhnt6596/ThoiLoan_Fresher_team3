@@ -261,9 +261,11 @@ var ObjectMenu = cc.Node.extend({
             if (gold > 0) {
                 this.remove_cost_gold.show(true);
                 this.remove_cost_elixir.show(false);
+                gold <= gv.user.gold ? this.remove_cost_gold.setEnoughColor(false) : this.remove_cost_gold.setEnoughColor(true);
             } else {
                 this.remove_cost_gold.show(false);
                 this.remove_cost_elixir.show(true);
+                elixir <= gv.user.elixir ? this.remove_cost_elixir.setEnoughColor(false) : this.remove_cost_elixir.setEnoughColor(true);
             }
         } else if (object instanceof Contruction) {
             if (object._status == 'complete' && object._name !== 'BDH_1') {
@@ -273,6 +275,10 @@ var ObjectMenu = cc.Node.extend({
                 this.upgrade_cost_gold.updateText(formatNumber(gold));
                 this.upgrade_cost_elixir.updateText(formatNumber(elixir));
                 this.upgrade_cost_dark_elixir.updateText(formatNumber(darkElixir));
+
+                gold <= gv.user.gold ? this.upgrade_cost_gold.setEnoughColor(false) : this.upgrade_cost_gold.setEnoughColor(true);
+                elixir <= gv.user.elixir ? this.upgrade_cost_elixir.setEnoughColor(false) : this.upgrade_cost_elixir.setEnoughColor(true);
+                darkElixir <= gv.user.darkElixir ? this.upgrade_cost_dark_elixir.setEnoughColor(false) : this.upgrade_cost_dark_elixir.setEnoughColor(true);
                 
                 this.upgrade_cost_gold.show(false);
                 this.upgrade_cost_elixir.show(false);
@@ -281,10 +287,13 @@ var ObjectMenu = cc.Node.extend({
                 if (elixir > 0) this.upgrade_cost_elixir.show(true);
                 if (darkElixir > 0) this.upgrade_cost_dark_elixir.show(true);
             } else if (object._status == 'upgrade' || object._status == 'pending') {
-                var remainTime = object.buildTime - (getCurrentServerTime() -object.startTime)/1000;
-                var coin = timeToG(remainTime);
-                this.quick_finish_cost_g.updateText(coin);
-                this.quick_finish_cost_g.show(true);
+                var self = this
+                setTimeout(function() {
+                    var remainTime = object.buildTime - (getCurrentServerTime() - object.startTime)/1000;
+                    var coin = timeToG(remainTime);
+                    self.quick_finish_cost_g.updateText(coin);
+                    self.quick_finish_cost_g.show(true);
+                }, 200);
             }
         }
     },
@@ -342,6 +351,9 @@ var costText = cc.Node.extend({
     },
     updateText: function(cost) {
         this.text.setString(cost.toString());
+    },
+    setEnoughColor: function(isEnough) {
+        isEnough ? this.text.setColor(new cc.color(255, 0, 0, 255)) : this.text.setColor(new cc.color(255, 255, 255, 255));
     },
     show: function(isShow) {
         isShow ? this.setVisible(true) : this.setVisible(false);
