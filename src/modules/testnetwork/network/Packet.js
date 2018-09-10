@@ -199,7 +199,21 @@ CmdSendUpgradeConstruction = fr.OutPacket.extend(
         }
     }
 );
-
+CmdSendRemoveObs = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.REMOVE_OBSTACLE);
+        },
+        pack:function(id){
+            this.packHeader();
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
 CmdSendUpgradeMultiWall = fr.OutPacket.extend(
     {
         ctor:function()

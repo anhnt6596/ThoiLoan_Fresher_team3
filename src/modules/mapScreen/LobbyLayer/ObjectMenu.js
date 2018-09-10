@@ -41,7 +41,7 @@ var ObjectMenu = cc.Node.extend({
         this._listBtn.push(removeBtn);
         this.removeBtn = removeBtn;
         this.addChild(removeBtn);
-        //removeBtn.addClickEventListener(this.remove.bind(this));
+        removeBtn.addClickEventListener(this.remove.bind(this));
 
         var researchBtn = ui.iconButton(100, 0, - 55, res.gui.research_icon, 'Research');
         this._listBtn.push(researchBtn);
