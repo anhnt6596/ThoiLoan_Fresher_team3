@@ -22,6 +22,9 @@ temp.buildingFinishTime = null;
 //Cancel Construction
 temp.buildingCancel = null;
 
+//Remove Obs
+temp.removedObs = null;
+
 //Upgrade Multi Walls
 temp.listWall = null;
 
