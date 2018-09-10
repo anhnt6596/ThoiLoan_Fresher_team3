@@ -341,7 +341,7 @@ testnetwork.Connector = cc.Class.extend({
                 memberListOnline = [];
                 memberListOnline[0] = {idUser: gv.user.id, username: gv.user.name, valueOnline: ONLINE};
                 temp.getListMessageFirst = false;
-                LOBBY.onCloseInteractiveGuild();
+                MESSAGE_BOX.onCloseInteractiveGuild();
 
                 //Remove timebar
                 var guildId = getIdGuildBuilding();
@@ -861,7 +861,7 @@ testnetwork.Connector = cc.Class.extend({
                 objectRefs[guildId].addTimeBarRequest(cur, max);
                 objectRefs[guildId].countDownRequest(cur, max);
             }
-            MAP._targetedObject = null;
+            //MAP._targetedObject = null;
         }
         messageList.push(message);
         temp.enableSendMessageFlag = true;

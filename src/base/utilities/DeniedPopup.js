@@ -28,8 +28,19 @@ var DeniedPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
         resetReducedTempResources();
+        cc.log("================= RETURN LOGIN MENU =======================");
+        //fr.view(LoginScreen);
+        cc.director.popToRootScene();
+
+        //this.refreshGame();
+        //cc.game.run();
+    },
+
+    refreshGame: function() {
+        cc.director.popToRootScene();
     }
 });
+
 
 var showPopupDisconect = function(){
     var data = {};

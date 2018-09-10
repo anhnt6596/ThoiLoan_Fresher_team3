@@ -356,12 +356,12 @@ var updateGUI = function() {
 var updateMessageBox = function() {
     if(temp.isOpenMessageBox){
         cc.log("==================================== MESSAGE BOX dang MO =====================");
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        MESSAGE_BOX.onCloseInteractiveGuild(false);
+        LOBBY.onInteractiveGuild(false);
     }else{
         cc.log("==================================== MESSAGE BOX dang DONG =====================");
-        LOBBY.onInteractiveGuild();
-        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild(false);
+        MESSAGE_BOX.onCloseInteractiveGuild(false);
     }
 };
 

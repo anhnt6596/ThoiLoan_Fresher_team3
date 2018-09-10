@@ -1,9 +1,9 @@
 var MESSAGE_BOX;
 
-var MessageGUI = ccui.Button.extend({
+var MessageGUI = cc.LayerColor.extend({
     ctor: function () {
         MESSAGE_BOX = this;
-        this._super('res/Art/GUIs/Chat/nen.png');
+        this._super(cc.color(0, 0, 0, 0), cc.winSize.width * 3/5, cc.winSize.height);
         this.init();
     },
 
@@ -21,61 +21,61 @@ var MessageGUI = ccui.Button.extend({
         }
     },
 
-    showJoinClan: function() {
+    showGui: function() {
         var size = cc.winSize;
-        this.setAnchorPoint(0, 0);
-        this.setScale(cc.winSize.width *3/5 / this.width, cc.winSize.height / this.height);
-        this.setZoomScale(0);
+
+        var bg = new ccui.Button('res/Art/GUIs/Chat/nen.png');
+        bg.setAnchorPoint(0, 0);
+        bg.setScale(size.width *3/5 / bg.width, size.height / bg.height);
+        bg.setZoomScale(0);
+        this.addChild(bg, 21, 17);
 
         var bgMember = new ccui.Button('res/Art/GUIs/Chat/vc_0004_Layer-80-copy.png');
         bgMember.setAnchorPoint(0, 0);
-        bgMember.setPosition(cc.winSize.width *2/5 + 10, 0);
         bgMember.setScale(cc.winSize.width /5 / bgMember.width, cc.winSize.height / bgMember.height);
+        bgMember.setPosition(cc.winSize.width *2/5 + 10, 0);
         bgMember.setZoomScale(0);
-        cc.director.getRunningScene().addChild(bgMember, 21, 23);
+        this.addChild(bgMember, 21, 23);
+
+        var prevBtn = new ccui.Button('res/Art/GUIs/Chat/button chinh 1.png', 'res/Art/GUIs/Chat/button chinh 1.png');
+        prevBtn.setPosition(this.x + this.width*this.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
+        prevBtn.addClickEventListener(this.onCloseInteractiveGuild.bind(this));
+        this.addChild(prevBtn, 21, 18);
+    },
+
+    showJoinClan: function() {
+        var size = cc.winSize;
+
+        this.showGui();
 
         var headClan = new ccui.Button('res/Art/GUIs/Chat/nen button 2.png');
         headClan.setPosition(cc.winSize.width *1/5, size.height - headClan.height/2 - 7);
         headClan.scaleY = 1.4;
-        cc.director.getRunningScene().addChild(headClan, 21, 24);
+        this.addChild(headClan, 21, 24);
 
         var btnJoinClan = new ccui.Button('res/Art/GUIs/pop_up/button.png', 'res/Art/GUIs/pop_up/button.png');
         btnJoinClan.setPosition(size.width/5, size.height/2);
         btnJoinClan.addClickEventListener(this.joinClan.bind(this));
-        cc.director.getRunningScene().addChild(btnJoinClan, 21, 25);
+        this.addChild(btnJoinClan, 21, 25);
 
         var label = new cc.LabelBMFont("  Join now", res.font_fista[20]);
         label.setPosition(size.width/5, size.height/2);
-        cc.director.getRunningScene().addChild(label, 22, 22);
-
-        var prevBtn = new ccui.Button('res/Art/GUIs/Chat/button chinh 1.png', 'res/Art/GUIs/Chat/button chinh 1.png');
-        prevBtn.setPosition(this.x + this.width*this.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(LOBBY.onCloseInteractiveGuild.bind(LOBBY));
-        cc.director.getRunningScene().addChild(prevBtn, 21, 18);
+        this.addChild(label, 22, 22);
     },
 
     showMessageGui: function() {
         var size = cc.winSize;
-        this.setAnchorPoint(0, 0);
-        this.setScale(cc.winSize.width *3/5 / this.width, cc.winSize.height / this.height);
-        this.setZoomScale(0);
 
-        var bgMember = new ccui.Button('res/Art/GUIs/Chat/vc_0004_Layer-80-copy.png');
-        bgMember.setAnchorPoint(0, 0);
-        bgMember.setPosition(cc.winSize.width *2/5 + 10, 0);
-        bgMember.setScale(cc.winSize.width /5 / bgMember.width, cc.winSize.height / bgMember.height);
-        bgMember.setZoomScale(0);
-        cc.director.getRunningScene().addChild(bgMember, 21, 23);
+        this.showGui();
 
         var headClan = new ccui.Button('res/Art/GUIs/Chat/nen button 2.png');
         headClan.setPosition(cc.winSize.width *1/5, size.height - headClan.height/2 - 7);
         headClan.scaleY = 1.4;
-        cc.director.getRunningScene().addChild(headClan, 21, 24);
+        this.addChild(headClan, 21, 24);
 
         var labelCLAN = new cc.LabelBMFont("CLAN", res.font_soji[20]);
         labelCLAN.setPosition(headClan.x, headClan.y - 5);
-        cc.director.getRunningScene().addChild(labelCLAN, 22, 25);
-
+        this.addChild(labelCLAN, 22, 25);
 
         var textField = new cc.EditBox(cc.size(size.width*1.5/5, size.height/12),"res/Art/GUIs/Chat/bg_text.png");
         textField.setPosition(textField.width/2, size.height - 140 + textField.height/2);
@@ -83,49 +83,50 @@ var MessageGUI = ccui.Button.extend({
         textField.setFontSize(25);
         //textField.setPlaceHolder("  Enter your message");
         this.textField = textField;
-        cc.director.getRunningScene().addChild(textField, 21, 21);
+        this.addChild(textField, 21, 21);
 
-        //var btnSend = gv.commonButton(size.width*0.5/5, size.height/12 - 5, textField.x + textField.width/2 + 60, textField.y - 2, "Send");
         var btnSend = ui.optionButton("Send", 'res/Art/GUIs/pop_up/button.png');
         btnSend.setPosition(textField.x + textField.width/2 + 60, textField.y - 2);
         btnSend.addClickEventListener(this.sendMessage.bind(this));
-        cc.director.getRunningScene().addChild(btnSend, 21, 22);
-        //cc.director.getRunningScene().addChild(btnSend, 21, 22);
+        this.addChild(btnSend, 21, 22);
 
 
         var nameGuildLabel = new cc.LabelBMFont(myClanInfo.name || gv.user.name_guild, res.font_soji[20]);
         nameGuildLabel.setPosition(nameGuildLabel.width/2 + 10, size.height - 160 + textField.height + nameGuildLabel.height);
-        cc.director.getRunningScene().addChild(nameGuildLabel, 24, 26);
+        this.addChild(nameGuildLabel, 24, 26);
 
         var messageScrollView = this.createMessageScroll();
-        cc.director.getRunningScene().addChild(messageScrollView, 100, 19);
+        this.addChild(messageScrollView, 100, 19);
 
         var memberScrollView = this.createMemberScroll();
-        cc.director.getRunningScene().addChild(memberScrollView, 101, 20);
-
-        var prevBtn = new ccui.Button('res/Art/GUIs/Chat/button chinh 1.png', 'res/Art/GUIs/Chat/button chinh 1.png');
-        prevBtn.setPosition(this.x + this.width*this.scaleX + prevBtn.width/2 - 5, cc.winSize.height/2);
-        prevBtn.addClickEventListener(LOBBY.onCloseInteractiveGuild.bind(LOBBY));
-        cc.director.getRunningScene().addChild(prevBtn, 21, 18);
+        this.addChild(memberScrollView, 101, 20);
     },
 
     joinClan: function() {
         CLAN_GUI.openAction();
-        LOBBY.onCloseInteractiveGuild();
+        this.onCloseInteractiveGuild();
     },
 
-    onCloseInteractiveGuild: function() {
+    onCloseInteractiveGuild: function(isAni = true) {
+        cc.log("================ CLOSE o MESSAGE GUI");
+
+        if(isAni){
+            var closeAct = cc.moveTo(0.25, cc.p(-1000, 0));
+        }else{
+            var closeAct = cc.moveTo(0, cc.p(0, 0));
+        }
+
         temp.isOpenMessageBox = false;
-        cc.director.getRunningScene().removeChildByTag(17);
-        cc.director.getRunningScene().removeChildByTag(18);
-        cc.director.getRunningScene().removeChildByTag(19);
-        cc.director.getRunningScene().removeChildByTag(20);
-        cc.director.getRunningScene().removeChildByTag(21);
-        cc.director.getRunningScene().removeChildByTag(22);
-        cc.director.getRunningScene().removeChildByTag(23);
-        cc.director.getRunningScene().removeChildByTag(24);
-        cc.director.getRunningScene().removeChildByTag(25);
-        cc.director.getRunningScene().removeChildByTag(26);
+        var self = this;
+        this.runAction(new cc.Sequence(closeAct, cc.CallFunc(function() {
+            self.getParent().removeChild(self);
+        }, this)));
+
+        var children = this.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
+
     },
 
     sendMessage: function() {
