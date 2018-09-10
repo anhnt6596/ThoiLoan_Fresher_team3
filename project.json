@@ -98,6 +98,7 @@
         "src/modules/mapScreen/PopUp/ShowUpgradePopup.js",
         "src/modules/mapScreen/PopUp/QuickFinishPopup.js",
         "src/modules/mapScreen/PopUp/LagScreen.js",
+        "src/modules/mapScreen/PopUp/ShowRemoveObsPopup.js",
         "src/modules/mapScreen/BarrackTrain/TrainPopup.js",
         "src/modules/mapScreen/BarrackTrain/TroopItem.js",
         "src/modules/mapScreen/BarrackTrain/SmallTroopItem.js",

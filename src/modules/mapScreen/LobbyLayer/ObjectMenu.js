@@ -145,7 +145,44 @@ var ObjectMenu = cc.Node.extend({
         } else MAP._targetedObject && MAP._targetedObject._status === 'complete' && createUpgradePopUp();
     },
     remove: function() {
-        MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
+        if(MAP._targetedObject){
+            var gold = config.obtacle[MAP._targetedObject._name][1].gold || 0;
+            var elixir = config.obtacle[MAP._targetedObject._name][1].elixir || 0;
+            var cost = {gold:gold, elixir: elixir, darkElixir:0, coin: 0};
+            var gResources = checkUserResources(cost);
+
+            var data;
+            var popup;
+            if(gResources == 0){
+                if(!checkIsFreeBuilder()){
+                    var gBuilder = getGToReleaseBuilder();
+                    if(gv.user.coin < gBuilder){
+                        showPopupNotEnoughG('release_builder');
+                    }else{
+                        _.extend(ReducedTempResources, cost);
+                        data = {type:'builder', obs:MAP._targetedObject, cost:cost, g:gBuilder};
+                        popup = new ShowRemoveObsPopup(cc.winSize.width/2, cc.winSize.height/1.5, "All builders are busy", false, data);
+                        cc.director.getRunningScene().addChild(popup, 2000000);
+                    }
+                } else {
+                    _.extend(ReducedTempResources, cost);
+                    temp.removedObs = MAP._targetedObject;
+                    NETWORK.sendRemoveObs(MAP._targetedObject._id);
+                }
+            } else if (gResources > 0) {
+                if (gv.user.coin < gResources) {
+                    showPopupNotEnoughG('build');
+                } else {
+                    data = {type:getLackingResources(cost), obs:MAP._targetedObject, cost:cost, g:gResources};
+                    popup = new ShowRemoveObsPopup(cc.winSize.width/2, cc.winSize.height/1.5, "Use G to remove this obstacle", false, data);
+                    cc.director.getRunningScene().addChild(popup, 2000000);
+                }
+            } else {
+                showPopupNotEnoughG('build');
+            }
+        }
+
+        //MAP._targetedObject && MAP._targetedObject instanceof Obstacle && MAP.removeObstacle(MAP._targetedObject);
     },
     cancel: function() {
         //Neu MAP._targetedObject != undefine, null, 0 thi ve phai moi chay
@@ -237,7 +274,7 @@ var ObjectMenu = cc.Node.extend({
                     this._listValidBtn.push(this.requestTroopBtn);
                 }
             }
-        } else if (object instanceof Obstacle) {
+        } else if (object instanceof Obstacle && object._status == COMPLETE) {
             this._listValidBtn.push(this.removeBtn);
         }
         var size = cc.winSize;

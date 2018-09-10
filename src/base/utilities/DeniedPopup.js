@@ -28,8 +28,19 @@ var DeniedPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
         resetReducedTempResources();
+        cc.log("================= RETURN LOGIN MENU =======================");
+        //fr.view(LoginScreen);
+        cc.director.popToRootScene();
+
+        //this.refreshGame();
+        //cc.game.run();
+    },
+
+    refreshGame: function() {
+        cc.director.popToRootScene();
     }
 });
+
 
 var showPopupDisconect = function(){
     var data = {};
@@ -96,6 +107,10 @@ var showPopupNotEnoughG = function(type){
         case 'server_denied_remove_obstacle':
             data.content = "Please try again later!";
             title = "Server denied to remove";
+            break;
+        case 'server_denied_finish_time_obstacle':
+            data.content = "Please try again later!";
+            title = "Server denied to finish time this obstacle";
             break;
         case 'server_denied_add_resources':
             resetReducedTempResources();

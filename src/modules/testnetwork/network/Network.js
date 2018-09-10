@@ -69,7 +69,6 @@ testnetwork.Connector = cc.Class.extend({
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN XAY tu SERVER=======================================");
                     MAP.updateMapWhenValidatedBuild(temp.newBuildingAdd, temp.buildingAdd);
-                    // eo hieu gi
                     if (temp.newBuildingAdd._name === "WAL_1") {
                         wallRefs.push(temp.newBuildingAdd);
                         wallRefs.forEach(function(element) {
@@ -134,10 +133,20 @@ testnetwork.Connector = cc.Class.extend({
                 break;
             case gv.CMD.REMOVE_OBSTACLE:
                 if(packet.validate) {
-
+                    cc.log("=======================================SERVER XAC NHAN REMOVE OBSTACLE=======================================");
+                    this.processRemoveObs(temp.removedObs);
                 }else {
                     cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
                     showPopupNotEnoughG('server_denied_remove_obstacle');
+                }
+                break;
+            case gv.CMD.FINISH_TIME_REMOVE_OBSTACLE:
+                if(packet.validate) {
+                    cc.log("=======================================SERVER XAC NHAN FINISH TIME OBSTACLE=======================================");
+                    this.processFinishTimeRemoveObs(temp.obsFinishTime);
+                }else {
+                    cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
+                    showPopupNotEnoughG('server_denied_finish_time_obstacle');
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
@@ -341,7 +350,7 @@ testnetwork.Connector = cc.Class.extend({
                 memberListOnline = [];
                 memberListOnline[0] = {idUser: gv.user.id, username: gv.user.name, valueOnline: ONLINE};
                 temp.getListMessageFirst = false;
-                LOBBY.onCloseInteractiveGuild();
+                MESSAGE_BOX.onCloseInteractiveGuild(false);
 
                 //Remove timebar
                 var guildId = getIdGuildBuilding();
@@ -578,6 +587,30 @@ testnetwork.Connector = cc.Class.extend({
     cancelConstruction: function(building) {
         if (building._status == UPGRADE) building.cancelUpgrade();
         else if (building._status == PENDING) building.cancelBuild();
+    },
+
+    processRemoveObs: function(obs) {
+        obs._status = PENDING;
+        for(var i in obstacleLists) {
+            if(obstacleLists[i].id == obs._id){
+                obstacleLists[i].status = PENDING;
+                obstacleLists[i].startTime = getCurrentServerTime();
+            }
+        }
+        obs._startTime = getCurrentServerTime();
+
+        var cur = (getCurrentServerTime() - obs._startTime)/1000;
+        var max = config.obtacle[obs._name][1].buildTime;
+        obs.addTimeBar(cur, max);
+        obs.countDown(cur, max);
+
+        updateGUI();
+        reduceUserResources(ReducedTempResources);
+        resetReducedTempResources();
+    },
+
+    processFinishTimeRemoveObs: function(obs) {
+        obs.removeComplete();
     },
 
     processUpgradeMultiWalls: function(listWall) {
@@ -861,7 +894,7 @@ testnetwork.Connector = cc.Class.extend({
                 objectRefs[guildId].addTimeBarRequest(cur, max);
                 objectRefs[guildId].countDownRequest(cur, max);
             }
-            MAP._targetedObject = null;
+            //MAP._targetedObject = null;
         }
         messageList.push(message);
         temp.enableSendMessageFlag = true;
@@ -891,7 +924,6 @@ testnetwork.Connector = cc.Class.extend({
 
     processInteractiveGuild: function() {
         LOBBY.onInteractiveGuild();
-        updateMessageBox();
     },
 
     processOnlineMessage: function(packet) {
@@ -996,6 +1028,12 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(id);
         this.gameClient.sendPacket(pk);
         cc.log("=======================================SEND REMOVE OBS=======================================" + id);
+    },
+    sendFinishTimeRemoveObs:function(id){
+        var pk = this.gameClient.getOutPacket(CmdSendFinishTimeRemoveObs);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND FINISH TIME REMOVE OBS=======================================" + id);
     },
     upgradeMultiWall: function(list){
         temp.listWall = list;

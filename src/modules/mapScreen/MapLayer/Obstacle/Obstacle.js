@@ -1,12 +1,16 @@
 var Obstacle = cc.Class.extend({
     ctor: function(info) {
         this.info = info;
-        this._id = info._id;
+        this._id = info.id;
+        cc.log("============== DUY id obstacle: " + info.id);
         this._name = info.name;
         this._posX = info.posX;
         this._posY = info.posY;
         this._width = info.width;
         this._height = info.height;
+        this._buildTime = config.obtacle[this._name][1].buildTime;
+        this._startTime = info.startTime;
+        this._status = info.status;
         // this._super('res/Art/Buildings/obstacle/' + this._name + '/idle/image0000.png');
         var grass = new cc.Sprite('res/Art/Map/map_obj_bg/GRASS_0_' + this._width + '_OBS.png');
         this.grass = grass;
@@ -26,7 +30,23 @@ var Obstacle = cc.Class.extend({
             scale: 1
         });
         MAP.addChild(objImg, this.caluclateZOrder());
+        this.setObsStatus();
     },
+
+    setObsStatus: function() {
+        cc.log("================= DUY =================");
+        if ((this._status == PENDING) && this._startTime) {
+            var cur = (getCurrentServerTime() - this._startTime)/1000;
+            var max = config.obtacle[this._name][1].buildTime;
+
+            if(!this.timeBar){
+                this.addTimeBar(cur, max);
+                this.countDown(cur, max);
+            }
+        }
+
+    },
+
     xyOnMap: function(posX, posY) {
         var newX = rootMapPos.x + (posY - posX) * TILE_WIDTH / 2;
         var newY = rootMapPos.y + (posX + posY) * TILE_HEIGHT / 2 + TILE_HEIGHT * (this._height - 1) * 0.5;
@@ -53,16 +73,26 @@ var Obstacle = cc.Class.extend({
         this.removeComplete();
     },
     removeComplete: function() {
-        var self = this;
         var newObstacleList = obstacleLists.filter(function(element) {
-            if (element._id == self._id){
+            if (element.id == this._id){
                 return false;
             }
             return true;
         });
         obstacleLists = newObstacleList;
         this.removeImg();
+        this._status = DESTROY;
+        for(var i in obstacleLists) {
+            if(obstacleLists[i].id == this._id){
+                obstacleLists[i].status = DESTROY;
+            }
+        }
+
+        this.timeBar && MAP.removeChild(this.timeBar);
+        this.timeBar = null;
+
         MAP.createLogicArray(contructionList, obstacleLists);
+        updateGUI();
     },
     removeImg: function() {
         this.removeTarget();
@@ -74,5 +104,65 @@ var Obstacle = cc.Class.extend({
             x: -1000000,
             y: -1000000
         });
+    },
+
+    addTimeBar: function(cur, max) {
+        var timeBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar.png');
+        this.timeBar = timeBar;
+        var coor = this.xyOnMap(this._posX, this._posY);
+        timeBar.attr({
+            x: coor.x,
+            y: coor.y + (this._height / 2) * TILE_HEIGHT + 60
+        });
+        MAP.addChild(timeBar, 1100);
+
+        var processBar = new cc.Sprite('res/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png');
+        this.processBar = processBar;
+        processBar.attr({
+            anchorX: 0,
+            anchorY: 0
+        });
+        timeBar.addChild(processBar);
+
+        var ratio = cur / max;
+
+        processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
+
+        var t = timeToReadable(max - cur);
+        var timeText = new cc.LabelBMFont(t, res.font_soji[16]);
+        this.timeText = timeText;
+        timeText.attr({
+            x: timeBar.width / 2,
+            y: 42
+        });
+        timeBar.addChild(timeText);
+    },
+    updateTimeBar: function(cur, max) {
+        if (this.timeBar) {
+            var ratio = cur / max;
+            //var t = timeToString(max - cur);
+            var t = timeToReadable(max - cur);
+            this.processBar.setTextureRect(cc.rect(0, 0, this.timeBar.width * ratio, this.timeBar.height));
+            this.timeText.setString(t);
+        }
+    },
+
+    countDown: function(cur, max){
+        var tick = () => {
+            setTimeout(() => {
+                cur = (getCurrentServerTime() - this._startTime)/1000;
+            if (cur >= max) {
+                temp.obsFinishTime = this;
+                NETWORK.sendFinishTimeRemoveObs(this._id);
+                return;
+            } else {
+                this.updateTimeBar(cur, max);
+                if(this._status == PENDING){
+                    tick();
+                }
+            }
+        }, 1000);
     }
+    tick();
+},
 });

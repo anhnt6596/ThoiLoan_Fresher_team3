@@ -6,6 +6,12 @@ var checkPendingBuilding = function(){
             pendingBuilding++;
         }
     }
+    for(var k in obstacleLists){
+        if(obstacleLists[k].status == PENDING){
+            cc.log("============ CO OBS DANG DANG PENDING ===========");
+            pendingBuilding++;
+        }
+    }
     return pendingBuilding;
 };
 
@@ -35,6 +41,7 @@ var checkBuilder = function(){
 //Kiem tra co tho xay nao ranh khong
 var checkIsFreeBuilder = function(){
     var pendingBuilding = checkPendingBuilding();
+    cc.log("================= SO NHA DANG PENDING LA: " + pendingBuilding);
     var builder = checkBuilder();
     if(builder - pendingBuilding > 0){
         return true;
@@ -47,10 +54,15 @@ var finishSmallestRemainingTimeBuilding = function(){
     for(var k in objectRefs){
         if(objectRefs[k]._id == idBuildingWillComplete){
             if(objectRefs[k]._status == PENDING){
-                objectRefs[k].buildComplete(false);
+                if(objectRefs[k] instanceof Obstacle){
+                    objectRefs[k].removeComplete();
+                }else{
+                    objectRefs[k].buildComplete(false);
+                }
             }else if(objectRefs[k]._status == UPGRADE){
                 objectRefs[k].upgradeComplete(false);
             }
+            return;
         }
     }
 };
@@ -118,6 +130,16 @@ var getGToReleaseBuilder = function(){
             }
         }
     }
+
+    for(var k in obstacleLists){
+        if(obstacleLists[k].status == PENDING) {
+            var timeRemain = obstacleLists[k].buildTime * 1000 - (getCurrentServerTime() - obstacleLists[k].startTime);
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+            }
+        }
+    }
+
     if(minTimeRemain == Infinity){
         return 0;
     }else{
@@ -135,6 +157,16 @@ var getIdBuildingMinRemainTime = function(){
             if(timeRemain < minTimeRemain){
                 minTimeRemain = timeRemain;
                 id = contructionList[k]._id;
+            }
+        }
+    }
+
+    for(var k in obstacleLists){
+        if(obstacleLists[k].status == PENDING) {
+            var timeRemain = obstacleLists[k].buildTime * 1000 - (getCurrentServerTime() - obstacleLists[k].startTime);
+            if(timeRemain < minTimeRemain){
+                minTimeRemain = timeRemain;
+                id = obstacleLists[k].id;
             }
         }
     }
@@ -356,12 +388,12 @@ var updateGUI = function() {
 var updateMessageBox = function() {
     if(temp.isOpenMessageBox){
         cc.log("==================================== MESSAGE BOX dang MO =====================");
-        LOBBY.onCloseInteractiveGuild();
-        LOBBY.onInteractiveGuild();
+        MESSAGE_BOX.onCloseInteractiveGuild(false);
+        LOBBY.onInteractiveGuild(false);
     }else{
         cc.log("==================================== MESSAGE BOX dang DONG =====================");
-        LOBBY.onInteractiveGuild();
-        LOBBY.onCloseInteractiveGuild();
+        LOBBY.onInteractiveGuild(false);
+        MESSAGE_BOX.onCloseInteractiveGuild(false);
     }
 };
 

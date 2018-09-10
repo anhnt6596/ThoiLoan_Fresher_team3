@@ -102,44 +102,31 @@ var LobbyLayer = cc.Layer.extend({
         // receiveTroopShowAnims("ARM_2", 4);
     },
 
-    onInteractiveGuild: function() {
+    onInteractiveGuild: function(isAni = true) {
+        cc.log("=============== MO MESSAGE BOX o LOBBY ===========");
         var messLayer = new MessageGUI();
         messLayer.setAnchorPoint(0, 0);
-        messLayer.setPosition(-100, 0);
+        messLayer.setPosition(-1000, 0);
         this.messLayer = messLayer;
         cc.director.getRunningScene().addChild(messLayer, 17, 17);
 
-        //var showAct = cc.moveTo(0.2, cc.p(100, 0));
-        //messLayer.runAction(showAct);
-    },
+        if(isAni){
+            var showAct = cc.moveTo(0.25, cc.p(0, 0));
+            messLayer.runAction(showAct);
+        }
 
-
-    onCloseInteractiveGuild: function() {
-        temp.isOpenMessageBox = false;
-        this.messLayer.retain();
-        cc.director.getRunningScene().removeChild(this.messLayer);
-        this.getParent().removeChildByTag(17);
-        this.getParent().removeChildByTag(18);
-        this.getParent().removeChildByTag(19);
-        this.getParent().removeChildByTag(20);
-        this.getParent().removeChildByTag(21);
-        this.getParent().removeChildByTag(22);
-        this.getParent().removeChildByTag(23);
-        this.getParent().removeChildByTag(24);
-        this.getParent().removeChildByTag(25);
-        this.getParent().removeChildByTag(26);
     },
 
     hideLobby: function() {
         this.attr({
             x: - 100000,
-            y: - 100000,
+            y: - 100000
         });
     },
     showLobby: function() {
         this.attr({
             x: 0,
-            y: 0,
+            y: 0
         });
     },
     showObjectMenu: function(object) {

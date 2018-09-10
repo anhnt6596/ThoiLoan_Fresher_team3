@@ -64,7 +64,7 @@ var ItemInfo = TinyPopup.extend({
 
 
         //Duoi co nen trang chua intro, 1 so nha co hinh anh cua cac loai item dc mo khoa
-        var bgUnder = new cc.Sprite('res/Art/GUIs/Main_Gui/login/bg.png');
+        var bgUnder = new cc.Sprite('res/Art/GUIs/Main_Gui/bg.png');
         bgUnder.scaleX = (this._frame.width*this._frame.scaleX - 20) / bgUnder.width;
         bgUnder.scaleY = this._frame.height*this._frame.scaleY/2 / bgUnder.height;
         bgUnder.setPosition(0, -1*this._frame.height/4 * this._frame.scaleY);
