@@ -2,7 +2,6 @@ var Obstacle = cc.Class.extend({
     ctor: function(info) {
         this.info = info;
         this._id = info.id;
-        cc.log("============== DUY id obstacle: " + info.id);
         this._name = info.name;
         this._posX = info.posX;
         this._posY = info.posY;
@@ -34,7 +33,6 @@ var Obstacle = cc.Class.extend({
     },
 
     setObsStatus: function() {
-        cc.log("================= DUY =================");
         if ((this._status == PENDING) && this._startTime) {
             var cur = (getCurrentServerTime() - this._startTime)/1000;
             var max = config.obtacle[this._name][1].buildTime;
