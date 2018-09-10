@@ -693,7 +693,8 @@ var MapLayer = cc.Layer.extend({
         this.acceptBtn.addClickEventListener(doNothing);
     },
     removeObstacle: function(obstacle) {
-        obstacle.remove();
+        // obstacle.remove();
+        NETWORK.sendRemoveObs(obstacle._id);
     },
     setVXbtn: function(targetedObject) {
         var coor = targetedObject.xyOnMap(targetedObject._posX, targetedObject._posY);

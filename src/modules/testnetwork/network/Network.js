@@ -990,6 +990,13 @@ testnetwork.Connector = cc.Class.extend({
         this.gameClient.sendPacket(pk);
         cc.log("=======================================SEND REQUEST UPGRADE CONSTRUCTION=======================================" + id);
     },
+    sendRemoveObs:function(id){
+        cc.log("sendRemoveObs" +id);
+        var pk = this.gameClient.getOutPacket(CmdSendRemoveObs);
+        pk.pack(id);
+        this.gameClient.sendPacket(pk);
+        cc.log("=======================================SEND REMOVE OBS=======================================" + id);
+    },
     upgradeMultiWall: function(list){
         temp.listWall = list;
         var pk = this.gameClient.getOutPacket(CmdSendUpgradeMultiWall);
