@@ -77,7 +77,7 @@ var MessageGUI = ccui.Button.extend({
         cc.director.getRunningScene().addChild(labelCLAN, 22, 25);
 
 
-        var textField = new cc.EditBox(cc.size(size.width*1.5/5, size.height/12),"res/Art/GUIs/Main_Gui/login/bg_text.png");
+        var textField = new cc.EditBox(cc.size(size.width*1.5/5, size.height/12),"res/Art/GUIs/Chat/bg_text.png");
         textField.setPosition(textField.width/2, size.height - 140 + textField.height/2);
         textField.setFontColor(new cc.Color(0,0,0,255));
         textField.setFontSize(25);

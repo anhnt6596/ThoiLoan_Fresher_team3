@@ -58,7 +58,8 @@ var Contruction = cc.Class.extend({
             MAP._targetedObject = null;
             this.collect();
         } else if (this._name === "CLC_1" && this._level === 0) {
-            this.upgrade();
+            // this.upgrade();
+            createUpgradePopUp();
             this.removeTarget();
             MAP._targetedObject = null;
         } else {
