@@ -124,12 +124,17 @@ ui.dropElixirEff = function(building, product, isDark = 0) {
                 
                 dropElixirEff.addChild(elixirSprite);
                 
-                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(200, 280)),randomInt(250, 300),1);
-                var fade_action = cc.FadeOut(0.75);
-            
+                var jump_action = cc.BezierBy.create(1.5,[cc.p(randomInt(-80, 80),randomInt(200,300)), cc.p(randomInt(-80, 80),randomInt(300,400)), cc.p(randomInt(-80, -80),randomInt(600,600))]);
+                
+                //var jump_action = cc.JumpBy.create(2,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
+                var fade_action = cc.FadeOut(1.5);
+                var scale_action = cc.ScaleTo(1.5, randomInt(25,50)/25);
+                
+                
                 elixirSprite.runAction(jump_action);
                 elixirSprite.runAction(fade_action);
-            }, i*20);
+                elixirSprite.runAction(scale_action);
+            }, i*30);
         })(i);
     }
 

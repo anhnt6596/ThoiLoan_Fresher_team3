@@ -38,12 +38,13 @@ var LoginScreen = cc.Layer.extend({
             anchorY: 0.5,
             x: size.width/2 - 175,
             y: size.height/2 + 30,
-            fontSize: 25,
+            fontSize: 35,
             scale: 1.1,
             //placeHolderFontColor: cc.color(255,255,255,200)
-
         });
         this.uuidEb.setFontColor(new cc.Color(255, 255, 255, 255));
+        this.uuidEb.setInputFlag(cc.EDITBOX_INPUT_MODE_NUMERIC);
+        this.uuidEb.setMaxLength(8);
         this.addChild(this.uuidEb);
 
         //var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");

@@ -642,6 +642,7 @@ testnetwork.packetMap[gv.CMD.GET_MAP_INFO] = fr.InPacket.extend(
                 this.posYObs = this.getInt();
                 //cc.log(", posY: " + this.posYObs);
                 this.status = this.getString();
+                this.startTime = this.getLong();
                 //console.log("/n");
                 var obstacle = {
                     _id: this.idObs,
