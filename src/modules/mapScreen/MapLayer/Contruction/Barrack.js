@@ -98,13 +98,13 @@ var Barrack = Building.extend({
         timeText.setPosition(timeBar.width / 2, 42);
         timeBar.addChild(timeText);
 
-        this.initTroopImages();
+        //this.initTroopImages();
 
         //Hinh anh linh
-        if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()) {
-            var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
-            this.visibleImageTroop(troopName);
-        }
+        //if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()) {
+        //    var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+        //    this.visibleImageTroop(troopName);
+        //}
 
         timeBar.visible = false;
     },
@@ -136,13 +136,13 @@ var Barrack = Building.extend({
             this.timeText.setString(t);
 
             //Hinh anh linh
-            if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()){
-                var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
-                cc.log("============ DAY LA BARRACK id: " + this._id);
-                cc.log('============ VISIBLE TROOP: ' + troopName);
-                cc.log('============ Barrack id: ' + this._id);
-                this.visibleImageTroop(troopName);
-            }
+            //if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()){
+            //    var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+            //    cc.log("============ DAY LA BARRACK id: " + this._id);
+            //    cc.log('============ VISIBLE TROOP: ' + troopName);
+            //    cc.log('============ Barrack id: ' + this._id);
+            //    this.visibleImageTroop(troopName);
+            //}
         }
     },
     
@@ -165,9 +165,9 @@ var Barrack = Building.extend({
             var a = i + 1;
             var name = 'ARM_' + a;
 
-            if(name == troopName){
+            if(name == troopName && this._imgTroop[name]){
                 this._imgTroop[name].visible = true;
-            }else {
+            } else if(this._imgTroop[name]) {
                 this._imgTroop[name].visible = false;
             }
 
@@ -175,12 +175,12 @@ var Barrack = Building.extend({
     },
 
     createImageTroop: function(troopName) {
-        var btn = new ccui.Button('res/Art/GUIs/train_troop_gui/slot.png');
+        this._btn = new ccui.Button('res/Art/GUIs/train_troop_gui/slot.png');
 
-        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
-        img.setPosition(btn.width/2, btn.height/2);
-        btn.addChild(img, 1);
+        this._img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
+        this._img.setPosition(this._btn.width/2, this._btn.height/2);
+        this._btn.addChild(this._img, 1);
 
-        return btn;
+        return this._btn;
     }
 });
