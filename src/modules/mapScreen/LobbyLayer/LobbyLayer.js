@@ -113,6 +113,8 @@ var LobbyLayer = cc.Layer.extend({
         if(isAni){
             var showAct = cc.moveTo(0.25, cc.p(0, 0));
             messLayer.runAction(showAct);
+        }else{
+            messLayer.setPosition(0, 0);
         }
 
     },

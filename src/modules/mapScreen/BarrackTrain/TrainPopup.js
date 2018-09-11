@@ -574,12 +574,8 @@ var TrainPopup = TinyPopup.extend({
         }, this)));
 
         var children = this.getChildren();
-        cc.log("=========================== RETAIN CHILDREN ============================");
         for(var i in children){
             children[i].retain();
         }
-
-        //this._statusCountDown = false;
-        //this._isShowTimeBar = false;
     }
 });

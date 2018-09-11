@@ -113,7 +113,7 @@ var MessageGUI = cc.LayerColor.extend({
         if(isAni){
             var closeAct = cc.moveTo(0.25, cc.p(-1000, 0));
         }else{
-            var closeAct = cc.moveTo(0, cc.p(0, 0));
+            var closeAct = cc.scaleTo(0, 1, 1);
         }
 
         temp.isOpenMessageBox = false;
