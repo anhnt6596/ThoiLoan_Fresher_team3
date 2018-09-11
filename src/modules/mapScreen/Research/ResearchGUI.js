@@ -32,7 +32,7 @@ var ResearchGUI = ui.PopUp.extend({
         troop = research_constant.troop;
         var countDownDate = config.troop[troop.type][troop.level+1].researchTime*1000;
         var now = getCurrentServerTime();
-        var distance = countDownDate - (now - troop.startTime);
+        var distance = countDownDate - (now - troop.timeStart);
         console.log("distance = " + distance);
         var gFinish = timeToG(distance/1000);
 

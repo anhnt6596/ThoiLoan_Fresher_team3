@@ -116,7 +116,6 @@ var LobbyLayer = cc.Layer.extend({
         }else{
             messLayer.setPosition(0, 0);
         }
-
     },
 
     hideLobby: function() {
