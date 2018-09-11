@@ -56,7 +56,7 @@ var ShopCatalogyScreen = Popup.extend({
                     if(self._itemList[self._itemList.length - 1].x < cc.winSize.width - gap_x - ITEM_WIDTH){
                         self._direction = false;
                     }
-                    //if(Math.abs(dx) < 10)
+                    if(Math.abs(dx) > 20)
                         self._moving = true;
                 }
             },
