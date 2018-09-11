@@ -209,7 +209,7 @@ var TrainPopup = TinyPopup.extend({
         if(!this._statusCountDown || this._barrackQueue._isFirst){
             cc.log("======================== RRRRRRRRRRRRRRRREAL =================");
             this.countDown();
-        }else if(!temp.pauseOverCapacityFlag){       //Can them check dieu kien khi finish time success
+        }else {
             cc.log("======================== FFFFFFFFFFFFFFFFFFAKE =================");
             this.lieTick();
         }
