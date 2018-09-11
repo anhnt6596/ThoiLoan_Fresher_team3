@@ -79,11 +79,13 @@ var SettingGUI = ui.PopUp.extend({
     },
     toggleSound: function() {
         SOUND = !SOUND;
+        cc.sys.localStorage.setItem("sound", SOUND.toString());
         var t = SOUND ? "Bật" : "Tắt";
         this.soundText.setString(t);
     },
     toggleMusic: function() {
         MUSIC = !MUSIC;
+        cc.sys.localStorage.setItem("music", MUSIC.toString());
         if (!MUSIC) cc.audioEngine.pauseMusic();
         else cc.audioEngine.resumeMusic();
         var t = MUSIC ? "Bật" : "Tắt";
