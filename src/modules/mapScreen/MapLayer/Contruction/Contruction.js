@@ -361,6 +361,7 @@ var Contruction = cc.Class.extend({
         this.setStatus('pending');
         this.addTimeBar(cur, max);
         this.countDown(cur, max);
+        updateGUI();
     },
     setStartTime: function () {
         this.startTime = getCurrentServerTime();

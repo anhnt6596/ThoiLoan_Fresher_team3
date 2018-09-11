@@ -44,7 +44,6 @@ var Barrack = Building.extend({
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
-            //Hien thi timebar ben ngoai
             if(!this.timeBar){
                 this.addTimeBarTrain(0, 20);
             }
@@ -60,7 +59,6 @@ var Barrack = Building.extend({
         //Neu chua co linh train thi khong cowntdown
         if(BARRACK[this._id]){
             BARRACK[this._id].countDown();
-            //Hien thi timebar ben ngoai
             if(!this.timeBar){
                 this.addTimeBarTrain(0, 20);
             }
@@ -100,13 +98,13 @@ var Barrack = Building.extend({
         timeText.setPosition(timeBar.width / 2, 42);
         timeBar.addChild(timeText);
 
-        this.initTroopImages();
+        //this.initTroopImages();
 
         //Hinh anh linh
-        if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()) {
-            var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
-            this.visibleImageTroop(troopName);
-        }
+        //if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()) {
+        //    var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+        //    this.visibleImageTroop(troopName);
+        //}
 
         timeBar.visible = false;
     },
@@ -118,26 +116,10 @@ var Barrack = Building.extend({
             var firstItem = BARRACK[this._id].getFirstItemInQueue();
         }
 
-        cc.log("========================= DUY 1 =================");
-
-
         var condition1 = BARRACK[this._id] && !BARRACK[this._id]._statusCountDown && (this._status != UPGRADE);
         var condition2 = BARRACK[this._id] && BARRACK[this._id]._statusCountDown && BARRACK[this._id].wait && (this._status != UPGRADE);
         var condition3 = (currentCapacity + (firstItem ? firstItem._housingSpace : 0)  > totalCapacity) && (Math.ceil(cur) >= max);
         if(condition1 || condition2 || condition3) {
-            if(condition1){
-                cc.log("================== 1 true");
-                cc.log("object status: " + this._status);
-
-            }
-            if(condition2){
-                cc.log("================== 2 true");
-            }
-            if(condition3){
-                cc.log("================== 3 true");
-            }
-
-            cc.log("========================= DUY 2 =================");
 
             if (this.timeBar) {
                 MAP.removeChild(this.timeBar);
@@ -145,8 +127,6 @@ var Barrack = Building.extend({
                 return;
             }
         }
-
-        cc.log("========================= DUY 3 =================");
 
         if (this.timeBar) {
             this.timeBar.visible = true;
@@ -156,10 +136,13 @@ var Barrack = Building.extend({
             this.timeText.setString(t);
 
             //Hinh anh linh
-            if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()){
-                var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
-                this.visibleImageTroop(troopName);
-            }
+            //if(BARRACK[this._id] && BARRACK[this._id].getFirstItemInQueue()){
+            //    var troopName = BARRACK[this._id].getFirstItemInQueue()._name;
+            //    cc.log("============ DAY LA BARRACK id: " + this._id);
+            //    cc.log('============ VISIBLE TROOP: ' + troopName);
+            //    cc.log('============ Barrack id: ' + this._id);
+            //    this.visibleImageTroop(troopName);
+            //}
         }
     },
     
@@ -182,9 +165,9 @@ var Barrack = Building.extend({
             var a = i + 1;
             var name = 'ARM_' + a;
 
-            if(name == troopName){
+            if(name == troopName && this._imgTroop[name]){
                 this._imgTroop[name].visible = true;
-            }else {
+            } else if(this._imgTroop[name]) {
                 this._imgTroop[name].visible = false;
             }
 
@@ -192,12 +175,12 @@ var Barrack = Building.extend({
     },
 
     createImageTroop: function(troopName) {
-        var btn = new ccui.Button('res/Art/GUIs/train_troop_gui/slot.png');
+        this._btn = new ccui.Button('res/Art/GUIs/train_troop_gui/slot.png');
 
-        var img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
-        img.setPosition(btn.width/2, btn.height/2);
-        btn.addChild(img, 1);
+        this._img = new cc.Sprite(train_troop_constant.img_train_troop_dir + troopName + '.png');
+        this._img.setPosition(this._btn.width/2, this._btn.height/2);
+        this._btn.addChild(this._img, 1);
 
-        return btn;
+        return this._btn;
     }
 });

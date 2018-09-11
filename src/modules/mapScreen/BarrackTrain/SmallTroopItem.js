@@ -30,13 +30,16 @@ var SmallTroopItem = ccui.Button.extend({
     },
 
     touchEventSmall: function() {
-        temp.trainedBarrackId = TRAIN_POPUP._id;                                  //gap van de neu next prev giua nhieu barrack
+        temp.trainedBarrackId = TRAIN_POPUP._id;
         temp.trainedTroopType = this._name;
         NETWORK.sendCancelTrainTroop(TRAIN_POPUP._id, this._name);
     },
 
     updateAmountSmall: function() {
         var barrack = getBarrackQueueById(this._barrackId);
-        this.getChildByTag(101).setString('x'+barrack.getTroopInBarrackByName(this._name)._amount);
+        var troop = barrack.getTroopInBarrackByName(this._name);
+        if(troop){
+            this.getChildByTag(101).setString('x'+troop._amount);
+        }
     }
 });

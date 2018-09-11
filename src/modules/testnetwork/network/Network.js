@@ -832,6 +832,16 @@ testnetwork.Connector = cc.Class.extend({
                             cc.director.getRunningScene().removeChildByTag(temp.tagTroopGive);
                         }else{
                             troopItem.currentAmount.setString(troopInfo[troopItem._name].population);
+
+                            for(var j = 107; j < 112; j++) {
+                                var child = cc.director.getRunningScene().getChildByTag(j);
+                                if(child){
+                                    var housingSpaceTroop = config.troopBase[child._name].housingSpace;
+                                    if(item.currentCapacityGot + housingSpaceTroop > item.guildCapacityAtTime){
+                                        child.setEnabled(false);
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -687,7 +687,7 @@ var MapLayer = cc.Layer.extend({
         objectRefs.push(newBuilding);
         MAP.createLogicArray(contructionList, obstacleLists);
 
-        updateBuilderNumber();
+        updateGUI();
         LOBBY.showLobby();
         this.cancelBtn.addClickEventListener(doNothing);
         this.acceptBtn.addClickEventListener(doNothing);

@@ -65,6 +65,7 @@ var finishSmallestRemainingTimeBuilding = function(){
             return;
         }
     }
+    updateGUI();
 };
 
 var getObjBuildingById = function(id) {
