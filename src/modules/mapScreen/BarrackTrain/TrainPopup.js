@@ -384,6 +384,7 @@ var TrainPopup = TinyPopup.extend({
                 if (max - cur <= 0) {
                     if(currentCapacity + firstItem._housingSpace > totalCapacity) {
                         cc.log("============================== STOP Countdown do > capacity");
+                        NETWORK.sendStropTrain(self._id);
                         return;
                     }
                     var name = firstItem._name;
