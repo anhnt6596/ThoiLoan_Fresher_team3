@@ -71,8 +71,9 @@ var Obstacle = cc.Class.extend({
         this.removeComplete();
     },
     removeComplete: function() {
+        var self = this;
         var newObstacleList = obstacleLists.filter(function(element) {
-            if (element.id == this._id){
+            if (element.id == self._id){
                 return false;
             }
             return true;
