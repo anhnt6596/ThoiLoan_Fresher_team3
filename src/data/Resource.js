@@ -816,8 +816,8 @@ var SOLID_MAP_VALUE = {
     SOLID_2: 2
 };
 
-var SOUND = true;
-var MUSIC = true;
+var SOUND = cc.sys.localStorage.getItem("sound") === "true" ? true : false;
+var MUSIC = cc.sys.localStorage.getItem("music") === "true" ? true : false;
 
 var ZOOM_SCALE = {
     MAX: 2,
