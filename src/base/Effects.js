@@ -80,8 +80,8 @@ ui.dropCoinEffect = function(building, product) {
                 dropCoinEff.addChild(coinSprite);
                 
                 var coin_anims = ui.makeAnimation('coindrop_' + coin_type + '/', 0, 4, 0.1);
-                var jump_action = cc.JumpBy.create(0.8,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
-                var fade_action = cc.FadeOut(1);
+                var jump_action = cc.JumpBy.create(0.8, cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
+                var fade_action =  cc.Sequence(cc.delayTime(0.4), cc.FadeOut(0.4));
             
                 coinSprite.runAction(coin_anims.repeatForever());
                 coinSprite.runAction(jump_action);
@@ -124,11 +124,15 @@ ui.dropElixirEff = function(building, product, isDark = 0) {
                 
                 dropElixirEff.addChild(elixirSprite);
                 
-                var jump_action = cc.BezierBy.create(1.5,[cc.p(randomInt(-80, 80),randomInt(200,300)), cc.p(randomInt(-80, 80),randomInt(300,400)), cc.p(randomInt(-80, -80),randomInt(600,600))]);
+                var jump_action = cc.BezierBy.create(1.5,[
+                    cc.p(randomInt(-60, 60), randomInt(150,280)),
+                    cc.p(randomInt(-80, 80), randomInt(280,350)),
+                    cc.p(randomInt(-120, 120), randomInt(350, 400))
+                ]);
                 
                 //var jump_action = cc.JumpBy.create(2,cc.p(randomInt(-80,80),randomInt(50, 150)),randomInt(200, 300),1);
                 var fade_action = cc.FadeOut(1.5);
-                var scale_action = cc.ScaleTo(1.5, randomInt(25,50)/25);
+                var scale_action = cc.ScaleTo(1, randomInt(25,50)/25);
                 
                 
                 elixirSprite.runAction(jump_action);

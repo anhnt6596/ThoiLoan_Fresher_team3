@@ -71,8 +71,9 @@ var Obstacle = cc.Class.extend({
         this.removeComplete();
     },
     removeComplete: function() {
+        var self = this;
         var newObstacleList = obstacleLists.filter(function(element) {
-            if (element.id == this._id){
+            if (element.id == self._id){
                 return false;
             }
             return true;
@@ -94,14 +95,20 @@ var Obstacle = cc.Class.extend({
     },
     removeImg: function() {
         this.removeTarget();
-        this.grass.attr({
-            x: -1000000,
-            y: -1000000
-        });
-        this.objImg.attr({
-            x: -1000000,
-            y: -1000000
-        });
+        var act1 = cc.ScaleTo(1, 2);
+        var act2 = cc.FadeOut(0.75);
+        var act3 = cc.FadeOut(1.25);
+        this.grass.runAction(act3);
+        this.objImg.runAction(act2);
+        this.objImg.runAction(act1);
+        // this.grass.attr({
+        //     x: -1000000,
+        //     y: -1000000
+        // });
+        // this.objImg.attr({
+        //     x: -1000000,
+        //     y: -1000000
+        // });
     },
 
     addTimeBar: function(cur, max) {
