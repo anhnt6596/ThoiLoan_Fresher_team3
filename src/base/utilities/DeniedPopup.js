@@ -18,7 +18,6 @@ var DeniedPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
 
-        //Xu ly o day
     },
 
     close: function() {
@@ -28,24 +27,29 @@ var DeniedPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
         resetReducedTempResources();
-        cc.log("================= RETURN LOGIN MENU =======================");
-        //fr.view(LoginScreen);
-        cc.director.popToRootScene();
 
-        //this.refreshGame();
-        //cc.game.run();
+        this.refreshGame();
     },
 
     refreshGame: function() {
         cc.director.popToRootScene();
+        var scene = cc.director.getRunningScene();
+        var children = scene.getChildren();
+        for(var i in children){
+            children[i].retain();
+        }
+        scene.retain();
+
+        cc.log("================= RETURN LOGIN MENU =======================");
+        fr.view(LoginScreen);
     }
 });
 
 
 var showPopupDisconect = function(){
     var data = {};
-    data.content = "Mất kết nối với Server, hãy thử kết nối lại!";
-    var title = "Disconected";
+    data.content = "Please try to reconnect";
+    var title = "Disconected to server";
     var popup = new DeniedPopup(cc.winSize.width/2, cc.winSize.height/1.5, title, true, data);
     cc.director.getRunningScene().addChild(popup, 2000000);
 };

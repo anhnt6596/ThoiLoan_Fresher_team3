@@ -107,7 +107,7 @@ testnetwork.Connector = cc.Class.extend({
             case gv.CMD.FINISH_TIME_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME tu SERVER=======================================");
-                    //this.finishTimeConstruction(temp.buildingFinishTime);
+                    this.finishTimeConstruction(temp.buildingFinishTime);
                 }else {
                     cc.log("=======================================SERVER TU CHOI FINISH TIME=======================================");
                     showPopupNotEnoughG('server_denied_finish_time');
@@ -933,7 +933,7 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     processInteractiveGuild: function() {
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
     },
 
     processOnlineMessage: function(packet) {
