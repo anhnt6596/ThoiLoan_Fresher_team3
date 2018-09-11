@@ -45,6 +45,8 @@ var LoginScreen = cc.Layer.extend({
         this.uuidEb.setFontColor(new cc.Color(255, 255, 255, 255));
         this.uuidEb.setInputFlag(cc.EDITBOX_INPUT_MODE_NUMERIC);
         this.uuidEb.setMaxLength(8);
+        var temp = cc.sys.localStorage.getItem("uuid");
+        temp && this.uuidEb.setString(temp);
         this.addChild(this.uuidEb);
 
         //var btnLogin = gv.commonButton(200, 64, size.width/2, size.height/5,"");
@@ -86,6 +88,7 @@ var LoginScreen = cc.Layer.extend({
         //this.lblLog.setString("Start Connect!");
 
         gv.user.uuid = this.uuidEb.getString();
+        cc.sys.localStorage.setItem("uuid", gv.user.uuid);
         cc.log("uuid "+  gv.user.uuid  );
         var test = gv.gameClient.connect();
         cc.log('=================================CONNECT====================='+test);
