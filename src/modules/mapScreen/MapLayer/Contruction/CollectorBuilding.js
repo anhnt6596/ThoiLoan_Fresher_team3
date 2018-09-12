@@ -104,7 +104,7 @@ var CollectorBuilding = Building.extend({
         console.log("Thu hoach resource "+this._name+" id="+this._id);
         temp.collectingBuilding = this;
         if (!is_upgrade) {
-            NETWORK.sendDoHarvest(this._id); //Neu dang upgrade thi khong can gui goi tin thu hoach, server tu xu li thu hoach
+            NETWORK.sendDoHarvest(this._id); //Neu dang upgrade thi khong can gui goi tin thu hoach, server tu xu li thu hoach            
         }
     },
     processCollectResource: function(sanluong){        
