@@ -787,10 +787,13 @@ testnetwork.Connector = cc.Class.extend({
         troopInfo[temp.typeTroopGive].population--;
         LOBBY.update(gv.user);
 
-        //Chay tiep countdown neu co
+        //Neu chua co linh train thi khong cowntdown
         for(var i = 0; i < barrackRefs.length; i++){
+
             var id = barrackRefs[i]._id;
-            if(BARRACK[id]){
+            if(BARRACK[id] && getBarrackQueueById(id)._stop){
+                getBarrackQueueById(id)._stop = false;
+                BARRACK[id]._barrackQueue._startTime = getCurrentServerTime() - BARRACK[id].getFirstItemInQueue()._trainingTime * 1000 + 1000 * (i+1);
                 BARRACK[id].countDown();
                 //Hien thi timebar ben ngoai
                 if(!barrackRefs[i].timeBar){
@@ -798,6 +801,8 @@ testnetwork.Connector = cc.Class.extend({
                 }
             }
         }
+
+
 
         if(userGotList[temp.idUserGetTroop]){
             userGotList[temp.idUserGetTroop] += 1;
@@ -981,10 +986,7 @@ testnetwork.Connector = cc.Class.extend({
         if(getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp < TIME_REQUEST_TROOP){
             //Trang thai dang request troop, hien thi bar
             temp.statusRequest = true;
-            cc.log(" =========================== status request = true ");
         }
-
-        cc.log(" ================ DUY: lastRequestTroopTimeStamp" + gv.user.lastRequestTroopTimeStamp);
 
         gv.user.is_in_guild = packet.is_in_guild;
         gv.user.id_guild = packet.id_guild || -1,
@@ -992,10 +994,6 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.id_logo_guild = packet.id_logo_guild || 1,
         gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
         gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
-        cc.log("========================================== Gold: " + gv.user.gold);
-        cc.log("========================================== Elixir: " + gv.user.elixir);
-        cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
-        cc.log("========================================== Coin: " + gv.user.coin);
         gv.user.allBuilder = packet.builderNumber;
         gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
         cc.log("========================================== All Builder: " + gv.user.allBuilder);

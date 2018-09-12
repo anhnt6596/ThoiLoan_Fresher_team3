@@ -757,6 +757,7 @@ var Contruction = cc.Class.extend({
                     cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
                 default:
+                    cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
             }
         }
@@ -798,6 +799,7 @@ var Contruction = cc.Class.extend({
                     cc.audioEngine.playEffect(sRes.wall_place);
                     break;
                 default:
+                    cc.audioEngine.playEffect(sRes.wall_place);
                     break;
             }
         }

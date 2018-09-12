@@ -27,11 +27,13 @@ var ErrorPopup = TinyPopup.extend({
         var children = scene.getChildren();
         for(var i in children){
             children[i].retain();
+            scene.removeChild(children[i]);
         }
+        scene.removeAllChildren(true);
+        scene.removeFromParent();
         scene.retain();
 
-        cc.log("================= RETURN LOGIN MENU =======================");
-        fr.view(LoginScreen);
+        cc.game.run();
     }
 });
 

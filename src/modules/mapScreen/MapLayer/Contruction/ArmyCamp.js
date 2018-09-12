@@ -62,22 +62,20 @@ var ArmyCamp = Building.extend({
     },
 
     updateArmyCampCapacity: function() {
-        cc.log("================== DUY 1");
         temp.pauseOverCapacityFlag = false;
 
         //Neu chua co linh train thi khong cowntdown
         for(var i = 0; i < barrackRefs.length; i++){
-            cc.log("================== DUY 2");
 
             var id = barrackRefs[i]._id;
-            if(BARRACK[id]){
-                cc.log("================== DUY 3");
-
+            cc.log("====================== BARRACK id " + id);
+            cc.log("====================== Trang thai STOP " + getBarrackQueueById(id)._stop);
+            if(BARRACK[id] && getBarrackQueueById(id)._stop){
+                getBarrackQueueById(id)._stop = false;
+                BARRACK[id]._barrackQueue._startTime = getCurrentServerTime() - BARRACK[id].getFirstItemInQueue()._trainingTime * 1000 + 1000 * (i+1);
                 BARRACK[id].countDown();
                 //Hien thi timebar ben ngoai
                 if(!barrackRefs[i].timeBar){
-                    cc.log("================== DUY 4");
-
                     barrackRefs[i].addTimeBarTrain(0, 20);
                 }
             }
