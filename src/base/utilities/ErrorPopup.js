@@ -18,7 +18,7 @@ var ErrorPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
 
-        //this.refreshGame();
+        this.refreshGame();
     },
 
     refreshGame: function() {

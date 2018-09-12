@@ -417,7 +417,8 @@ var Contruction = cc.Class.extend({
                 }
             }else{
                 _.extend(ReducedTempResources, costBuilding);
-
+                cc.log("upgrade nha "+ this._name);
+                
                 NETWORK.sendRequestUpgradeConstruction(this);
             }
         } else{

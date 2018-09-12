@@ -292,8 +292,7 @@ testnetwork.Connector = cc.Class.extend({
         var elixir = 0;
         var dElixir = 0;
         if (data.validate) {            
-            temp.collectingBuilding.processCollectResource(data.sanluong);
-            
+            temp.collectingBuilding.processCollectResource(data.sanluong);            
         }
         else { //neu server tra ve false , xu li log out nguoi dung ra khoi game
 
@@ -1053,6 +1052,10 @@ testnetwork.Connector = cc.Class.extend({
     sendRequestUpgradeConstruction:function(building){
         NETWORK.sendUpgradeConstruction(building._id);
         temp.buildingUpgrade = building;
+        if (building._name==='RES_1'||building._name==='RES_2'||building._name==='RES_3' ) {
+            cc.log("chay vao trong temp.collectingBuilding");
+            temp.collectingBuilding = building;
+        }  
     },
 
     //Finish build or Finish upgrade
