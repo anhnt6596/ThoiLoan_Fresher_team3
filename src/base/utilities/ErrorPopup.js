@@ -18,7 +18,7 @@ var ErrorPopup = TinyPopup.extend({
             self.getParent().removeChild(self);
         }, this)));
 
-        this.refreshGame();
+        //this.refreshGame();
     },
 
     refreshGame: function() {
@@ -32,13 +32,12 @@ var ErrorPopup = TinyPopup.extend({
         scene.removeAllChildren(true);
         scene.removeFromParent();
         scene.retain();
-        
+
         cc.game.run();
     }
 });
 
 
-//Show thong bao khong du G de lam gi do
 var showErrorPopup = function(type){
     var data = {};
     var title;
