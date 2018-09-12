@@ -44,6 +44,7 @@
         "src/base/utilities/TinyPopup.js",
         "src/base/utilities/Functional.js",
         "src/base/utilities/DeniedPopup.js",
+        "src/base/utilities/ErrorPopup.js",
         "src/base/Effects.js",
         "src/base/OptionButton.js",
         "src/base/Music.js",

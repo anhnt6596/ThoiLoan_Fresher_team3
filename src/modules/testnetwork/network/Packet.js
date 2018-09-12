@@ -37,6 +37,7 @@ gv.CMD.TRAIN_TROOP = 7002;
 gv.CMD.CANCEL_TRAIN_TROOP = 7003;
 gv.CMD.QUICK_FINISH_TRAIN_TROOP = 7004;
 gv.CMD.FINISH_TIME_TRAIN_TROOP = 7005;
+gv.CMD.STOP_TRAIN = 7006;
 
 gv.CMD.NEW_MESSAGE = 8001;
 gv.CMD.GIVE_TROOP_GUILD = 8002;
@@ -452,6 +453,22 @@ CmdSendQuickFinishTrainTroop = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.QUICK_FINISH_TRAIN_TROOP);
+        },
+        pack:function(idBarrack){
+            this.packHeader();
+            this.putInt(idBarrack);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendStopTrain = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.STOP_TRAIN);
         },
         pack:function(idBarrack){
             this.packHeader();

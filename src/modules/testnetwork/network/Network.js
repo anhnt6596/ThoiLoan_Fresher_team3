@@ -83,7 +83,7 @@ testnetwork.Connector = cc.Class.extend({
                     if (SOUND) cc.audioEngine.playEffect(sRes.building_contruct);
                 }else {
                     cc.log("=======================================SERVER TU CHOI XAY=======================================");
-                    showPopupNotEnoughG('server_denied_build');
+                    showErrorPopup('server_denied_build');
                 }
                 break;
             case gv.CMD.UPGRADE_CONSTRUCTION:
@@ -92,7 +92,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.upgradeConstruction(temp.buildingUpgrade);
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE=======================================");
-                    showPopupNotEnoughG('server_denied_upgrade');
+                    showErrorPopup('server_denied_upgrade');
                 }
                 break;
             case gv.CMD.QUICK_FINISH:
@@ -101,16 +101,16 @@ testnetwork.Connector = cc.Class.extend({
                     this.quickFinishConstruction(temp.buildingQuickFinish);
                 }else {
                     cc.log("=======================================SERVER TU CHOI QUICK FINISH=======================================");
-                    showPopupNotEnoughG('server_denied_quick_finish');
+                    showErrorPopup('server_denied_quick_finish');
                 }
                 break;
             case gv.CMD.FINISH_TIME_CONSTRUCTION:
                 if (packet.validate) {
                     cc.log("=======================================XAC NHAN FINISH TIME tu SERVER=======================================");
-                    //this.finishTimeConstruction(temp.buildingFinishTime);
+                    this.finishTimeConstruction(temp.buildingFinishTime);
                 }else {
                     cc.log("=======================================SERVER TU CHOI FINISH TIME=======================================");
-                    showPopupNotEnoughG('server_denied_finish_time');
+                    showErrorPopup('server_denied_finish_time');
                 }
                 break;
             case gv.CMD.CANCEL_CONSTRUCTION:
@@ -119,7 +119,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.cancelConstruction(temp.buildingCancel);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL=======================================");
-                    showPopupNotEnoughG('server_denied_cancel');
+                    showErrorPopup('server_denied_cancel');
                 }
                 break;
             case gv.CMD.UPGRADE_MULTI_WALL:
@@ -128,7 +128,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.processUpgradeMultiWalls(temp.listWall);
                 }else {
                     cc.log("=======================================SERVER TU CHOI UPGRADE MULTI WALL=======================================");
-                    showPopupNotEnoughG('server_denied_upgrade_multi_wall');
+                    showErrorPopup('server_denied_upgrade_multi_wall');
                 }
                 break;
             case gv.CMD.REMOVE_OBSTACLE:
@@ -137,7 +137,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.processRemoveObs(temp.removedObs);
                 }else {
                     cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
-                    showPopupNotEnoughG('server_denied_remove_obstacle');
+                    showErrorPopup('server_denied_remove_obstacle');
                 }
                 break;
             case gv.CMD.FINISH_TIME_REMOVE_OBSTACLE:
@@ -146,7 +146,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.processFinishTimeRemoveObs(temp.obsFinishTime);
                 }else {
                     cc.log("=======================================SERVER TU CHOI REMOVE OBSTACLE=======================================");
-                    showPopupNotEnoughG('server_denied_finish_time_obstacle');
+                    showErrorPopup('server_denied_finish_time_obstacle');
                 }
                 break;
             case gv.CMD.GET_SERVER_TIME:
@@ -159,7 +159,7 @@ testnetwork.Connector = cc.Class.extend({
                     increaseUserResources(ReducedTempResources);
                 }else {
                     cc.log("=======================================SERVER TU CHOI ADD RESOURCE tu SERVER=======================================");
-                    showPopupNotEnoughG('server_denied_add_resources');
+                    showErrorPopup('server_denied_add_resources');
                 }
                 break;
             case gv.CMD.GET_TROOP_INFO:
@@ -186,7 +186,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.trainTroopCompleted(temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI TRAIN TROOP=======================================");
-                    showPopupNotEnoughG('server_denied_train_troop');
+                    showErrorPopup('server_denied_train_troop');
                 }
                 break;
             case gv.CMD.CANCEL_TRAIN_TROOP:
@@ -195,7 +195,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.canceledTrainTroop(temp.trainedTroopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
-                    showPopupNotEnoughG('server_denied_cancel_train_troop');
+                    showErrorPopup('server_denied_cancel_train_troop');
                 }
                 break;
             case gv.CMD.FINISH_TIME_TRAIN_TROOP:
@@ -204,7 +204,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.finishTimeTroopTrain(packet.idBarrack, packet.troopType);
                 }else {
                     cc.log("=======================================SERVER TU CHOI CANCEL TRAIN TROOP=======================================");
-                    showPopupNotEnoughG('server_denied_finish_time_train_troop');
+                    showErrorPopup('server_denied_finish_time_train_troop');
                 }
                 break;
             case gv.CMD.QUICK_FINISH_TRAIN_TROOP:
@@ -213,7 +213,7 @@ testnetwork.Connector = cc.Class.extend({
                     this.quickFinishTroopTrain(temp.trainedBarrackId);
                 }else {
                     cc.log("=======================================SERVER TU CHOI QUICK FINISH TRAIN TROOP=======================================");
-                    showPopupNotEnoughG('server_denied_quick_finish_train_troop');
+                    showErrorPopup('server_denied_quick_finish_train_troop');
                 }
                 break;
             case gv.CMD.RESEARCH_TROOP_COMPLETE:
@@ -253,7 +253,7 @@ testnetwork.Connector = cc.Class.extend({
                         this.processNewMessage();
                     }else{
                         cc.log("=======================================SERVER TU CHOI SEND NEW MESSAGE=======================================");
-                        showPopupNotEnoughG('server_denied_send_new_message');
+                        showErrorPopup('server_denied_send_new_message');
                     }
                 }else if(packet.typeResponse == RESPONSE_TO_ALL){
                     this.processNewMessageToAll(packet);
@@ -267,7 +267,7 @@ testnetwork.Connector = cc.Class.extend({
                         this.processGiveTroop();
                     }else{
                         cc.log("=======================================SERVER TU CHOI GIVE TROOP GUILD=======================================");
-                        showPopupNotEnoughG('server_denied_give_troop_guild');
+                        showErrorPopup('server_denied_give_troop_guild');
                     }
                 }else if(packet.typeResponse == RESPONSE_TO_ALL){
                     this.processGiveTroopToAll(packet);
@@ -786,10 +786,13 @@ testnetwork.Connector = cc.Class.extend({
         troopInfo[temp.typeTroopGive].population--;
         LOBBY.update(gv.user);
 
-        //Chay tiep countdown neu co
+        //Neu chua co linh train thi khong cowntdown
         for(var i = 0; i < barrackRefs.length; i++){
+
             var id = barrackRefs[i]._id;
-            if(BARRACK[id]){
+            if(BARRACK[id] && getBarrackQueueById(id)._stop){
+                getBarrackQueueById(id)._stop = false;
+                BARRACK[id]._barrackQueue._startTime = getCurrentServerTime() - BARRACK[id].getFirstItemInQueue()._trainingTime * 1000 + 1000 * (i+1);
                 BARRACK[id].countDown();
                 //Hien thi timebar ben ngoai
                 if(!barrackRefs[i].timeBar){
@@ -797,6 +800,8 @@ testnetwork.Connector = cc.Class.extend({
                 }
             }
         }
+
+
 
         if(userGotList[temp.idUserGetTroop]){
             userGotList[temp.idUserGetTroop] += 1;
@@ -932,7 +937,7 @@ testnetwork.Connector = cc.Class.extend({
     },
 
     processInteractiveGuild: function() {
-        LOBBY.onInteractiveGuild();
+        updateMessageBox();
     },
 
     processOnlineMessage: function(packet) {
@@ -980,10 +985,7 @@ testnetwork.Connector = cc.Class.extend({
         if(getCurrentServerTime() - gv.user.lastRequestTroopTimeStamp < TIME_REQUEST_TROOP){
             //Trang thai dang request troop, hien thi bar
             temp.statusRequest = true;
-            cc.log(" =========================== status request = true ");
         }
-
-        cc.log(" ================ DUY: lastRequestTroopTimeStamp" + gv.user.lastRequestTroopTimeStamp);
 
         gv.user.is_in_guild = packet.is_in_guild;
         gv.user.id_guild = packet.id_guild || -1,
@@ -991,10 +993,6 @@ testnetwork.Connector = cc.Class.extend({
         gv.user.id_logo_guild = packet.id_logo_guild || 1,
         gv.user.last_time_ask_for_troops = packet.last_time_ask_for_troops || -1,
         gv.user.last_time_out_guild = packet.last_time_out_guild || 0;
-        cc.log("========================================== Gold: " + gv.user.gold);
-        cc.log("========================================== Elixir: " + gv.user.elixir);
-        cc.log("========================================== Dark Elixir: " + gv.user.darkElixir);
-        cc.log("========================================== Coin: " + gv.user.coin);
         gv.user.allBuilder = packet.builderNumber;
         gv.user.freeBuilder = gv.user.allBuilder - checkPendingBuilding();
         cc.log("========================================== All Builder: " + gv.user.allBuilder);
@@ -1143,6 +1141,13 @@ testnetwork.Connector = cc.Class.extend({
         pk.pack(idBarrack, typeTroop);
         this.gameClient.sendPacket(pk);
         cc.log('=======================================SEND CANCEL TRAIN TROOP==========================================');
+    },
+
+    sendStropTrain: function(idBarrack) {
+        var pk = this.gameClient.getOutPacket(CmdSendStopTrain);
+        pk.pack(idBarrack);
+        this.gameClient.sendPacket(pk);
+        cc.log('=======================================SEND STOP TRAIN TROOP==========================================');
     },
 
     sendFinishTimeTrainTroop: function(idBarrack, typeTroop, remainTroop) {

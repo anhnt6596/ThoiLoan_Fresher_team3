@@ -30,7 +30,22 @@ var PopupGiveTroop = ccui.Button.extend({
                 troop.level = item.level;
                 troop.type = item.type;
                 troop.tagTroopGive = j;
-                troop.addClickEventListener(this.giveTroop.bind(troop));
+
+                for(var i in messageList) {
+                    var itemMess = messageList[i];
+                    if (itemMess.typeMessage == MESSAGE_ASK_TROOP && itemMess.userId == idUserGet) {
+                        var housingSpaceTroop = config.troopBase[item.type].housingSpace;
+                        if(itemMess.currentCapacityGot + housingSpaceTroop <= itemMess.guildCapacityAtTime){
+                            troop.addClickEventListener(this.giveTroop.bind(troop));
+                        }else{
+                            troop.setEnabled(false);
+                        }
+                    }
+                }
+
+
+
+
                 cc.director.getRunningScene().addChild(troop, 2259, j);
                 this.listTroopTag.push(j);
                 j++;

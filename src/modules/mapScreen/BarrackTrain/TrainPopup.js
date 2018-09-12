@@ -27,6 +27,7 @@ var TrainPopup = TinyPopup.extend({
     _positionsInQueue:[],
     _nextBtn:null,
     _prevBtn:null,
+    _stop:null,
 
 
     ctor: function (width, height, title, type, data) {
@@ -64,7 +65,6 @@ var TrainPopup = TinyPopup.extend({
 
         //Hien thi du lieu tren queue
         if(this._barrackQueue._troopList.length > 0){
-            cc.log("============= Barrack " + this._id + ": show Queue Data");
             //Neu current troop capacity > max AMC capacity thi khong cho chay
             this.showQueueData();
         }
@@ -209,7 +209,7 @@ var TrainPopup = TinyPopup.extend({
         if(!this._statusCountDown || this._barrackQueue._isFirst){
             cc.log("======================== RRRRRRRRRRRRRRRREAL =================");
             this.countDown();
-        }else if(!temp.pauseOverCapacityFlag){       //Can them check dieu kien khi finish time success
+        }else {
             cc.log("======================== FFFFFFFFFFFFFFFFFFAKE =================");
             this.lieTick();
         }
@@ -292,8 +292,6 @@ var TrainPopup = TinyPopup.extend({
         processBar.setTextureRect(cc.rect(0, 0, processBar.width * ratio, processBar.height));
 
         var t;
-        cc.log("================= DUY: cur: " + cur);
-        cc.log("================= DUY: max: " + max);
         if(cur > max) {
             t = "STOP";
         }else{
@@ -384,8 +382,12 @@ var TrainPopup = TinyPopup.extend({
                 if (max - cur <= 0) {
                     if(currentCapacity + firstItem._housingSpace > totalCapacity) {
                         cc.log("============================== STOP Countdown do > capacity");
+                        BARRACK[self._id]._barrackQueue._stop = true;
+                        cc.log("============================== BARRACK id: " + self._id + " STOP = TRUE");
+                        NETWORK.sendStropTrain(self._id);
                         return;
                     }
+                    BARRACK[self._id]._barrackQueue._stop = false;
                     var name = firstItem._name;
                     NETWORK.sendFinishTimeTrainTroop(self._id, name, self._barrackQueue.getTroopInBarrackByName(name)._amount - 1);
                 } else if(BARRACK[self._id]._statusCountDown){

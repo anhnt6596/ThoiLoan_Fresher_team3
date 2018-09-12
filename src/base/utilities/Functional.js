@@ -8,7 +8,6 @@ var checkPendingBuilding = function(){
     }
     for(var k in obstacleLists){
         if(obstacleLists[k].status == PENDING){
-            cc.log("============ CO OBS DANG DANG PENDING ===========");
             pendingBuilding++;
         }
     }
@@ -41,7 +40,6 @@ var checkBuilder = function(){
 //Kiem tra co tho xay nao ranh khong
 var checkIsFreeBuilder = function(){
     var pendingBuilding = checkPendingBuilding();
-    cc.log("================= SO NHA DANG PENDING LA: " + pendingBuilding);
     var builder = checkBuilder();
     if(builder - pendingBuilding > 0){
         return true;
@@ -388,11 +386,9 @@ var updateGUI = function() {
 
 var updateMessageBox = function() {
     if(temp.isOpenMessageBox){
-        cc.log("==================================== MESSAGE BOX dang MO =====================");
         MESSAGE_BOX.onCloseInteractiveGuild(false);
         LOBBY.onInteractiveGuild(false);
     }else{
-        cc.log("==================================== MESSAGE BOX dang DONG =====================");
         LOBBY.onInteractiveGuild(false);
         MESSAGE_BOX.onCloseInteractiveGuild(false);
     }

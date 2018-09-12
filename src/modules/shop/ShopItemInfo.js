@@ -27,10 +27,7 @@ var ItemInfo = TinyPopup.extend({
         var h = 1;
         for(var j in this.troopGuildListDiff){
             var name2 = j.substring(0, 5);
-            cc.log("================= DUY: loai quan: " + name2);
             var level2 = j.substring(6, 7);
-            cc.log("================= DUY: level: " + level2);
-            cc.log("================= DUY: amount: " + this.troopGuildListDiff[j]);
 
             var troop = new TroopGuildItem(name2, level2, this.troopGuildListDiff[j]);
             troop.setPosition(-450 + 150*h, -100);

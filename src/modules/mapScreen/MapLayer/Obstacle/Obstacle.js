@@ -81,11 +81,6 @@ var Obstacle = cc.Class.extend({
         obstacleLists = newObstacleList;
         this.removeImg();
         this._status = DESTROY;
-        for(var i in obstacleLists) {
-            if(obstacleLists[i].id == this._id){
-                obstacleLists[i].status = DESTROY;
-            }
-        }
 
         this.timeBar && MAP.removeChild(this.timeBar);
         this.timeBar = null;

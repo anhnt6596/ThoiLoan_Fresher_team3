@@ -684,26 +684,17 @@ var Contruction = cc.Class.extend({
     countDown: function(cur, max){
         var tick = () => {
             setTimeout(() => {
-                //if(updateTimeFlag){
-                //    cc.log("--------------------------------------------------------updateTimeFlag == true");
-                //    cur = (getCurrentServerTime() - this.startTime)/1000;
-                //    updateTimeFlag = false;
-                //}
                 cur = (getCurrentServerTime() - this.startTime)/1000;
                 if (cur >= max) {
-                    if(this._status == 'pending'){
-                        this.buildComplete(false);
-                    }else if(this._status == 'upgrade'){
-                        this.upgradeComplete(false);
-                    }
+                    temp.buildingFinishTime = this;
+                    NETWORK.sendFinishTimeConstruction(this._id);
                     return;
                 } else {
                     this.updateTimeBar(cur, max);
-                    if(this._status == 'pending' || this._status == 'upgrade'){
+                    if(this._status == PENDING || this._status == UPGRADE){
                         tick();
                     }
                 }
-                //cur +=1;
             }, 1000);
         }
         //Chay 1 lan
@@ -767,6 +758,7 @@ var Contruction = cc.Class.extend({
                     cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
                 default:
+                    cc.audioEngine.playEffect(sRes.wall_pickup);
                     break;
             }
         }
@@ -808,6 +800,7 @@ var Contruction = cc.Class.extend({
                     cc.audioEngine.playEffect(sRes.wall_place);
                     break;
                 default:
+                    cc.audioEngine.playEffect(sRes.wall_place);
                     break;
             }
         }
