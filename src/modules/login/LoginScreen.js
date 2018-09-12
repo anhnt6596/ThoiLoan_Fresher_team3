@@ -103,7 +103,6 @@ var LoginScreen = cc.Layer.extend({
     },
     onFinishGameInfo:function(){
         setUserResourcesCapacity();
-        cc.director.pushScene(createMapScene());
-        //cc.director.runScene(createMapScene());
+        cc.director.runScene(createMapScene());
     }
 });

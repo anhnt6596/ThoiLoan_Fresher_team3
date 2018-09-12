@@ -32,7 +32,7 @@ var ErrorPopup = TinyPopup.extend({
         scene.removeAllChildren(true);
         scene.removeFromParent();
         scene.retain();
-
+        
         cc.game.run();
     }
 });
